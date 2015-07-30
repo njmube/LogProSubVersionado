@@ -124,8 +124,8 @@ namespace WpfFront.Views
 
         public ListView ListadoItemsAgregados
         {
-            get { return this.lvDocumentMaster_2; }
-            set { this.lvDocumentMaster_2 = value; }
+            get { return this.lvDocumentMasterAddToPallet; }
+            set { this.lvDocumentMasterAddToPallet = value; }
         }
 
         public GridView ListadoEquipos

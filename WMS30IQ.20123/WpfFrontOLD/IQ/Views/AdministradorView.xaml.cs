@@ -36,6 +36,7 @@ namespace WpfFront.Views
         public event EventHandler<EventArgs> ReiniciarCapacitacion;
         public event EventHandler<EventArgs> ConsultarMovimientos;
         public event EventHandler<EventArgs> BuscarEquipoTracking;
+        public event EventHandler<EventArgs> exportarTracking;
 
         //Recibo
         public event EventHandler<EventArgs> BuscarRegistrosRecibo;
@@ -60,6 +61,11 @@ namespace WpfFront.Views
 
         #region Variables
 
+        public System.Windows.Controls.DataGrid ListadoSeriales
+        {
+            get { return this.dataGrid1; }
+            set { this.dataGrid1 = value; }
+        }
         public AdministradorModel Model
         {
             get { return this.DataContext as AdministradorModel; }
@@ -366,6 +372,10 @@ namespace WpfFront.Views
 
         #region Metodos
 
+        private void Btn_Exportar_Click_1(object sender, RoutedEventArgs e)
+        {
+           exportarTracking(sender, e);           
+        }
 
         private void btn_confirmar_Click_1(object sender, RoutedEventArgs e)
         {
@@ -547,7 +557,6 @@ namespace WpfFront.Views
             ConfirmarRecibo(sender, e);
         }
 
-
         private void chkRep_Checked_1(object sender, RoutedEventArgs e)
         {
             //Mostrar ventana de Cargando...
@@ -608,6 +617,7 @@ namespace WpfFront.Views
         TextBlock GetTextHideShowHeader { get; set; }
         Border GetBorderHeader { get; set; }
         //GridView ListadoEquipos { get; set; }
+      
         Button GetButtonConfirmar { get; set; }
         TextBox GetSerial1 { get; set; }
         //TextBox GetSerial2 { get; set; }
@@ -615,7 +625,7 @@ namespace WpfFront.Views
         Border BorderDetails { get; set; }
         Chart chart1 { get; set; }
         //ListView ListadoItems { get; set; }
-
+        
         //Administrador
 
         ComboBox EstadoSerial { get; set; }
@@ -676,6 +686,7 @@ namespace WpfFront.Views
         event EventHandler<EventArgs> ReiniciarCapacitacion;
         event EventHandler<EventArgs> ConsultarMovimientos;
         event EventHandler<EventArgs> BuscarEquipoTracking;
+        event EventHandler<EventArgs> exportarTracking;
         //Recibo
         event EventHandler<EventArgs> BuscarRegistrosRecibo;
         event EventHandler<EventArgs> BuscarNombreMaterial;

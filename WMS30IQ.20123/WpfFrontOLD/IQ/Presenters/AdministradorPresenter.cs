@@ -42,6 +42,7 @@ namespace WpfFront.Presenters
         public int offset = 5; //# columnas que no se debe replicar porque son fijas.
         private String userName = App.curUser.UserName;
         private String user = App.curUser.FirstName + " " + App.curUser.LastName;
+        private int cont = 0;
 
         public AdministradorPresenter(IUnityContainer container, IAdministradorView view)
         {
@@ -64,6 +65,7 @@ namespace WpfFront.Presenters
             View.ReiniciarCapacitacion += new EventHandler<EventArgs>(this.OnReiniciarCapacitacion);
             View.ConsultarMovimientos += new EventHandler<EventArgs>(this.OnConsultarMovimientos);
             View.BuscarEquipoTracking += new EventHandler<EventArgs>(this.OnBuscarEquipoTracking);
+            View.exportarTracking += new EventHandler<EventArgs>(this.OnexportarTracking);
 
             //Recibo
             View.BuscarRegistrosRecibo += this.OnBuscarRegistrosRecibo;
@@ -100,6 +102,45 @@ namespace WpfFront.Presenters
             #endregion
         }
 
+        public void OnexportarTracking(object sender, EventArgs e)
+        {
+            Microsoft.Office.Interop.Excel.Application excel = null;
+            Microsoft.Office.Interop.Excel.Workbook wb = null;
+
+            object missing = Type.Missing;
+            Microsoft.Office.Interop.Excel.Worksheet ws = null;
+            Microsoft.Office.Interop.Excel.Range rng = null;
+            try
+            {
+                excel = new Microsoft.Office.Interop.Excel.Application();
+
+                wb = excel.Workbooks.Add();
+                ws = (Microsoft.Office.Interop.Excel.Worksheet)wb.ActiveSheet;
+
+                for (int i = 0; i < View.Model.ListMovimientos.Columns.Count; i++)
+                {
+                    ws.Range["A1"].Offset[0, i].Value = View.Model.ListMovimientos.Columns[i].ColumnName;
+                    ws.Range["A1"].Offset[0, i].Interior.Color = System.Drawing.ColorTranslator.ToOle(System.Drawing.Color.Red);
+                }
+
+                for (int i = 0; i < View.Model.ListMovimientos.Rows.Count; i++)
+                {
+                    ws.get_Range("A1", "H" + cont + 1).EntireColumn.NumberFormat = "@";
+                    ws.Range["A2"].Offset[i].Resize[1, View.Model.ListMovimientos.Columns.Count].Value = View.Model.ListMovimientos.Rows[i].ItemArray;
+                }
+
+                rng = ws.get_Range("A1", "H" + View.Model.ListMovimientos.Rows.Count + 1);
+                rng.Cells.HorizontalAlignment = Microsoft.Office.Interop.Excel.XlHAlign.xlHAlignLeft;
+                rng.Columns.AutoFit();
+
+                excel.Visible = true;
+                wb.Activate();
+            }
+            catch (Exception ex)
+            {
+                Util.ShowMessage("Error al crear el archivo excel de exportación " + ex.Message);
+            }
+        }
         public void OnBuscarEquipoTracking(object sender, EventArgs e)
         {
 
@@ -534,10 +575,6 @@ namespace WpfFront.Presenters
             //Limpio los registros de la lista
             //View.Model.ListRecords.Rows.Clear();
         }
-
-
-
-
 
     }
 }

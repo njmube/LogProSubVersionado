@@ -281,6 +281,7 @@
                                                     <GridViewColumn x:Uid="GridViewColumn_2" Header="Estado" Width="100" DisplayMemberBinding="{Binding Path=Estado}" />
                                                     <GridViewColumn x:Uid="GridViewColumn_2" Header="Diagnostico" Width="100" DisplayMemberBinding="{Binding Path=Diagnostico}" />
                                                     <GridViewColumn x:Uid="GridViewColumn_2" Header="" Width="0" DisplayMemberBinding="{Binding Path=RowID}" />
+                                                    <GridViewColumn x:Uid="GridViewColumn_2" Header="Tecnico" Width="50" DisplayMemberBinding="{Binding Path=Tecnico}" />
                                                     <GridViewColumn x:Uid="GridViewColumn_2" Header="" Width="0" DisplayMemberBinding="{Binding Path=Usuario}" />
                                                     <!--<GridViewColumn x:Uid="Gr" Width="90" Header="Campo1" >
                                                 <GridViewColumn.CellTemplate>
@@ -380,10 +381,7 @@
                                                 <GridViewColumn x:Uid="GridViewColumn_1" Header="Serial" Width="115" DisplayMemberBinding="{Binding Path= Serial}"/>
                                                 <GridViewColumn x:Uid="GridViewColumn_1" Header="Mac" Width="115" DisplayMemberBinding="{Binding Path= Mac}"/>
                                                 <GridViewColumn x:Uid="GridViewColumn_1" Header="Estado" Width="0" DisplayMemberBinding="{Binding Path= Estado}"/>
-                                                <GridViewColumn x:Uid="GridViewColumn_1" Header="Fecha reparación" Width="0" DisplayMemberBinding="{Binding Path= FECHA}"/>
-                                                <GridViewColumn x:Uid="GridViewColumn_1" Header="Tiempo reparado" Width="0" DisplayMemberBinding="{Binding Path= TIEMPOREP}"/>
                                                 <GridViewColumn x:Uid="GridViewColumn_1" Header="Tecnico" Width="115" DisplayMemberBinding="{Binding Path= Tecnico}"/>
-                                                <GridViewColumn x:Uid="GridViewColumn_1" Header="Caja" Width="0" DisplayMemberBinding="{Binding Path= CAJA}"/>
                                                 <GridViewColumn x:Uid="GridViewColumn_1" Header="" Width="0" DisplayMemberBinding="{Binding Path= RowID}"/>
                                                 <GridViewColumn x:Uid="GridViewColumn_1" Header="Usuario última reparación" Width="0" DisplayMemberBinding="{Binding Path= Usuario}"/>
                                             </GridView>

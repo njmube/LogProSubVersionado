@@ -93,6 +93,8 @@ namespace WpfFront.Presenters
             //ListarDatos();
             OcultarPestanas();
 
+            View.Model.ListRecordsAddToPallet = service.DirectSQLQuery("EXEC sp_GetProcesos 'BUSCARMERCANCIAENTREGAREP', '', '',''", "", "dbo.EquiposClaro", Local);
+
             //Cargo las ubicaciones
             View.Model.ListadoPosiciones = service.GetMMaster(new MMaster { MetaType = new MType { Code = "POSICION1" } });
             this.Actualizar_UbicacionDisponible();
@@ -1015,15 +1017,13 @@ namespace WpfFront.Presenters
                     //agrego los equipos al listado de agregados
                     dr = View.Model.ListRecordsAddToPallet.NewRow();
 
-                    dr["RowID"] = item.Row["RowID"].ToString();
+                    dr["Producto"] = item.Row["Producto"].ToString();
                     dr["Serial"] = item.Row["Serial"].ToString();
                     dr["Mac"] = item.Row["Mac"].ToString();
-                    dr["Tecnico"] = item.Row["Tecnico"].ToString();
-                    dr["Producto"] = item.Row["Producto"].ToString();
                     dr["Estado"] = item.Row["Estado"].ToString();
-                    dr["FECHA"] = item.Row["FECHA"].ToString();
-                    dr["TIEMPOREP"] = item.Row["TIEMPOREP"].ToString();
-                    dr["CAJA"] = item.Row["CAJA"].ToString();
+                    dr["Tecnico"] = item.Row["Tecnico"].ToString();
+                    dr["RowID"] = item.Row["RowID"].ToString();
+                    
 
                     View.Model.ListRecordsAddToPallet.Rows.Add(dr);
 
@@ -1054,14 +1054,13 @@ namespace WpfFront.Presenters
             foreach (DataRowView itemAdd in View.ListadoItemsAgregados.SelectedItems)
             {
                 //cambio el estado para no mostrar mas en el listado general
-                ConsultaAgregar = "update dbo.EquiposCLARO set Estado = 'REPARACION' where RowID = " + itemAdd.Row["RowID"];
-                Console.WriteLine(ConsultaAgregar);
+                ConsultaAgregar = "UPDATE dbo.EquiposCLARO SET Estado = 'DIAGNOSTICO' where RowID = " + itemAdd.Row["RowID"];
                 service.DirectSQLNonQuery(ConsultaAgregar, Local);
                 ConsultaAgregar = "";
             }
 
             FiltrarDatosEntrega();
-
+            // Elimino el registro de la lista
             while (View.ListadoItemsAgregados.SelectedItems.Count > 0)
             {
                 View.Model.ListRecordsAddToPallet.Rows.RemoveAt(View.ListadoItemsAgregados.Items.IndexOf(View.ListadoItemsAgregados.SelectedItem));
@@ -1114,6 +1113,7 @@ namespace WpfFront.Presenters
             // Ejecuto la consulta 
             View.Model.ListRecords_1 = service.DirectSQLQuery(consultaSQL, "", "dbo.EquiposCLARO", Local);
         }
+        
         #endregion
     }
 }
