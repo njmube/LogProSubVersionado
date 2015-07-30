@@ -1,0 +1,126 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema xmlns:tns="http://schemas.datacontract.org/2004/07/Entities.Report" elementFormDefault="qualified" targetNamespace="http://schemas.datacontract.org/2004/07/Entities.Report" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:import namespace="Entities.Profile" />
+  <xs:import namespace="Entities.General" />
+  <xs:complexType name="IqColumn">
+    <xs:complexContent mixed="false">
+      <xs:extension xmlns:q1="Entities.Profile" base="q1:Auditing">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="ColumnId" type="xs:int" />
+          <xs:element minOccurs="0" name="DbType" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="Name" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="ReportColumns" nillable="true" type="tns:ArrayOfIqReportColumn" />
+          <xs:element minOccurs="0" name="Table" nillable="true" type="tns:IqTable" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="IqColumn" nillable="true" type="tns:IqColumn" />
+  <xs:complexType name="ArrayOfIqReportColumn">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="IqReportColumn" nillable="true" type="tns:IqReportColumn" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfIqReportColumn" nillable="true" type="tns:ArrayOfIqReportColumn" />
+  <xs:complexType name="IqReportColumn">
+    <xs:complexContent mixed="false">
+      <xs:extension xmlns:q2="Entities.Profile" base="q2:Auditing">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="AggregateValue" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="Alias" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="BaseWhere" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="Column" nillable="true" type="tns:IqColumn" />
+          <xs:element minOccurs="0" name="ColumnFormula" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="FilterOperator" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="FilteredValue" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="IsAggregate" nillable="true" type="xs:boolean" />
+          <xs:element minOccurs="0" name="IsCalculated" nillable="true" type="xs:boolean" />
+          <xs:element minOccurs="0" name="IsFiltered" nillable="true" type="xs:boolean" />
+          <xs:element minOccurs="0" name="IsSelected" type="xs:boolean" />
+          <xs:element minOccurs="0" name="NumOrder" type="xs:short" />
+          <xs:element minOccurs="0" name="Options" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="OptionsDesc" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="ReportColumnId" type="xs:int" />
+          <xs:element minOccurs="0" name="ReportTable" nillable="true" type="tns:IqReportTable" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="IqReportColumn" nillable="true" type="tns:IqReportColumn" />
+  <xs:complexType name="IqReportTable">
+    <xs:complexContent mixed="false">
+      <xs:extension xmlns:q3="Entities.Profile" base="q3:Auditing">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="Alias" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="JoinQuery" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="NumLevel" type="xs:short" />
+          <xs:element minOccurs="0" name="Report" nillable="true" type="tns:IqReport" />
+          <xs:element minOccurs="0" name="ReportColumns" nillable="true" type="tns:ArrayOfIqReportColumn" />
+          <xs:element minOccurs="0" name="ReportTableId" type="xs:int" />
+          <xs:element minOccurs="0" name="Secuence" type="xs:short" />
+          <xs:element minOccurs="0" name="Table" nillable="true" type="tns:IqTable" />
+          <xs:element minOccurs="0" name="WhereCondition" nillable="true" type="xs:string" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="IqReportTable" nillable="true" type="tns:IqReportTable" />
+  <xs:complexType name="IqReport">
+    <xs:complexContent mixed="false">
+      <xs:extension xmlns:q4="Entities.Profile" base="q4:Auditing">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="IsForSystem" nillable="true" type="xs:boolean" />
+          <xs:element minOccurs="0" name="Name" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="PermitCode" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="Process" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="ProcessControl" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="ProcessParams" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="QueryString" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="ReportDesc" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="ReportId" type="xs:int" />
+          <xs:element minOccurs="0" name="ReportTables" nillable="true" type="tns:ArrayOfIqReportTable" />
+          <xs:element minOccurs="0" name="Settings" nillable="true" type="xs:string" />
+          <xs:element xmlns:q5="Entities.General" minOccurs="0" name="Status" nillable="true" type="q5:Status" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="IqReport" nillable="true" type="tns:IqReport" />
+  <xs:complexType name="ArrayOfIqReportTable">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="IqReportTable" nillable="true" type="tns:IqReportTable" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfIqReportTable" nillable="true" type="tns:ArrayOfIqReportTable" />
+  <xs:complexType name="IqTable">
+    <xs:complexContent mixed="false">
+      <xs:extension xmlns:q6="Entities.Profile" base="q6:Auditing">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="Columns" nillable="true" type="tns:ArrayOfIqColumn" />
+          <xs:element minOccurs="0" name="Name" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="ReportTables" nillable="true" type="tns:ArrayOfIqReportTable" />
+          <xs:element minOccurs="0" name="TableId" type="xs:int" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="IqTable" nillable="true" type="tns:IqTable" />
+  <xs:complexType name="ArrayOfIqColumn">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="IqColumn" nillable="true" type="tns:IqColumn" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfIqColumn" nillable="true" type="tns:ArrayOfIqColumn" />
+  <xs:complexType name="ArrayOfIqReport">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="IqReport" nillable="true" type="tns:IqReport" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfIqReport" nillable="true" type="tns:ArrayOfIqReport" />
+  <xs:complexType name="ArrayOfIqTable">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="IqTable" nillable="true" type="tns:IqTable" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfIqTable" nillable="true" type="tns:ArrayOfIqTable" />
+</xs:schema>

@@ -1,0 +1,694 @@
+﻿<ResourceDictionary 
+    x:Uid="ResourceDictionary_1" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:WMCore="clr-namespace:Core.WPF;assembly=Core" 
+    xmlns:xcdg="http://schemas.xceed.com/wpf/xaml/datagrid"
+    xmlns:aw="clr-namespace:Assergs.Windows;assembly=Assergs.Windows"
+    xmlns:Microsoft_Windows_Themes="clr-namespace:Microsoft.Windows.Themes;assembly=PresentationFramework.Aero">
+
+    <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary x:Uid="ResourceDictionary_2" Source="pack://application:,,,/Assergs.Windows;component/themes/ComboBox.xaml"/>
+        <ResourceDictionary x:Uid="ResourceDictionary_3" Source="pack://application:,,,/Assergs.Windows;component/Controls/ImageButtonDefaultStyle.xaml"/>
+        <ResourceDictionary x:Uid="ResourceDictionary_4" Source="pack://application:,,,/Assergs.Windows;component/Controls/HeaderedPanelDefaultStyle.xaml"/>
+        <ResourceDictionary x:Uid="ResourceDictionary_5" Source="pack://application:,,,/Assergs.Windows;component/Controls/ReflectedButtonDefaultStyle.xaml" />
+        <ResourceDictionary x:Uid="ResourceDictionary_6" Source="pack://application:,,,/Assergs.Windows;component/Controls/UnderlineSeparatorDefaultStyle.xaml" />
+        <ResourceDictionary x:Uid="ResourceDictionary_7" Source="pack://application:,,,/Assergs.Windows;component/Controls/SearchableComboBoxDefaultStyle.xaml" />
+
+        <ResourceDictionary x:Uid="ResourceDictionary_8" Source="pack://application:,,,/Assergs.Windows;component/Ribbon/RibbonDefaultStyle.xaml"/>
+        <ResourceDictionary x:Uid="ResourceDictionary_9" Source="pack://application:,,,/Assergs.Windows;component/Ribbon/RibbonPanelDefaultStyle.xaml"/>
+        <ResourceDictionary x:Uid="ResourceDictionary_10" Source="pack://application:,,,/Assergs.Windows;component/Ribbon/RibbonTabItemDefaultStyle.xaml"/>
+        <ResourceDictionary x:Uid="ResourceDictionary_11" Source="pack://application:,,,/Assergs.Windows;component/Ribbon/RibbonTabItemChromeDefaultStyle.xaml"/>
+        <ResourceDictionary x:Uid="ResourceDictionary_12" Source="pack://application:,,,/Assergs.Windows;component/Windows/ToolWindowDefaultStyle.xaml"/>
+        <ResourceDictionary x:Uid="ResourceDictionary_13" Source="pack://application:,,,/Assergs.Windows;component/Windows/ToolWindowTabItemContainerDefaultStyle.xaml" />
+        <ResourceDictionary x:Uid="ResourceDictionary_14" Source="pack://application:,,,/Assergs.Windows;component/Windows/ToolWindowDockPanelDefaultStyle.xaml" />
+        <ResourceDictionary x:Uid="ResourceDictionary_15" Source="pack://application:,,,/Assergs.Windows;component/DropDownButton/DropDownButtonDefaultStyle.xaml" />
+        <ResourceDictionary x:Uid="ResourceDictionary_16" Source="pack://application:,,,/Assergs.Windows;component/DropDownButton/DropDownMenuItemDefaultStyle.xaml" />
+
+        <ResourceDictionary x:Uid="ResourceDictionary_17" Source="pack://application:,,,/Assergs.Windows;component/themes/ResizeGripStyle.xaml"/>
+        <ResourceDictionary x:Uid="ResourceDictionary_18" Source="pack://application:,,,/Assergs.Windows;component/themes/StatusBarStyle.xaml"/>
+        <ResourceDictionary x:Uid="ResourceDictionary_19" Source="pack://application:,,,/Assergs.Windows;component/themes/ComboBox.xaml"/>
+        <ResourceDictionary x:Uid="ResourceDictionary_20" Source="pack://application:,,,/Assergs.Windows;component/themes/ScrollBar.xaml"/>
+        <ResourceDictionary x:Uid="ResourceDictionary_21" Source="pack://application:,,,/Assergs.Windows;component/themes/Button.xaml"/>
+        <ResourceDictionary x:Uid="ResourceDictionary_22" Source="pack://application:,,,/Assergs.Windows;component/themes/TextBox.xaml"/>
+        <ResourceDictionary x:Uid="ResourceDictionary_23" Source="pack://application:,,,/Assergs.Windows;component/themes/CheckBox.xaml"/>
+        <ResourceDictionary x:Uid="ResourceDictionary_24" Source="pack://application:,,,/Assergs.Windows;component/themes/GroupBox.xaml"/>
+        <ResourceDictionary x:Uid="ResourceDictionary_25" Source="pack://application:,,,/Assergs.Windows;component/themes/GroupBox.xaml"/>
+        <ResourceDictionary x:Uid="ResourceDictionary_26" Source="pack://application:,,,/Assergs.Windows;component/themes/ListBox.xaml"/>
+        <ResourceDictionary x:Uid="ResourceDictionary_27" Source="pack://application:,,,/Assergs.Windows;component/themes/ListBoxItem.xaml"/>
+        <ResourceDictionary x:Uid="ResourceDictionary_28" Source="pack://application:,,,/Assergs.Windows;component/themes/ProgressBar.xaml"/>
+        <ResourceDictionary x:Uid="ResourceDictionary_29" Source="pack://application:,,,/Assergs.Windows;component/themes/ScrollViewer.xaml"/>
+        <ResourceDictionary x:Uid="ResourceDictionary_30" Source="pack://application:,,,/Assergs.Windows;component/themes/RadioButton.xaml"/>
+        <ResourceDictionary x:Uid="ResourceDictionary_31" Source="pack://application:,,,/Assergs.Windows;component/themes/Slider.xaml"/>
+        <ResourceDictionary x:Uid="ResourceDictionary_32" Source="pack://application:,,,/Assergs.Windows;component/themes/Expander.xaml"/>
+        <ResourceDictionary x:Uid="ResourceDictionary_33" Source="pack://application:,,,/Assergs.Windows;component/themes/TabControl.xaml"/>
+        <ResourceDictionary x:Uid="ResourceDictionary_34" Source="pack://application:,,,/Assergs.Windows;component/themes/ListView.xaml"/>
+        <ResourceDictionary x:Uid="ResourceDictionary_35" Source="pack://application:,,,/Assergs.Windows;component/themes/TextBlockStyle.xaml"/>
+        <ResourceDictionary x:Uid="ResourceDictionary_36" Source="pack://application:,,,/Assergs.Windows;component/themes/EditBox.xaml" />
+        <!--<ResourceDictionary Source="pack://application:,,,/Assergs.Windows;component/themes/DataGridControl.xaml"/>-->
+
+    </ResourceDictionary.MergedDictionaries>
+
+
+    <!-- Tab Control -->
+    <LinearGradientBrush x:Uid="LinearGradientBrush_1" x:Key="BrushDarkBackground" EndPoint="0,1" StartPoint="0,0">
+        <GradientStop x:Uid="GradientStop_1" Color="#FF6591CD" Offset="0" />
+        <GradientStop x:Uid="GradientStop_2" Color="#FF6591CD" Offset="1" />
+    </LinearGradientBrush>
+
+    <SolidColorBrush x:Uid="SolidColorBrush_1" x:Key="BrushTextForeground" Color="Black" />
+    
+    <SolidColorBrush x:Uid="SolidColorBrush_2" x:Key="BrushTabControlNormalBorderBrush" Color="#8C8E94" />
+    
+    
+    <Style x:Uid="Style_1" x:Key="TabControlStyleApplication" TargetType="{x:Type TabControl}">
+        <Setter x:Uid="Setter_1" Property="Foreground" Value="{StaticResource {x:Static SystemColors.ControlTextBrushKey}}" />
+        <Setter x:Uid="Setter_2" Property="Padding" Value="4" />
+        <Setter x:Uid="Setter_3" Property="BorderThickness" Value="1" />
+        <Setter x:Uid="Setter_4" Property="BorderBrush" Value="{DynamicResource BrushTabControlNormalBorderBrush}" />
+        <Setter x:Uid="Setter_5" Property="Background" Value="{x:Null}" />
+        <Setter x:Uid="Setter_6" Property="HorizontalContentAlignment" Value="Center" />
+        <Setter x:Uid="Setter_7" Property="VerticalContentAlignment" Value="Center" />
+        <Setter x:Uid="Setter_8" Property="Padding" Value="0,0,0,0" />
+        <Setter x:Uid="Setter_9" Property="VerticalContentAlignment" Value="Stretch" />
+        <Setter x:Uid="Setter_10" Property="HorizontalContentAlignment" Value="Stretch" />
+        <Setter x:Uid="Setter_11" Property="Margin" Value="0,0,0,0" />
+        <Setter x:Uid="Setter_12" Property="TabStripPlacement" Value="Bottom" />
+        <Setter x:Uid="Setter_13" Property="IsSynchronizedWithCurrentItem" Value="True" />
+        <Setter x:Uid="Setter_14" Property="Height" Value="Auto" />
+        <Setter x:Uid="Setter_15" Property="Width" Value="Auto" />
+        <Setter x:Uid="Setter_16" Property="Template">
+            <Setter.Value>
+                <ControlTemplate x:Uid="ControlTemplate_1" TargetType="{x:Type TabControl}">
+                    <Grid x:Uid="Grid_1" ClipToBounds="true" SnapsToDevicePixels="true" KeyboardNavigation.TabNavigation="Local">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition x:Uid="ColumnDefinition0" x:Name="ColumnDefinition0" />
+                            <ColumnDefinition x:Uid="ColumnDefinition1" Width="0" x:Name="ColumnDefinition1" />
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition x:Uid="RowDefinition0" x:Name="RowDefinition0" Height="Auto" />
+                            <RowDefinition x:Uid="RowDefinition1" x:Name="RowDefinition1" Height="*" />
+                        </Grid.RowDefinitions>
+                        <Border x:Uid="ContentPanel" x:Name="ContentPanel" Background="{TemplateBinding Background}" BorderBrush="{DynamicResource BrushDarkBackground}" BorderThickness="{TemplateBinding BorderThickness}" Grid.Column="0" Grid.Row="1" KeyboardNavigation.DirectionalNavigation="Contained" KeyboardNavigation.TabIndex="2" KeyboardNavigation.TabNavigation="Local">
+                            <ContentPresenter x:Uid="PART_SelectedContentHost" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" Margin="{TemplateBinding Padding}" x:Name="PART_SelectedContentHost" ContentSource="SelectedContent" />
+                        </Border>
+                        <Border x:Uid="HeaderPanelBorder" x:Name="HeaderPanelBorder" Margin="0,0,0,0" BorderBrush="{DynamicResource BrushDarkBackground}" Grid.Column="0" Grid.Row="0" BorderThickness="1,0,1,0" Padding="4,0,4,0">
+                            <TabPanel x:Uid="HeaderPanel" x:Name="HeaderPanel" IsItemsHost="true" Panel.ZIndex="1" KeyboardNavigation.TabIndex="1" Margin="0,4,0,0" />
+                        </Border>
+                    </Grid>
+                    <ControlTemplate.Triggers>
+                        <Trigger x:Uid="Trigger_1" Property="TabStripPlacement" Value="Bottom">
+                            <Setter x:Uid="Setter_17" Property="Grid.Row" TargetName="HeaderPanelBorder" Value="1" />
+                            <Setter x:Uid="Setter_18" Property="Grid.Row" TargetName="ContentPanel" Value="0" />
+                            <Setter x:Uid="Setter_19" Property="Height" TargetName="RowDefinition0" Value="*" />
+                            <Setter x:Uid="Setter_20" Property="Height" TargetName="RowDefinition1" Value="Auto" />
+                            <Setter x:Uid="Setter_21" Property="Margin" TargetName="HeaderPanel" Value="0,0,0,4" />
+                        </Trigger>
+                        <Trigger x:Uid="Trigger_2" Property="TabStripPlacement" Value="Left">
+                            <Setter x:Uid="Setter_22" Property="Grid.Row" TargetName="HeaderPanelBorder" Value="0" />
+                            <Setter x:Uid="Setter_23" Property="Grid.Row" TargetName="ContentPanel" Value="0" />
+                            <Setter x:Uid="Setter_24" Property="Grid.Column" TargetName="HeaderPanelBorder" Value="0" />
+                            <Setter x:Uid="Setter_25" Property="Grid.Column" TargetName="ContentPanel" Value="1" />
+                            <Setter x:Uid="Setter_26" Property="Width" TargetName="ColumnDefinition0" Value="Auto" />
+                            <Setter x:Uid="Setter_27" Property="Width" TargetName="ColumnDefinition1" Value="*" />
+                            <Setter x:Uid="Setter_28" Property="Height" TargetName="RowDefinition0" Value="*" />
+                            <Setter x:Uid="Setter_29" Property="Height" TargetName="RowDefinition1" Value="0" />
+                            <Setter x:Uid="Setter_30" Property="Margin" TargetName="HeaderPanelBorder" Value="2,2,0,2" />
+                        </Trigger>
+                        <Trigger x:Uid="Trigger_3" Property="TabStripPlacement" Value="Right">
+                            <Setter x:Uid="Setter_31" Property="Grid.Row" TargetName="HeaderPanelBorder" Value="0" />
+                            <Setter x:Uid="Setter_32" Property="Grid.Row" TargetName="ContentPanel" Value="0" />
+                            <Setter x:Uid="Setter_33" Property="Grid.Column" TargetName="HeaderPanelBorder" Value="1" />
+                            <Setter x:Uid="Setter_34" Property="Grid.Column" TargetName="ContentPanel" Value="0" />
+                            <Setter x:Uid="Setter_35" Property="Width" TargetName="ColumnDefinition0" Value="*" />
+                            <Setter x:Uid="Setter_36" Property="Width" TargetName="ColumnDefinition1" Value="Auto" />
+                            <Setter x:Uid="Setter_37" Property="Height" TargetName="RowDefinition0" Value="*" />
+                            <Setter x:Uid="Setter_38" Property="Height" TargetName="RowDefinition1" Value="0" />
+                            <Setter x:Uid="Setter_39" Property="Margin" TargetName="HeaderPanelBorder" Value="0,2,2,2" />
+                        </Trigger>
+                        <Trigger x:Uid="Trigger_4" Property="IsEnabled" Value="false">
+                            <Setter x:Uid="Setter_40" Property="Foreground" Value="{StaticResource {x:Static SystemColors.GrayTextBrushKey}}" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    
+    <!-- Tab Item -->
+    
+    <Style x:Uid="Style_2" x:Key="TabItemFocusVisual">
+        <Setter x:Uid="Setter_41" Property="Control.Template">
+            <Setter.Value>
+                <ControlTemplate x:Uid="ControlTemplate_2">
+                    <Rectangle x:Uid="Rectangle_1" SnapsToDevicePixels="true" Stroke="Black" StrokeDashArray="1 2" StrokeThickness="1" Margin="3,3,3,1" />
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    
+    <SolidColorBrush x:Uid="SolidColorBrush_3" x:Key="BrushFormHeadingText" Color="#FF003987" />
+    
+    <LinearGradientBrush x:Uid="LinearGradientBrush_2" x:Key="BrushToolBarBackground" EndPoint="0,1" StartPoint="0,0">
+        <GradientStop x:Uid="GradientStop_3" Color="#FFBFDBFF" Offset="0" />
+        <GradientStop x:Uid="GradientStop_4" Color="#FFE7F3FF" Offset="0.11" />
+        <GradientStop x:Uid="GradientStop_5" Color="#FFBFDBFF" Offset="0.53" />
+    </LinearGradientBrush>
+    
+    <LinearGradientBrush x:Uid="LinearGradientBrush_3" x:Key="BrushTabControlButtonNormalBackground" EndPoint="0,1" StartPoint="0,0">
+        <GradientStop x:Uid="GradientStop_6" Color="#F3F3F3" Offset="0" />
+        <GradientStop x:Uid="GradientStop_7" Color="#EBEBEB" Offset="0.5" />
+        <GradientStop x:Uid="GradientStop_8" Color="#DDDDDD" Offset="0.5" />
+        <GradientStop x:Uid="GradientStop_9" Color="#CDCDCD" Offset="1" />
+    </LinearGradientBrush>
+    
+    <LinearGradientBrush x:Uid="LinearGradientBrush_4" x:Key="BrushTabItemBackgroundBorder" EndPoint="0.5,-0.175" StartPoint="0.5,1.175">
+        <GradientStop x:Uid="GradientStop_10" Color="#FF6591CD" Offset="0.445" />
+        <GradientStop x:Uid="GradientStop_11" Color="#FFBFDBFF" Offset="0.855" />
+    </LinearGradientBrush>
+
+    <LinearGradientBrush x:Uid="LinearGradientBrush_5" x:Key="BrushTabItemSelected" EndPoint="0.497,0.076" StartPoint="0.497,1.015">
+        <GradientStop x:Uid="GradientStop_12" Color="#FFE3EFFF" Offset="0" />
+        <GradientStop x:Uid="GradientStop_13" Color="#FFE3EFFF" Offset="0.375" />
+    </LinearGradientBrush>
+
+    <LinearGradientBrush x:Uid="LinearGradientBrush_6" x:Key="BrushTabItemNotSelected" EndPoint="0.5,-0.175" StartPoint="0.5,1.175">
+        <GradientStop x:Uid="GradientStop_14" Color="#FFFFFFFF" Offset="0.683" />
+        <GradientStop x:Uid="GradientStop_15" Color="#FFFFFFFF" Offset="1" />
+    </LinearGradientBrush>
+    
+    <SolidColorBrush x:Uid="SolidColorBrush_4" x:Key="BrushToolBarButtonBorder" Color="#FFFB8C3C" />
+    
+    <LinearGradientBrush x:Uid="LinearGradientBrush_7" x:Key="BrushToolBarMouseOverBackground" EndPoint="0,1" StartPoint="0,0" SpreadMethod="Reflect">
+        <GradientStop x:Uid="GradientStop_16" Color="#FFFFF5CB" Offset="0.2" />
+        <GradientStop x:Uid="GradientStop_17" Color="#FFFFE290" Offset="0.6" />
+        <GradientStop x:Uid="GradientStop_18" Color="#FFFFDB76" Offset="1" />
+        <GradientStop x:Uid="GradientStop_19" Color="#FFFFF8D5" Offset="0" />
+    </LinearGradientBrush>
+    
+    <SolidColorBrush x:Uid="SolidColorBrush_5" x:Key="BrushTabItemDisabledBackground" Color="#F4F4F4" />
+
+    <SolidColorBrush x:Uid="SolidColorBrush_6" x:Key="BrushTabItemDisabledBorderBrush" Color="#FFC9C7BA" />
+    
+    <Style x:Uid="Style_3" x:Key="TabItemStyleApplication" TargetType="{x:Type TabItem}">
+        <Setter x:Uid="Setter_42" Property="Background" Value="{DynamicResource BrushToolBarBackground}" />
+        <Setter x:Uid="Setter_43" Property="Foreground" Value="{DynamicResource BrushFormHeadingText}" />
+        <Setter x:Uid="Setter_44" Property="FocusVisualStyle" Value="{StaticResource TabItemFocusVisual}" />
+        <Setter x:Uid="Setter_45" Property="Padding" Value="6,1,6,1" />
+        <Setter x:Uid="Setter_46" Property="BorderBrush" Value="{DynamicResource BrushTabControlNormalBorderBrush}" />
+        <Setter x:Uid="Setter_47" Property="Background" Value="{DynamicResource BrushTabControlButtonNormalBackground}" />
+        <Setter x:Uid="Setter_48" Property="HorizontalContentAlignment" Value="Stretch" />
+        <Setter x:Uid="Setter_49" Property="VerticalContentAlignment" Value="Stretch" />
+        <Setter x:Uid="Setter_50" Property="Template">
+            <Setter.Value>
+                <ControlTemplate x:Uid="ControlTemplate_3" TargetType="{x:Type TabItem}">
+                    <Grid x:Uid="Grid_2" SnapsToDevicePixels="true">
+                        <Border x:Uid="Bd" x:Name="Bd" Padding="{TemplateBinding Padding}" Background="{DynamicResource BrushTabItemNotSelected}" BorderBrush="{DynamicResource BrushDarkBackground}" >
+                            <ContentPresenter x:Uid="Content" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" HorizontalAlignment="{Binding Path=HorizontalContentAlignment, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}" x:Name="Content" VerticalAlignment="{Binding Path=VerticalContentAlignment, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}" ContentSource="Header" RecognizesAccessKey="True" />
+                        </Border>
+                    </Grid>
+                    <ControlTemplate.Triggers>
+                        <Trigger x:Uid="Trigger_5" Property="IsSelected" Value="true">
+                            <Setter x:Uid="Setter_51" Property="Panel.ZIndex" Value="1" />
+                            <Setter x:Uid="Setter_52" Property="Background" TargetName="Bd" Value="{DynamicResource BrushTabItemSelected}" />
+                            <Setter x:Uid="Setter_53" Property="BorderBrush" TargetName="Bd" Value="{DynamicResource BrushDarkBackground}" />
+                        </Trigger>
+                        <MultiTrigger x:Uid="MultiTrigger_1">
+                            <MultiTrigger.Conditions>
+                                <Condition x:Uid="Condition_1" Property="MinWidth" Value="0" SourceName="Bd" />
+                                <Condition x:Uid="Condition_2" Property="IsMouseOver" Value="true" SourceName="Bd" />
+                            </MultiTrigger.Conditions>
+                            <Setter x:Uid="Setter_54" Property="BorderBrush" TargetName="Bd" Value="{DynamicResource BrushToolBarButtonBorder}" />
+                            <Setter x:Uid="Setter_55" Property="Background" TargetName="Bd" Value="{DynamicResource BrushTabItemSelected}" />
+                        </MultiTrigger>
+                        <MultiTrigger x:Uid="MultiTrigger_2">
+                            <MultiTrigger.Conditions>
+                                <Condition x:Uid="Condition_3" Property="IsSelected" Value="false" />
+                                <Condition x:Uid="Condition_4" Property="IsMouseOver" Value="true" />
+                            </MultiTrigger.Conditions>
+                            <Setter x:Uid="Setter_56" Property="Background" TargetName="Bd" Value="{DynamicResource BrushToolBarMouseOverBackground}" />
+                            <Setter x:Uid="Setter_57" Property="BorderBrush" TargetName="Bd" Value="{DynamicResource BrushToolBarButtonBorder}" />
+                        </MultiTrigger>
+                        <Trigger x:Uid="Trigger_6" Property="TabStripPlacement" Value="Top">
+                            <Setter x:Uid="Setter_58" Property="CornerRadius" TargetName="Bd" Value="6,6,0,0" />
+                        </Trigger>
+                        <Trigger x:Uid="Trigger_7" Property="TabStripPlacement" Value="Bottom">
+                            <Setter x:Uid="Setter_59" Property="BorderThickness" TargetName="Bd" Value="1,0,1,1" />
+                            <Setter x:Uid="Setter_60" Property="CornerRadius" TargetName="Bd" Value="0,0,6,6" />
+                        </Trigger>
+                        <Trigger x:Uid="Trigger_8" Property="TabStripPlacement" Value="Left">
+                            <Setter x:Uid="Setter_61" Property="BorderThickness" TargetName="Bd" Value="1,1,0,1" />
+                        </Trigger>
+                        <Trigger x:Uid="Trigger_9" Property="TabStripPlacement" Value="Right">
+                            <Setter x:Uid="Setter_62" Property="BorderThickness" TargetName="Bd" Value="0,1,1,1" />
+                        </Trigger>
+                        <MultiTrigger x:Uid="MultiTrigger_3">
+                            <MultiTrigger.Conditions>
+                                <Condition x:Uid="Condition_5" Property="IsSelected" Value="true" />
+                                <Condition x:Uid="Condition_6" Property="TabStripPlacement" Value="Top" />
+                            </MultiTrigger.Conditions>
+                            <Setter x:Uid="Setter_63" Property="Margin" Value="0,-2,-2,-1" />
+                            <Setter x:Uid="Setter_64" Property="Margin" TargetName="Content" Value="0,0,0,1" />
+                        </MultiTrigger>
+                        <MultiTrigger x:Uid="MultiTrigger_4">
+                            <MultiTrigger.Conditions>
+                                <Condition x:Uid="Condition_7" Property="IsSelected" Value="true" />
+                                <Condition x:Uid="Condition_8" Property="TabStripPlacement" Value="Bottom" />
+                            </MultiTrigger.Conditions>
+                            <Setter x:Uid="Setter_65" Property="Margin" Value="0,-1,-2,-2" />
+                            <Setter x:Uid="Setter_66" Property="Margin" TargetName="Content" Value="0,1,0,0" />
+                            <Setter x:Uid="Setter_67" Property="Margin" TargetName="Bd" Value="-0.309,0,0.309,0" />
+                        </MultiTrigger>
+                        <MultiTrigger x:Uid="MultiTrigger_5">
+                            <MultiTrigger.Conditions>
+                                <Condition x:Uid="Condition_9" Property="IsSelected" Value="true" />
+                                <Condition x:Uid="Condition_10" Property="TabStripPlacement" Value="Left" />
+                            </MultiTrigger.Conditions>
+                            <Setter x:Uid="Setter_68" Property="Margin" Value="-2,-2,-1,-2" />
+                            <Setter x:Uid="Setter_69" Property="Margin" TargetName="Content" Value="0,0,1,0" />
+                        </MultiTrigger>
+                        <MultiTrigger x:Uid="MultiTrigger_6">
+                            <MultiTrigger.Conditions>
+                                <Condition x:Uid="Condition_11" Property="IsSelected" Value="true" />
+                                <Condition x:Uid="Condition_12" Property="TabStripPlacement" Value="Right" />
+                            </MultiTrigger.Conditions>
+                            <Setter x:Uid="Setter_70" Property="Margin" Value="-1,-2,-2,-2" />
+                            <Setter x:Uid="Setter_71" Property="Margin" TargetName="Content" Value="1,0,0,0" />
+                        </MultiTrigger>
+                        <Trigger x:Uid="Trigger_10" Property="IsEnabled" Value="false">
+                            <Setter x:Uid="Setter_72" Property="Background" TargetName="Bd" Value="{DynamicResource BrushTabItemDisabledBackground}" />
+                            <Setter x:Uid="Setter_73" Property="BorderBrush" TargetName="Bd" Value="{DynamicResource BrushTabItemDisabledBorderBrush}" />
+                            <Setter x:Uid="Setter_74" Property="Foreground" Value="{StaticResource {x:Static SystemColors.GrayTextBrushKey}}" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!-- ToolBar Tray Styles -->
+    <Style x:Uid="Style_4" TargetType="{x:Type ToolBarTray}">
+        <Setter x:Uid="Setter_75" Property="Background" Value="{DynamicResource BrushToolBarBackground}" />
+        <Setter x:Uid="Setter_76" Property="DockPanel.Dock" Value="Top" />
+    </Style>
+
+    <LinearGradientBrush x:Uid="LinearGradientBrush_8" x:Key="BrushToolBarButtonPressed" EndPoint="0,1" StartPoint="0,0">
+        <GradientStop x:Uid="GradientStop_20" Color="#FFFB923C" Offset="0" />
+        <GradientStop x:Uid="GradientStop_21" Color="#FFFC953C" Offset="0.0967741935483871" />
+        <GradientStop x:Uid="GradientStop_22" Color="#FFFD9D3D" Offset="0.303" />
+        <GradientStop x:Uid="GradientStop_23" Color="#FFFFAB3F" Offset="0.551" />
+        <GradientStop x:Uid="GradientStop_24" Color="#FFFFB14D" Offset="0.788" />
+        <GradientStop x:Uid="GradientStop_25" Color="#FFFFB85D" Offset="1" />
+    </LinearGradientBrush>
+
+    <SolidColorBrush x:Uid="SolidColorBrush_7" x:Key="BrushToolBarMouseOverForeground" Color="Black" />
+    
+    <!-- ToolBar Button Styles -->
+    <Style x:Uid="Style_5" TargetType="{x:Type WMCore:CustomToolBarButton}">
+        <Setter x:Uid="Setter_77" Property="ButtonPressedBackground" Value="{DynamicResource BrushToolBarButtonPressed}" />
+        <Setter x:Uid="Setter_78" Property="ButtonPressedBorder" Value="{DynamicResource BrushToolBarButtonBorder}" />
+        <Setter x:Uid="Setter_79" Property="MouseOverBackground" Value="{DynamicResource BrushToolBarMouseOverBackground}" />
+        <Setter x:Uid="Setter_80" Property="MouseOverBorder" Value="{DynamicResource BrushToolBarButtonBorder}" />
+        <Setter x:Uid="Setter_81" Property="MouseOverForeground" Value="{DynamicResource BrushToolBarMouseOverForeground}" />
+    </Style>
+    
+    <!-- MDI Tab Control Brushes -->
+    <LinearGradientBrush x:Uid="LinearGradientBrush_9" x:Key="BrushLightTabItemBackground" EndPoint="0,1" StartPoint="0,0">
+        <GradientStop x:Uid="GradientStop_26" Color="#FFE3EFFF" Offset="0" />
+        <GradientStop x:Uid="GradientStop_27" Color="#FFE3EFFF" Offset="1" />
+    </LinearGradientBrush>
+
+    <!-- Application Border Style - Used on the Application Main Window, wraps the tab control -->
+    <Style x:Uid="Style_6" x:Key="ApplicationBorder" TargetType="{x:Type Border}">
+        <Setter x:Uid="Setter_82" Property="Width" Value="Auto" />
+        <Setter x:Uid="Setter_83" Property="Height" Value="Auto" />
+        <Setter x:Uid="Setter_84" Property="BorderBrush" Value="{DynamicResource BrushTabItemBackgroundBorder}" />
+        <Setter x:Uid="Setter_85" Property="BorderThickness" Value="4,0,4,4" />
+    </Style>
+    
+    <!-- UserControl Form Styles - Used on all application UserControl forms -->
+    <Style x:Uid="Style_7" x:Key="UserControlFormOuterBorder" TargetType="{x:Type Border}">
+        <Setter x:Uid="Setter_86" Property="HorizontalAlignment" Value="Stretch" />
+        <Setter x:Uid="Setter_87" Property="VerticalAlignment" Value="Stretch" />
+        <Setter x:Uid="Setter_88" Property="DockPanel.Dock" Value="Top" />
+        <Setter x:Uid="Setter_89" Property="Width" Value="Auto" />
+        <Setter x:Uid="Setter_90" Property="Height" Value="Auto" />
+        <Setter x:Uid="Setter_91" Property="BorderThickness" Value="2" />
+    </Style>
+
+    <Style x:Uid="Style_8" x:Key="UserControlFormInnerBorder" TargetType="{x:Type Border}">
+        <Setter x:Uid="Setter_92" Property="KeyboardNavigation.TabNavigation" Value="Cycle" />
+        <Setter x:Uid="Setter_93" Property="Padding" Value="5" />
+        <Setter x:Uid="Setter_94" Property="Margin" Value="5,5,5,5" />
+        <Setter x:Uid="Setter_95" Property="CornerRadius" Value="10" />
+        <Setter x:Uid="Setter_96" Property="BorderBrush" Value="{DynamicResource BrushDarkBackground}" />
+        <Setter x:Uid="Setter_97" Property="Background" Value="{DynamicResource BrushLightTabItemBackground}" />
+        <Setter x:Uid="Setter_98" Property="VerticalAlignment" Value="Stretch" />
+        <Setter x:Uid="Setter_99" Property="Width" Value="Auto" />
+        <Setter x:Uid="Setter_100" Property="Height" Value="Auto" />
+        <Setter x:Uid="Setter_101" Property="BorderThickness" Value="2" />
+    </Style>
+
+
+
+    <Style x:Uid="Style_9" x:Key="GrayStyle" TargetType="{x:Type Border}">
+        <Setter x:Uid="Setter_102" Property="KeyboardNavigation.TabNavigation" Value="Cycle" />
+        <Setter x:Uid="Setter_103" Property="Padding" Value="5" />
+        <Setter x:Uid="Setter_104" Property="Margin" Value="5,5,5,5" />
+        <Setter x:Uid="Setter_105" Property="CornerRadius" Value="10" />
+        <Setter x:Uid="Setter_106" Property="BorderBrush" Value="{DynamicResource BrushDarkBackground}" />
+        <Setter x:Uid="Setter_107" Property="Background" Value="{DynamicResource GrayBg}" />
+        <Setter x:Uid="Setter_108" Property="VerticalAlignment" Value="Stretch" />
+        <Setter x:Uid="Setter_109" Property="Width" Value="Auto" />
+        <Setter x:Uid="Setter_110" Property="Height" Value="Auto" />
+        <Setter x:Uid="Setter_111" Property="BorderThickness" Value="2" />
+    </Style>
+
+
+    <Style x:Uid="Style_10" x:Key="BrownFont" TargetType="{x:Type TextBlock}">
+        <Setter x:Uid="Setter_112" Property="FontWeight" Value="Bold" />
+        <Setter x:Uid="Setter_113" Property="FontSize" Value="12" />
+        <Setter x:Uid="Setter_114" Property="Foreground" Value="Brown" />
+    </Style>
+
+
+    <LinearGradientBrush x:Uid="LinearGradientBrush_10" x:Key="GrayBg" EndPoint="1,1" StartPoint="0,0">
+        <GradientStop x:Uid="GradientStop_28" Color="LightGray" Offset="0"/>
+        <GradientStop x:Uid="GradientStop_29" Color="AliceBlue" Offset="1"/>
+    </LinearGradientBrush>
+
+    <LinearGradientBrush x:Uid="LinearGradientBrush_11" x:Key="WBg" EndPoint="1,1" StartPoint="0,0">
+        <GradientStop x:Uid="GradientStop_30" Color="WhiteSmoke" Offset="0"/>
+        <GradientStop x:Uid="GradientStop_31" Color="White" Offset="1"/>
+    </LinearGradientBrush>
+    
+
+
+    <LinearGradientBrush x:Uid="LinearGradientBrush_12" x:Key="BrushToolBarOverflowRegion" EndPoint="0.5,-0.175" StartPoint="0.5,1.175">
+        <GradientStop x:Uid="GradientStop_32" Color="#FF74A2E2" Offset="0.445" />
+        <GradientStop x:Uid="GradientStop_33" Color="#FFBFDBFF" Offset="0.83" />
+        <GradientStop x:Uid="GradientStop_34" Color="#FF74A2E2" Offset="1"/>
+    </LinearGradientBrush>
+    
+    <Style x:Uid="Style_11" TargetType="{x:Type ToolBar}">
+        <Setter x:Uid="Setter_115" Property="DockPanel.Dock" Value="Top" />
+        <Setter x:Uid="Setter_116" Property="Background" Value="{x:Null}" />
+        <Setter x:Uid="Setter_117" Property="KeyboardNavigation.TabNavigation" Value="Continue" />
+        <Setter x:Uid="Setter_118" Property="VerticalAlignment" Value="Top" />
+        <Setter x:Uid="Setter_119" Property="BorderBrush" Value="{x:Null}" />
+        <Setter x:Uid="Setter_120" Property="BorderThickness" Value="0" />
+        <Setter x:Uid="Setter_121" Property="Foreground" Value="{DynamicResource BrushTextForeground}" />
+        <Setter x:Uid="Setter_122" Property="HorizontalAlignment" Value="Left" />
+
+        <Setter x:Uid="Setter_123" Property="Template">
+            <Setter.Value>
+                <ControlTemplate x:Uid="ControlTemplate_4" TargetType="{x:Type ToolBar}">
+                    <Grid x:Uid="Grid" SnapsToDevicePixels="True" Margin="3,1,1,1" x:Name="Grid">
+                        <Grid x:Uid="OverflowGrid" HorizontalAlignment="Right" x:Name="OverflowGrid">
+                            <ToggleButton x:Uid="OverflowButton" IsEnabled="{TemplateBinding HasOverflowItems}" FocusVisualStyle="{x:Null}" x:Name="OverflowButton" ClickMode="Press" IsChecked="{Binding Path=IsOverflowOpen, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}" Background="{DynamicResource BrushToolBarOverflowRegion}">
+                                <ToggleButton.Style>
+                                    <Style x:Uid="Style_12" TargetType="{x:Type ToggleButton}">
+                                        <Setter x:Uid="Setter_124" Property="Background">
+                                            <Setter.Value>
+                                                <LinearGradientBrush x:Uid="LinearGradientBrush_13" EndPoint="0,1" StartPoint="0,0">
+                                                    <GradientStop x:Uid="GradientStop_35" Color="#FFECECEC" Offset="0" />
+                                                    <GradientStop x:Uid="GradientStop_36" Color="#FFDDDDDD" Offset="0.5" />
+                                                    <GradientStop x:Uid="GradientStop_37" Color="#FFA0A0A0" Offset="1" />
+                                                </LinearGradientBrush>
+                                            </Setter.Value>
+                                        </Setter>
+                                        <Setter x:Uid="Setter_125" Property="MinHeight" Value="0" />
+                                        <Setter x:Uid="Setter_126" Property="MinWidth" Value="0" />
+                                        <Setter x:Uid="Setter_127" Property="Template">
+                                            <Setter.Value>
+                                                <ControlTemplate x:Uid="ControlTemplate_5" TargetType="{x:Type ToggleButton}">
+                                                    <Border x:Uid="Border_1" SnapsToDevicePixels="True" x:Name="Bd" Background="{TemplateBinding Background}" CornerRadius="0,3,3,0">
+                                                        <Canvas x:Uid="Canvas_1" SnapsToDevicePixels="True" HorizontalAlignment="Right" Margin="7,2,2,2" VerticalAlignment="Bottom" Width="6" Height="7">
+                                                            <Path x:Uid="Path_1" Stroke="#FFFFFFFF" Data="M1,1.5L6,1.5" />
+                                                            <Path x:Uid="Path_2" Stroke="{TemplateBinding Foreground}" Data="M0,0.5L5,0.5" />
+                                                            <Path x:Uid="Path_3" Fill="#FFFFFFFF" Data="M0.5,4L6.5,4 3.5,7z" />
+                                                            <Path x:Uid="Path_4" Fill="{TemplateBinding Foreground}" Data="M-0.5,3L5.5,3 2.5,6z" />
+                                                        </Canvas>
+                                                    </Border>
+                                                    <ControlTemplate.Triggers>
+                                                        <Trigger x:Uid="Trigger_11" Property="IsMouseOver" Value="True">
+                                                            <Setter x:Uid="Setter_128" Property="Background" TargetName="Bd" Value="{DynamicResource BrushToolBarMouseOverBackground}" />
+                                                        </Trigger>
+                                                        <Trigger x:Uid="Trigger_12" Property="IsKeyboardFocused" Value="True">
+                                                            <Setter x:Uid="Setter_129" Property="Background" TargetName="Bd" Value="{DynamicResource BrushToolBarMouseOverBackground}" />
+                                                        </Trigger>
+                                                        <Trigger x:Uid="Trigger_13" Property="IsEnabled" Value="False">
+                                                            <Setter x:Uid="Setter_130" Property="Foreground" Value="#FFC6C3C6" />
+                                                        </Trigger>
+                                                    </ControlTemplate.Triggers>
+                                                </ControlTemplate>
+                                            </Setter.Value>
+                                        </Setter>
+                                    </Style>
+                                </ToggleButton.Style>
+                            </ToggleButton>
+                            <Popup x:Uid="OverflowPopup" Focusable="False" AllowsTransparency="True" IsOpen="{Binding Path=IsOverflowOpen, RelativeSource={RelativeSource TemplatedParent}}" Placement="Bottom" PopupAnimation="{DynamicResource {x:Static SystemParameters.ComboBoxPopupAnimationKey}}" StaysOpen="False" x:Name="OverflowPopup">
+                                <Microsoft_Windows_Themes:SystemDropShadowChrome x:Uid="Shdw" x:Name="Shdw" Color="#00FFFFFF">
+                                    <Border x:Uid="Border_2" Background="#FFFDFDFD" BorderBrush="#FF808080" BorderThickness="1,1,1,1">
+                                        <ToolBarOverflowPanel x:Uid="PART_ToolBarOverflowPanel" Focusable="True" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" FocusVisualStyle="{x:Null}" Margin="2,2,2,2" x:Name="PART_ToolBarOverflowPanel" KeyboardNavigation.DirectionalNavigation="Cycle" KeyboardNavigation.TabNavigation="Cycle" WrapWidth="200" />
+                                    </Border>
+                                </Microsoft_Windows_Themes:SystemDropShadowChrome>
+                            </Popup>
+                        </Grid>
+                        <Border x:Uid="MainPanelBorder" Margin="0,0,11,0" x:Name="MainPanelBorder" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" CornerRadius="3,3,3,3" Padding="{TemplateBinding Padding}">
+                            <DockPanel x:Uid="DockPanel_1" KeyboardNavigation.TabIndex="1" KeyboardNavigation.TabNavigation="Local">
+                                <Thumb  x:Uid="ToolBarThumb" Padding="6,5,1,6" Margin="-3,-1,0,0" x:Name="ToolBarThumb" Width="10">
+                                    <Thumb.Style>
+                                        <Style x:Uid="Style_13" TargetType="{x:Type Thumb}">
+
+                                            <Setter x:Uid="Setter_131" Property="Template">
+                                                <Setter.Value>
+                                                    <ControlTemplate x:Uid="ControlTemplate_6" TargetType="{x:Type Thumb}">
+                                                        <Border x:Uid="Border_3" SnapsToDevicePixels="True" Background="#00FFFFFF" Padding="{TemplateBinding Padding}">
+                                                            <Rectangle x:Uid="Rectangle_2">
+                                                                <Rectangle.Fill>
+                                                                    <DrawingBrush x:Uid="DrawingBrush_1" TileMode="Tile" Viewbox="0,0,4,4" ViewboxUnits="Absolute" Viewport="0,0,4,4" ViewportUnits="Absolute">
+                                                                        <DrawingBrush.Drawing>
+                                                                            <DrawingGroup x:Uid="DrawingGroup_1">
+                                                                                <GeometryDrawing x:Uid="GeometryDrawing_1" Brush="#FFFFFFFF" Geometry="M1,1L1,3 3,3 3,1z" />
+                                                                                <GeometryDrawing x:Uid="GeometryDrawing_2" Brush="#FFC6C3C6" Geometry="M0,0L0,2 2,2 2,0z" />
+                                                                            </DrawingGroup>
+                                                                        </DrawingBrush.Drawing>
+                                                                    </DrawingBrush>
+                                                                </Rectangle.Fill>
+                                                            </Rectangle>
+                                                        </Border>
+                                                        <!--<ControlTemplate.Triggers>
+                                                <Trigger Property="IsMouseOver" Value="True">
+                                                    <Setter Property="Cursor" Value="SizeAll" />
+                                                </Trigger>
+                                            </ControlTemplate.Triggers>-->
+                                                    </ControlTemplate>
+                                                </Setter.Value>
+                                            </Setter>
+                                        </Style>
+                                    </Thumb.Style>
+                                </Thumb>
+                                <ContentPresenter x:Uid="ToolBarHeader" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" HorizontalAlignment="Center" Margin="4,0,4,0" x:Name="ToolBarHeader" VerticalAlignment="Center" Content="{TemplateBinding Header}" ContentSource="Header" ContentTemplate="{TemplateBinding HeaderTemplate}" />
+                                <ToolBarPanel x:Uid="PART_ToolBarPanel" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" Margin="0,1,2,2" x:Name="PART_ToolBarPanel" IsItemsHost="True" />
+                            </DockPanel>
+                        </Border>
+                    </Grid>
+                    <ControlTemplate.Triggers>
+                        <Trigger x:Uid="Trigger_14" Property="IsOverflowOpen" Value="True">
+                            <Setter x:Uid="Setter_132" Property="IsEnabled" TargetName="ToolBarThumb" Value="False" />
+                        </Trigger>
+                        <Trigger x:Uid="Trigger_15" Property="Header" Value="{x:Null}">
+                            <Setter x:Uid="Setter_133" Property="Visibility" TargetName="ToolBarHeader" Value="Collapsed" />
+                        </Trigger>
+                        <Trigger x:Uid="Trigger_16" Property="ToolBarTray.IsLocked" Value="True">
+                            <Setter x:Uid="Setter_134" Property="Visibility" TargetName="ToolBarThumb" Value="Collapsed" />
+                        </Trigger>
+                        <Trigger x:Uid="Trigger_17" Property="HasDropShadow" SourceName="OverflowPopup" Value="True">
+                            <Setter x:Uid="Setter_135" Property="Margin" TargetName="Shdw" Value="0,0,5,5" />
+                            <Setter x:Uid="Setter_136" Property="SnapsToDevicePixels" TargetName="Shdw" Value="True" />
+                            <Setter x:Uid="Setter_137" Property="Color" TargetName="Shdw" Value="#71000000" />
+                        </Trigger>
+                        <Trigger x:Uid="Trigger_18" Property="Orientation" Value="Vertical">
+                            <Setter x:Uid="Setter_138" Property="Margin" TargetName="Grid" Value="1,3,1,1" />
+                            <Setter x:Uid="Setter_139" Property="Style" TargetName="OverflowButton">
+                                <Setter.Value>
+                                    <Style x:Uid="Style_14" TargetType="{x:Type ToggleButton}">
+                                        <Setter x:Uid="Setter_140" Property="Background">
+                                            <Setter.Value>
+                                                <LinearGradientBrush x:Uid="LinearGradientBrush_14" EndPoint="1,0" StartPoint="0,0">
+                                                    <GradientStop x:Uid="GradientStop_38" Color="#FFECECEC" Offset="0" />
+                                                    <GradientStop x:Uid="GradientStop_39" Color="#FFDDDDDD" Offset="0.5" />
+                                                    <GradientStop x:Uid="GradientStop_40" Color="#FFA0A0A0" Offset="1" />
+                                                </LinearGradientBrush>
+                                            </Setter.Value>
+                                        </Setter>
+                                        <Setter x:Uid="Setter_141" Property="MinHeight" Value="0" />
+                                        <Setter x:Uid="Setter_142" Property="MinWidth" Value="0" />
+                                        <Setter x:Uid="Setter_143" Property="Template">
+                                            <Setter.Value>
+                                                <ControlTemplate x:Uid="ControlTemplate_7" TargetType="{x:Type ToggleButton}">
+                                                    <Border x:Uid="Border_4" SnapsToDevicePixels="True" x:Name="Bd" Background="{TemplateBinding Background}" CornerRadius="0,0,3,3">
+                                                        <Canvas x:Uid="Canvas_2" SnapsToDevicePixels="True" HorizontalAlignment="Right" Margin="2,7,2,2" VerticalAlignment="Bottom" Width="7" Height="6">
+                                                            <Path x:Uid="Path_5" Stroke="#FFFFFFFF" Data="M1.5,1L1.5,6" />
+                                                            <Path x:Uid="Path_6" Stroke="{TemplateBinding Foreground}" Data="M0.5,0L0.5,5" />
+                                                            <Path x:Uid="Path_7" Fill="#FFFFFFFF" Data="M3.5,0.5L7,3.5 4,6.5z" />
+                                                            <Path x:Uid="Path_8" Fill="{TemplateBinding Foreground}" Data="M3,-0.5L6,2.5 3,5.5z" />
+                                                        </Canvas>
+                                                    </Border>
+                                                    <ControlTemplate.Triggers>
+                                                        <Trigger x:Uid="Trigger_19" Property="IsMouseOver" Value="True">
+                                                            <Setter x:Uid="Setter_144" Property="Background" TargetName="Bd" Value="#FFC2E0FF" />
+                                                        </Trigger>
+                                                        <Trigger x:Uid="Trigger_20" Property="IsKeyboardFocused" Value="True">
+                                                            <Setter x:Uid="Setter_145" Property="Background" TargetName="Bd" Value="#FFC2E0FF" />
+                                                        </Trigger>
+                                                        <Trigger x:Uid="Trigger_21" Property="IsEnabled" Value="False">
+                                                            <Setter x:Uid="Setter_146" Property="Foreground" Value="#FFC6C3C6" />
+                                                        </Trigger>
+                                                    </ControlTemplate.Triggers>
+                                                </ControlTemplate>
+                                            </Setter.Value>
+                                        </Setter>
+                                    </Style>
+                                </Setter.Value>
+                            </Setter>
+                            <Setter x:Uid="Setter_147" Property="Height" TargetName="ToolBarThumb" Value="10" />
+                            <Setter x:Uid="Setter_148" Property="Width" TargetName="ToolBarThumb" Value="NaN" />
+                            <Setter x:Uid="Setter_149" Property="Margin" TargetName="ToolBarThumb" Value="-1,-3,0,0" />
+                            <Setter x:Uid="Setter_150" Property="Padding" TargetName="ToolBarThumb" Value="5,6,6,1" />
+                            <Setter x:Uid="Setter_151" Property="Margin" TargetName="ToolBarHeader" Value="0,0,0,4" />
+                            <Setter x:Uid="Setter_152" Property="Margin" TargetName="PART_ToolBarPanel" Value="1,0,2,2" />
+                            <Setter x:Uid="Setter_153" Property="DockPanel.Dock" TargetName="ToolBarThumb" Value="Top" />
+                            <Setter x:Uid="Setter_154" Property="DockPanel.Dock" TargetName="ToolBarHeader" Value="Top" />
+                            <Setter x:Uid="Setter_155" Property="HorizontalAlignment" TargetName="OverflowGrid" Value="Stretch" />
+                            <Setter x:Uid="Setter_156" Property="VerticalAlignment" TargetName="OverflowGrid" Value="Bottom" />
+                            <Setter x:Uid="Setter_157" Property="Placement" TargetName="OverflowPopup" Value="Right" />
+                            <Setter x:Uid="Setter_158" Property="Margin" TargetName="MainPanelBorder" Value="0,0,0,11" />
+                            <Setter x:Uid="Setter_159" Property="Background">
+                                <Setter.Value>
+                                    <LinearGradientBrush x:Uid="LinearGradientBrush_15" EndPoint="1,0" StartPoint="0,0">
+                                        <GradientStop x:Uid="GradientStop_41" Color="#FFFFFFFF" Offset="0" />
+                                        <GradientStop x:Uid="GradientStop_42" Color="#FFFFFBFF" Offset="0.5" />
+                                        <GradientStop x:Uid="GradientStop_43" Color="#FFF7F7F7" Offset="1" />
+                                    </LinearGradientBrush>
+                                </Setter.Value>
+                            </Setter>
+                        </Trigger>
+                        <Trigger x:Uid="Trigger_22" Property="IsEnabled" Value="False">
+                            <Setter x:Uid="Setter_160" Property="Foreground" Value="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <ControlTemplate x:Uid="ControlTemplate_8" x:Key="validationTemplate">
+        <DockPanel x:Uid="DockPanel_2">
+            <DockPanel.Resources>
+                <WMCore:ValdiationErrorGetErrorMessageConverter x:Uid="WMCore:ValdiationErrorGetErrorMessageConverter_1" x:Key="valdiationErrorGetErrorMessageConverter" />
+            </DockPanel.Resources>
+            <TextBlock x:Uid="TextBlock_1" Margin="5,0,5,0" Foreground="Red" FontSize="16" VerticalAlignment="Center" Text="*" ToolTip="{Binding ElementName=errorAdorner, Path=AdornedElement.(Validation.Errors), Converter={StaticResource valdiationErrorGetErrorMessageConverter}}" />
+            <AdornedElementPlaceholder x:Uid="errorAdorner" x:Name="errorAdorner" />
+        </DockPanel>
+    </ControlTemplate>
+
+    <Style x:Uid="Style_15" TargetType="{x:Type TextBox}">
+        <Setter x:Uid="Setter_161" Property="Validation.ErrorTemplate" Value="{DynamicResource validationTemplate}" />
+    </Style>
+
+
+    <Style x:Uid="Style_16" TargetType="{x:Type xcdg:DataGridControl}">
+        <Setter x:Uid="Setter_162" Property="FontSize" Value="11" />
+    </Style>
+
+    <Style x:Uid="Style_17" x:Key="CustomHeaderStyle" TargetType="{x:Type GridViewColumnHeader}">
+        <Setter x:Uid="Setter_163" Property="Visibility" Value="Collapsed" />
+    </Style>
+
+    <Style x:Uid="Style_18" x:Key="ProcessResult" TargetType="{x:Type TextBlock}">
+        <Setter x:Uid="Setter_164" Property="Foreground" Value="Brown" />
+        <Setter x:Uid="Setter_165" Property="FontWeight" Value="Bold" />
+        <Setter x:Uid="Setter_166" Property="FontSize" Value="12" />
+    </Style>
+
+
+    <Style  x:Uid="Style_19" TargetType="{x:Type TabControl}" x:Key="TabControlStyle">
+        <Setter x:Uid="Setter_167" Property="Template">
+            <Setter.Value>
+                <ControlTemplate x:Uid="ControlTemplate_9" TargetType="{x:Type TabControl}">
+                    <Grid x:Uid="Grid_3">
+                        <Grid.RowDefinitions>
+                            <RowDefinition x:Uid="RowDefinition_1" Height="Auto"/>
+                            <RowDefinition x:Uid="RowDefinition_2" Height="*"/>
+                        </Grid.RowDefinitions>
+                        <TabPanel 
+            x:Uid="TabPanel_1" Grid.Row="0" Panel.ZIndex="1"  Margin="0,0,4,-1" 
+            IsItemsHost="True" Background="Transparent" />
+                        <Border 
+              x:Uid="Border_5" Grid.Row="1"
+              BorderBrush="Black" 
+              BorderThickness="1" 
+              CornerRadius="0, 12, 12, 12">
+                            <Border.Background>
+                                <LinearGradientBrush x:Uid="LinearGradientBrush_16">
+                                    <GradientStop x:Uid="GradientStop_44" Color="LightGray" Offset="0" />
+                                    <GradientStop x:Uid="GradientStop_45" Color="White" Offset="1" />
+                                </LinearGradientBrush>
+                            </Border.Background>
+                            <ContentPresenter 
+                x:Uid="ContentPresenter_1" ContentSource="SelectedContent" />
+                        </Border>
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+
+    <Style  x:Uid="Style_20" TargetType="{x:Type TabControl}" x:Key="TabControlStyle1">
+        <Setter x:Uid="Setter_168" Property="Template">
+            <Setter.Value>
+                <ControlTemplate x:Uid="ControlTemplate_10" TargetType="{x:Type TabControl}">
+                    <Grid x:Uid="Grid_4">
+                        <Grid.RowDefinitions>
+                            <RowDefinition x:Uid="RowDefinition_3" Height="Auto"/>
+                            <RowDefinition x:Uid="RowDefinition_4" Height="*"/>
+                        </Grid.RowDefinitions>
+                        <TabPanel 
+            x:Uid="TabPanel_2" Grid.Row="0" Panel.ZIndex="1"  Margin="0,0,4,-1" 
+            IsItemsHost="True" Background="Transparent" />
+                        <Border 
+              x:Uid="Border_6" Grid.Row="1"
+              BorderBrush="Black" 
+              BorderThickness="1" 
+              CornerRadius="0, 12, 12, 12">
+                            <Border.Background>
+                                <LinearGradientBrush x:Uid="LinearGradientBrush_17">
+                                    <GradientStop x:Uid="GradientStop_46" Color="LightGray" Offset="0" />
+                                    <GradientStop x:Uid="GradientStop_47" Color="White" Offset="1" />
+                                </LinearGradientBrush>
+                            </Border.Background>
+                            <ContentPresenter 
+                x:Uid="ContentPresenter_2" ContentSource="SelectedContent" />
+                        </Border>
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!--<SolidColorBrush x:Key="DefaultWorkspaceAdorner1BackgroundBrush" Color="{x:Static aw:OfficeColors.Background.OfficeColor8}" />
+    <SolidColorBrush x:Key="DefaultWorkspaceAdorner1StrokeBrush" Color="{x:Static aw:OfficeColors.Background.OfficeColor9}" />
+    <SolidColorBrush x:Key="DefaultWorkspaceAdorner2BackgroundBrush" Color="{x:Static aw:OfficeColors.Background.OfficeColor10}" />
+
+    <LinearGradientBrush x:Key="DefaultWorkspaceBackgroundBrush" StartPoint="0.5,0" EndPoint="0.5,1">
+        <GradientStop Offset="0" Color="{x:Static aw:OfficeColors.Background.OfficeColor5}" />
+        <GradientStop Offset="0.7" Color="{x:Static aw:OfficeColors.Background.OfficeColor6}" />
+        <GradientStop Offset="1" Color="{x:Static aw:OfficeColors.Background.OfficeColor7}" />
+    </LinearGradientBrush>-->
+
+
+
+
+</ResourceDictionary>

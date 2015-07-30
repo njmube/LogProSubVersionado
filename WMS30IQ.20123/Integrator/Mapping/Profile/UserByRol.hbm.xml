@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<hibernate-mapping xmlns="urn:nhibernate-mapping-2.2" namespace="Entities.Profile" assembly="Entities">
+  <class name="UserByRol" table="Profile.UserByRol">
+    <id name="RowID" type="Int32">
+      <generator class="native" />
+    </id>
+    <many-to-one lazy="false" name="User" class="SysUser" column="UserID" not-null="true" unique-key="ukUserRol"  />
+    <many-to-one lazy="false" name="Rol" class="Rol" column="RolID" not-null="true" unique-key="ukUserRol" />
+	<many-to-one lazy="false" name="Location" class="Entities.Master.Location" column="LocationID" not-null="true" unique-key="ukUserRol" />
+	<property name="IsDefault" type="Boolean"  />
+	<many-to-one lazy="false" name="Contract" class="Entities.Master.Contract" column="ContractID" not-found="ignore"  />
+
+
+	<property name="CreatedBy" type="String" length="50" not-null="true"  />
+	<property name="CreationDate" type="DateTime" not-null="true"   />
+	<property name="CreTerminal" type="String" length="50"   />
+	<property name="ModifiedBy" type="String" length="50"   />
+	<property name="ModDate" type="DateTime"   />
+	<property name="ModTerminal" type="String" length="50"   />
+  </class>
+</hibernate-mapping>

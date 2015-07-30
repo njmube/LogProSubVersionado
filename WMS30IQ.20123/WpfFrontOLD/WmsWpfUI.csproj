@@ -1,0 +1,2417 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>9.0.30729</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{46C063B5-B4CE-4677-A7D5-210716FB7EEF}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>WpfFront</RootNamespace>
+    <AssemblyName>WpfFront</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <WarningLevel>4</WarningLevel>
+    <SccProjectName>
+    </SccProjectName>
+    <SccLocalPath>
+    </SccLocalPath>
+    <SccAuxPath>
+    </SccAuxPath>
+    <SccProvider>
+    </SccProvider>
+    <SignAssembly>false</SignAssembly>
+    <AssemblyOriginatorKeyFile>WMS30Key.pfx</AssemblyOriginatorKeyFile>
+    <ApplicationIcon>logo16x16.png</ApplicationIcon>
+    <IsWebBootstrapper>true</IsWebBootstrapper>
+    <PublishUrl>http://localhost/WpfFront/</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Web</InstallFrom>
+    <UpdateEnabled>true</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <UpgradeBackupLocation>
+    </UpgradeBackupLocation>
+    <OldToolsVersion>3.5</OldToolsVersion>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+    <PlatformTarget>x86</PlatformTarget>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x86\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
+    <OutputPath>bin\x86\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Accessibility" />
+    <Reference Include="Assergs.Windows, Version=1.0.0.0, Culture=neutral, PublicKeyToken=a3f5c2f55f72aacd, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\SharedBinaries\Assergs.Windows.dll</HintPath>
+    </Reference>
+    <Reference Include="Barcode, Version=1.0.5.38761, Culture=neutral, PublicKeyToken=6dc438ab78a525b3">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\SharedBinaries\Barcode.dll</HintPath>
+    </Reference>
+    <Reference Include="BarcodeLib, Version=1.0.0.17, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>bin\Debug\BarcodeLib.dll</HintPath>
+    </Reference>
+    <Reference Include="Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=608edcc8b535d274, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\SharedBinaries\WMComposite\Core.dll</HintPath>
+    </Reference>
+    <Reference Include="DataDynamics.Analysis.DataProvider.Microsoft.AnalysisServices, Version=1.0.464.0, Culture=neutral, PublicKeyToken=d557f2f30a260da2, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\SharedBinaries\DataDynamics.Analysis.DataProvider.Microsoft.AnalysisServices.dll</HintPath>
+    </Reference>
+    <Reference Include="DataDynamics.Analysis.Extensions, Version=1.0.464.0, Culture=neutral, PublicKeyToken=d557f2f30a260da2, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\SharedBinaries\DataDynamics.Analysis.Extensions.dll</HintPath>
+    </Reference>
+    <Reference Include="DataDynamics.Analysis.Windows.Forms, Version=1.0.464.0, Culture=neutral, PublicKeyToken=d557f2f30a260da2, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\SharedBinaries\DataDynamics.Analysis.Windows.Forms.dll</HintPath>
+    </Reference>
+    <Reference Include="ExcelExport, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\SharedBinaries\ExcelExport.dll</HintPath>
+    </Reference>
+    <Reference Include="microsoft.analysisservices.adomdclient, Version=9.0.242.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\SharedBinaries\microsoft.analysisservices.adomdclient.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Office.Interop.Excel, Version=12.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c" />
+    <Reference Include="Microsoft.Office.Interop.Outlook, Version=12.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c" />
+    <Reference Include="Microsoft.Office.Interop.PowerPoint, Version=12.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c" />
+    <Reference Include="Microsoft.Office.Interop.Word, Version=12.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c" />
+    <Reference Include="Microsoft.Practices.ObjectBuilder2, Version=2.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\SharedBinaries\WMComposite\Microsoft.Practices.ObjectBuilder2.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Practices.Unity, Version=1.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\SharedBinaries\WMComposite\Microsoft.Practices.Unity.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.ReportViewer.WinForms, Version=11.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\SharedBinaries\Microsoft.ReportViewer.WinForms.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.VisualBasic" />
+    <Reference Include="Odyssey, Version=1.3.18.42840, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\SharedBinaries\Odyssey.dll</HintPath>
+    </Reference>
+    <Reference Include="PresentationFramework.Aero">
+      <RequiredTargetFramework>3.0</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="PresentationUI, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
+    <Reference Include="ReachFramework" />
+    <Reference Include="System" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Core">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Data.Entity" />
+    <Reference Include="System.Data.Entity.Design" />
+    <Reference Include="System.Deployment" />
+    <Reference Include="System.Design" />
+    <Reference Include="System.DirectoryServices" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Drawing.Design" />
+    <Reference Include="System.Management" />
+    <Reference Include="System.Printing" />
+    <Reference Include="System.Runtime.Serialization">
+      <RequiredTargetFramework>3.0</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.ServiceModel">
+      <RequiredTargetFramework>3.0</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Web.DataVisualization" />
+    <Reference Include="System.Web.DataVisualization.Design" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Windows.Forms.DataVisualization" />
+    <Reference Include="System.Windows.Forms.DataVisualization.Design" />
+    <Reference Include="System.Xaml" />
+    <Reference Include="System.Xml.Linq">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Data.DataSetExtensions">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+    <Reference Include="UIAutomationProvider">
+      <RequiredTargetFramework>3.0</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="UIAutomationTypes" />
+    <Reference Include="Webmaster.Composite, Version=1.0.0.0, Culture=neutral, PublicKeyToken=36a08c9dee96b290, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\SharedBinaries\Webmaster.Composite.dll</HintPath>
+    </Reference>
+    <Reference Include="WindowsBase">
+      <RequiredTargetFramework>3.0</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="PresentationCore">
+      <RequiredTargetFramework>3.0</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="PresentationFramework">
+      <RequiredTargetFramework>3.0</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="WindowsFormsIntegration, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\SharedBinaries\WindowsFormsIntegration.dll</HintPath>
+      <RequiredTargetFramework>3.0</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="WPFToolkit, Version=3.5.40128.1, Culture=neutral, PublicKeyToken=c93dde70475aea7e, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\SharedBinaries\WPFToolkit.dll</HintPath>
+    </Reference>
+    <Reference Include="WPFVisifire.Charts, Version=2.0.4.0, Culture=neutral, PublicKeyToken=99d724542e4db593, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\SharedBinaries\WPFVisifire.Charts.dll</HintPath>
+    </Reference>
+    <Reference Include="Xceed.Wpf.Controls, Version=2.0.8211.13450, Culture=neutral, PublicKeyToken=ba83ff368b7563c6, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\SharedBinaries\Xceed.Wpf.Controls.dll</HintPath>
+    </Reference>
+    <Reference Include="Xceed.Wpf.DataGrid, Version=2.0.8211.13450, Culture=neutral, PublicKeyToken=ba83ff368b7563c6, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\SharedBinaries\Xceed.Wpf.DataGrid.dll</HintPath>
+    </Reference>
+    <Reference Include="Xceed.Wpf.DataGrid.ThemePack.1, Version=3.1.9069.14010, Culture=neutral, PublicKeyToken=ba83ff368b7563c6, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\SharedBinaries\Xceed.Wpf.DataGrid.ThemePack.1.dll</HintPath>
+    </Reference>
+    <Reference Include="Xceed.Wpf.DataGrid.ThemePack.2, Version=3.1.9069.14010, Culture=neutral, PublicKeyToken=ba83ff368b7563c6, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\SharedBinaries\Xceed.Wpf.DataGrid.ThemePack.2.dll</HintPath>
+    </Reference>
+    <Reference Include="Xceed.Wpf.DataGrid.Views3D, Version=3.1.9069.14010, Culture=neutral, PublicKeyToken=ba83ff368b7563c6, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\SharedBinaries\Xceed.Wpf.DataGrid.Views3D.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <ApplicationDefinition Include="App.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </ApplicationDefinition>
+    <Page Include="Common\UserControls\CasNumberFormula.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Common\UserControls\AccountAddress.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Common\UserControls\CasNumberRule.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Common\UserControls\SearchEstiba.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Common\UserControls\SearchC_CasNumber.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Common\WFUserControls\WFDateTime.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Common\WFUserControls\WFCheckBox.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Common\WFUserControls\WFComboBox.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Common\WFUserControls\WFLabel.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Common\WFUserControls\WFNumericText.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Common\WFUserControls\WFStringText.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Common\Windows\WindowInfo.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="General\Views\ShippingMethodView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="IQ\DIRECTV\Views\AdministradorDTVView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="IQ\DIRECTV\Views\AlmacenamientoView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="IQ\DIRECTV\Views\ConfirmacionIntermediaViewP.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="IQ\DIRECTV\Views\DespachoDTVView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="IQ\DIRECTV\Views\DiagnosticoDTVView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="IQ\DIRECTV\Views\EmpaqueDTVView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="IQ\DIRECTV\Views\EtiquetadosDTVView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="IQ\DIRECTV\Views\MoverMercanciaDTVView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="IQ\DIRECTV\Views\ReciboView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="IQ\DIRECTV\Views\ReparacionesDTVView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="IQ\DIRECTV\Views\SmartCardDTVViewP.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="IQ\DIRECTV\Views\VerificacionDTVView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="IQ\Views\ActualizacionRRView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="IQ\Views\AdminInformationConsultaView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="IQ\Views\AdminInformationView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="IQ\Views\AdministradorView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="IQ\Views\BodegasView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="IQ\Views\ConfirmacionIntermediaView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="IQ\Views\ConfirmarReciboView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="IQ\Views\DataInformationView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="IQ\Views\DespachosView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="IQ\Views\DespachoView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="IQ\Views\DiagnosticoView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="IQ\Views\EmpaqueView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="IQ\Views\EnsambleView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="IQ\Views\EntradaAlmacenV2View.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="IQ\Views\EntradaAlmacenView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="IQ\Views\EtiquetadosView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="IQ\Views\GeneradorEstibasView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="IQ\Views\ImpresionEtiquetasView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="IQ\Views\MensajeCargueView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="IQ\Views\MoverMercanciaView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="IQ\Views\MoverProductoView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="IQ\Views\NoProcesablesView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="IQ\Views\Novedades.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="IQ\Views\ReparacionesView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="IQ\Views\ValidadorSeriales.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="IQ\Views\VerificacionView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Language.es-CO.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Language.en-US.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Common\UserControls\AdminDocumentLine.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Common\UserControls\AdminDocumentLineV2.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Common\UserControls\Process\AdminPackagesV2.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Common\UserControls\QueryFilter.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Common\SkinOne.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Common\UserControls\BinLocation.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Common\UserControls\BinRange.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Common\UserControls\AutoComplete.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Common\UserControls\Process\InventoryCountSchedule.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Common\UserControls\ShowProcessFile.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Common\UserControls\UploadFile.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Common\UserControls\ProcessFile.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Common\UserControls\DirectPrint.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Common\UserControls\DocumentList.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Common\UserControls\ParamReport.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Common\UserControls\PopUpDocumentDetail.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Common\UserControls\PopUpHelp.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Common\UserControls\PopUpShell.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Common\UserControls\SearchAccount.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Common\UserControls\SearchProduct.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Common\Windows\AuthorizationWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Common\Windows\ViewDocumentBrowser.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Common\Windows\ConfirmationOK.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Common\Windows\ConfirmationWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Common\Windows\ErrWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Common\Windows\MsgWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Common\Windows\PopupWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Common\Windows\ProcessWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Common\Windows\ResultWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Common\Windows\ViewDocument.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="DevTool\IqToolView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="General\Views\AdminTrackOptionView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="General\Views\BasicSetupView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="General\Views\ConnectionView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="General\Views\DocumentConceptView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="General\Views\DocumentTypeSequenceView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="General\Views\LabelMappingView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="General\Views\LabelTemplateView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="General\Views\MessageRuleByCompanyView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="General\Views\PickMethodView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="General\Views\ReportView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Master\Views\AccountView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Master\Views\BinView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Master\Views\CompanyView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Master\Views\C_CasNumberView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Master\Views\KitView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Master\Views\LocationView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Master\Views\MetaTypeView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Master\Views\ProductCategoryView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Master\Views\ProductView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Master\Views\UnitView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Master\Views\ZoneManagerView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Process\View\BasicProcessView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Process\View\CustomProcessActivityView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Process\View\CustomProcessContextView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Process\View\CustomProcessEntityContextView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Process\View\CustomProcessRouteView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Process\View\CustomProcessTransitionView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Process\View\CustomProcessView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Process\View\FileProcessView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Profile\Views\ConfigOptionView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Profile\Views\MenuOptionView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Profile\Views\RolView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Profile\Views\SysUserView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Shell\IntroView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Shell\LogOnScreen.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Shell\Shell.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Shell\Splash.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Trace\Views\BookingMngrView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Trace\Views\ChangeLocationView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Trace\Views\KitAssemblyView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Trace\Views\OrderMngrV2View.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Trace\Views\DocumentManagerView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Trace\Views\ScheduleView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Trace\Views\ShipperMngrView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Trace\Views\ShipRouteView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Trace\Views\TrackOptionShipView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Trace\Views\InventoryCountView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Trace\Views\PackageAdminView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Trace\Views\CrossDockView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Trace\Views\IntroInventoryView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Trace\Views\InventoryAdjustmentView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Trace\Views\InventoryTaskView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Trace\Views\KitAssemblyV2View.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Trace\Views\PrintingView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Trace\Views\QueriesView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Trace\Views\ReceivingCubeView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Trace\Views\ReceivingView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Trace\Views\RemoveNodeView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Trace\Views\ShippingConsoleView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Trace\Views\ShippingView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Trace\Views\TrackOptionView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Trace\Views\UC_IV_ComparerView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Trace\Views\UC_IV_Replanish_Packing.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Compile Include="Common\RawPrinterHelper.cs" />
+    <Compile Include="IQ\DIRECTV\Presenters\ConfirmacionIntermediaPresenterP.cs" />
+    <Compile Include="IQ\DIRECTV\Models\ConfirmacionIntermediaModelP.cs" />
+    <Compile Include="IQ\DIRECTV\Views\ConfirmacionIntermediaViewP.xaml.cs">
+      <DependentUpon>ConfirmacionIntermediaViewP.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="IQ\Models\ActualizacionRRModel.cs" />
+    <Compile Include="IQ\Models\ListViewData.cs" />
+    <Compile Include="IQ\Models\NovedadesModel.cs" />
+    <Compile Include="IQ\Models\RequiredValidator.cs" />
+    <Compile Include="IQ\Presenters\ActualizacionRRPresenter.cs" />
+    <Compile Include="IQ\Presenters\ConfirmacionIntermediaPresenter.cs" />
+    <Compile Include="IQ\Models\ConfirmacionIntermediaModel.cs" />
+    <Compile Include="IQ\DIRECTV\Models\SmartCardDTVModelP.cs" />
+    <Compile Include="IQ\DIRECTV\Presenters\SmartCardDTVPresenterP.cs" />
+    <Compile Include="App.xaml.cs">
+      <DependentUpon>App.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Common\Converters.cs" />
+    <Compile Include="Common\Crypto.cs" />
+    <Compile Include="Common\ListValues.cs" />
+    <Compile Include="Common\Printer.cs" />
+    <Compile Include="Common\PrinterControl.cs" />
+    <Compile Include="Common\Tools\Etiquetas.cs" />
+    <Compile Include="Common\Tools\ExportToExcel.cs" />
+    <Compile Include="Common\Tools\PrinterControl.cs" />
+    <Compile Include="Common\UserControls\AdminDocumentLine.xaml.cs">
+      <DependentUpon>AdminDocumentLine.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Common\UserControls\AdminDocumentLineV2.xaml.cs">
+      <DependentUpon>AdminDocumentLineV2.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Common\UserControls\CasNumberFormula.xaml.cs">
+      <DependentUpon>CasNumberFormula.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Common\UserControls\AccountAddress.xaml.cs">
+      <DependentUpon>AccountAddress.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Common\UserControls\CasNumberRule.xaml.cs">
+      <DependentUpon>CasNumberRule.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Common\UserControls\SearchEstiba.xaml.cs">
+      <DependentUpon>SearchEstiba.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Common\UserControls\SearchC_CasNumber.xaml.cs">
+      <DependentUpon>SearchC_CasNumber.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Common\UserControls\Process\AdminPackagesV2.xaml.cs">
+      <DependentUpon>AdminPackagesV2.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Common\UserControls\QueryFilter.xaml.cs">
+      <DependentUpon>QueryFilter.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Common\Query\FormatItem.cs" />
+    <Compile Include="Common\Query\GreaterThanConverter.cs" />
+    <Compile Include="Common\Query\Operators.cs" />
+    <Compile Include="Common\Query\PredefinedSettingsItem.cs" />
+    <Compile Include="Common\Query\SeparatorItem.cs" />
+    <Compile Include="Common\ReportMngr.cs" />
+    <Compile Include="Common\UIMenu.cs" />
+    <Compile Include="Common\UserControls\BinLocation.xaml.cs">
+      <DependentUpon>BinLocation.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Common\UserControls\BinRange.xaml.cs">
+      <DependentUpon>BinRange.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Common\UserControls\AutoComplete.xaml.cs">
+      <DependentUpon>AutoComplete.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Common\UserControls\Process\InventoryCountSchedule.xaml.cs">
+      <DependentUpon>InventoryCountSchedule.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Common\UserControls\ShowProcessFile.xaml.cs">
+      <DependentUpon>ShowProcessFile.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Common\UserControls\UploadFile.xaml.cs">
+      <DependentUpon>UploadFile.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Common\UserControls\ProcessFile.xaml.cs">
+      <DependentUpon>ProcessFile.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Common\UserControls\DirectPrint.xaml.cs">
+      <DependentUpon>DirectPrint.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Common\UserControls\DocumentList.xaml.cs">
+      <DependentUpon>DocumentList.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Common\UserControls\ParamReport.xaml.cs">
+      <DependentUpon>ParamReport.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Common\UserControls\PopUpDocumentDetail.xaml.cs">
+      <DependentUpon>PopUpDocumentDetail.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Common\UserControls\PopUpHelp.xaml.cs">
+      <DependentUpon>PopUpHelp.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Common\UserControls\PopUpShell.xaml.cs">
+      <DependentUpon>PopUpShell.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Common\UserControls\SearchAccount.xaml.cs">
+      <DependentUpon>SearchAccount.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Common\UserControls\SearchProduct.xaml.cs">
+      <DependentUpon>SearchProduct.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Common\Util.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Common\Util.WF.cs" />
+    <Compile Include="Common\WFUserControls\WFDateTime.xaml.cs">
+      <DependentUpon>WFDateTime.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Common\WFUserControls\WFCheckBox.xaml.cs">
+      <DependentUpon>WFCheckBox.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Common\WFUserControls\WFComboBox.xaml.cs">
+      <DependentUpon>WFComboBox.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Common\WFUserControls\WFLabel.xaml.cs">
+      <DependentUpon>WFLabel.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Common\WFUserControls\WFNumericText.xaml.cs">
+      <DependentUpon>WFNumericText.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Common\WFUserControls\WFStringText.xaml.cs">
+      <DependentUpon>WFStringText.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Common\Windows\AuthorizationWindow.xaml.cs">
+      <DependentUpon>AuthorizationWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Common\Windows\ViewDocumentBrowser.xaml.cs">
+      <DependentUpon>ViewDocumentBrowser.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Common\UtilWindow.cs" />
+    <Compile Include="Common\Windows\ConfirmationOK.xaml.cs">
+      <DependentUpon>ConfirmationOK.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Common\Windows\ConfirmationWindow.xaml.cs">
+      <DependentUpon>ConfirmationWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Common\Windows\ErrWindow.xaml.cs">
+      <DependentUpon>ErrWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Common\Windows\MsgWindow.xaml.cs">
+      <DependentUpon>MsgWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Common\Windows\PopupWindow.xaml.cs">
+      <DependentUpon>PopupWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Common\Windows\ProcessWindow.xaml.cs">
+      <DependentUpon>ProcessWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Common\Windows\ResultWindow.xaml.cs">
+      <DependentUpon>ResultWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Common\Windows\ViewDocument.xaml.cs">
+      <DependentUpon>ViewDocument.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Common\Windows\WindowInfo.xaml.cs">
+      <DependentUpon>WindowInfo.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="DevTool\IqToolModel.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DevTool\IqToolPresenter.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DevTool\IqToolView.xaml.cs">
+      <DependentUpon>IqToolView.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="General\Models\AdminTrackOptionModel.cs" />
+    <Compile Include="General\Models\BasicSetupModel.cs" />
+    <Compile Include="General\Models\ConnectionModel.cs" />
+    <Compile Include="General\Models\DocumentConceptModel.cs" />
+    <Compile Include="General\Models\DocumentTypeSequenceModel.cs" />
+    <Compile Include="General\Models\LabelMappingModel.cs" />
+    <Compile Include="General\Models\LabelTemplateModel.cs" />
+    <Compile Include="General\Models\MessageRuleByCompanyModel.cs" />
+    <Compile Include="General\Models\PickMethodModel.cs" />
+    <Compile Include="General\Models\ReportModel.cs" />
+    <Compile Include="General\Models\ShippingMethodModel.cs" />
+    <Compile Include="General\Presenters\AdminTrackOptionPresenter.cs" />
+    <Compile Include="General\Presenters\BasicSetupPresenter.cs" />
+    <Compile Include="General\Presenters\ConnectionPresenter.cs" />
+    <Compile Include="General\Presenters\DocumentConceptPresenter.cs" />
+    <Compile Include="General\Presenters\DocumentTypeSequencePresenter.cs" />
+    <Compile Include="General\Presenters\LabelMappingPresenter.cs" />
+    <Compile Include="General\Presenters\LabelTemplatePresenter.cs" />
+    <Compile Include="General\Presenters\MessageRuleByCompanyPresenter.cs" />
+    <Compile Include="General\Presenters\PickMethodPresenter.cs" />
+    <Compile Include="General\Presenters\ReportPresenter.cs" />
+    <Compile Include="General\Presenters\ShippingMethodPresenter.cs" />
+    <Compile Include="General\Views\AdminTrackOptionView.xaml.cs">
+      <DependentUpon>AdminTrackOptionView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="General\Views\BasicSetupView.xaml.cs">
+      <DependentUpon>BasicSetupView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="General\Views\ConnectionView.xaml.cs">
+      <DependentUpon>ConnectionView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="General\Views\DocumentConceptView.xaml.cs">
+      <DependentUpon>DocumentConceptView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="General\Views\DocumentTypeSequenceView.xaml.cs">
+      <DependentUpon>DocumentTypeSequenceView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="General\Views\LabelMappingView.xaml.cs">
+      <DependentUpon>LabelMappingView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="General\Views\LabelTemplateView.xaml.cs">
+      <DependentUpon>LabelTemplateView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="General\Views\MessageRuleByCompanyView.xaml.cs">
+      <DependentUpon>MessageRuleByCompanyView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="General\Views\PickMethodView.xaml.cs">
+      <DependentUpon>PickMethodView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="General\Views\ReportView.xaml.cs">
+      <DependentUpon>ReportView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="General\Views\ShippingMethodView.xaml.cs">
+      <DependentUpon>ShippingMethodView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="IQ\DIRECTV\Models\AdministradorDTVModel.cs" />
+    <Compile Include="IQ\DIRECTV\Models\AlmacenamientoModel.cs" />
+    <Compile Include="IQ\DIRECTV\Models\DespachoDTVModel.cs" />
+    <Compile Include="IQ\DIRECTV\Models\DiagnosticoDTVModel.cs" />
+    <Compile Include="IQ\DIRECTV\Models\EmpaqueDTVModel.cs" />
+    <Compile Include="IQ\DIRECTV\Models\EtiquetadosDTVModel.cs" />
+    <Compile Include="IQ\DIRECTV\Models\MoverMercanciaDTVModel.cs" />
+    <Compile Include="IQ\DIRECTV\Models\ReciboModel.cs" />
+    <Compile Include="IQ\DIRECTV\Models\ReparacionesDTVModel.cs" />
+    <Compile Include="IQ\DIRECTV\Models\VerificacionDTVModel.cs" />
+    <Compile Include="IQ\DIRECTV\Presenters\AdministradorDTVPresenter.cs" />
+    <Compile Include="IQ\DIRECTV\Presenters\AlmacenamientoPresenter.cs" />
+    <Compile Include="IQ\DIRECTV\Presenters\DespachoDTVPresenter.cs" />
+    <Compile Include="IQ\DIRECTV\Presenters\DiagnosticoDTVPresenter.cs" />
+    <Compile Include="IQ\DIRECTV\Presenters\EmpaqueDTVPresenter.cs" />
+    <Compile Include="IQ\DIRECTV\Presenters\EtiquetadosDTVPresenter.cs" />
+    <Compile Include="IQ\DIRECTV\Presenters\MoverMercanciaDTVPresenter.cs" />
+    <Compile Include="IQ\DIRECTV\Presenters\ReciboPresenter.cs" />
+    <Compile Include="IQ\DIRECTV\Presenters\ReparacionesDTVPresenter.cs" />
+    <Compile Include="IQ\DIRECTV\Presenters\VerificacionDTVPresenter.cs" />
+    <Compile Include="IQ\DIRECTV\Views\AdministradorDTVView.xaml.cs">
+      <DependentUpon>AdministradorDTVView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="IQ\DIRECTV\Views\AlmacenamientoView.xaml.cs">
+      <DependentUpon>AlmacenamientoView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="IQ\DIRECTV\Views\DespachoDTVView.xaml.cs">
+      <DependentUpon>DespachoDTVView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="IQ\DIRECTV\Views\DiagnosticoDTVView.xaml.cs">
+      <DependentUpon>DiagnosticoDTVView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="IQ\DIRECTV\Views\EmpaqueDTVView.xaml.cs">
+      <DependentUpon>EmpaqueDTVView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="IQ\DIRECTV\Views\EtiquetadosDTVView.xaml.cs">
+      <DependentUpon>EtiquetadosDTVView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="IQ\DIRECTV\Views\MoverMercanciaDTVView.xaml.cs">
+      <DependentUpon>MoverMercanciaDTVView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="IQ\DIRECTV\Views\ReciboView.xaml.cs">
+      <DependentUpon>ReciboView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="IQ\DIRECTV\Views\ReparacionesDTVView.xaml.cs">
+      <DependentUpon>ReparacionesDTVView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="IQ\DIRECTV\Views\SmartCardDTVViewP.xaml.cs">
+      <DependentUpon>SmartCardDTVViewP.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="IQ\DIRECTV\Views\VerificacionDTVView.xaml.cs">
+      <DependentUpon>VerificacionDTVView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="IQ\Models\AdminInformationConsultaModel.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="IQ\Models\AdminInformationModel.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="IQ\Models\AdministradorModel.cs" />
+    <Compile Include="IQ\Models\BodegasModel.cs" />
+    <Compile Include="IQ\Models\ConfirmarReciboModel.cs" />
+    <Compile Include="IQ\Models\DataInformationModel.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="IQ\Models\DespachoModel.cs" />
+    <Compile Include="IQ\Models\DespachosModel.cs" />
+    <Compile Include="IQ\Models\DiagnosticoModel.cs" />
+    <Compile Include="IQ\Models\EmpaqueModel.cs" />
+    <Compile Include="IQ\Models\EnsambleModel.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="IQ\Models\EntradaAlmacenModel.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="IQ\Models\EntradaAlmacenV2Model.cs" />
+    <Compile Include="IQ\Models\EtiquetadosModel.cs" />
+    <Compile Include="IQ\Models\GeneradorEstibasModel.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="IQ\Models\ImpresionEtiquetasModel.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="IQ\Models\MoverMercanciaModel.cs" />
+    <Compile Include="IQ\Models\MoverProductoModel.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="IQ\Models\NoProcesablesModel.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="IQ\Models\ReparacionesModel.cs" />
+    <Compile Include="IQ\Models\ValidadorSerialesModel.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="IQ\Models\VerificacionModel.cs" />
+    <Compile Include="IQ\Presenters\AdminInformationConsultaPresenter.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="IQ\Presenters\AdminInformationPresenter.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="IQ\Presenters\AdministradorPresenter.cs" />
+    <Compile Include="IQ\Presenters\BodegasPresenter.cs" />
+    <Compile Include="IQ\Presenters\ConfirmarReciboPresenter.cs" />
+    <Compile Include="IQ\Presenters\DataInformationPresenter.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="IQ\Presenters\DespachoPresenter.cs" />
+    <Compile Include="IQ\Presenters\DespachosPresenter.cs" />
+    <Compile Include="IQ\Presenters\DiagnosticoPresenter.cs" />
+    <Compile Include="IQ\Presenters\EmpaquePresenter.cs" />
+    <Compile Include="IQ\Presenters\EnsamblePresenter.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="IQ\Presenters\EntradaAlmacenPresenter.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="IQ\Presenters\EntradaAlmacenV2Presenter.cs" />
+    <Compile Include="IQ\Presenters\EtiquetadosPresenter.cs" />
+    <Compile Include="IQ\Presenters\GeneradorEstibasPresenter.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="IQ\Presenters\ImpresionEtiquetasPresenter.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="IQ\Presenters\MoverMercanciaPresenter.cs" />
+    <Compile Include="IQ\Presenters\MoverProductoPresenter.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="IQ\Presenters\NoProcesablesPresenter.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="IQ\Presenters\NovedadesPresenter.cs" />
+    <Compile Include="IQ\Presenters\ReparacionesPresenter.cs" />
+    <Compile Include="IQ\Presenters\ValidadorSerialesPresenter.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="IQ\Presenters\VerificacionPresenter.cs" />
+    <Compile Include="IQ\Views\ActualizacionRRView.xaml.cs">
+      <DependentUpon>ActualizacionRRView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="IQ\Views\AdminInformationConsultaView.xaml.cs">
+      <DependentUpon>AdminInformationConsultaView.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="IQ\Views\AdminInformationView.xaml.cs">
+      <DependentUpon>AdminInformationView.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="IQ\Views\AdministradorView.xaml.cs">
+      <DependentUpon>AdministradorView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="IQ\Views\BodegasView.xaml.cs">
+      <DependentUpon>BodegasView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="IQ\Views\ConfirmacionIntermediaView.xaml.cs">
+      <DependentUpon>ConfirmacionIntermediaView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="IQ\Views\ConfirmarReciboView.xaml.cs">
+      <DependentUpon>ConfirmarReciboView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="IQ\Views\DataInformationView.xaml.cs">
+      <DependentUpon>DataInformationView.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="IQ\Views\DespachosView.xaml.cs">
+      <DependentUpon>DespachosView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="IQ\Views\DespachoView.xaml.cs">
+      <DependentUpon>DespachoView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="IQ\Views\DiagnosticoView.xaml.cs">
+      <DependentUpon>DiagnosticoView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="IQ\Views\EmpaqueView.xaml.cs">
+      <DependentUpon>EmpaqueView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="IQ\Views\EnsambleView.xaml.cs">
+      <DependentUpon>EnsambleView.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="IQ\Views\EntradaAlmacenV2View.xaml.cs">
+      <DependentUpon>EntradaAlmacenV2View.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="IQ\Views\EntradaAlmacenView.xaml.cs">
+      <DependentUpon>EntradaAlmacenView.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="IQ\Views\EtiquetadosView.xaml.cs">
+      <DependentUpon>EtiquetadosView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="IQ\Views\GeneradorEstibasView.xaml.cs">
+      <DependentUpon>GeneradorEstibasView.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="IQ\Views\ImpresionEtiquetasView.xaml.cs">
+      <DependentUpon>ImpresionEtiquetasView.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="IQ\Views\MensajeCargueView.xaml.cs">
+      <DependentUpon>MensajeCargueView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="IQ\Views\MoverMercanciaView.xaml.cs">
+      <DependentUpon>MoverMercanciaView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="IQ\Views\MoverProductoView.xaml.cs">
+      <DependentUpon>MoverProductoView.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="IQ\Views\NoProcesablesView.xaml.cs">
+      <DependentUpon>NoProcesablesView.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="IQ\Views\Novedades.xaml.cs">
+      <DependentUpon>Novedades.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="IQ\Views\ReparacionesView.xaml.cs">
+      <DependentUpon>ReparacionesView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="IQ\Views\ValidadorSeriales.xaml.cs">
+      <DependentUpon>ValidadorSeriales.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="IQ\Views\VerificacionView.xaml.cs">
+      <DependentUpon>VerificacionView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Master\Models\AccountModel.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Master\Models\BinModel.cs" />
+    <Compile Include="Master\Models\CompanyModel.cs" />
+    <Compile Include="Master\Models\C_CasNumberModel.cs" />
+    <Compile Include="Master\Models\KitModel.cs" />
+    <Compile Include="Master\Models\LocationModel.cs" />
+    <Compile Include="Master\Models\MetaTypeModel.cs" />
+    <Compile Include="Master\Models\ProductCategoryModel.cs" />
+    <Compile Include="Master\Models\ProductModel.cs" />
+    <Compile Include="Master\Models\UnitModel.cs" />
+    <Compile Include="Master\Models\ZoneManagerModel.cs" />
+    <Compile Include="Master\Presenters\AccountPresenter.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Master\Presenters\BinPresenter.cs" />
+    <Compile Include="Master\Presenters\CompanyPresenter.cs" />
+    <Compile Include="Master\Presenters\C_CasNumberPresenter.cs" />
+    <Compile Include="Master\Presenters\KitPresenter.cs" />
+    <Compile Include="Master\Presenters\LocationPresenter.cs" />
+    <Compile Include="Master\Presenters\MetaTypePresenter.cs" />
+    <Compile Include="Master\Presenters\ProductCategoryPresenter.cs" />
+    <Compile Include="Master\Presenters\ProductPresenter.cs" />
+    <Compile Include="Master\Presenters\UnitPresenter.cs" />
+    <Compile Include="Master\Presenters\ZoneManagerPresenter.cs" />
+    <Compile Include="Master\Views\AccountView.xaml.cs">
+      <DependentUpon>AccountView.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Master\Views\BinView.xaml.cs">
+      <DependentUpon>BinView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Master\Views\CompanyView.xaml.cs">
+      <DependentUpon>CompanyView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Master\Views\C_CasNumberView.xaml.cs">
+      <DependentUpon>C_CasNumberView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Master\Views\KitView.xaml.cs">
+      <DependentUpon>KitView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Master\Views\LocationView.xaml.cs">
+      <DependentUpon>LocationView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Master\Views\MetaTypeView.xaml.cs">
+      <DependentUpon>MetaTypeView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Master\Views\ProductCategoryView.xaml.cs">
+      <DependentUpon>ProductCategoryView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Master\Views\ProductView.xaml.cs">
+      <DependentUpon>ProductView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Master\Views\UnitView.xaml.cs">
+      <DependentUpon>UnitView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Master\Views\ZoneManagerView.xaml.cs">
+      <DependentUpon>ZoneManagerView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Process\Model\BasicProcessModel.cs" />
+    <Compile Include="Process\Model\CustomProcessActivityModel.cs" />
+    <Compile Include="Process\Model\CustomProcessContextModel.cs" />
+    <Compile Include="Process\Model\CustomProcessEntityContextModel.cs" />
+    <Compile Include="Process\Model\CustomProcessModel.cs" />
+    <Compile Include="Process\Model\CustomProcessRouteModel.cs" />
+    <Compile Include="Process\Model\CustomProcessTransitionModel.cs" />
+    <Compile Include="Process\Model\FileProcessModel.cs" />
+    <Compile Include="Process\Presenter\BasicProcessPresenter.cs" />
+    <Compile Include="Process\Presenter\CustomProcessActivityPresenter.cs" />
+    <Compile Include="Process\Presenter\CustomProcessContextPresenter.cs" />
+    <Compile Include="Process\Presenter\CustomProcessEntityContextPresenter.cs" />
+    <Compile Include="Process\Presenter\CustomProcessPresenter.cs" />
+    <Compile Include="Process\Presenter\CustomProcessRoutePresenter.cs" />
+    <Compile Include="Process\Presenter\CustomProcessTransitionPresenter.cs" />
+    <Compile Include="Process\Presenter\FileProcessPresenter.cs" />
+    <Compile Include="Process\View\BasicProcessView.xaml.cs">
+      <DependentUpon>BasicProcessView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Process\View\CustomProcessActivityView.xaml.cs">
+      <DependentUpon>CustomProcessActivityView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Process\View\CustomProcessContextView.xaml.cs">
+      <DependentUpon>CustomProcessContextView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Process\View\CustomProcessEntityContextView.xaml.cs">
+      <DependentUpon>CustomProcessEntityContextView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Process\View\CustomProcessRouteView.xaml.cs">
+      <DependentUpon>CustomProcessRouteView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Process\View\CustomProcessTransitionView.xaml.cs">
+      <DependentUpon>CustomProcessTransitionView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Process\View\CustomProcessView.xaml.cs">
+      <DependentUpon>CustomProcessView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Process\View\FileProcessView.xaml.cs">
+      <DependentUpon>FileProcessView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Profile\Models\ConfigOptionModel.cs" />
+    <Compile Include="Profile\Models\MenuOptionModel.cs" />
+    <Compile Include="Profile\Models\RolModel.cs" />
+    <Compile Include="Profile\Models\SysUserModel.cs" />
+    <Compile Include="Profile\Presenters\ConfigOptionPresenter.cs" />
+    <Compile Include="Profile\Presenters\MenuOptionPresenter.cs" />
+    <Compile Include="Profile\Presenters\RolPresenter.cs" />
+    <Compile Include="Profile\Presenters\SysUserPresenter.cs" />
+    <Compile Include="Profile\Views\ConfigOptionView.xaml.cs">
+      <DependentUpon>ConfigOptionView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Profile\Views\MenuOptionView.xaml.cs">
+      <DependentUpon>MenuOptionView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Profile\Views\RolView.xaml.cs">
+      <DependentUpon>RolView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Profile\Views\SysUserView.xaml.cs">
+      <DependentUpon>SysUserView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\AssemblyInfo.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+    <Compile Include="Service References\WMSBusinessService\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Compile>
+    <Compile Include="Shell\Bootstrapper.cs" />
+    <Compile Include="Shell\IntroModel.cs" />
+    <Compile Include="Shell\IntroPresenter.cs" />
+    <Compile Include="Shell\IntroView.xaml.cs">
+      <DependentUpon>IntroView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Shell\LogOnScreen.xaml.cs">
+      <DependentUpon>LogOnScreen.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Shell\Shell.xaml.cs">
+      <DependentUpon>Shell.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Shell\ShellPresenter.cs">
+      <SubType>
+      </SubType>
+    </Compile>
+    <Compile Include="Shell\ShellPresenterModel.cs">
+      <SubType>
+      </SubType>
+    </Compile>
+    <Compile Include="Shell\Splash.xaml.cs">
+      <DependentUpon>Splash.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Shell\SplashModel.cs" />
+    <Compile Include="StartModules.cs" />
+    <Compile Include="Trace\Models\BookingMngrModel.cs" />
+    <Compile Include="Trace\Models\ChangeLocationModel.cs" />
+    <Compile Include="Trace\Models\KitAssemblyModel.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Trace\Models\OrderMngrV2Model.cs" />
+    <Compile Include="Trace\Models\DocumentManagerModel.cs" />
+    <Compile Include="Trace\Models\ScheduleModel.cs" />
+    <Compile Include="Trace\Models\ShipperMngrModel.cs" />
+    <Compile Include="Trace\Models\ShipRouteModel.cs" />
+    <Compile Include="Trace\Models\TrackOptionShipModel.cs" />
+    <Compile Include="Trace\Models\InventoryCountModel.cs" />
+    <Compile Include="Trace\Models\PackageAdminModel.cs" />
+    <Compile Include="Trace\Models\CrossDockModel.cs" />
+    <Compile Include="Trace\Models\IntroInventoryModel.cs" />
+    <Compile Include="Trace\Models\InventoryAdjustmentModel.cs" />
+    <Compile Include="Trace\Models\InventoryTaskModel.cs" />
+    <Compile Include="Trace\Models\KitAssemblyV2Model.cs" />
+    <Compile Include="Trace\Models\PrintingModel.cs" />
+    <Compile Include="Trace\Models\QueriesModel.cs" />
+    <Compile Include="Trace\Models\ReceivingCubeModel.cs" />
+    <Compile Include="Trace\Models\ReceivingModel.cs" />
+    <Compile Include="Trace\Models\RemoveNodeModel.cs" />
+    <Compile Include="Trace\Models\ShippingConsoleModel.cs" />
+    <Compile Include="Trace\Models\ShippingModel.cs" />
+    <Compile Include="Trace\Models\TrackOptionModel.cs" />
+    <Compile Include="Trace\Models\UC_IV_Model.cs" />
+    <Compile Include="Trace\Presenters\BookingMngrPresenter.cs" />
+    <Compile Include="Trace\Presenters\ChangeLocationPresenter.cs" />
+    <Compile Include="Trace\Presenters\KitAssemblyPresenter.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Trace\Presenters\OrderMngrV2Presenter.cs" />
+    <Compile Include="Trace\Presenters\DocumentManagerPresenter.cs" />
+    <Compile Include="Trace\Presenters\SchedulePresenter.cs" />
+    <Compile Include="Trace\Presenters\ShipperMngrPresenter.cs" />
+    <Compile Include="Trace\Presenters\ShipRoutePresenter.cs" />
+    <Compile Include="Trace\Presenters\TrackOptionShipPresenter.cs" />
+    <Compile Include="Trace\Presenters\InventoryCountPresenter.cs" />
+    <Compile Include="Trace\Presenters\PackageAdminPresenter.cs" />
+    <Compile Include="Trace\Presenters\CrossDockPresenter.cs" />
+    <Compile Include="Trace\Presenters\IntroInventoryPresenter.cs" />
+    <Compile Include="Trace\Presenters\InventoryAdjustmentPresenter.cs" />
+    <Compile Include="Trace\Presenters\InventoryTaskPresenter.cs" />
+    <Compile Include="Trace\Presenters\KitAssemblyV2Presenter.cs" />
+    <Compile Include="Trace\Presenters\PrintingPresenter.cs" />
+    <Compile Include="Trace\Presenters\QueriesPresenter.cs" />
+    <Compile Include="Trace\Presenters\ReceivingCubePresenter.cs" />
+    <Compile Include="Trace\Presenters\ReceivingPresenter.cs" />
+    <Compile Include="Trace\Presenters\RemoveNodePresenter.cs" />
+    <Compile Include="Trace\Presenters\ShippingConsolePresenter.cs" />
+    <Compile Include="Trace\Presenters\ShippingPresenter.cs" />
+    <Compile Include="Trace\Presenters\TrackOptionPresenter.cs" />
+    <Compile Include="Trace\Presenters\UC_IV_Presenter.cs" />
+    <Compile Include="Trace\Views\BookingMngrView.xaml.cs">
+      <DependentUpon>BookingMngrView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Trace\Views\ChangeLocationView.xaml.cs">
+      <DependentUpon>ChangeLocationView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Trace\Views\KitAssemblyView.xaml.cs">
+      <DependentUpon>KitAssemblyView.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Trace\Views\OrderMngrV2View.xaml.cs">
+      <DependentUpon>OrderMngrV2View.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Trace\Views\DocumentManagerView.xaml.cs">
+      <DependentUpon>DocumentManagerView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Trace\Views\ScheduleView.xaml.cs">
+      <DependentUpon>ScheduleView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Trace\Views\ShipperMngrView.xaml.cs">
+      <DependentUpon>ShipperMngrView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Trace\Views\ShipRouteView.xaml.cs">
+      <DependentUpon>ShipRouteView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Trace\Views\TrackOptionShipView.xaml.cs">
+      <DependentUpon>TrackOptionShipView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Trace\Views\InventoryCountView.xaml.cs">
+      <DependentUpon>InventoryCountView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Trace\Views\PackageAdminView.xaml.cs">
+      <DependentUpon>PackageAdminView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Trace\Views\CrossDockView.xaml.cs">
+      <DependentUpon>CrossDockView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Trace\Views\IntroInventoryView.xaml.cs">
+      <DependentUpon>IntroInventoryView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Trace\Views\InventoryAdjustmentView.xaml.cs">
+      <DependentUpon>InventoryAdjustmentView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Trace\Views\InventoryTaskView.xaml.cs">
+      <DependentUpon>InventoryTaskView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Trace\Views\KitAssemblyV2View.xaml.cs">
+      <DependentUpon>KitAssemblyV2View.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Trace\Views\PrintingView.xaml.cs">
+      <DependentUpon>PrintingView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Trace\Views\QueriesView.xaml.cs">
+      <DependentUpon>QueriesView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Trace\Views\ReceivingCubeView.xaml.cs">
+      <DependentUpon>ReceivingCubeView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Trace\Views\ReceivingView.xaml.cs">
+      <DependentUpon>ReceivingView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Trace\Views\RemoveNodeView.xaml.cs">
+      <DependentUpon>RemoveNodeView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Trace\Views\ShippingConsoleView.xaml.cs">
+      <DependentUpon>ShippingConsoleView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Trace\Views\ShippingView.xaml.cs">
+      <DependentUpon>ShippingView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Trace\Views\TrackOptionView.xaml.cs">
+      <DependentUpon>TrackOptionView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Trace\Views\UC_IV_ComparerView.xaml.cs">
+      <DependentUpon>UC_IV_ComparerView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Trace\Views\UC_IV_Replanish_Packing.xaml.cs">
+      <DependentUpon>UC_IV_Replanish_Packing.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="WcfClient\WMSServiceClient.cs" />
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <None Include="app.config">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="PRINT.BAT" />
+    <None Include="Properties\DataSources\System.Data.DataSet.datasource" />
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <None Include="Service References\WMSBusinessService\Arrays.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\WMSBusinessService\Entities.General.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\WMSBusinessService\Entities.General1.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\WMSBusinessService\Entities.Master.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\WMSBusinessService\Entities.Master1.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\WMSBusinessService\Entities.Process.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\WMSBusinessService\Entities.Process1.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\WMSBusinessService\Entities.Profile.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\WMSBusinessService\Entities.Report.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\WMSBusinessService\Entities.Report1.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\WMSBusinessService\Entities.Trace.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\WMSBusinessService\Entities.Trace1.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\WMSBusinessService\Entities.Workflow.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\WMSBusinessService\service.wsdl" />
+    <None Include="Service References\WMSBusinessService\service.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\WMSBusinessService\service1.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\WMSBusinessService\service2.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\WMSBusinessService\System.Data.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\WMSBusinessService\WpfFront.WMSBusinessService.Account.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\WMSBusinessService\WpfFront.WMSBusinessService.AccountAddress.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\WMSBusinessService\WpfFront.WMSBusinessService.AccountType.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\WMSBusinessService\WpfFront.WMSBusinessService.AccountTypeRelation.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\WMSBusinessService\WpfFront.WMSBusinessService.Bin.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\WMSBusinessService\WpfFront.WMSBusinessService.BinByTask.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\WMSBusinessService\WpfFront.WMSBusinessService.BinByTaskExecution.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\WMSBusinessService\WpfFront.WMSBusinessService.BinRoute.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\WMSBusinessService\WpfFront.WMSBusinessService.ClassEntity.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\WMSBusinessService\WpfFront.WMSBusinessService.Company.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\WMSBusinessService\WpfFront.WMSBusinessService.ConfigOption.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\WMSBusinessService\WpfFront.WMSBusinessService.ConfigOptionByCompany.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\WMSBusinessService\WpfFront.WMSBusinessService.ConfigType.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\WMSBusinessService\WpfFront.WMSBusinessService.Connection.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\WMSBusinessService\WpfFront.WMSBusinessService.ConnectionType.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\WMSBusinessService\WpfFront.WMSBusinessService.Contact.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\WMSBusinessService\WpfFront.WMSBusinessService.ContactEntityRelation.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\WMSBusinessService\WpfFront.WMSBusinessService.ContactPosition.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\WMSBusinessService\WpfFront.WMSBusinessService.Contract.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\WMSBusinessService\WpfFront.WMSBusinessService.CountSchedule.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\WMSBusinessService\WpfFront.WMSBusinessService.CountTaskBalance.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\WMSBusinessService\WpfFront.WMSBusinessService.CustomProcess.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\WMSBusinessService\WpfFront.WMSBusinessService.CustomProcessActivity.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\WMSBusinessService\WpfFront.WMSBusinessService.CustomProcessContext.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\WMSBusinessService\WpfFront.WMSBusinessService.CustomProcessContextByEntity.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\WMSBusinessService\WpfFront.WMSBusinessService.CustomProcessRoute.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\WMSBusinessService\WpfFront.WMSBusinessService.CustomProcessTransition.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\WMSBusinessService\WpfFront.WMSBusinessService.CustomProcessTransitionByEntity.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\WMSBusinessService\WpfFront.WMSBusinessService.C_CasNumber.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\WMSBusinessService\WpfFront.WMSBusinessService.C_CasNumberFormula.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\WMSBusinessService\WpfFront.WMSBusinessService.C_CasNumberRule.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\WMSBusinessService\WpfFront.WMSBusinessService.DataDefinition.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\WMSBusinessService\WpfFront.WMSBusinessService.DataDefinitionByBin.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\WMSBusinessService\WpfFront.WMSBusinessService.DataInformation.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\WMSBusinessService\WpfFront.WMSBusinessService.DataType.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\WMSBusinessService\WpfFront.WMSBusinessService.Document.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\WMSBusinessService\WpfFront.WMSBusinessService.DocumentAddress.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\WMSBusinessService\WpfFront.WMSBusinessService.DocumentBalance.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\WMSBusinessService\WpfFront.WMSBusinessService.DocumentClass.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\WMSBusinessService\WpfFront.WMSBusinessService.DocumentConcept.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\WMSBusinessService\WpfFront.WMSBusinessService.DocumentLine.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\WMSBusinessService\WpfFront.WMSBusinessService.DocumentPackage.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\WMSBusinessService\WpfFront.WMSBusinessService.DocumentType.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\WMSBusinessService\WpfFront.WMSBusinessService.DocumentTypeSequence.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\WMSBusinessService\WpfFront.WMSBusinessService.EntityExtraData.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\WMSBusinessService\WpfFront.WMSBusinessService.GroupCriteria.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\WMSBusinessService\WpfFront.WMSBusinessService.GroupCriteriaDetail.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\WMSBusinessService\WpfFront.WMSBusinessService.GroupCriteriaRelation.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\WMSBusinessService\WpfFront.WMSBusinessService.GroupCriteriaRelationData.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\WMSBusinessService\WpfFront.WMSBusinessService.ImageEntityRelation.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\WMSBusinessService\WpfFront.WMSBusinessService.IqColumn.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\WMSBusinessService\WpfFront.WMSBusinessService.IqReport.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\WMSBusinessService\WpfFront.WMSBusinessService.IqReportColumn.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\WMSBusinessService\WpfFront.WMSBusinessService.IqReportTable.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\WMSBusinessService\WpfFront.WMSBusinessService.IqTable.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\WMSBusinessService\WpfFront.WMSBusinessService.KitAssembly.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\WMSBusinessService\WpfFront.WMSBusinessService.KitAssemblyFormula.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\WMSBusinessService\WpfFront.WMSBusinessService.Label.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\WMSBusinessService\WpfFront.WMSBusinessService.LabelMapping.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\WMSBusinessService\WpfFront.WMSBusinessService.LabelTemplate.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\WMSBusinessService\WpfFront.WMSBusinessService.LabelTrackOption.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\WMSBusinessService\WpfFront.WMSBusinessService.Location.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\WMSBusinessService\WpfFront.WMSBusinessService.LogError.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\WMSBusinessService\WpfFront.WMSBusinessService.MeasureType.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\WMSBusinessService\WpfFront.WMSBusinessService.MeasureUnit.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\WMSBusinessService\WpfFront.WMSBusinessService.MeasureUnitConvertion.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\WMSBusinessService\WpfFront.WMSBusinessService.MenuOption.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\WMSBusinessService\WpfFront.WMSBusinessService.MenuOptionByRol.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\WMSBusinessService\WpfFront.WMSBusinessService.MenuOptionExtension.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\WMSBusinessService\WpfFront.WMSBusinessService.MenuOptionType.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\WMSBusinessService\WpfFront.WMSBusinessService.MessageRuleByCompany.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\WMSBusinessService\WpfFront.WMSBusinessService.MessageRuleExtension.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\WMSBusinessService\WpfFront.WMSBusinessService.MMaster.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\WMSBusinessService\WpfFront.WMSBusinessService.MType.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\WMSBusinessService\WpfFront.WMSBusinessService.Node.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\WMSBusinessService\WpfFront.WMSBusinessService.NodeDocumentType.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\WMSBusinessService\WpfFront.WMSBusinessService.NodeExtension.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\WMSBusinessService\WpfFront.WMSBusinessService.NodeExtensionTrace.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\WMSBusinessService\WpfFront.WMSBusinessService.NodeRoute.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\WMSBusinessService\WpfFront.WMSBusinessService.NodeTrace.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\WMSBusinessService\WpfFront.WMSBusinessService.OptionType.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\WMSBusinessService\WpfFront.WMSBusinessService.PickMethod.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\WMSBusinessService\WpfFront.WMSBusinessService.ProcessEntityResource.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\WMSBusinessService\WpfFront.WMSBusinessService.Product.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\WMSBusinessService\WpfFront.WMSBusinessService.ProductAccountRelation.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\WMSBusinessService\WpfFront.WMSBusinessService.ProductAlternate.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\WMSBusinessService\WpfFront.WMSBusinessService.ProductCategory.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\WMSBusinessService\WpfFront.WMSBusinessService.ProductInventory.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\WMSBusinessService\WpfFront.WMSBusinessService.ProductStock.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\WMSBusinessService\WpfFront.WMSBusinessService.ProductTrackRelation.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\WMSBusinessService\WpfFront.WMSBusinessService.ReportHeaderFormat.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\WMSBusinessService\WpfFront.WMSBusinessService.Rol.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\WMSBusinessService\WpfFront.WMSBusinessService.ShippingMethod.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\WMSBusinessService\WpfFront.WMSBusinessService.ShowData.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\WMSBusinessService\WpfFront.WMSBusinessService.Status.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\WMSBusinessService\WpfFront.WMSBusinessService.StatusType.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\WMSBusinessService\WpfFront.WMSBusinessService.SysUser.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\WMSBusinessService\WpfFront.WMSBusinessService.TaskByUser.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\WMSBusinessService\WpfFront.WMSBusinessService.TaskDocumentRelation.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\WMSBusinessService\WpfFront.WMSBusinessService.Terminal.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\WMSBusinessService\WpfFront.WMSBusinessService.TrackOption.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\WMSBusinessService\WpfFront.WMSBusinessService.Unit.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\WMSBusinessService\WpfFront.WMSBusinessService.UnitProductEquivalence.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\WMSBusinessService\WpfFront.WMSBusinessService.UnitProductLogistic.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\WMSBusinessService\WpfFront.WMSBusinessService.UnitProductRelation.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\WMSBusinessService\WpfFront.WMSBusinessService.UserByRol.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\WMSBusinessService\WpfFront.WMSBusinessService.Vehicle.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\WMSBusinessService\WpfFront.WMSBusinessService.WFDataType.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\WMSBusinessService\WpfFront.WMSBusinessService.Zone.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\WMSBusinessService\WpfFront.WMSBusinessService.ZoneBinRelation.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\WMSBusinessService\WpfFront.WMSBusinessService.ZoneEntityRelation.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\WMSBusinessService\WpfFront.WMSBusinessService.ZonePickerRelation.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="WMS30Key.pfx" />
+    <AppDesigner Include="Properties\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\16_Darf.png" />
+    <Resource Include="Images\arrow.png" />
+    <Resource Include="Images\btn_on_right.gif" />
+    <Resource Include="Images\Delete.png" />
+    <Resource Include="Images\DeleteDisabled.png" />
+    <Resource Include="Images\detail.png" />
+    <Resource Include="Images\fields.png" />
+    <Resource Include="Images\Icons\48x48\Adjustment.png" />
+    <Resource Include="Images\Icons\48x48\Bin.png" />
+    <Resource Include="Images\Icons\48x48\ChangeLocation.png" />
+    <Resource Include="Images\Icons\48x48\Company.png" />
+    <Resource Include="Images\Icons\48x48\Config.png" />
+    <Resource Include="Images\Icons\48x48\Connection.png" />
+    <Resource Include="Images\Icons\48x48\Console.png" />
+    <Resource Include="Images\Icons\48x48\Count.png" />
+    <Resource Include="Images\Icons\48x48\CrossDock.png" />
+    <Resource Include="Images\Icons\48x48\Cube.png" />
+    <Resource Include="Images\Icons\48x48\InvTask.png" />
+    <Resource Include="Images\Icons\48x48\KitAssembly.png" />
+    <Resource Include="Images\Icons\48x48\Label.png" />
+    <Resource Include="Images\Icons\48x48\Location.png" />
+    <Resource Include="Images\Icons\48x48\MenuOption.png" />
+    <Resource Include="Images\Icons\48x48\Node.png" />
+    <Resource Include="Images\Icons\48x48\Permit.png" />
+    <Resource Include="Images\Icons\48x48\PrintLabels.png" />
+    <Resource Include="Images\Icons\48x48\Process.png" />
+    <Resource Include="Images\Icons\48x48\Product.png" />
+    <Resource Include="Images\Icons\48x48\Receiving.png" />
+    <Resource Include="Images\Icons\48x48\Repack.png" />
+    <Resource Include="Images\Icons\48x48\Report.png" />
+    <Resource Include="Images\Icons\48x48\Sequence.png" />
+    <Resource Include="Images\Icons\48x48\Shipping.png" />
+    <Resource Include="Images\Icons\48x48\Trefoil32.png" />
+    <Resource Include="Images\Icons\48x48\Unit.png" />
+    <Resource Include="Images\Icons\48x48\User.png" />
+    <Resource Include="Images\Icons\Confirm.png" />
+    <Resource Include="Images\Icons\Cross.png" />
+    <Resource Include="Images\Icons\Exit16.png" />
+    <Resource Include="Images\Icons\logo16x16.png" />
+    <Resource Include="Images\integration.gif" />
+    <Resource Include="Images\integration.png" />
+    <Resource Include="Images\invoice.jpg" />
+    <Resource Include="Images\label.jpg" />
+    <Resource Include="Images\logoWMS.jpg" />
+    <Resource Include="Images\logoWMSheader.jpg" />
+    <Resource Include="Images\look.png" />
+    <Resource Include="Images\Maximized32.png" />
+    <Resource Include="Images\Minimized32.png" />
+    <Resource Include="Images\New.png" />
+    <Resource Include="Images\NewDisabled.png" />
+    <Resource Include="Images\openbox.png" />
+    <Resource Include="Images\print.png" />
+    <Resource Include="Images\progress_ball.gif" />
+    <Resource Include="Images\refresh.png" />
+    <Resource Include="Images\report.png" />
+    <Resource Include="Images\reports.gif" />
+    <Resource Include="Images\Save.png" />
+    <Resource Include="Images\SaveDisabled.png" />
+    <Resource Include="Images\scheduler.gif" />
+    <Resource Include="Images\setup.gif" />
+    <Resource Include="Images\setup.png" />
+    <Resource Include="Images\Ticket.png" />
+    <Resource Include="Images\Window128.png" />
+    <Resource Include="WmsExpress.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Service References\" />
+  </ItemGroup>
+  <ItemGroup>
+    <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework Client Profile</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.2.0">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 2.0 %28x86%29</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.0">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.0 %28x86%29</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Windows.Installer.3.1">
+      <Visible>False</Visible>
+      <ProductName>Windows Installer 3.1</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Icons\48x48\OrderManager.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Icons\48x48\Category.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Icons\48x48\Docs.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Icons\48x48\LastDocs.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\printfile.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Pallet.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Icons\48x48\Account.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Properties\DataSources\System.Collections.Specialized.StringDictionary.datasource" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Properties\DataSources\System.Data.DataTable.datasource" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\excel.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="bin\" />
+    <Folder Include="Workflow\Models\" />
+    <Folder Include="Workflow\Presenters\" />
+    <Folder Include="Workflow\Views\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Icons\48x48\Delete.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Icons\48x48\ValidarSeriales.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\LogoLogPro.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Icons\48x48\Almacenamiento.png" />
+    <Resource Include="Images\Icons\48x48\Diagnostico.png" />
+    <Resource Include="Images\Icons\48x48\Empaque.png" />
+    <Resource Include="Images\Icons\48x48\Etiquetado.png" />
+    <Resource Include="Images\Icons\48x48\MovMercancia.png" />
+    <Resource Include="Images\Icons\48x48\Recibo.png" />
+    <Resource Include="Images\Icons\48x48\Reparacion.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Icons\48x48\Despacho.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\logo16x16.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="logo16x16.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Icons\LOGO LOGPRO.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadataStorage Include="Service References\WMSBusinessService\" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\WMSBusinessService\configuration91.svcinfo" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\WMSBusinessService\configuration.svcinfo" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\WMSBusinessService\Reference.svcmap">
+      <Generator>WCF Proxy Generator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Icons\48x48\Liberacion.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Icons\48x48\Montacargas.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\excel1.png" />
+    <Resource Include="Images\excel2.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Icons\48x48\check1.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Icons\48x48\barcode2.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Icons\48x48\printer1.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Icons\48x48\printer2.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Icons\48x48\novedad.png" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

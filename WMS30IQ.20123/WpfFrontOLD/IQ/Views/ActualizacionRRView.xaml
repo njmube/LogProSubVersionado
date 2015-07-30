@@ -1,0 +1,271 @@
+﻿<WMCore:UserControlBase x:Uid="ActualizacionRR" x:Class="WpfFront.Views.ActualizacionRRView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:xcdg="http://schemas.xceed.com/wpf/xaml/datagrid"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    Height="Auto" Width="Auto" HorizontalAlignment="Stretch"
+    xmlns:WMCore="clr-namespace:Core.WPF;assembly=Core"
+    xmlns:dg="http://schemas.microsoft.com/wpf/2008/toolkit"
+    xmlns:toolkit="http://schemas.microsoft.com/wpf/2008/toolkit"
+    xmlns:uc="clr-namespace:WpfFront.Common.UserControls"
+    x:Name="ActualizacionRR">
+    <AdornerDecorator x:Uid="AdornerDecorator_1">
+        <DockPanel x:Uid="DockPanel_1" Background="AliceBlue" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+            <StackPanel x:Uid="StackPanel_1" Orientation="Horizontal" >
+                <StackPanel x:Uid="Stack_Panel" Orientation="Vertical" Margin="3" HorizontalAlignment="Center" Width="auto" Height="auto" >
+                    <Border x:Uid="Border_1" x:Name="Border_Detail" Style="{DynamicResource UserControlFormInnerBorder}" Margin="3" HorizontalAlignment="Center" Visibility="Visible" >
+                        <StackPanel x:Name="Stack_DetailSerial" Orientation="Vertical" Margin="3" HorizontalAlignment="Center" >
+                            <StackPanel>
+                                <TextBlock Text="MODULO LIBERACIÓN" HorizontalAlignment="Left" FontWeight="bold" />
+                            </StackPanel>
+                            <Separator Margin="5,0,0,0"/>
+                            <StackPanel x:Uid="Stack_SerialGroup" x:Name="Stack_SerialGroup" Orientation="Horizontal" Margin="0,6,0,0">
+                                <StackPanel x:Uid="Stack_UploadFile" x:Name="Stack_UploadFile" Orientation="Vertical" Margin="4,-3,4,0" >
+                                    <TextBlock x:Uid="txt_UploadFile" x:Name="txt_UploadFile" Text="Cargar Archivo"  />
+                                    <uc:UploadFile x:Uid="fUpload" Margin="0,0,0,0" x:Name="fUpload" OnFileUpload="fUpload_OnFileUpload_1" />
+                                    <TextBox x:Uid="tb_CodPallet" x:Name="tb_CodPalletBusqueda" Width="115"  Margin="0,2,0,0" VerticalAlignment="Bottom" Height="21" Visibility="Collapsed"/>
+                                </StackPanel>
+                            </StackPanel>
+                            <StackPanel x:Uid="Stack_Adicionales" x:Name="Stack_Adicionales" Orientation="Vertical" Margin="0,6,0,0">
+                                <ListView x:Uid="lvDocumentMaster" ItemsSource="{Binding ListRecords}" Margin="0,4,0,0"  MaxHeight="400" x:Name="lvDocumentMaster">
+                                    <ListView.View>
+                                        <GridView x:Uid="GridViewDetails" x:Name="GridViewDetails">
+
+                                            <GridViewColumn x:Uid="GridViewColumn_2" Header="Serial" Width="100" DisplayMemberBinding="{Binding SERIAL}" />
+                                            <GridViewColumn x:Uid="GridViewColumn_2" Header="Codigo SAP" Width="100" DisplayMemberBinding="{Binding SAP}" />
+                                            <GridViewColumn x:Uid="GridViewColumn_2" Header="Producto" Width="200" DisplayMemberBinding="{Binding PRODUCTO}" />
+                                            <GridViewColumn x:Uid="GridViewColumn_2" Header="Direccionable" Width="120" DisplayMemberBinding="{Binding DIRECCIONABLE}" />
+                                            <GridViewColumn x:Uid="GridViewColumn_2" Header="Estado RR" Width="60" DisplayMemberBinding="{Binding ESTADORR}" />
+                                            <GridViewColumn x:Uid="GridViewColumn_2" Header="Doc. SAP" Width="60" DisplayMemberBinding="{Binding DOCSAP}" />
+                                            <GridViewColumn x:Uid="GridViewColumn_2" Header="Lote" Width="100" DisplayMemberBinding="{Binding LOTE}" />
+                                        </GridView>
+                                    </ListView.View>
+                                </ListView>
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock x:Uid="textblock_recuento" Text="Registros Cargados: " FontWeight="Bold" Margin="0,0,8,4" />
+                                    <TextBlock x:Uid="textblock_recuento" x:Name="textblock_recuento" Text="{Binding ListRecords.Count}" FontWeight="Bold" Margin="0,0,8,4" />
+                                </StackPanel>
+                                <StackPanel x:Uid="Stack_Button" x:Name="Stack_Button"  Margin="0,10,0,0" Orientation="Horizontal" HorizontalAlignment="Left">
+                                    <Button x:Uid="Btn_Guardar" x:Name="Btn_Guardar" Width="70" Content="Aceptar" Click="Btn_Guardar_Click_1" />
+
+                                    <Button Margin="20,0,0,0" x:Uid="Btn_Cancelar" x:Name="Btn_Cancelar" Width="70" Content="Cancelar" Click="Btn_Cancelar_Click_1" />
+                                    <Grid Margin="220,0,0,0">
+                                        <TextBlock x:Uid="textblock_estadoCargue" x:Name="textblock_estadoCargue" Text="Operación detenida" Margin="0,-17,0,0" />
+                                        <ProgressBar x:Uid="PBar_cargue" x:Name="PBar_cargue" Margin="0,3,0,3" Width="255" Minimum="0" Maximum="100"/>
+                                        <TextBlock Text="{Binding ElementName=PBar_cargue, Path=Value, StringFormat={}{0:0}%}" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                                    </Grid>
+
+                                </StackPanel>
+                            </StackPanel>
+
+                            <Expander Grid.Row="1" Margin="0,10,0,0" VerticalAlignment="Stretch" Width="auto" Cursor="Hand" Name="ExpanderCuarentena">
+                                <Expander.Header>
+                                    <Border Background="SeaShell">
+                                        <TextBlock>
+                                                              <Run Text="Listado de Equipos en Cuarentena: ("/>
+                                                              <Run Text="{Binding List_Cuarentena.Count}"/>
+                                                              <Run Text=")"/>
+                                        </TextBlock>
+                                        
+                                    </Border>
+                                </Expander.Header>
+                                <Border Margin="0,0,0,0" Background="AliceBlue">
+                                    <StackPanel x:Name="stackpanelCuarentena">
+                                        <ListView x:Uid="lv_NoCargue" ItemsSource="{Binding List_Cuarentena}" Margin="0,0,0,0"  MaxHeight="480" x:Name="lv_Cuarentena">
+                                            <ListView.ItemContainerStyle>
+                                                <Style TargetType="{x:Type ListViewItem}">
+                                                    <Setter Property="HorizontalContentAlignment" Value="Left"/>
+                                                </Style>
+                                            </ListView.ItemContainerStyle>
+                                            <ListView.View>
+                                                <GridView x:Uid="GridViewDetails" x:Name="GridViewDetailsCuarentena">
+                                                    <GridViewColumn x:Uid="GridViewColumn_2" Header="Serial" Width="120" DisplayMemberBinding="{Binding Serial}" />
+                                                    <GridViewColumn x:Uid="GridViewColumn_2" Header="Estado" Width="150" DisplayMemberBinding="{Binding Estado}" />
+                                                    <GridViewColumn x:Uid="GridViewColumn_2" Header="Código SAP" Width="120" DisplayMemberBinding="{Binding CodSAP}" />
+                                                    <GridViewColumn x:Uid="GridViewColumn_2" Header="Movimiento" Width="0" DisplayMemberBinding="{Binding Movimiento}" />
+                                                    <GridViewColumn x:Uid="GridViewColumn_2" Header="Usuario" Width="100" DisplayMemberBinding="{Binding Usuario}" />
+                                                    <GridViewColumn x:Uid="GridViewColumn_2" Header="Fecha Ingreso" Width="100" DisplayMemberBinding="{Binding FIngreso}" />
+                                                    
+                                                </GridView>
+                                            </ListView.View>
+                                        </ListView>
+                                        <StackPanel Orientation="Horizontal" Margin="5,10,0,5">
+                                            <Image x:Uid="ImageRefresh" Name="ImageRefresh"  Margin="0,-6,5,0"  HorizontalAlignment="Center" Source="/WpfFront;component/Images/excel2.png" ToolTip="Exportar a archivo de excel" MouseDown="Btn_Exportar_Click_1"/>
+                                            <TextBlock Text="Exportar" HorizontalAlignment="Left" FontWeight="bold" />
+
+                                            <TextBlock Text="Equipos Totales en CUARENTENA:  " HorizontalAlignment="Left" FontWeight="bold" Margin="400,0,0,0"/>
+                                            <TextBlock Text="" HorizontalAlignment="Left" FontWeight="bold" Name="txtTotal"/>
+                                        </StackPanel>
+                                    </StackPanel>
+                                    
+                                </Border>
+                                
+                            </Expander>
+
+                        </StackPanel>
+                        
+                        
+                        
+                    </Border>
+                </StackPanel>
+
+                
+                
+            </StackPanel>
+
+            <Expander Grid.Row="1" Margin="0,10,0,0" VerticalAlignment="Stretch" Width="auto" Cursor="Hand">
+                <Expander.Header>
+                    <Border Background="SeaShell">
+                        <TextBlock>
+                                                              <Run Text="Equipos no liberados: ("/>
+                                                              <Run Text="{Binding List_Nocargue.Count}"/>
+                                                              <Run Text=")"/>
+                        </TextBlock>
+                    </Border>
+                </Expander.Header>
+                <Border Margin="0,0,0,0" Background="AliceBlue">
+                    <StackPanel x:Name="stackpanelLibreracion">
+                        <ListView x:Uid="lv_NoCargue" ItemsSource="{Binding List_Nocargue}" Margin="0,0,0,0"  MaxHeight="480" x:Name="lv_NoCargue">
+                            <ListView.ItemContainerStyle>
+                                <Style TargetType="{x:Type ListViewItem}">
+                                    <Setter Property="HorizontalContentAlignment" Value="Left"/>
+                                </Style>
+                            </ListView.ItemContainerStyle>
+                            <ListView.View>
+                                <GridView x:Uid="GridViewDetails" x:Name="GridViewDetailsLiberacion">
+                                    <GridViewColumn x:Uid="GridViewColumn_2" Header="Serial" Width="100" DisplayMemberBinding="{Binding Serial}" />
+                                    <GridViewColumn x:Uid="GridViewColumn_2" Header="Código SAP" Width="100" DisplayMemberBinding="{Binding CodSAP}" />
+                                    <GridViewColumn x:Uid="GridViewColumn_2" Header="Producto" Width="190" DisplayMemberBinding="{Binding Modelo}" />
+                                    <GridViewColumn x:Uid="GridViewColumn_2" Header="Motivo de no Liberación" Width="250" DisplayMemberBinding="{Binding Motivo}" />
+                                </GridView>
+                            </ListView.View>
+                        </ListView>
+                        <StackPanel Orientation="Horizontal" Margin="5,10,0,5">
+                            <Image x:Uid="ImageRefresh" Name="ImageExport"  Margin="0,-6,5,0"  HorizontalAlignment="Center" Source="/WpfFront;component/Images/excel2.png" ToolTip="Exportar a archivo de excel" MouseDown="Btn_ExportarNoliberados_Click_1"/>
+                            <TextBlock Text="Exportar" HorizontalAlignment="Left" FontWeight="bold" />
+                        </StackPanel>
+                    </StackPanel>
+                </Border>
+            </Expander>
+
+
+            
+            
+            <!--StackPanel x:Uid="StackPanel_2" x:Name="StackPanel_2" Orientation="Horizontal" >
+                <StackPanel x:Uid="Stack_Panel2" Orientation="Vertical" Margin="3" HorizontalAlignment="Center" Width="auto" Height="auto" >
+                    <Border x:Uid="Border_1" x:Name="Border_Detail2" Style="{DynamicResource UserControlFormInnerBorder}" Margin="3" HorizontalAlignment="Center" Visibility="Visible" Width="165" >
+                        <StackPanel x:Name="Stack_DetailSerial2" Orientation="Vertical" Margin="3" HorizontalAlignment="Center" >
+                            <StackPanel>
+                                <TextBlock HorizontalAlignment="Left" FontWeight="bold" ><Run Text="SERIALES REPETIDOS "/><LineBreak/><Run Text="EN ARCHIVO"/></TextBlock>
+                            </StackPanel>
+                            <Separator Margin="5,0,0,0"/>
+
+                            <StackPanel x:Uid="Stack_Adicionales2" x:Name="Stack_Adicionales2" Orientation="Vertical" Margin="0,6,0,0">
+                                <ListView x:Uid="lvDocumentMaster2" ItemsSource="{Binding ListRecordsRep}" Margin="0,4,0,0"  MaxHeight="400" Name="lvDocumentMaster2" Width="140">
+                                    <ListView.View>
+                                        <GridView x:Uid="GridViewDetails2" x:Name="GridViewDetails2">
+                                            <GridViewColumn x:Uid="GridViewColumn_2" Header="Serial" Width="140" DisplayMemberBinding="{Binding SERIAL}" />
+                                        </GridView>
+                                    </ListView.View>
+                                </ListView>
+
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock x:Uid="textblock_recuento2" Text="Registros Repetidos: " FontWeight="Bold" Margin="0,0,8,4" />
+                                    <TextBlock x:Uid="textblock_recuento2" x:Name="textblock_recuento2" Text="{Binding ListRecordsRep.Count}" FontWeight="Bold" Margin="0,0,8,4" />
+
+                                </StackPanel>
+
+                            </StackPanel>
+                        </StackPanel>
+                    </Border>
+                </StackPanel>
+            </StackPanel>
+
+            <StackPanel x:Uid="StackPanel_3" x:Name="StackPanel_3" Orientation="Horizontal" >
+                <StackPanel x:Uid="Stack_Panel3" Orientation="Vertical" Margin="3" HorizontalAlignment="Center" Width="175" Height="auto" >
+                    <Border x:Uid="Border_1" x:Name="Border_Detail3" Style="{DynamicResource UserControlFormInnerBorder}" Margin="3" HorizontalAlignment="Center" Visibility="Visible" >
+                        <StackPanel x:Name="Stack_DetailSerial3" Orientation="Vertical" Margin="3" HorizontalAlignment="Center" >
+                            <StackPanel>
+                                <TextBlock HorizontalAlignment="Left" FontWeight="bold" ><Run Text="SERIALES NO EXISTEN "/><LineBreak/><Run Text="EN BD"/></TextBlock>
+                            </StackPanel>
+                            <Separator Margin="5,0,0,0"/>
+
+                            <StackPanel x:Uid="Stack_Adicionales3" x:Name="Stack_Adicionales3" Orientation="Vertical" Margin="0,6,0,0">
+                                <ListView x:Uid="lvDocumentMaster3" ItemsSource="{Binding ListRecordsRepDB}" Margin="0,4,0,0"  MaxHeight="400" Name="lvDocumentMaster3" Width="140">
+                                    <ListView.View>
+                                        <GridView x:Uid="GridViewDetails3" x:Name="GridViewDetails3">
+                                            <GridViewColumn x:Uid="GridViewColumn_2" Header="Serial" Width="140" DisplayMemberBinding="{Binding SERIAL}" />
+                                        </GridView>
+                                    </ListView.View>
+                                </ListView>
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock x:Uid="textblock_recuento2" Text="Registros Inexistentes: " FontWeight="Bold" Margin="0,0,8,4" />
+                                    <TextBlock x:Uid="textblock_recuento2" x:Name="textblock_recuento3" Text="{Binding ListRecordsRepDB.Count}" FontWeight="Bold" Margin="0,0,8,4" />
+                                </StackPanel>
+
+                            </StackPanel>
+                        </StackPanel>
+                    </Border>
+                </StackPanel>
+            </StackPanel>
+
+            <StackPanel x:Uid="StackPanel_4" x:Name="StackPanel_4" Orientation="Horizontal" >
+                <StackPanel x:Uid="Stack_Panel4" Orientation="Vertical" Margin="3" HorizontalAlignment="Center" Width="auto" Height="auto" >
+                    <Border x:Uid="Border_1" x:Name="Border_Detail4" Style="{DynamicResource UserControlFormInnerBorder}" Margin="3" HorizontalAlignment="Center" Visibility="Visible" Width="159" >
+                        <StackPanel x:Name="Stack_DetailSerial4" Orientation="Vertical" Margin="3" HorizontalAlignment="Center" >
+                            <StackPanel>
+                                <TextBlock Text="CODIGO SAP NO EXISTE" HorizontalAlignment="Left" FontWeight="bold" />
+                            </StackPanel>
+                            <Separator Margin="5,0,0,0"/>
+
+                            <StackPanel x:Uid="Stack_Adicionales4" x:Name="Stack_Adicionales4" Orientation="Vertical" Margin="0,6,0,0">
+                                <ListView x:Uid="lvDocumentMaster4" ItemsSource="{Binding ListRecordsSAP}" Margin="0,4,0,0"  MaxHeight="400" Name="lvDocumentMaster4" Width="138">
+                                    <ListView.View>
+                                        <GridView x:Uid="GridViewDetails4" x:Name="GridViewDetails4">
+                                            <GridViewColumn x:Uid="GridViewColumn_2" Header="Serial" Width="140" DisplayMemberBinding="{Binding SERIAL}" />
+                                        </GridView>
+                                    </ListView.View>
+                                </ListView>
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock x:Uid="textblock_recuento2" Text="SAP Inexistentes: " FontWeight="Bold" Margin="0,0,8,4" />
+                                    <TextBlock x:Uid="textblock_recuento2" x:Name="textblock_recuento4" Text="{Binding ListRecordsSAP.Count}" FontWeight="Bold" Margin="0,0,8,4" />
+                                </StackPanel>
+
+                            </StackPanel>
+                        </StackPanel>
+                    </Border>
+                    
+                </StackPanel>
+            </StackPanel>
+
+            <StackPanel x:Uid="StackPanel_5" x:Name="StackPanel_5" Orientation="Horizontal" >
+                <StackPanel x:Uid="Stack_Panel5" Orientation="Vertical" Margin="3" HorizontalAlignment="Center" Width="auto" Height="auto" >
+                    <Border x:Uid="Border_1" x:Name="Border_Detail5" Style="{DynamicResource UserControlFormInnerBorder}" Margin="3" HorizontalAlignment="Center" Visibility="Visible" Width="159" >
+                        <StackPanel x:Name="Stack_DetailSerial5" Orientation="Vertical" Margin="3" HorizontalAlignment="Center" >
+                            <StackPanel>
+                                <TextBlock HorizontalAlignment="Left" FontWeight="bold" ><Run Text="SAP Y SERIAL NO "/><LineBreak/><Run Text="COINCIDENTE"/><Run Language="es-es" Text="S"/></TextBlock>
+                            </StackPanel>
+                            <Separator Margin="5,0,0,0"/>
+
+                            <StackPanel x:Uid="Stack_Adicionales5" x:Name="Stack_Adicionales5" Orientation="Vertical" Margin="0,6,0,0">
+                                <ListView x:Uid="lvDocumentMaster5" ItemsSource="{Binding ListRecordsSAP_Serial}" Margin="0,4,0,0"  MaxHeight="400" Name="lvDocumentMaster5" Width="138">
+                                    <ListView.View>
+                                        <GridView x:Uid="GridViewDetails5" x:Name="GridViewDetails5">
+                                            <GridViewColumn x:Uid="GridViewColumn_2" Header="Serial" Width="140" DisplayMemberBinding="{Binding SERIAL}" />
+                                        </GridView>
+                                    </ListView.View>
+                                </ListView>
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock x:Uid="textblock_recuento2" Text="No Coincidentes: " FontWeight="Bold" Margin="0,0,8,4" />
+                                    <TextBlock x:Uid="textblock_recuento2" x:Name="textblock_recuento5" Text="{Binding ListRecordsSAP_Serial.Count}" FontWeight="Bold" Margin="0,0,8,4" />
+                                </StackPanel>
+
+                            </StackPanel>
+                        </StackPanel>
+                    </Border>
+
+                </StackPanel>
+            </StackPanel-->
+
+        </DockPanel>
+    </AdornerDecorator>
+</WMCore:UserControlBase>

@@ -1,0 +1,11 @@
+﻿<UserControl x:Uid="UserControl_1" x:Class="WpfFront.Common.WFUserControls.WFDateTime"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:toolkit="http://schemas.microsoft.com/wpf/2008/toolkit"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <Grid x:Uid="Grid_1">
+        <StackPanel x:Uid="StackPanel_1" Orientation="Horizontal" Margin="4,3,4,3">
+            <TextBlock x:Uid="TextBlock_1" HorizontalAlignment="Left" Margin="0,0,6,0" TextAlignment="Left" VerticalAlignment="Center" Text="{Binding Path=UcLabel}" Width="100" TextWrapping="Wrap" />
+            <toolkit:DatePicker x:Uid="toolkit:DatePicker_1" FirstDayOfWeek="Monday" SelectedDate="{Binding Path=UcValue}" Width="180" Height="23" />
+        </StackPanel>
+    </Grid>
+</UserControl>

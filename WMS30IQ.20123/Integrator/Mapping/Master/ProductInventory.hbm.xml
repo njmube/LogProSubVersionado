@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<hibernate-mapping xmlns="urn:nhibernate-mapping-2.2" namespace="Entities.Master" assembly="Entities">
+  <class name="ProductInventory" table="Master.ProductInventory">
+	<id name="RowID" type="Int32">
+		<generator class="native" />
+	</id>
+	  
+	<many-to-one lazy="false" name="Location" class="Location" column="LocationID" not-null="true" unique-key="ukProductID" />
+
+	<many-to-one lazy="false" name="Document" class="Entities.Trace.Document" column="DocID" not-null="true" unique-key="ukProductID"  />
+	  
+    <many-to-one lazy="false" name="Product" class="Product" column="ProductID" not-null="true" unique-key="ukProductID"  />
+	    
+	<property name="QtyInUse" type="Double"  />
+
+	<property name="QtyAllocated" type="Double"  />
+
+
+	  <property name="CreatedBy" type="String" length="50" not-null="true"  />
+	  <property name="CreationDate" type="DateTime" not-null="true"   />
+	  <property name="CreTerminal" type="String" length="50"   />
+	  <property name="ModifiedBy" type="String" length="50"   />
+	  <property name="ModDate" type="DateTime"   />
+	  <property name="ModTerminal" type="String" length="50"  />  
+	
+  </class>
+</hibernate-mapping>

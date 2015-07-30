@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<hibernate-mapping xmlns="urn:nhibernate-mapping-2.2" namespace="Entities.Process" assembly="Entities">
+  <class name="ProcessEntityResource" table="Process.ProcessEntityResource">
+	<id name="RowID" type="Int32">
+		<generator class="native" />
+	</id>
+	  
+	<many-to-one name="Entity" class="Entities.General.ClassEntity" column="EntityID" not-found="ignore"/>
+
+	  <many-to-one name="Process" class="Entities.Process.CustomProcess" column="ProcessID" not-null="true" lazy="false"/>
+	  
+	  <property name="EntityRowID" type="Int32" not-null="true" />
+	  
+	  <!--<property name="ResourceType" type="Int16" not-null="true" />
+	  
+	  <property name="ResourceID" type="Int32" not-null="true" /> --><!-- Image, File -->
+
+	  <many-to-one name="Template" class="Entities.General.LabelTemplate" column="TemplateID" not-found="ignore"/>
+	  
+	  <many-to-one name="File" class="Entities.Master.ImageEntityRelation" column="FileID" not-found="ignore"/>
+
+	  <many-to-one name="Status" class="Entities.General.Status" column="StatusID" not-null="true" lazy="false"/>
+
+	  <many-to-one name="Printer" class="Entities.General.Connection" column="PrinterID" not-found="ignore"/>
+
+	  <property name="CreatedBy" type="String" length="50" not-null="true"  />
+	  <property name="CreationDate" type="DateTime" not-null="true"   />
+	  <property name="CreTerminal" type="String" length="50"   />
+	  <property name="ModifiedBy" type="String" length="50"   />
+	  <property name="ModDate" type="DateTime"   />
+	  <property name="ModTerminal" type="String" length="50"   />
+
+  
+	  
+  </class>
+</hibernate-mapping>
+
+

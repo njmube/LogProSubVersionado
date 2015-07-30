@@ -1,0 +1,169 @@
+﻿<WMCore:UserControlBase x:Uid="WMCore:UserControlBase_1" x:Class="WpfFront.Views.IqToolView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:sys="clr-namespace:System;assembly=mscorlib"
+    xmlns:scm="clr-namespace:System.ComponentModel;assembly=WindowsBase"
+    xmlns:WMCore="clr-namespace:Core.WPF;assembly=Core"
+    xmlns:odc="http://schemas.odyssey.com/wpf"
+    xmlns:qr="clr-namespace:WpfFront.Common.Query"                        
+    xmlns:aw="clr-namespace:Assergs.Windows;assembly=Assergs.Windows"
+    xmlns:xcdg="http://schemas.xceed.com/wpf/xaml/datagrid"
+    xmlns:s="clr-namespace:System;assembly=mscorlib"
+    xmlns:awc="clr-namespace:Assergs.Windows.Controls;assembly=Assergs.Windows">
+    <AdornerDecorator x:Uid="AdornerDecorator_1">
+        <AdornerDecorator.Resources>
+            <WMCore:ForceReReadConverter x:Uid="WMCore:ForceReReadConverter_1" x:Key="forceReReadConverter" />
+            <WMCore:FormattingConverter x:Uid="WMCore:FormattingConverter_1" x:Key="formattingConverter" />
+            <WMCore:FormNotificationErrorMessageConverter x:Uid="WMCore:FormNotificationErrorMessageConverter_1" x:Key="formNotificationErrorMessageConverter" />
+            <WMCore:NullableIntegerFormatConverter x:Uid="WMCore:NullableIntegerFormatConverter_1" x:Key="nullableIntegerFormatConverter" />
+            <xcdg:DataGridCollectionViewSource x:Uid="xcdg:DataGridCollectionViewSource_1" x:Key="reportTables" Source="{Binding ReportSystem.ReportTables}"/>
+            <xcdg:DataGridCollectionViewSource x:Uid="xcdg:DataGridCollectionViewSource_2" x:Key="reportData" Source="{Binding Details}" AutoFilterMode="And"  DefaultCalculateDistinctValues="True">
+                <xcdg:DataGridCollectionViewSource.StatFunctions>
+                    <xcdg:CountFunction x:Uid="xcdg:CountFunction_1" ResultPropertyName="Count" SourcePropertyName="StatusID"/>
+                </xcdg:DataGridCollectionViewSource.StatFunctions>
+
+            </xcdg:DataGridCollectionViewSource>
+            <qr:GreaterThanConverter x:Uid="qr:GreaterThanConverter_1" x:Key="greaterThanConverter" />
+
+
+        </AdornerDecorator.Resources>
+        
+
+            
+            <DockPanel x:Uid="DockPanel_1" Background="{DynamicResource WBg}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+
+            <!--<odc:OutlookBar Header="Reports List" MaxNumberOfButtons="0" x:Name="bar" NavigationPaneText="Query Manager"
+                            IsCloseButtonVisible="False" HorizontalAlignment="Stretch" 
+                            SelectedSectionIndex="0" Margin="4,4,0,4" DockPanel.Dock="Left" ShowButtons="False" ShowSideButtons="True">
+                <odc:OutlookBar.Sections>
+                    <odc:OutlookSection Header="List of Reports" >-->
+
+                  
+
+                            <StackPanel x:Uid="StackPanel_2" Orientation="Horizontal" DockPanel.Dock="Top">
+
+                                <TextBlock x:Uid="TextBlock_1" DockPanel.Dock="Top" Margin="15,4,4,4" FontSize="14" FontWeight="Bold" HorizontalAlignment="Left">Inquiry Dev Tool</TextBlock>
+
+                             
+                                        <ComboBox x:Uid="ComboBox_1" Margin="10,3,0,0" ItemsSource="{Binding Path=ListReportSystems}" SelectedValue="{Binding Path=ReportSystem}" 
+                                                  DisplayMemberPath="ReportDesc" SelectionChanged="ComboBox_SelectionChanged" Width="200" FontWeight="Bold" Name="cboReport" />
+
+                                        <ComboBox  x:Uid="cboTable" Margin="10,3,0,0" ItemsSource="{Binding Path=ReportSystem.ReportTables}" SelectionChanged="cboTable_SelectionChanged"
+                                                  DisplayMemberPath="Alias" Width="150" FontWeight="Bold" Name="cboTable" SelectedValue="{Binding Path=CurTable}"  />
+
+            </StackPanel>
+                            
+
+    
+
+
+            <StackPanel x:Uid="stkReport"  Margin="3" Name="stkReport" Visibility="Collapsed" DockPanel.Dock="Top">
+
+                <ContentControl x:Uid="parametersHost" x:Name="parametersHost" >
+                    <!-- Style="{StaticResource parametersHostStyle}"-->
+                    <StackPanel x:Uid="StackPanel_4" Orientation="Vertical" ></StackPanel>
+                </ContentControl>
+            </StackPanel>
+                               
+                
+            <!-- Popup Field Selector -->    
+
+                <Border  x:Uid="Border_1" Style="{DynamicResource UserControlFormInnerBorder}" HorizontalAlignment="Stretch"  VerticalAlignment="Stretch" >
+
+
+                    <Border.Background>
+                        <LinearGradientBrush x:Uid="LinearGradientBrush_1" EndPoint="1,1" StartPoint="0,0">
+                            <GradientStop x:Uid="GradientStop_1" Color="LightGray" Offset="0"/>
+                            <GradientStop x:Uid="GradientStop_2" Color="AliceBlue" Offset="1"/>
+                        </LinearGradientBrush>
+                    </Border.Background>
+                    
+
+                    <StackPanel x:Uid="StackPanel_3" Margin="3">
+                        
+                        <TextBlock x:Uid="TextBlock_2" FontWeight="Bold" Margin="0,3,0,2">Fields Selector</TextBlock>
+                        <TextBlock x:Uid="TextBlock_3" Margin="0,0,0,4">Drag from Fields List and drop into Selected Fields.</TextBlock>
+
+                    <StackPanel x:Uid="StackPanel_5" Orientation="Horizontal">
+                        
+                        
+                        <xcdg:DataGridControl   x:Uid="lvSource" ItemsSource="{Binding Path=AllColumns}"                          
+                          AutoCreateColumns="False"  ReadOnly="True"  Height="350" 
+                          VerticalAlignment="Top" Name="lvSource"
+                              SelectionMode="Extended" AllowDrop="True" NavigationBehavior="RowOnly">
+                            <xcdg:DataGridControl.Resources>
+                                <Style x:Uid="Style_3" x:Key="{x:Type xcdg:ScrollTip}" TargetType="{x:Type xcdg:ScrollTip}">
+                                    <Setter x:Uid="Setter_4" Property="HorizontalAlignment" Value="Right" />
+                                    <Setter x:Uid="Setter_5" Property="VerticalAlignment" Value="Bottom" />
+                                </Style>
+                            </xcdg:DataGridControl.Resources>
+                            <xcdg:DataGridControl.Columns>
+                                <xcdg:Column x:Uid="xcdg:Column_5" FieldName="Name" IsMainColumn="True" Title="Fields List" Width="160" />
+                            </xcdg:DataGridControl.Columns>
+                            <xcdg:DataGridControl.View>
+                                <xcdg:TableView x:Uid="xcdg:TableView_2" UseDefaultHeadersFooters="False" ShowScrollTip="True" VerticalGridLineBrush="LightGray" ShowRowSelectorPane="False" HorizontalGridLineThickness="1" HorizontalGridLineBrush="LightGray">
+                                    <xcdg:TableView.Theme>
+                                        <xcdg:Office2007BlackTheme x:Uid="xcdg:Office2007BlackTheme_2"/>
+                                    </xcdg:TableView.Theme>
+                                    <xcdg:TableView.FixedHeaders>
+                                        <DataTemplate x:Uid="DataTemplate_2">
+                                            <xcdg:ColumnManagerRow x:Uid="xcdg:ColumnManagerRow_2" />
+                                        </DataTemplate>
+                                    </xcdg:TableView.FixedHeaders>
+                                </xcdg:TableView>
+                            </xcdg:DataGridControl.View>
+                        </xcdg:DataGridControl>
+
+
+                        <!--<Button Margin="5,0,5,0" VerticalAlignment="Center" FontWeight="Bold" Click="Button_Click_1">Add </Button>-->
+
+
+                        <xcdg:DataGridControl x:Uid="lvDest" Margin="40,0,0,0"  ItemsSource="{Binding Path=CurTable.ReportColumns}"                          
+                          AutoCreateColumns="False" Height="350"  EditTriggers="BeginEditCommand,ActivationGesture,ClickOnCurrentCell,SingleClick"
+                                    CellEditorDisplayConditions="MouseOverCell"
+                          VerticalAlignment="Top" Name="lvDest"
+                             AllowDrop="True" >
+                            <xcdg:DataGridControl.Resources>
+                                <Style x:Uid="Style_4" x:Key="{x:Type xcdg:ScrollTip}" TargetType="{x:Type xcdg:ScrollTip}">
+                                    <Setter x:Uid="Setter_6" Property="HorizontalAlignment" Value="Right" />
+                                    <Setter x:Uid="Setter_7" Property="VerticalAlignment" Value="Bottom" />
+                                </Style>
+                            </xcdg:DataGridControl.Resources>
+                            <xcdg:DataGridControl.Columns>
+                                <xcdg:Column x:Uid="xcdg:Column_6" FieldName="Alias" ReadOnly="False"  Title="Alias" Width="160" />
+                                <xcdg:Column x:Uid="xcdg:Column_7" FieldName="Column.Name"  Title="Original Name" Width="160" />
+                            </xcdg:DataGridControl.Columns>
+                            <xcdg:DataGridControl.View>
+                                <xcdg:TableView x:Uid="xcdg:TableView_3" UseDefaultHeadersFooters="False" ShowScrollTip="True" VerticalGridLineBrush="LightGray" ShowRowSelectorPane="False" HorizontalGridLineThickness="1" HorizontalGridLineBrush="LightGray">
+                                    <xcdg:TableView.Theme>
+                                        <xcdg:Office2007BlackTheme x:Uid="xcdg:Office2007BlackTheme_3"/>
+                                    </xcdg:TableView.Theme>
+                                    <xcdg:TableView.FixedHeaders>
+                                        <DataTemplate x:Uid="DataTemplate_3">
+                                            <xcdg:ColumnManagerRow x:Uid="xcdg:ColumnManagerRow_3" />
+                                        </DataTemplate>
+                                    </xcdg:TableView.FixedHeaders>
+                                </xcdg:TableView>
+                            </xcdg:DataGridControl.View>
+                        </xcdg:DataGridControl>
+
+
+                    </StackPanel>
+
+                    <Button x:Uid="Button_1" HorizontalAlignment="Left" Click="Button_Click">Update Current Table</Button>
+
+                </StackPanel>
+
+
+            </Border>
+
+           <!-- Fin Popup Field Selector -->
+
+
+
+        </DockPanel>
+            
+        <!--</Border>-->
+        
+    </AdornerDecorator>
+</WMCore:UserControlBase>

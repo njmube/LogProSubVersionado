@@ -1,0 +1,101 @@
+﻿<UserControl x:Uid="SearchProductName" x:Class="WpfFront.Common.UserControls.AdminDocumentLine"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:uc="clr-namespace:WpfFront.Common.UserControls"
+    xmlns:WMCore="clr-namespace:Core.WPF;assembly=Core"  
+    Height="Auto" Width="Auto" x:Name="AdminDocLine">
+
+    <UserControl.Resources>
+        <WMCore:ForceReReadConverter x:Uid="WMCore:ForceReReadConverter_1" x:Key="forceReReadConverter" />
+        <WMCore:FormattingConverter x:Uid="WMCore:FormattingConverter_1" x:Key="formattingConverter" />
+        <WMCore:FormNotificationErrorMessageConverter x:Uid="WMCore:FormNotificationErrorMessageConverter_1" x:Key="formNotificationErrorMessageConverter" />
+        <WMCore:NullableIntegerFormatConverter x:Uid="WMCore:NullableIntegerFormatConverter_1" x:Key="nullableIntegerFormatConverter" />
+    </UserControl.Resources>
+
+    <Border  x:Uid="Border_1" Style="{DynamicResource UserControlFormInnerBorder}" 
+                    HorizontalAlignment="Stretch"  VerticalAlignment="Stretch" Margin="10,3,0,0"  >
+
+        <Border.Background>
+            <LinearGradientBrush x:Uid="LinearGradientBrush_1" EndPoint="1,1" StartPoint="0,0">
+                <GradientStop x:Uid="GradientStop_1" Color="White" Offset="0"/>
+                <GradientStop x:Uid="GradientStop_2" Color="LightGray" Offset="1"/>
+            </LinearGradientBrush>
+        </Border.Background>
+        
+        <StackPanel Orientation="Vertical" Margin="10,5,10,5" >
+
+            <WMCore:FormNotification x:Uid="frmNotification" IsTabStop="False" x:Name="frmNotification" Margin="0,0,0,0" Height="1"
+                                         Panel.ZIndex="99" AutoCollapseTimeout="2" Visibility="Collapsed">
+                <WMCore:FormNotification.ErrorMessage>
+                    <MultiBinding x:Uid="MultiBinding_1" Converter="{StaticResource formNotificationErrorMessageConverter}">
+                        <Binding x:Uid="Binding_1" Path="Error" />
+                        <Binding x:Uid="Binding_2" Path="ValidationExceptionErrors" ElementName="AdminDocLine" />
+                    </MultiBinding>
+                </WMCore:FormNotification.ErrorMessage>
+            </WMCore:FormNotification>
+
+
+            <Grid Margin="-2"  x:Uid="dgEdit" HorizontalAlignment="Center"  VerticalAlignment="Top"  x:Name="dgEditLine" >
+        
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition x:Uid="ColumnDefinition_4" Width="Auto" />
+            <ColumnDefinition x:Uid="ColumnDefinition_5" Width="Auto" />
+        </Grid.ColumnDefinitions>
+        
+        <Grid.RowDefinitions>
+            
+            <RowDefinition x:Uid="RowDefinition_3" Height="auto" />
+            <RowDefinition x:Uid="RowDefinition_4" Height="auto" />
+            <RowDefinition x:Uid="RowDefinition_5" Height="auto" />
+            <RowDefinition x:Uid="RowDefinition_6" Height="auto" />
+            <RowDefinition x:Uid="RowDefinition_7" Height="auto" />
+            <RowDefinition x:Uid="RowDefinition_8" Height="auto" />
+            <RowDefinition x:Uid="RowDefinition_9" Height="auto" />
+            <RowDefinition x:Uid="RowDefinition_10" Height="auto" />
+            <RowDefinition x:Uid="RowDefinition_11" Height="auto" />
+            
+        </Grid.RowDefinitions>
+
+       <TextBlock x:Uid="TextBlock_6" Grid.ColumnSpan="2" Grid.Row="0" Margin="0,4,4,6" FontWeight="Bold" Foreground="Brown" Text="{StaticResource ADD_UPDATE_DOCUMENT_LINES}"></TextBlock>
+
+
+            <TextBlock x:Uid="TextBlock_6" Grid.Column="0" Grid.Row="1" Margin="0,4,4,0" HorizontalAlignment="Right" FontWeight="Bold" ForceCursor="True" Text="{StaticResource PRODUCT}"></TextBlock>
+        <uc:SearchProduct Grid.Column="1" x:Name="scProduct"  Grid.Row="1" Margin="0,4,0,0" OnLoadRecord="SearchProduct_OnLoadRecord" /> <!-- Product="{Binding Path=CurDocLine.Product}" -->
+        
+        <TextBlock x:Uid="TextBlock_7" Grid.Column="0" Grid.Row="2" Margin="0,4,4,0" HorizontalAlignment="Right" FontWeight="Bold" Text="{StaticResource UNIT}" ></TextBlock>
+        <ComboBox x:Uid="cboUnit" Width="110"  Grid.Column="2" ItemsSource="{Binding Path=ProductUnits}" Grid.Row="2" Name="cboUnit" 
+                   DisplayMemberPath="Name"   Margin="0,4,0,0" VerticalAlignment="Top" Height="Auto"  HorizontalAlignment="Left" />
+
+        <TextBlock x:Uid="TextBlock_9" Grid.Column="0" Grid.Row="3" Margin="0,4,4,0" HorizontalAlignment="Right" FontWeight="Bold" Text="{StaticResource QTY_ORDER}"></TextBlock>
+        <TextBox x:Uid="TextBox_4" Name="txtQty"  HorizontalAlignment="Left" Width="80" Grid.Column="1" Grid.Row="3" Margin="0,4,0,0" Height="22"  
+                  Text="{Binding Path=CurDocLine.Quantity, Mode=TwoWay, UpdateSourceTrigger=LostFocus, NotifyOnValidationError=True, ValidatesOnDataErrors=True, ValidatesOnExceptions=True, Converter={StaticResource forceReReadConverter}}" />
+
+
+        <TextBlock x:Uid="TextBlock_9" Grid.Column="0" Grid.Row="4" Margin="0,4,4,0" HorizontalAlignment="Right" Text="{StaticResource QTY_TO_BACKORD}"></TextBlock>
+        <TextBox x:Uid="TextBox_4" Name="txtBO" HorizontalAlignment="Left" Width="80" Grid.Column="1" Grid.Row="4" Margin="0,4,0,0" Height="22"  
+                 Text="{Binding Path=CurDocLine.QtyBackOrder, Mode=TwoWay, UpdateSourceTrigger=LostFocus, NotifyOnValidationError=True, ValidatesOnDataErrors=True, ValidatesOnExceptions=True, Converter={StaticResource forceReReadConverter}}" />
+
+        <TextBlock x:Uid="TextBlock_11" Grid.Column="0" Grid.Row="5" Margin="0,4,4,0" HorizontalAlignment="Right" Text="{StaticResource QTY_TO_CANCEL}"></TextBlock>
+        <TextBox x:Uid="TextBox_4" Name="txtCancel" HorizontalAlignment="Left" Width="80" Grid.Column="1" Grid.Row="5" Margin="0,4,0,0" Height="22" 
+                 Text="{Binding Path=CurDocLine.QtyCancel, Mode=TwoWay, UpdateSourceTrigger=LostFocus, NotifyOnValidationError=True, ValidatesOnDataErrors=True, ValidatesOnExceptions=True, Converter={StaticResource forceReReadConverter}}"  />
+
+
+        <TextBlock x:Uid="TextBlock_8" Grid.Column="0" Grid.Row="7" Margin="0,4,4,0" HorizontalAlignment="Right" Text="{StaticResource LINE_DESCRIPTION}"></TextBlock>
+        <TextBox x:Uid="TextBox_3" Width="200" HorizontalAlignment="Left" Name="txtNotes" Grid.Column="1" Grid.Row="7" Margin="0,4,0,0" Height="46" Text="{Binding Path=CurDocLine.LineDescription}" TextWrapping="Wrap" />
+
+            <StackPanel Grid.Column="1" Grid.Row="8" Orientation="Horizontal">
+                <Button Grid.Column="0" Margin="0,4,4,0" Visibility="Collapsed" HorizontalAlignment="Left" Content="{StaticResource CLEAR}" Click="Button_Click_1" />
+                <Button  Margin="0,4,0,0" HorizontalAlignment="Right" Height="25"  FontWeight="Bold" Width="110" Name="btnProcess"  Content="{StaticResource ADD_LINE}" Click="Button_Click" />
+            </StackPanel>
+
+        </Grid>
+
+            <TextBlock Margin="0,8,3,0" Name="txtHide" FontWeight="Bold" VerticalAlignment="Center" HorizontalAlignment="Right" 
+                       MouseDown="txtHide_MouseDown" Text="{StaticResource [X]CLOSE}"></TextBlock>
+
+        </StackPanel>
+    
+    </Border>
+
+
+</UserControl>

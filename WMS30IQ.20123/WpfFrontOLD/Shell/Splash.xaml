@@ -1,0 +1,76 @@
+﻿<Window x:Uid="Window_1" x:Class="WpfFront.Splash"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:aw="clr-namespace:Assergs.Windows;assembly=Assergs.Windows"
+        xmlns:local="clr-namespace:WpfFront"
+        Title="Starting LOG PRO Express ..." 
+        Height="379" Width="379"
+        WindowStartupLocation="CenterScreen"
+        WindowStyle="None"
+        ResizeMode="NoResize"
+        
+        ShowInTaskbar="False"
+        Topmost="True"
+        Focusable="False"
+        BorderThickness="4"        
+        BorderBrush="#FF376991">
+    <!-- Icon="/WpfFront;component/Images/Icons/logo16x16.png" -->
+    
+    <Window.Resources>
+        <Style x:Uid="Style_1" TargetType="Label">
+            <Setter x:Uid="Setter_1" Property="Foreground" Value="White"/>
+        </Style>
+    </Window.Resources>
+    
+	<Window.Background>
+		<LinearGradientBrush x:Uid="LinearGradientBrush_1" EndPoint="1,1" StartPoint="0,0">
+			<GradientStop x:Uid="GradientStop_1" Color="LightSteelBlue" Offset="0"/>
+			<GradientStop x:Uid="GradientStop_2" Color="SteelBlue" Offset="1"/>
+		</LinearGradientBrush>
+	</Window.Background>
+    <DockPanel x:Uid="DockPanel_1">
+
+        <StatusBar x:Uid="StatusBar_1" DockPanel.Dock="Bottom">
+            <StatusBarItem x:Uid="StatusBarItem_1" Content="Pangea Group, Copyright 2014" HorizontalAlignment="Left" FontSize="9" />
+        </StatusBar>
+
+
+    <Grid x:Uid="Grid_1" Margin="10">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition x:Uid="ColumnDefinition_1" />
+            <ColumnDefinition x:Uid="ColumnDefinition_2" Width="Auto"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition x:Uid="RowDefinition_1" Height="Auto"/>
+            <RowDefinition x:Uid="RowDefinition_2" />
+            <RowDefinition x:Uid="RowDefinition_3" Height="Auto"/>
+            <RowDefinition x:Uid="RowDefinition_4" Height="Auto"/>
+        </Grid.RowDefinitions>
+        <Border x:Uid="Border_1" Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="2"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                Width="Auto" 
+                BorderThickness="1"
+                BorderBrush="#50000000"
+                Background="White">
+            <StackPanel x:Uid="StackPanel_1" Margin="0,0,0,0">
+                <TextBlock x:Uid="TextBlock_1"></TextBlock>
+
+                    <Image x:Uid="image1" Name="image1" Source="/WpfFront;component/Images/Icons/LOGO LOGPRO.png" Width="350" Height="100" />
+            </StackPanel>
+        </Border>
+        <Label x:Uid="Label_1" Grid.Column="1" Grid.Row="1"
+               HorizontalAlignment="Right"
+               VerticalAlignment="Top"
+               FontFamily="Georgia"
+               FontSize="32"
+               FontWeight="Bold"
+               Content=""/>
+        <Label x:Uid="Label_2" Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="2"
+               Content="{Binding Message}"/>
+        <ProgressBar x:Uid="ProgressBar_1" Grid.Column="0" Grid.Row="3" Grid.ColumnSpan="2"
+                     Height="20" Minimum="0" Maximum="1"  
+                     IsIndeterminate="True" />
+    </Grid>
+    </DockPanel>
+</Window>

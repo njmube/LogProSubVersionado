@@ -1,0 +1,18 @@
+﻿<Window x:Uid="Window_1" x:Class="WpfFront.Common.ViewDocument"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    WindowStartupLocation="CenterScreen" Margin="5"
+    Icon="/WpfFront;component/Images/Icons/logo16x16.png"
+    Title="WMS Document View"  Width="800" Height="700">
+    <StackPanel x:Uid="StackPanel_1">
+        <!--<StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+            <TextBox Margin="0,0,10,0" VerticalAlignment="Center">To print all records press</TextBox>
+            <Button Height="30" Width="20" HorizontalAlignment="Center" FontWeight="Bold" Name="btnPrintBatch" Margin="0" Click="btnPrintBatch_Click">Print All</Button>
+        </StackPanel>-->
+
+        <Grid  x:Uid="gridP" Name="gridP"  HorizontalAlignment="Center" Margin="5"
+           VerticalAlignment="Stretch" Width="790" Height="690">
+       
+    </Grid>    
+    </StackPanel>
+</Window>

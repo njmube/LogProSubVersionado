@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<hibernate-mapping xmlns="urn:nhibernate-mapping-2.2" namespace="Entities.Trace" assembly="Entities">
+  <class name="DocumentAddress" table="Trace.DocumentAddress" lazy="true">
+	<id name="RowID" type="Int32" column="RowID">
+		<generator class="native" />
+	</id>
+	<many-to-one lazy="false" name="Document" class="Document" column="DocID"  />
+	<many-to-one lazy="false" name="DocumentLine" class="DocumentLine" column="DocLineID" not-found="ignore" />
+	  <property name="AddressType" type="Int16" not-null="true"  />
+	  <property name="Name" type="String" length="100"  />
+	  <property name="AddressLine1" type="String" length="100" not-null="true"  />
+	<property name="AddressLine2" type="String" length="100"   />
+	<property name="AddressLine3" type="String" length="100"   />
+	<property name="City" type="String" length="50" not-null="true"  />
+	<property name="State" type="String" length="50" not-null="true"  />
+	<property name="ZipCode" type="String" length="50" not-null="true"  />
+	  <property name="Country" type="String" length="50" not-null="true"  />
+	<property name="ContactPerson" type="String" length="80" not-null="true"  />
+	  <property name="Phone1" type="String" length="50" not-null="true"  />
+	  <property name="Phone2" type="String" length="50"   />
+	  <property name="Phone3" type="String" length="50"   />
+	  <property name="Email" type="String" length="50"   />
+	  <property name="ErpCode" type="String" length="50"   />
+	  <many-to-one lazy="false" name="ShpMethod" class="Entities.Master.ShippingMethod" column="shpMethodID" not-found="ignore" />
+
+	  <property name="CreatedBy" type="String" length="50" not-null="true"  />
+	<property name="CreationDate" type="DateTime" not-null="true"   />
+	<property name="CreTerminal" type="String" length="50"   />
+	<property name="ModifiedBy" type="String" length="50"   />
+	<property name="ModDate" type="DateTime"   />
+	<property name="ModTerminal" type="String" length="50"   />
+ </class>
+</hibernate-mapping>

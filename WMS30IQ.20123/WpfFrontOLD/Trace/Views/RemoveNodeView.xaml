@@ -1,0 +1,182 @@
+﻿    <WMCore:UserControlBase x:Uid="RemoveNode" x:Class="WpfFront.Views.RemoveNodeView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:xcdg="http://schemas.xceed.com/wpf/xaml/datagrid"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    Height="auto" HorizontalAlignment="Stretch"
+    xmlns:odc="http://schemas.odyssey.com/wpf"
+    xmlns:WMCore="clr-namespace:Core.WPF;assembly=Core"    
+    xmlns:aw="clr-namespace:Assergs.Windows;assembly=Assergs.Windows"
+    xmlns:uc="clr-namespace:WpfFront.Common.UserControls"
+    x:Name="RemoveNode" >
+
+    <AdornerDecorator x:Uid="AdornerDecorator_1">
+
+        <DockPanel x:Uid="DockPanel_1" HorizontalAlignment="Center" 
+                   VerticalAlignment="Stretch" Margin="5">
+
+            <DockPanel.Resources>
+                <WMCore:ForceReReadConverter x:Uid="WMCore:ForceReReadConverter_1" x:Key="forceReReadConverter" />
+                <WMCore:FormattingConverter x:Uid="WMCore:FormattingConverter_1" x:Key="formattingConverter" />
+                <WMCore:FormNotificationErrorMessageConverter x:Uid="WMCore:FormNotificationErrorMessageConverter_1" x:Key="formNotificationErrorMessageConverter" />
+                <WMCore:NullableIntegerFormatConverter x:Uid="WMCore:NullableIntegerFormatConverter_1" x:Key="nullableIntegerFormatConverter" />
+            </DockPanel.Resources>
+
+
+            <StackPanel x:Uid="StackPanel_1" Margin="0,3,0,0" Orientation="Horizontal" HorizontalAlignment="Center"  DockPanel.Dock="Top">
+                <TextBlock  x:Uid="TextBlock_1" FontWeight="Bold" Margin="0,0,0,4" VerticalAlignment="Top" FontSize="12" TextAlignment="Right" Text="{StaticResource CURRENT_DOCUMENT}"></TextBlock>
+                <TextBlock x:Uid="TextBlock_2" FontWeight="Bold" Margin="10,0,0,4" Text="{Binding Path=Record.Document.DocNumber}" Foreground="Brown"></TextBlock>
+            </StackPanel>
+
+
+            <StackPanel x:Uid="StackPanel_2" Orientation="Horizontal">
+
+
+                <Border x:Uid="brdManual" x:Name="brdManual" Style="{DynamicResource UserControlFormInnerBorder}" 
+                            Margin="0,5,0,0"  VerticalAlignment="Top" HorizontalAlignment="Center">
+                    
+                    <StackPanel x:Uid="StackPanel_3">
+
+                        <TextBlock x:Uid="TextBlock_3" FontWeight="Bold" Text="{StaticResource LIST_OF_RECEIVED_MANUALLY}" ></TextBlock>
+
+                        <!--<ListView Margin="0,4,0,8" x:Name="dgDocumentBalance"  ItemsSource="{Binding Path=DocumentBalance}" 
+                                     HorizontalAlignment="Stretch" MaxHeight="250" >
+                            <ListView.View>
+                                <GridView>
+                                    <GridViewColumn Header="Product" DisplayMemberBinding="{Binding Path=Product.ProductCode}" Width="90"></GridViewColumn>
+                                    <GridViewColumn Header="Description" Width="100">
+                                        <GridViewColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <TextBlock Text="{Binding Path=Product.Description}" TextWrapping="Wrap" />
+                                            </DataTemplate>
+                                        </GridViewColumn.CellTemplate>
+                                    </GridViewColumn>
+                                    <GridViewColumn Header="UoM" DisplayMemberBinding="{Binding Path=Unit.Name}"></GridViewColumn>
+                                    <GridViewColumn Header="Received" DisplayMemberBinding="{Binding Path=QtyProcessed}"></GridViewColumn>
+                                   <GridViewColumn Header="Pending" DisplayMemberBinding="{Binding Path=QtyPending}"></GridViewColumn>
+                                </GridView>
+                            </ListView.View>
+                        </ListView>-->
+
+
+                        <Grid  x:Uid="dgManual" HorizontalAlignment="Center" 
+                            VerticalAlignment="Top" Width="Auto" Margin="0,5,0,0" x:Name="dgManual">
+
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition x:Uid="ColumnDefinition_1" Width="Auto" />
+                            <ColumnDefinition x:Uid="ColumnDefinition_2" Width="Auto" />
+                            <ColumnDefinition x:Uid="ColumnDefinition_3" Width="Auto" />
+                            <ColumnDefinition x:Uid="ColumnDefinition_4" Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition x:Uid="RowDefinition_1" Height="auto" />
+                            <RowDefinition x:Uid="RowDefinition_2" Height="auto" />
+                        </Grid.RowDefinitions>
+
+                        <TextBlock x:Uid="TextBlock_4" Grid.Row="0" Grid.Column="0" Margin="6,0,6,6" FontWeight="Bold" HorizontalAlignment="Left" Text="{StaticResource PRODUCT}" ></TextBlock>
+                            <WrapPanel x:Uid="WrapPanel_1" Grid.Row="1" Grid.Column="0"  Margin="6,0,6,0" MaxWidth="130">
+                                
+                                <TextBlock  x:Uid="TextBlock_5" FontWeight="Bold" Foreground="Brown" Text="{Binding Path=Record.Product.ProductCode}"
+                                  HorizontalAlignment="Left" TextWrapping="Wrap" ></TextBlock>
+
+                                <!--<TextBlock Margin="5,0,0,0" FontWeight="Bold" Foreground="Brown" Text="{Binding Path=Record.Product.Name}"
+                                  HorizontalAlignment="Left" TextWrapping="Wrap" ></TextBlock>-->
+
+                            </WrapPanel>
+                        <TextBlock x:Uid="TextBlock_6" Grid.Row="0" Grid.Column="1" Margin="6,0,6,6" FontWeight="Bold" HorizontalAlignment="Center" Text="{StaticResource QTY_RECEIVED}"></TextBlock>
+                        <TextBlock x:Uid="TextBlock_7" Grid.Row="1" Grid.Column="1" Margin="6,0,6,0" FontWeight="Bold"  
+                                   Foreground="Brown" HorizontalAlignment="Center"  Text="{Binding Path=QtyManualOld}"></TextBlock>
+
+                        <TextBlock x:Uid="TextBlock_8" Grid.Row="0" Grid.Column="2" Margin="6,0,6,6" FontWeight="Bold" Text="{StaticResource QTY_TO_REMOVE}"></TextBlock>                            
+                        <TextBox x:Uid="txtQtyRemove" x:Name="txtQtyRemove" Grid.Row="1" Grid.Column="2" Margin="0" 
+                                 Width="70" HorizontalAlignment="Center" ></TextBox>
+                        
+                            
+                        <Button x:Uid="btnRemoveManual" Grid.Column="3" VerticalAlignment="Bottom" Margin="0,8,0,0" Height="30" FontWeight="Bold" Grid.RowSpan="2" Name="btnRemoveManual" 
+                                Click="btnRemoveManual_Click" Width="75" Content="{StaticResource REMOVE}"></Button>
+                    </Grid>
+                        
+                        </StackPanel>
+                    
+                </Border>
+
+                <!-- Printer Side -->
+                <Border x:Uid="brdPrinted" x:Name="brdPrinted" Style="{DynamicResource UserControlFormInnerBorder}" 
+                            Margin="15,5,0,0" HorizontalAlignment="Center" >
+
+                    <StackPanel x:Uid="stkChilds" x:Name="stkChilds"  Margin="0,0,0,0">
+
+                        <StackPanel x:Uid="StackPanel_4" Orientation="Horizontal" Margin="0,0,0,10">
+                            <TextBlock x:Uid="TextBlock_9" FontWeight="Bold" Text="{StaticResource LIST_OF_PROCESSED_RECORDS}" ></TextBlock>
+                            <TextBlock x:Uid="TextBlock_10" Visibility="Collapsed" FontWeight="Bold" Margin="5,0,0,0" FontSize="12" Text="{Binding Path=QtyPrintedOld}" Foreground="Brown"></TextBlock>
+                        </StackPanel>
+
+                        <StackPanel x:Uid="StackPanel_5" Orientation="Horizontal" HorizontalAlignment="Right">
+                            <TextBlock x:Uid="TextBlock_11" Text="{StaticResource PRINTED_LABELS}" ></TextBlock>
+                            <CheckBox x:Uid="chkSelectAll" Margin="20,0,0,0" Name="chkSelectAll" HorizontalAlignment="Right" 
+                                          VerticalAlignment="Center" Checked="chkSelectAll_Checked" Unchecked="chkSelectAll_Unchecked" Content="{StaticResource SELECT_ALL}"></CheckBox>
+                        </StackPanel>
+
+
+                        <ListView x:Uid="lvPrintedLabels" x:Name="lvPrintedLabels" ItemsSource="{Binding Path=LstPrinted}"
+                                       Height="Auto" MaxHeight="120" Margin="0,5,0,5">
+                            <ListView.View>
+                                <GridView x:Uid="GridView_1">
+                                    <GridViewColumn x:Uid="GridViewColumn_1" Header="{StaticResource LABEL}" Width="70" DisplayMemberBinding="{Binding Path=Label.LabelCode}"></GridViewColumn>
+                                    <GridViewColumn x:Uid="GridViewColumn_2" Header="{StaticResource PRODUCT}" Width="100" DisplayMemberBinding="{Binding Path=Label.Product.ProductCode}"></GridViewColumn>
+                                    
+                                    <GridViewColumn Header="{StaticResource DESCRIPTION}" Width="140">
+                                        <GridViewColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <TextBlock  Text="{Binding Path=Label.Product.Name}" TextWrapping="Wrap" />
+                                            </DataTemplate>
+                                        </GridViewColumn.CellTemplate>
+                                    </GridViewColumn>
+
+                                    <GridViewColumn  Header="{StaticResource UNIT}" DisplayMemberBinding="{Binding Path=Label.Unit.Name}"></GridViewColumn>
+                                 
+
+                                    <GridViewColumn x:Uid="GridViewColumn_4" Header="{StaticResource QUANTITY}" Width="55" DisplayMemberBinding="{Binding Path=Quantity}"></GridViewColumn> <!--Label.CurrQty -->
+                                    
+                                    <GridViewColumn x:Uid="GridViewColumn_4" Header="{StaticResource BIN}" Width="55" DisplayMemberBinding="{Binding Path=Label.Bin.BinCode}"></GridViewColumn>
+                                    
+                                    <GridViewColumn x:Uid="GridViewColumn_6" DisplayMemberBinding="{Binding Path=Label.LotCode}"></GridViewColumn>
+                                    
+                                    <GridViewColumn  x:Uid="GridViewColumn_7" DisplayMemberBinding="{Binding Path=Label.SerialNumber}"></GridViewColumn>
+                                    
+                                    <GridViewColumn DisplayMemberBinding="{Binding Path=Label.FatherLabel.DocumentPackages[0].PackDesc}"></GridViewColumn>
+                                    
+                                    <GridViewColumn Header="{StaticResource USER}" DisplayMemberBinding="{Binding Path=Label.ModifiedBy}" />
+                                    
+                                    <GridViewColumn Header="{StaticResource DATE}" DisplayMemberBinding="{Binding Path=Label.ModDate}" />
+                                    
+                                </GridView>
+                            </ListView.View>
+                        </ListView>
+
+                        <StackPanel x:Uid="StackPanel_6" HorizontalAlignment="Right" Orientation="Horizontal">
+                            <TextBlock x:Uid="TextBlock_12" Margin="0,0,5,0" Text="{StaticResource TOTAL_QTY}"></TextBlock>
+                            <TextBlock x:Uid="TextBlock_13" Margin="0,0,0,0" FontWeight="Bold"  Width="70"
+                                   Foreground="Brown" HorizontalAlignment="Center" Text="{Binding Path=QtyPrintedOld}" />
+                        </StackPanel>
+
+                        <StackPanel x:Uid="StackPanel_7" Orientation="Horizontal" Margin="10,5,0,0" HorizontalAlignment="Right">
+
+                            <StackPanel x:Uid="stkUcBin" Name="stkUcBin">
+                                <TextBlock x:Uid="TextBlock_14" VerticalAlignment="Center" Text="{StaticResource BIN_TO_RESTORE_MAIN_BY_DEFAULT}" ></TextBlock>
+                                <uc:BinLocation x:Uid="binRestock" x:Name="binRestock" VerticalAlignment="Center" />
+                            </StackPanel>
+                            
+                            <Button x:Uid="btnRemovePrinted" Margin="10,0,0,0"  x:Name="btnRemovePrinted" Width="120" Height="30" FontWeight="Bold"
+                                  VerticalAlignment="Bottom" Click="btnRemovePrinted_Click" Content="{StaticResource REMOVE_SELECTED}" ></Button>
+                        </StackPanel>
+                    </StackPanel>
+
+                </Border>
+                
+            </StackPanel>
+            
+ 
+        </DockPanel>
+    </AdornerDecorator>
+        
+</WMCore:UserControlBase>

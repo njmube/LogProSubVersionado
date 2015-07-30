@@ -1,0 +1,451 @@
+﻿<Window x:Uid="Window_1" x:Class="WpfFront.Shell"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    Title="LOGPRO Express"
+    xmlns:WMCore="clr-namespace:Core.WPF;assembly=Core"
+    xmlns:aw="clr-namespace:Assergs.Windows;assembly=Assergs.Windows"
+    xmlns:awc="clr-namespace:Assergs.Windows.Controls;assembly=Assergs.Windows"
+    xmlns:uc="clr-namespace:WpfFront.Common.UserControls" 
+    WindowStyle="SingleBorderWindow"        
+    WindowStartupLocation="CenterScreen"   
+    xmlns:lg="clr-namespace:WpfFront.Common"
+    Icon="/WpfFront;component/Images/logo16x16.png"            
+    WindowState="Maximized">
+
+    <Grid x:Uid="Grid_1">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="40*" />
+            <ColumnDefinition Width="803.541*" />
+        </Grid.ColumnDefinitions>
+        <DockPanel  x:Uid="DockPanel_1" RenderOptions.BitmapScalingMode="HighQuality" Grid.ColumnSpan="2">
+            <StatusBar x:Uid="StatusBar_1" DockPanel.Dock="Bottom">
+                <StatusBar.Resources>
+                    <WMCore:TimeDisplay x:Uid="WMCore:TimeDisplay_1" x:Key="timeDisplay"/>
+                    <WMCore:FormattingConverter x:Uid="WMCore:FormattingConverter_1" x:Key="formattingConverter" />
+                </StatusBar.Resources>
+                <StatusBarItem x:Uid="StatusBarItem_1" Margin="3,0,3,0" Content="{Binding Source={StaticResource timeDisplay}, Path=Now, Converter={StaticResource formattingConverter}, ConverterParameter=\{0:f\}}" DockPanel.Dock="Right"/>
+                <StatusBarItem x:Uid="StatusBarItem_2" Content="{Binding UserInfo}" FontWeight="Bold" />
+            </StatusBar>
+
+            <!-- Ribbon -->
+
+            <awc:Ribbon x:Uid="mRibbon" x:Name="mRibbon" DockPanel.Dock="Top" Height="120"  SelectionChanged="Ribbon_SelectionChanged" TabStripPlacement="Bottom">
+                
+                <awc:Ribbon.Resources>
+                    <Style x:Uid="Style_1" TargetType="ListView">
+                        <Setter x:Uid="Setter_1" Property="ItemsPanel">
+                            <Setter.Value>
+                                <ItemsPanelTemplate x:Uid="ItemsPanelTemplate_1">
+                                    <StackPanel x:Uid="StackPanel_1" Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                                </ItemsPanelTemplate>
+                            </Setter.Value>
+                        </Setter>
+                    </Style>
+                </awc:Ribbon.Resources>
+                
+                <awc:RibbonTabItem x:Uid="TabInitial" x:Name="TabInitial" Header="{StaticResource MAIN_CONSOLE}">
+                    <StackPanel x:Uid="StackPanel_2" Orientation="Horizontal" Height="95" >                      
+                        <awc:RibbonPanel x:Uid="awc:RibbonPanel_1" Header="Windows">
+                            <StackPanel x:Uid="StackPanel_3" Orientation="Horizontal">
+                                <awc:DropDownButton x:Uid="awc:DropDownButton_1" OverridesDefaultStyle="True">
+                                    <awc:DropDownMenuItem x:Uid="awc:DropDownMenuItem_1" TopLevelButtonOrientation="Vertical" DropDownButtonMode="ToggleButtonOnly" HeaderText="Current Windows" MaxWidth="55" SubmenuOpened="WindowsSubmenu_Opened" OverridesDefaultStyle="True">
+                                        <awc:DropDownMenuItem.Header>
+                                            <Image x:Uid="Image_1" Width="32" Height="32" Source="/WpfFront;component/Images/Minimized32.png" />
+                                        </awc:DropDownMenuItem.Header>
+                                        <awc:DropDownMenuItem x:Uid="awc:DropDownMenuItem_2" IsPanelContainer="True" ButtonBase.Click="WindowsSubmenu_ButtonClick" OverridesDefaultStyle="True">
+                                            <awc:DropDownMenuItem.Header>
+                                                <StackPanel x:Uid="StackPanel_4">
+                                                    <Border x:Uid="Border_1" Height="20" BorderThickness="0,0,0,1" BorderBrush="Gray">
+                                                        <TextBlock x:Uid="TextBlock_1" Text="Environment Windows" VerticalAlignment="Center" Margin="2,0,0,0" />
+                                                    </Border>
+                                                    <ScrollViewer x:Uid="ScrollViewer_1" Width="210" Height="260" Background="White">
+                                                        <WrapPanel x:Uid="_WrapPanel" Name="_WrapPanel" />
+                                                    </ScrollViewer>
+                                                </StackPanel>
+                                            </awc:DropDownMenuItem.Header>
+                                        </awc:DropDownMenuItem>
+                                    </awc:DropDownMenuItem>
+                                </awc:DropDownButton>
+                                <awc:ImageButton Visibility="Collapsed" x:Uid="cmdMax" x:Name="cmdMax" Command="{x:Static aw:ToolWindowDockPanel.MaximizeAllWindowsCommand}" IsToolStyle="True" Orientation="Vertical" ImageSource="/WpfFront;component/Images/Maximized32.png">Maximize All</awc:ImageButton>
+                                <awc:ImageButton Visibility="Collapsed" x:Uid="awc:ImageButton_1" Command="{x:Static aw:ToolWindowDockPanel.RestoreAllWindowsCommand}" IsToolStyle="True" Orientation="Vertical" ImageSource="/WpfFront;component/Images/Minimized32.png">Restore</awc:ImageButton>
+                            </StackPanel>
+                        </awc:RibbonPanel>
+
+                        <awc:RibbonPanel x:Uid="awc:RibbonPanel_2" Header="Business" Visibility="{Binding Path=AllowChangeLocation}" Margin="0,0,3,32">
+
+                            <StackPanel x:Uid="StackPanel_5" Orientation="Vertical" Margin="0,0,3,0">
+                                <StackPanel x:Uid="StackPanel_6" Orientation="Horizontal" Margin="5,8,0,4">
+                                    <TextBlock x:Uid="TextBlock_2" Width="60" VerticalAlignment="Center"  FontWeight="Bold" TextAlignment="Right" Text="{StaticResource COMPANY}"></TextBlock>
+                                    <ComboBox x:Uid="cboCompany" Width="150" Margin="5,0,6,0" ItemsSource="{Binding Path=Companies}"
+                                              DisplayMemberPath="Name" Name="cboCompany" IsEnabled="False"
+                                     />
+                                    <!--<Button  IsEnabled="False">Change</Button>-->
+                                </StackPanel>
+
+                                <StackPanel x:Uid="StackPanel_7" Orientation="Horizontal" Visibility="Collapsed" Margin="5,3,0,4">
+                                    <TextBlock x:Uid="TextBlock_3" Width="60" VerticalAlignment="Center"  FontWeight="Bold" TextAlignment="Right" Text="{StaticResource LOCATION}"></TextBlock>
+                                    <ComboBox x:Uid="cboLocation" Width="150" Margin="5,0,6,0" ItemsSource="{Binding Path=Locations}" SelectionChanged="cboLocation_SelectionChanged"
+                                      Name="cboLocation"  SelectedValuePath="LocationID"  SelectedItem="{Binding Path=CurLocation}"    DisplayMemberPath="Name"/>
+                                    <!--<Button>Change</Button>-->
+                                </StackPanel>
+                            </StackPanel>
+                        </awc:RibbonPanel>
+
+                        <awc:RibbonPanel  x:Uid="awc:RibbonPanel_12" Header="Business"  Visibility="Collapsed">
+
+                            <StackPanel x:Uid="StackPanel_20" Orientation="Horizontal" Margin="0,0,3,0">
+                                
+                                <TextBlock  x:Uid="TextBlock_8" Width="50" Margin="3,0,0,0"  VerticalAlignment="Center" TextWrapping="Wrap" Text="{StaticResource INQUIRY_SHORTCUT}"></TextBlock>
+                                
+                                <StackPanel  x:Uid="StackPanel_21" Orientation="Vertical" Margin="5,0,0,4" VerticalAlignment="Center">
+                                    
+                                 <ComboBox x:Uid="cboEntity" Width="110" Margin="0,0,6,3" ItemsSource="{Binding Path=EntityList}" SelectionChanged="cboEntity_SelectionChanged"
+                                       HorizontalAlignment="Left"       DisplayMemberPath="Name" Name="cboEntity"/>
+                                    
+                                    <uc:SearchProduct x:Uid="ucProduct" x:Name="ucProduct" OnLoadRecord="ucProduct_OnLoadRecord" />
+                                    
+                                    <uc:BinLocation  x:Uid="ucBin" x:Name="ucBin" OnLoadLocation="ucBin_OnLoadLocation" Visibility="Collapsed" />
+                               
+                                </StackPanel>
+                            </StackPanel>
+                        </awc:RibbonPanel>
+
+
+                        <awc:RibbonPanel x:Uid="awc:RibbonPanel_2" Header="Business" Visibility="Collapsed">
+
+                            <StackPanel x:Uid="StackPanel_5" Orientation="Vertical" Margin="0,0,3,0">
+                                <StackPanel x:Uid="StackPanel_6" Orientation="Horizontal" Margin="5,2,0,4">
+                                    <TextBlock x:Uid="TextBlock_2" Width="115" VerticalAlignment="Center"  TextAlignment="Right" Text="{StaticResource NEW_PASSWORD}"></TextBlock>
+                                    <PasswordBox  Margin="5,0,6,0" Width="100" Name="txtNewPassword"  />
+                                    <!--<Button  IsEnabled="False">Change</Button>-->
+                                </StackPanel>
+
+                                <StackPanel x:Uid="StackPanel_7" Orientation="Horizontal" Margin="5,3,0,4">
+                                    <TextBlock x:Uid="TextBlock_3" Width="115" VerticalAlignment="Center"  TextAlignment="Right" Text="{StaticResource CONFIRM_PASSWORD}" ></TextBlock>
+                                    <PasswordBox  Margin="5,0,6,0" Width="100" Name="txtNewPassword2" />
+                                    <!--<Button>Change</Button>-->
+                                </StackPanel>
+
+                                <Button FontWeight="Bold" Name="btnChange" Click="btnChange_Click" Width="100" HorizontalAlignment="Right" Margin="0,0,6,0" Content="{StaticResource CHANGE}"></Button>
+
+                            </StackPanel>
+
+                        </awc:RibbonPanel>
+
+                    </StackPanel>
+                </awc:RibbonTabItem>
+
+
+                <!-- Daily Process -->
+                <awc:RibbonTabItem x:Uid="tbReceiving" x:Name="tbReceiving" Header="Logistica">
+
+                    <StackPanel x:Uid="StackPanel_8" Orientation="Horizontal" Height="95" >
+
+
+                        <awc:RibbonPanel x:Uid="awc:RibbonPanel_3" Header="Windows">
+                            <StackPanel x:Uid="StackPanel_9" Orientation="Horizontal">
+                                <awc:DropDownButton x:Uid="awc:DropDownButton_2" OverridesDefaultStyle="True">
+                                    <awc:DropDownMenuItem x:Uid="awc:DropDownMenuItem_3" TopLevelButtonOrientation="Vertical" DropDownButtonMode="ToggleButtonOnly" HeaderText="Current Windows" MaxWidth="55" SubmenuOpened="WindowsSubmenu_Opened1" OverridesDefaultStyle="True">
+                                        <awc:DropDownMenuItem.Header>
+                                            <Image x:Uid="Image_2" Width="32" Height="32" Source="/WpfFront;component/Images/Minimized32.png" />
+                                        </awc:DropDownMenuItem.Header>
+                                        <awc:DropDownMenuItem x:Uid="awc:DropDownMenuItem_4" IsPanelContainer="True" ButtonBase.Click="WindowsSubmenu_ButtonClick" OverridesDefaultStyle="True">
+                                            <awc:DropDownMenuItem.Header>
+                                                <StackPanel x:Uid="StackPanel_10">
+                                                    <Border x:Uid="Border_2" Height="20" BorderThickness="0,0,0,1" BorderBrush="Gray">
+                                                        <TextBlock x:Uid="TextBlock_4" Text="Environment Windows" VerticalAlignment="Center" Margin="2,0,0,0" />
+                                                    </Border>
+                                                    <ScrollViewer x:Uid="ScrollViewer_2" Width="210" Height="260" Background="White">
+                                                        <WrapPanel x:Uid="_WrapPanel1" Name="_WrapPanel1" />
+                                                    </ScrollViewer>
+                                                </StackPanel>
+                                            </awc:DropDownMenuItem.Header>
+                                        </awc:DropDownMenuItem>
+                                    </awc:DropDownMenuItem>
+                                </awc:DropDownButton>
+                                <!--<awc:ImageButton x:Uid="awc:ImageButton_2" Command="{x:Static aw:ToolWindowDockPanel.MaximizeAllWindowsCommand}" IsToolStyle="True" Orientation="Vertical" ImageSource="/WpfFront;component/Images/Maximized32.png">Maximize All</awc:ImageButton>
+                                <awc:ImageButton x:Uid="awc:ImageButton_3" Command="{x:Static aw:ToolWindowDockPanel.RestoreAllWindowsCommand}" IsToolStyle="True" Orientation="Vertical" ImageSource="/WpfFront;component/Images/Minimized32.png">Restore</awc:ImageButton>-->
+                            </StackPanel>
+                        </awc:RibbonPanel>
+
+                        <awc:RibbonPanel x:Uid="awc:RibbonPanel_4" Header="Receiving Options" Visibility="{Binding ShowMenu1}" >
+                            <ListView x:Uid="ListView_1" ItemsSource="{Binding UserMenu[1].Options}" Width="Auto" Background="{DynamicResource WBg}">
+                                <ListView.ItemTemplate>
+                                    <DataTemplate x:Uid="DataTemplate_1">
+                                        <awc:ImageButton x:Uid="awc:ImageButton_4" Margin="0" CommandParameter="{Binding}"  Click="ImageButton_Click"
+                                                         IsToolStyle="True" ToolTip="{Binding Path=Name}" Content="{Binding Path=Name}" Orientation="Vertical" 
+                                                         ImageSource="{Binding Image}"  MinWidth="70"/>
+                                    </DataTemplate>
+                                </ListView.ItemTemplate>
+                            </ListView>
+                        </awc:RibbonPanel>
+
+
+                        <awc:RibbonPanel x:Uid="awc:RibbonPanel_5" Header="Shipping Options" Visibility="{Binding ShowMenu2}">
+                            <ListView x:Uid="ListView_2" ItemsSource="{Binding UserMenu[2].Options}" Width="Auto"  Background="{DynamicResource WBg}">
+                                <ListView.ItemTemplate>
+                                    <DataTemplate x:Uid="DataTemplate_2">
+                                    <awc:ImageButton x:Uid="awc:ImageButton_5" Margin="0" CommandParameter="{Binding}"  Click="ImageButton_Click"  
+                                                     IsToolStyle="True" ToolTip="{Binding Path=Name}" Content="{Binding Path=Name}" Orientation="Vertical" 
+                                                     ImageSource="{Binding Image}"  MinWidth="70"/>
+                                    </DataTemplate>
+                                </ListView.ItemTemplate>
+                            </ListView>
+                        </awc:RibbonPanel>
+                        
+                    </StackPanel>
+                </awc:RibbonTabItem>
+                
+                <!-- Daily Process -->
+                <awc:RibbonTabItem x:Uid="tbInventory" x:Name="tbInventory" Header="Produccion"  Visibility="{Binding ShowMenu3}">
+
+                    <StackPanel x:Uid="StackPanel_11" Orientation="Horizontal" Height="95" >
+                        <awc:RibbonPanel x:Uid="awc:RibbonPanel_6" Header="Windows">
+                            <StackPanel x:Uid="StackPanel_12" Orientation="Horizontal">
+                                <awc:DropDownButton x:Uid="awc:DropDownButton_3" OverridesDefaultStyle="True">
+                                    <awc:DropDownMenuItem x:Uid="awc:DropDownMenuItem_5" TopLevelButtonOrientation="Vertical" DropDownButtonMode="ToggleButtonOnly" HeaderText="Current Windows" MaxWidth="55" SubmenuOpened="WindowsSubmenu_Opened2" OverridesDefaultStyle="True">
+                                        <awc:DropDownMenuItem.Header>
+                                            <Image x:Uid="Image_3" Width="32" Height="32" Source="/WpfFront;component/Images/Minimized32.png" />
+                                        </awc:DropDownMenuItem.Header>
+                                        <awc:DropDownMenuItem x:Uid="awc:DropDownMenuItem_6" IsPanelContainer="True" ButtonBase.Click="WindowsSubmenu_ButtonClick" OverridesDefaultStyle="True">
+                                            <awc:DropDownMenuItem.Header>
+                                                <StackPanel x:Uid="StackPanel_13">
+                                                    <Border x:Uid="Border_3" Height="20" BorderThickness="0,0,0,1" BorderBrush="Gray">
+                                                        <TextBlock x:Uid="TextBlock_5" Text="Environment Windows" VerticalAlignment="Center" Margin="2,0,0,0" />
+                                                    </Border>
+                                                    <ScrollViewer x:Uid="ScrollViewer_3" Width="210" Height="260" Background="White">
+                                                        <WrapPanel x:Uid="_WrapPanel2" Name="_WrapPanel2" />
+                                                    </ScrollViewer>
+                                                </StackPanel>
+                                            </awc:DropDownMenuItem.Header>
+                                        </awc:DropDownMenuItem>
+                                    </awc:DropDownMenuItem>
+                                </awc:DropDownButton>
+                                <!--<awc:ImageButton x:Uid="awc:ImageButton_6" Command="{x:Static aw:ToolWindowDockPanel.MaximizeAllWindowsCommand}" IsToolStyle="True" Orientation="Vertical" ImageSource="/WpfFront;component/Images/Maximized32.png">Maximize All</awc:ImageButton>
+                                <awc:ImageButton x:Uid="awc:ImageButton_7" Command="{x:Static aw:ToolWindowDockPanel.RestoreAllWindowsCommand}" IsToolStyle="True" Orientation="Vertical" ImageSource="/WpfFront;component/Images/Minimized32.png">Restore</awc:ImageButton>-->
+                            </StackPanel>
+                        </awc:RibbonPanel>
+
+
+                        <awc:RibbonPanel x:Uid="awc:RibbonPanel_7" Header="Inventory Options">
+                            <ListView x:Uid="ListView_3" ItemsSource="{Binding UserMenu[3].Options}" Width="Auto" Background="{DynamicResource WBg}">
+                                <ListView.ItemTemplate>
+                                    <DataTemplate x:Uid="DataTemplate_3">
+                                        <awc:ImageButton x:Uid="awc:ImageButton_8" CommandParameter="{Binding}"  Click="ImageButton_Click"  
+                                                     IsToolStyle="True" ToolTip="{Binding Path=Name}" Orientation="Vertical" 
+                                                      MinWidth="70" Content="{Binding Path=Name}" ImageSource="{Binding Image}" />
+                                    </DataTemplate>
+                                </ListView.ItemTemplate>
+                            </ListView>
+                        </awc:RibbonPanel>
+
+
+                        <awc:RibbonPanel   Header="Counting" Visibility="{Binding ShowMenu7}">
+                            <ListView  ItemsSource="{Binding UserMenu[7].Options}" Width="Auto" Background="{DynamicResource WBg}">
+                                <ListView.ItemTemplate>
+                                    <DataTemplate>
+                                        <awc:ImageButton x:Uid="awc:ImageButton_8" CommandParameter="{Binding}"  Click="ImageButton_Click"  
+                                                     IsToolStyle="True" ToolTip="{Binding Path=Name}" Orientation="Vertical" 
+                                                      MinWidth="70" Content="{Binding Path=Name}" ImageSource="{Binding Image}" />
+                                    </DataTemplate>
+                                </ListView.ItemTemplate>
+                            </ListView>
+                        </awc:RibbonPanel>
+
+
+                    </StackPanel>
+
+                </awc:RibbonTabItem>
+
+
+                
+                <awc:RibbonTabItem x:Uid="tbPermission" x:Name="tbMaster" Header="{StaticResource MASTERS}"  Visibility="{Binding ShowMenu4}">
+
+                    <StackPanel x:Uid="StackPanel_14" Orientation="Horizontal" Height="95" >
+                        <awc:RibbonPanel x:Uid="awc:RibbonPanel_8" Header="Windows">
+                            <StackPanel x:Uid="StackPanel_15" Orientation="Horizontal">
+                                <awc:DropDownButton x:Uid="awc:DropDownButton_4" OverridesDefaultStyle="True">
+                                    <awc:DropDownMenuItem x:Uid="awc:DropDownMenuItem_7" TopLevelButtonOrientation="Vertical" DropDownButtonMode="ToggleButtonOnly" HeaderText="Current Windows" MaxWidth="55" SubmenuOpened="WindowsSubmenu_Opened3" OverridesDefaultStyle="True">
+                                        <awc:DropDownMenuItem.Header>
+                                            <Image x:Uid="Image_4" Width="32" Height="32" Source="/WpfFront;component/Images/Minimized32.png" />
+                                        </awc:DropDownMenuItem.Header>
+                                        <awc:DropDownMenuItem x:Uid="awc:DropDownMenuItem_8" IsPanelContainer="True" ButtonBase.Click="WindowsSubmenu_ButtonClick" OverridesDefaultStyle="True">
+                                            <awc:DropDownMenuItem.Header>
+                                                <StackPanel x:Uid="StackPanel_16">
+                                                    <Border x:Uid="Border_4" Height="20" BorderThickness="0,0,0,1" BorderBrush="Gray">
+                                                        <TextBlock x:Uid="TextBlock_6" Text="Environment Windows" VerticalAlignment="Center" Margin="2,0,0,0" />
+                                                    </Border>
+                                                    <ScrollViewer x:Uid="ScrollViewer_4" Width="210" Height="260" Background="White">
+                                                        <WrapPanel x:Uid="_WrapPanel3" Name="_WrapPanel3" />
+                                                    </ScrollViewer>
+                                                </StackPanel>
+                                            </awc:DropDownMenuItem.Header>
+                                        </awc:DropDownMenuItem>
+                                    </awc:DropDownMenuItem>
+                                </awc:DropDownButton>
+                                <!--<awc:ImageButton  x:Uid="awc:ImageButton_9" Command="{x:Static aw:ToolWindowDockPanel.MaximizeAllWindowsCommand}" IsToolStyle="True" Orientation="Vertical" ImageSource="/WpfFront;component/Images/Maximized32.png">Maximize All</awc:ImageButton>
+                                <awc:ImageButton x:Uid="awc:ImageButton_10" Command="{x:Static aw:ToolWindowDockPanel.RestoreAllWindowsCommand}" IsToolStyle="True" Orientation="Vertical" ImageSource="/WpfFront;component/Images/Minimized32.png">Restore</awc:ImageButton>-->
+                            </StackPanel>
+                        </awc:RibbonPanel>
+
+
+                        <awc:RibbonPanel x:Uid="awc:RibbonPanel_9" Header="Permission Options">
+                            <ListView x:Uid="ListView_4" ItemsSource="{Binding UserMenu[4].Options}" Width="Auto" Background="{DynamicResource WBg}">
+                                <ListView.ItemTemplate>
+                                    <DataTemplate x:Uid="DataTemplate_4">
+                                        <awc:ImageButton x:Uid="awc:ImageButton_11" CommandParameter="{Binding}"  Click="ImageButton_Click"  
+                                                     IsToolStyle="True" ToolTip="{Binding Path=Name}" Orientation="Vertical" 
+                                                       MinWidth="70" Content="{Binding Path=Name}" ImageSource="{Binding Image}" />
+                                    </DataTemplate>
+                                </ListView.ItemTemplate>
+                            </ListView>
+                        </awc:RibbonPanel>
+
+                    </StackPanel>
+                    
+                </awc:RibbonTabItem>
+
+
+                
+                
+                <awc:RibbonTabItem x:Uid="tbConfig" x:Name="tbConfig" Header="{StaticResource SYSTEM_SETUP}"  Visibility="{Binding ShowMenu5}">
+
+                    <StackPanel x:Uid="StackPanel_17" Orientation="Horizontal" Height="95" >
+                        <awc:RibbonPanel x:Uid="awc:RibbonPanel_10" Header="Windows">
+                            <StackPanel x:Uid="StackPanel_18" Orientation="Horizontal">
+                                <awc:DropDownButton x:Uid="awc:DropDownButton_5" OverridesDefaultStyle="True">
+                                    <awc:DropDownMenuItem x:Uid="awc:DropDownMenuItem_9" TopLevelButtonOrientation="Vertical" DropDownButtonMode="ToggleButtonOnly" HeaderText="Current Windows" MaxWidth="55" SubmenuOpened="WindowsSubmenu_Opened4" OverridesDefaultStyle="True">
+                                        <awc:DropDownMenuItem.Header>
+                                            <Image x:Uid="Image_5" Width="32" Height="32" Source="/WpfFront;component/Images/Minimized32.png" />
+                                        </awc:DropDownMenuItem.Header>
+                                        <awc:DropDownMenuItem x:Uid="awc:DropDownMenuItem_10" IsPanelContainer="True" ButtonBase.Click="WindowsSubmenu_ButtonClick" OverridesDefaultStyle="True">
+                                            <awc:DropDownMenuItem.Header>
+                                                <StackPanel x:Uid="StackPanel_19">
+                                                    <Border x:Uid="Border_5" Height="20" BorderThickness="0,0,0,1" BorderBrush="Gray">
+                                                        <TextBlock x:Uid="TextBlock_7" Text="Environment Windows" VerticalAlignment="Center" Margin="2,0,0,0" />
+                                                    </Border>
+                                                    <ScrollViewer x:Uid="ScrollViewer_5" Width="210" Height="260" Background="White">
+                                                        <WrapPanel x:Uid="_WrapPanel4" Name="_WrapPanel4" />
+                                                    </ScrollViewer>
+                                                </StackPanel>
+                                            </awc:DropDownMenuItem.Header>
+                                        </awc:DropDownMenuItem>
+                                    </awc:DropDownMenuItem>
+                                </awc:DropDownButton>
+                                <!--<awc:ImageButton x:Uid="awc:ImageButton_12" Command="{x:Static aw:ToolWindowDockPanel.MaximizeAllWindowsCommand}" IsToolStyle="True" Orientation="Vertical" ImageSource="/WpfFront;component/Images/Maximized32.png">Maximize All</awc:ImageButton>
+                                <awc:ImageButton x:Uid="awc:ImageButton_13" Command="{x:Static aw:ToolWindowDockPanel.RestoreAllWindowsCommand}" IsToolStyle="True" Orientation="Vertical" ImageSource="/WpfFront;component/Images/Minimized32.png">Restore</awc:ImageButton>-->
+                            </StackPanel>
+                        </awc:RibbonPanel>
+
+
+                        <awc:RibbonPanel x:Uid="awc:RibbonPanel_11" Header="Setup Options" >
+                            <ListView x:Uid="ListView_5" ItemsSource="{Binding UserMenu[5].Options}" Width="Auto" Background="{DynamicResource WBg}">
+                                <ListView.ItemTemplate>
+                                    <DataTemplate x:Uid="DataTemplate_5">
+                                        <awc:ImageButton x:Uid="awc:ImageButton_14" CommandParameter="{Binding}"  Click="ImageButton_Click"  
+                                                     IsToolStyle="True" ToolTip="{Binding Path=Name}" Orientation="Vertical" 
+                                                    MinWidth="70"   Content="{Binding Path=Name}" ImageSource="{Binding Image}" />
+                                    </DataTemplate>
+                                </ListView.ItemTemplate>
+                            </ListView>
+                        </awc:RibbonPanel>
+
+                    </StackPanel>
+                    
+                </awc:RibbonTabItem>
+
+                <awc:RibbonTabItem x:Uid="tbExit" x:Name="tbReportes" Header="Reports" MouseDoubleClick="goNavigateButton_Click" Height="24" VerticalAlignment="Top" >
+                    <StackPanel>
+                        <WebBrowser x:Name="myWebBrowser" Height="900"/>
+                    </StackPanel>
+                </awc:RibbonTabItem>
+
+                <awc:RibbonTabItem x:Uid="tbReports" x:Name="tbReports" Header="{StaticResource REPORTS}" Visibility="Collapsed">
+                    <StackPanel x:Uid="StackPanel_2" Orientation="Horizontal" Height="95" >
+
+                        <awc:RibbonPanel x:Uid="awc:RibbonPanel_1" Header="Windows">
+                            <StackPanel x:Uid="StackPanel_3" Orientation="Horizontal">
+                                <awc:DropDownButton x:Uid="awc:DropDownButton_1" OverridesDefaultStyle="True">
+                                    <awc:DropDownMenuItem x:Uid="awc:DropDownMenuItem_1" TopLevelButtonOrientation="Vertical" DropDownButtonMode="ToggleButtonOnly" HeaderText="Current Windows" MaxWidth="55" SubmenuOpened="WindowsSubmenu_Opened5" OverridesDefaultStyle="True">
+                                        <awc:DropDownMenuItem.Header>
+                                            <Image x:Uid="Image_1" Width="32" Height="32" Source="/WpfFront;component/Images/Minimized32.png" />
+                                        </awc:DropDownMenuItem.Header>
+                                        <awc:DropDownMenuItem x:Uid="awc:DropDownMenuItem_2" IsPanelContainer="True" ButtonBase.Click="WindowsSubmenu_ButtonClick" OverridesDefaultStyle="True">
+                                            <awc:DropDownMenuItem.Header>
+                                                <StackPanel x:Uid="StackPanel_4">
+                                                    <Border x:Uid="Border_1" Height="20" BorderThickness="0,0,0,1" BorderBrush="Gray">
+                                                        <TextBlock x:Uid="TextBlock_1" Text="Environment Windows" VerticalAlignment="Center" Margin="2,0,0,0" />
+                                                    </Border>
+                                                    <ScrollViewer x:Uid="ScrollViewer_1" Width="210" Height="260" Background="White">
+                                                        <WrapPanel x:Uid="_WrapPanel5" Name="_WrapPanel5" />
+                                                    </ScrollViewer>
+                                                </StackPanel>
+                                            </awc:DropDownMenuItem.Header>
+                                        </awc:DropDownMenuItem>
+                                    </awc:DropDownMenuItem>
+                                </awc:DropDownButton>
+                                <awc:ImageButton Visibility="Collapsed"  Command="{x:Static aw:ToolWindowDockPanel.MaximizeAllWindowsCommand}" IsToolStyle="True" Orientation="Vertical" ImageSource="/WpfFront;component/Images/Maximized32.png">Maximize All</awc:ImageButton>
+                                <awc:ImageButton Visibility="Collapsed"  Command="{x:Static aw:ToolWindowDockPanel.RestoreAllWindowsCommand}" IsToolStyle="True" Orientation="Vertical" ImageSource="/WpfFront;component/Images/Minimized32.png">Restore</awc:ImageButton>
+                            </StackPanel>
+                        </awc:RibbonPanel>
+
+
+
+                    </StackPanel>
+                </awc:RibbonTabItem>
+
+
+                <awc:RibbonTabItem x:Uid="tbExit" x:Name="tbExit" Header="{StaticResource EXIT}">
+                </awc:RibbonTabItem>
+
+
+
+
+
+
+            </awc:Ribbon>
+
+
+
+            <!-- Content -->
+
+            <Grid x:Uid="containerGrid" x:Name="containerGrid" Background="{DynamicResource DefaultWorkspaceBackgroundBrush}">
+
+                <Path
+					x:Uid="Path_1" Fill="{DynamicResource DefaultWorkspaceAdorner1BackgroundBrush}"
+					Stretch="Fill"
+					Stroke="{DynamicResource DefaultWorkspaceAdorner1StrokeBrush}"
+					Width="505" Data="M0.5,0.5 L480.5,0.5 C362.06667,12.09897 210.5,53.233083 0.5,169.5 z"
+					StrokeThickness="1.5"
+					HorizontalAlignment="Left"
+					VerticalAlignment="Top"
+					Height="159"/>
+
+                <Path
+					x:Uid="Path_2" Fill="{DynamicResource DefaultWorkspaceAdorner2BackgroundBrush}"
+					Stretch="Fill"
+					HorizontalAlignment="Left"
+					Width="505"
+					Data="M0.5,0.5 L480.5,0.5 C362.06667,12.09897 210.5,53.233083 0.5,169.5 z"
+					VerticalAlignment="Top"
+					Height="134"/>
+
+                <aw:ToolWindowDockPanel x:Uid="content" Name="content" />
+
+            </Grid>
+
+
+
+        </DockPanel>
+
+
+        <Canvas x:Uid="_ModalContainer" Name="_ModalContainer" Grid.ColumnSpan="2" />
+
+        <!--<Popup Placement="Center"  Name="popup1" IsOpen="True"  AllowsTransparency="True" Margin="0,25,-420,25" 
+               PlacementTarget="{Binding ElementName=mRibbon}" HorizontalAlignment="Right" Width="400">
+            <uc:PopUpHelp />
+        </Popup>-->
+
+    </Grid>
+
+</Window>

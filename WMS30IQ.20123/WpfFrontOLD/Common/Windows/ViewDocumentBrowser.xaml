@@ -1,0 +1,9 @@
+﻿<Window x:Class="WpfFront.Common.ViewDocumentBrowser"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:my="clr-namespace:System.Windows.Forms.Integration;assembly=WindowsFormsIntegration"
+    Title="Display File - Document" Height="auto" Width="auto">
+    <Grid>
+        <my:WindowsFormsHost Margin="4,4,0,0" Name="windowsFormsHost1" />
+    </Grid>
+</Window>

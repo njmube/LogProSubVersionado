@@ -1,0 +1,290 @@
+﻿<WMCore:UserControlBase x:Uid="MetaType" x:Class="WpfFront.Views.MetaTypeView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:xcdg="http://schemas.xceed.com/wpf/xaml/datagrid"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    Height="Auto" Width="Auto" HorizontalAlignment="Stretch"
+    xmlns:WMCore="clr-namespace:Core.WPF;assembly=Core"  
+    xmlns:lg="clr-namespace:WpfFront.Common"                        
+    x:Name="MetaType"> 
+    <!-- xmlns:converters="clr-namespace:WpfFront.Common" -->
+    <AdornerDecorator x:Uid="AdornerDecorator_1">
+        
+        <DockPanel x:Uid="DockPanel_1" Background="AliceBlue" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+
+            <DockPanel.Resources>
+                <WMCore:ForceReReadConverter x:Uid="WMCore:ForceReReadConverter_1" x:Key="forceReReadConverter" />
+                <WMCore:FormattingConverter x:Uid="WMCore:FormattingConverter_1" x:Key="formattingConverter" />
+                <WMCore:FormNotificationErrorMessageConverter x:Uid="WMCore:FormNotificationErrorMessageConverter_1" x:Key="formNotificationErrorMessageConverter" />
+                <WMCore:NullableIntegerFormatConverter x:Uid="WMCore:NullableIntegerFormatConverter_1" x:Key="nullableIntegerFormatConverter" />
+            </DockPanel.Resources>
+            
+            <!-- list of Group Criterias -->
+            <TextBlock x:Uid="TextBlock_1" DockPanel.Dock="Top" Margin="15,4,4,4" FontSize="14" FontWeight="Bold" 
+                       HorizontalAlignment="Left" Text="{StaticResource METATYPE}" /> <!--#LG:METATYPE:Metatype:Metatipo-->
+
+              
+                <StackPanel x:Uid="stkSearchForm" DockPanel.Dock="Left" Margin="7,0,7,0" Grid.Column="1" Grid.Row="0" x:Name="stkSearchForm">
+
+                <Border x:Uid="Border_1" Style="{DynamicResource UserControlFormInnerBorder}" Margin="0" >
+
+                    
+                        <Grid  x:Uid="dgSearch" HorizontalAlignment="Center"
+                            VerticalAlignment="Top" Width="Auto" Margin="0,5,0,0" x:Name="dgSearch" >
+
+                       
+
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition x:Uid="ColumnDefinition_1" Width="Auto" />
+                                <ColumnDefinition x:Uid="ColumnDefinition_2" Width="Auto" />
+                                <ColumnDefinition x:Uid="ColumnDefinition_3" Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition x:Uid="RowDefinition_1" Height="auto" />
+                                <RowDefinition x:Uid="RowDefinition_2" Height="auto" />
+                                <RowDefinition x:Uid="RowDefinition_3" Height="auto" />
+                            </Grid.RowDefinitions>
+
+                            <TextBlock x:Uid="TextBlock_2" Grid.Column="0" Grid.Row="1" VerticalAlignment="Center" Margin="0,0,5,0" Text="{StaticResource SEARCH}" /> <!--#LG:SEARCH:Search:Buscar-->
+
+                            <TextBox x:Uid="txtSearch" Grid.Column="1" Grid.Row="1" Width="100" Height="22" ToolTip="Write a keyword to search." Margin="0,0,0,0" Name="txtSearch" TextChanged="txtSearch_TextChanged" />
+                            <Button x:Uid="btnNew" Grid.Column="2" Grid.Row="1" Name="btnNew" Margin="10,0,0,0" HorizontalAlignment="Right" Click="btnNew_Click">
+                                <WrapPanel x:Uid="WrapPanel_1">
+                                <TextBlock x:Uid="TextBlock_3" Margin="5"  VerticalAlignment="Center" Text="{StaticResource NEW}" /> <!--#LG:NEW:New:Nuevo-->
+                                <Image x:Uid="Image_1" VerticalAlignment="Center" Source="/WpfFront;component/Images/New.png" Stretch="None" Margin="0,0,5,0"></Image>
+                                </WrapPanel>
+                            </Button>
+
+
+                            <StackPanel x:Uid="StackPanel_1" Grid.Column="0" Grid.Row="3" Grid.ColumnSpan="3" Margin="0,5,0,0">
+
+                                <xcdg:DataGridControl x:Uid="dgList" x:Name="dgList"  Grid.Row="2" ItemsSource="{Binding Path=EntityList}"                           
+                          AutoCreateColumns="False" Width="Auto" ReadOnly="True" IsTextSearchEnabled="True" 
+                          MaxHeight="500" Margin="0,0,0,0" VerticalAlignment="Stretch" SelectionMode="Single" 
+                                          NavigationBehavior="RowOnly" GotFocus="dgList_GotFocus">
+                                    <xcdg:DataGridControl.Resources>
+                                        <Style x:Uid="Style_1" x:Key="{x:Type xcdg:ScrollTip}" TargetType="{x:Type xcdg:ScrollTip}">
+                                            <Setter x:Uid="Setter_1" Property="HorizontalAlignment" Value="Right" />
+                                            <Setter x:Uid="Setter_2" Property="VerticalAlignment" Value="Bottom" />
+                                        </Style>
+                                    </xcdg:DataGridControl.Resources>
+                                    <xcdg:DataGridControl.Columns>
+										<xcdg:Column Width="200" FieldName="Name" Title="Name" TextWrapping="Wrap" /> <!--#LG:NAME:Name:Nombre-->
+                                    </xcdg:DataGridControl.Columns>
+                                    <xcdg:DataGridControl.View>
+                                        <xcdg:TableView x:Uid="xcdg:TableView_1" UseDefaultHeadersFooters="False" ShowScrollTip="True" VerticalGridLineBrush="LightGray" 
+														ShowRowSelectorPane="False" HorizontalGridLineThickness="1" HorizontalGridLineBrush="LightGray">
+                                            <xcdg:TableView.Theme>
+                                                <xcdg:RoyaleNormalColorTheme x:Uid="xcdg:RoyaleNormalColorTheme_1" />
+                                            </xcdg:TableView.Theme>
+                                            <xcdg:TableView.FixedHeaders>
+                                                <DataTemplate x:Uid="DataTemplate_1">
+                                                    <xcdg:ColumnManagerRow x:Uid="xcdg:ColumnManagerRow_1" AllowColumnReorder="True" />
+                                                </DataTemplate>
+                                            </xcdg:TableView.FixedHeaders>
+                                        </xcdg:TableView>
+                                    </xcdg:DataGridControl.View>
+                                </xcdg:DataGridControl>
+
+                            </StackPanel>
+
+                        </Grid>
+
+                    </Border>
+
+            </StackPanel>
+
+
+            <!-- End Setp Two -->
+
+
+
+            <!-- Edit Group Data -->
+
+            <Grid x:Uid="Grid_1" DockPanel.Dock="Left"  HorizontalAlignment="Left" VerticalAlignment="Stretch">
+                <StackPanel x:Uid="stkEdit" Visibility="Hidden" x:Name="stkEdit">
+
+                    
+                    <WMCore:FormNotification x:Uid="frmNotification" IsTabStop="False" x:Name="frmNotification" Margin="3,0,3,0" WatermarkMessage="" Height="15" Panel.ZIndex="99" AutoCollapseTimeout="2">
+                        <WMCore:FormNotification.ErrorMessage>
+                            <MultiBinding x:Uid="MultiBinding_1" Converter="{StaticResource formNotificationErrorMessageConverter}">
+                                <Binding x:Uid="Binding_1" Path="Error" />
+                                <Binding x:Uid="Binding_2" Path="ValidationExceptionErrors" ElementName="MetaType" />
+                            </MultiBinding>
+                        </WMCore:FormNotification.ErrorMessage>
+                    </WMCore:FormNotification>
+                    
+
+                    <Border x:Uid="Border_2" Style="{DynamicResource UserControlFormInnerBorder}" Margin="15,-15,10,10" >
+                        
+  
+
+			<StackPanel x:Uid="StackPanel_2" Orientation="Horizontal">
+                            
+                        <Grid  x:Uid="dgEdit" HorizontalAlignment="Left"  VerticalAlignment="Top" Margin="5" x:Name="dgEdit" >
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition x:Uid="ColumnDefinition_4" Width="Auto" />
+                                <ColumnDefinition x:Uid="ColumnDefinition_5" Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+								<RowDefinition x:Uid="RowDefinition_3" Height="auto" />
+								<RowDefinition x:Uid="RowDefinition_4" Height="auto" />
+								<RowDefinition x:Uid="RowDefinition_5" Height="auto" />
+								<RowDefinition x:Uid="RowDefinition_6" Height="auto" />
+								<RowDefinition x:Uid="RowDefinition_7" Height="auto" />
+								<RowDefinition x:Uid="RowDefinition_8" Height="auto" />
+								<RowDefinition x:Uid="RowDefinition_9" Height="auto" />
+								<RowDefinition x:Uid="RowDefinition_10" Height="auto" />
+								
+                            </Grid.RowDefinitions>
+
+                                <TextBlock x:Uid="TextBlock_4" Grid.Column="0" Grid.Row="0" Margin="0,4,4,0" HorizontalAlignment="Right" VerticalAlignment="Center"  Text="{StaticResource NAME}" /> <!--#LG:NAME:Name:Nombre-->
+                                <TextBox x:Uid="txtName" Grid.Column="1" Grid.Row="0" Margin="0,4,0,0" Height="22" Width="150" Text="{Binding Path=Record.Name}" x:Name="txtName"/>
+
+                                <TextBlock x:Uid="TextBlock_4" Grid.Column="0" Grid.Row="1" Margin="0,4,4,0" HorizontalAlignment="Right" VerticalAlignment="Center" Text="{StaticResource CODE}" />
+                                <TextBox x:Uid="txtCode" Grid.Column="1" Grid.Row="1" Margin="0,4,0,0" Height="22" Width="150" Text="{Binding Path=Record.Code}" x:Name="txtCode"/>
+
+                            </Grid>
+                           
+
+                            <StackPanel  x:Uid="StackPanel_3" Margin="5,5,0,0">
+                                <Button x:Uid="btnSave" Name="btnSave" Margin="0,4,5,0" Click="btnSave_Click">
+                                    <WrapPanel x:Uid="WrapPanel_2" >
+                                        <Image x:Uid="Image_2" Source="/WpfFront;component/Images/Save.png" Margin="5,0,0,0"></Image>
+                                        <TextBlock x:Uid="TextBlock_5" Margin="5" Text="{StaticResource SAVE_RECORD}" /> <!--#LG:SAVE_RECORD:Save Record:Guardar Registro-->
+                                    </WrapPanel>
+                                </Button>
+                             
+                            </StackPanel>
+                            <StackPanel  x:Uid="StackPanel_4" Margin="5,5,0,0">
+                                <Button x:Uid="btnDelete" Name="btnDelete" Margin="0,4,5,0" Click="btnDelete_Click">
+                                    <WrapPanel x:Uid="WrapPanel_3">
+                                        <Image x:Uid="Image_3" Margin="5,0,0,0" Source="/WpfFront;component/Images/Delete.png"></Image>
+                                        <TextBlock x:Uid="TextBlock_6" Margin="5" Text="{StaticResource DELETE_RECORD}" /> <!--#LG:DELETE_RECORD:Delete Record:Borrar Registro-->
+                                    </WrapPanel>
+                                </Button>
+                            </StackPanel>
+
+                        </StackPanel>
+            
+
+                    </Border>
+
+                    <Border x:Uid="Brd_Detail" x:Name="Brd_Detail" Style="{DynamicResource UserControlFormInnerBorder}" Margin="15,5,10,10" >
+                        <StackPanel x:Uid="StackPanel_5" Orientation="Vertical">
+                            <StackPanel x:Uid="StackPanel_6" Orientation="Horizontal">
+                                <TextBlock x:Uid="TextBlock_7" Margin="5,0,0,5" FontSize="14" FontWeight="Bold" HorizontalAlignment="Left" Text="{StaticResource METAMASTER}" /> <!--#LG:METAMASTER:Metamaster:MetaMaestro-->
+                                <Button x:Uid="btnNewDet" Grid.Column="2" Grid.Row="0" Name="btnNewDet" Margin="270,0,0,5" HorizontalAlignment="Right" Click="btnNewDet_Click">
+                                    <WrapPanel x:Uid="WrapPanel_4">
+                                        <TextBlock x:Uid="TextBlock_8" Margin="5"  VerticalAlignment="Center" Text="{StaticResource NEW_RECORD}" /> <!--#LG:NEW_RECORD:New Record:Nuevo Registro-->
+                                        <Image x:Uid="Image_4" VerticalAlignment="Center" Source="/WpfFront;component/Images/New.png" Stretch="None" Margin="0,0,5,0"></Image>
+                                    </WrapPanel>
+                                </Button>
+                            </StackPanel>
+                            <StackPanel x:Uid="StackPanel_7" Orientation="Horizontal">
+                                
+                            <xcdg:DataGridControl x:Uid="dgDetail" x:Name="dgDetail"  Grid.Row="1" ItemsSource="{Binding Path=DetailList}"                           
+                                AutoCreateColumns="False" Width="Auto" ReadOnly="True" IsTextSearchEnabled="True" 
+                                MaxHeight="400" Margin="0,0,10,0" VerticalAlignment="Stretch" SelectionMode="Single" 
+                                NavigationBehavior="RowOnly" GotFocus="dgDetail_GotFocus">
+                                <xcdg:DataGridControl.Resources>
+                                    <Style x:Uid="Style_2" x:Key="{x:Type xcdg:ScrollTip}" TargetType="{x:Type xcdg:ScrollTip}">
+                                        <Setter x:Uid="Setter_3" Property="HorizontalAlignment" Value="Right" />
+                                        <Setter x:Uid="Setter_4" Property="VerticalAlignment" Value="Bottom" />
+                                    </Style>
+                                </xcdg:DataGridControl.Resources>
+                                <xcdg:DataGridControl.Columns>
+                                    <xcdg:Column x:Uid="xcdg:Column_2" FieldName="Code" Title="Code" TextWrapping="Wrap" /> <!--#LG:CODE:Code:Codigo-->
+                                    <xcdg:Column x:Uid="xcdg:Column_3" FieldName="Name" Title="Name" TextWrapping="Wrap" /> <!--#LG:NAME:Name:Nombre-->
+                                    <xcdg:Column x:Uid="xcdg:Column_5" FieldName="NumOrder" Title="Order" TextWrapping="Wrap" Width="40px" /> <!--#LG:ORDER:Order:Orden-->
+                                    <xcdg:Column x:Uid="xcdg:Column_6" FieldName="Active" Title="Active" Width="30px" /> <!--#LG:ACTIVE:Active:Activo-->
+                                </xcdg:DataGridControl.Columns>
+                                <xcdg:DataGridControl.View>
+                                    <xcdg:TableView x:Uid="xcdg:TableView_2" UseDefaultHeadersFooters="False" ShowScrollTip="True" VerticalGridLineBrush="LightGray" 
+														ShowRowSelectorPane="False" HorizontalGridLineThickness="1" HorizontalGridLineBrush="LightGray">
+                                        <xcdg:TableView.Theme>
+                                            <xcdg:RoyaleNormalColorTheme x:Uid="xcdg:RoyaleNormalColorTheme_2" />
+                                        </xcdg:TableView.Theme>
+                                        <xcdg:TableView.FixedHeaders>
+                                            <DataTemplate x:Uid="DataTemplate_2">
+                                                <xcdg:ColumnManagerRow x:Uid="xcdg:ColumnManagerRow_2" AllowColumnReorder="True" />
+                                            </DataTemplate>
+                                        </xcdg:TableView.FixedHeaders>
+                                    </xcdg:TableView>
+                                </xcdg:DataGridControl.View>
+                            </xcdg:DataGridControl>
+
+                                <Border x:Uid="Border_det" x:Name="Border_det" Style="{DynamicResource GrayStyle}"  Visibility="Collapsed" >
+                                    <StackPanel x:Uid="stkEditDetail" Orientation="Vertical" x:Name="stkEditDetail" >
+
+                                        <Grid  x:Uid="dgEditDet" HorizontalAlignment="Left"  VerticalAlignment="Top" Margin="5" x:Name="dgEditDet" >
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition x:Uid="ColumnDefinition_6" Width="Auto" />
+                                                <ColumnDefinition x:Uid="ColumnDefinition_7" Width="Auto" />
+                                            </Grid.ColumnDefinitions>
+                                            <Grid.RowDefinitions>
+                                                <RowDefinition x:Uid="RowDefinition_11" Height="auto" />
+                                                <RowDefinition x:Uid="RowDefinition_12" Height="auto" />
+                                                <RowDefinition x:Uid="RowDefinition_13" Height="auto" />
+                                                <RowDefinition x:Uid="RowDefinition_14" Height="auto" />
+                                                <RowDefinition x:Uid="RowDefinition_15" Height="auto" />
+                                                <RowDefinition x:Uid="RowDefinition_16" Height="auto" />
+                                                <RowDefinition x:Uid="RowDefinition_17" Height="auto" />
+                                                <RowDefinition x:Uid="RowDefinition_18" Height="auto" />
+
+                                            </Grid.RowDefinitions>
+
+                                            <TextBlock x:Uid="TextBlock_9" Grid.Column="0" Grid.Row="0" Margin="0,4,4,0" HorizontalAlignment="Right" Text="{StaticResource CODE}" /> <!--#LG:CODE:Code:Codigo-->
+                                            <TextBox x:Uid="TextBox_1" Grid.Column="1" Grid.Row="0" Margin="0,4,0,0" Height="22" Width="150" Text="{Binding Path=DetailRecord.Code}" />
+                                            <TextBlock x:Uid="TextBlock_10" Grid.Column="0" Grid.Row="1" Margin="0,4,4,0" HorizontalAlignment="Right" Text="{StaticResource NAME}" /> <!--#LG:NAME:Name:Nombre-->
+                                            <TextBox x:Uid="txtNameDet" Grid.Column="1" Grid.Row="1" Margin="0,4,0,0" Height="44" Width="150" Text="{Binding Path=DetailRecord.Name}" TextWrapping="Wrap" x:Name="txtNameDet" />
+                                            <TextBlock x:Uid="TextBlock_11" Grid.Column="0" Grid.Row="2" Margin="0,4,4,0" HorizontalAlignment="Right" Text="{StaticResource DESCRIPTION}" /> <!--#LG:DESCRIPTION:Description:Descripcion-->
+                                            <TextBox x:Uid="TextBox_2" Grid.Column="1" Grid.Row="2"  Margin="0,4,0,0" Height="44" Width="150" Text="{Binding Path=DetailRecord.Description}" TextWrapping="Wrap" />
+
+                                            <TextBlock x:Uid="TextBlock_12" Grid.Column="0" Grid.Row="3" Margin="0,4,4,0" HorizontalAlignment="Right" Text="{StaticResource CODE2}" /> <!--#LG:CODE2:Code2:Codigo2-->
+                                            <TextBox Grid.Column="1" Grid.Row="3" Margin="0,4,0,0" Height="22" Width="150" Text="{Binding Path=DetailRecord.Code2}"  />
+
+                                            <TextBlock Grid.Column="0" Grid.Row="4" Margin="0,4,4,0" HorizontalAlignment="Right" Text="{StaticResource DEFAULT_VALUE}" /> <!--#LG:DEFAULT_VALUE:Default Value:Valor por Defecto-->
+                                            <TextBox   Grid.Column="1" Grid.Row="4" Margin="0,4,0,0" Height="22" Width="150" Text="{Binding Path=DetailRecord.DefValue}" />
+
+                                            <TextBlock Grid.Column="0" Grid.Row="5" Margin="0,4,4,0" HorizontalAlignment="Right" Text="{StaticResource ORDER}" /> <!--#LG:ORDER:Order:Orden-->
+                                            <TextBox  x:Name="txtOrder" Grid.Column="1" Grid.Row="5" Margin="0,4,0,0" Height="22" Width="150" Text="{Binding Path=DetailRecord.NumOrder}" />
+
+
+                                            <TextBlock x:Uid="TextBlock_13" Grid.Column="0" Grid.Row="6" Margin="0,4,4,0" HorizontalAlignment="Right" Text="{StaticResource ACTIVE}" /> <!--#LG:ACTIVE:Active:Activo-->
+                                            <CheckBox x:Uid="chkActive" Grid.Column="1" Grid.Row="6" Margin="0,4,4,0" HorizontalAlignment="Left"  IsChecked="{Binding Path=DetailRecord.Active}" x:Name="chkActive" ></CheckBox >
+                                        </Grid>
+
+
+                                        <StackPanel  x:Uid="StackPanel_8" Margin="10,0,0,0" Orientation="Horizontal">
+                                            <Button x:Uid="btnSaveDet" Name="btnSaveDet" Margin="0,5,5,0" Click="btnSaveDet_Click">
+                                                <WrapPanel x:Uid="WrapPanel_5" >
+                                                    <Image x:Uid="Image_5" Source="/WpfFront;component/Images/Save.png" Margin="5,0,0,0"></Image>
+                                                    <TextBlock x:Uid="TextBlock_14" Margin="5" Text="{StaticResource SAVE_RECORD}" /> <!--#LG:SAVE_RECORD:Save Record:Guardar Registro-->
+                                                </WrapPanel>
+                                            </Button>
+
+                                            <Button x:Uid="btnDeleteDet" Name="btnDeleteDet" Margin="0,4,5,0" Click="btnDeleteDet_Click" Visibility="Collapsed">
+                                                <WrapPanel x:Uid="WrapPanel_6">
+                                                    <Image x:Uid="Image_6" Margin="5,0,0,0" Source="/WpfFront;component/Images/Delete.png"></Image>
+                                                    <TextBlock x:Uid="TextBlock_15" Margin="5" Text="{StaticResource DELETE_RECORD}" /> <!--#LG:DELETE_RECORD:Delete Record:Borrar Registro-->
+                                                </WrapPanel>
+                                            </Button>
+                                        </StackPanel>
+
+                                    </StackPanel>
+                                </Border>
+
+                            </StackPanel>
+
+                        </StackPanel>
+                    </Border>
+                </StackPanel>
+
+            </Grid>
+
+            <!-- End Setp Three -->
+
+
+        </DockPanel>
+    </AdornerDecorator>
+</WMCore:UserControlBase>

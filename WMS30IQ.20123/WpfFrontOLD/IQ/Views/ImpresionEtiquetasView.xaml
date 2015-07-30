@@ -1,0 +1,67 @@
+﻿<WMCore:UserControlBase x:Uid="ImpresionEtiquetas" x:Class="WpfFront.Views.ImpresionEtiquetasView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:xcdg="http://schemas.xceed.com/wpf/xaml/datagrid"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    Height="Auto" Width="Auto" HorizontalAlignment="Stretch"
+    xmlns:WMCore="clr-namespace:Core.WPF;assembly=Core"   
+    xmlns:dg="http://schemas.microsoft.com/wpf/2008/toolkit"
+    xmlns:toolkit="http://schemas.microsoft.com/wpf/2008/toolkit"
+    xmlns:uc="clr-namespace:WpfFront.Common.UserControls"
+    x:Name="ImpresionEtiquetas">
+       
+   
+    <AdornerDecorator x:Uid="AdornerDecorator_1">
+        
+        <DockPanel x:Uid="DockPanel_1" Background="AliceBlue" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+
+            <StackPanel x:Uid="StackPanel_1" Orientation="Horizontal" >               
+                <StackPanel x:Uid="Stack_Panel1" Orientation="Vertical" Margin="3" HorizontalAlignment="Left" Width="auto" Height="auto">
+                    <Border x:Uid="Border_Select" Style="{DynamicResource UserControlFormInnerBorder}" Margin="3" HorizontalAlignment="Center">
+                        <StackPanel x:Uid="Stack_Panel1" Margin="5" Width="auto" HorizontalAlignment="Left" Orientation="Horizontal">
+                            <StackPanel x:Uid="Stack_Panel2" Width="auto" Orientation="Vertical" Margin="4,3,4,3">
+                                <TextBlock x:Uid="Text_block2" Width="100" Text="Etiqueta" HorizontalAlignment="Left" Margin="4,0,6,0" />
+                                <ComboBox x:Uid="cb_Tipo" Name="cb_Tipo" ItemsSource="{Binding Path=ListadoEtiquetas}" DisplayMemberPath="Name" SelectedValue="MetaMasterID" />
+                            </StackPanel>
+                            <StackPanel x:Uid="Stack_Panel2" Width="auto" Orientation="Vertical" Margin="4,3,4,3">
+                                <TextBlock x:Uid="Text_block22" Width="100" Text="Serial" HorizontalAlignment="Left" Margin="4,0,6,0" />
+                                <TextBox x:Uid="tb_NumeroBusqueda" Name="tb_NumeroBusqueda" Width="100" Height="23" VerticalAlignment="Center" KeyDown="tb_NumeroBusqueda_KeyDown" />
+                            </StackPanel>
+                        </StackPanel> 
+                    </Border>
+                </StackPanel>                
+                <StackPanel x:Uid="Stack_Datos" Name="Stack_Datos" Orientation="Vertical" Margin="3" HorizontalAlignment="Center" Width="auto" Height="auto" >                   
+                    <Border x:Uid="Border_Dinamicos" Style="{DynamicResource UserControlFormInnerBorder}" Margin="3" HorizontalAlignment="Center">
+                        <StackPanel x:Uid="Stack_Panel12" Margin="5" Width="auto" HorizontalAlignment="Center" Orientation="Vertical">
+                            <StackPanel x:Uid="Stack_Panel2" Width="auto" Orientation="Vertical" Margin="4,3,4,3">
+                                <TextBlock x:Uid="Text_block2" Text="Seriales Escaneados" VerticalAlignment="Center" Margin="4,0,6,0" Foreground="Brown" FontWeight="Bold" />
+                                <Separator Width="auto" Margin="0,0,0,0" Height="1" />
+                            </StackPanel>
+                            <StackPanel x:Uid="Stack_Panel2" Width="auto" Orientation="Horizontal" Margin="4,3,4,3">
+                                <ListView x:Uid="lvSerialesScaneados" Name="lvSerialesScaneados" ItemsSource="{Binding Path=ListaEquipos}" Margin="0,5,0,12" MaxHeight="400" >
+                                    <ListView.View>
+                                        <GridView x:Uid="GridView_1">
+                                            <!--<GridViewColumn x:Uid="GridViewColumn_1" Header="Label" Width="0" DisplayMemberBinding="{Binding Path=Label}"  />-->
+                                            <GridViewColumn x:Uid="GridViewColumn_2" Header="Serial" Width="100" DisplayMemberBinding="{Binding Path=Serial}"  />
+                                            <GridViewColumn x:Uid="GridViewColumn_3" Header="Etiqueta" Width="150" DisplayMemberBinding="{Binding Path=Etiqueta}" />
+                                        </GridView>
+                                    </ListView.View>
+                                </ListView>
+                            </StackPanel>
+                            <StackPanel x:Uid="Stack_Button" Width="auto" Margin="0,10,0,0" Orientation="Horizontal"  HorizontalAlignment="Left">
+                                <Button x:Uid="Btn_Guardar" x:Name="Btn_Guardar" Width="70" Margin="5,0,0,5" Content="Guardar" Click="Btn_Guardar_Click" />
+                                <Button x:Uid="Btn_Eliminar" x:Name="Btn_Eliminar" Width="130" Margin="5,0,0,5" Content="Quitar Seleccionados" Click="Btn_Eliminar_Click" />
+                            </StackPanel>
+                        </StackPanel>
+                    </Border>                   
+                </StackPanel>
+                <StackPanel x:Uid="Stack_Botones" Name="Stack_Botones"  Orientation="Vertical" Margin="3" HorizontalAlignment="Center" Width="auto" Height="auto" Visibility="Collapsed" >
+                    <!--<Border x:Uid="Border_1" Name="Border_Detail" Style="{DynamicResource UserControlFormInnerBorder}" Margin="3" HorizontalAlignment="Center" >-->
+                        <StackPanel x:Uid="Stack_Adicionales" Orientation="Vertical" Margin="0,0,0,0">
+                            
+                        </StackPanel>
+                    <!--</Border>-->
+                </StackPanel>
+            </StackPanel>
+        </DockPanel>
+    </AdornerDecorator>
+</WMCore:UserControlBase>

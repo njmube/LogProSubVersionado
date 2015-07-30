@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<hibernate-mapping xmlns="urn:nhibernate-mapping-2.2" namespace="Entities.Trace" assembly="Entities">
+  <class name="Node" table="Trace.Node">
+	<id name="NodeID" type="Int32">
+		<generator class="assigned" />
+	</id>
+
+	  <!-- <many-to-one lazy="false" name="Location" class="Entities.Master.Location" column="LocationID" not-null="true"  unique-key="ukNode" /> -->
+	<property name="Name" type="String" length="50" not-null="true" unique="true"  />
+    
+	<property name="Description" type="String" length="255"  />
+	<property name="IsBasic" type="Boolean" not-null="true"  />
+	<property name="NodeSeq" type="Int16" not-null="true"  />
+	<property name="RequireDocID" type="Boolean" not-null="true"  />
+    
+  <!--  
+	<bag fetch="subselect" name="NodeExtensions" inverse="true" cascade="persist,save-update" lazy="true">
+		<key column="Node"/><one-to-many class="NodeExtension"/>
+	</bag>	
+    
+	<bag fetch="subselect" name="Labels" inverse="true" cascade="persist,save-update" lazy="true">
+		<key column="NodeID"/><one-to-many class="Label"/>
+	</bag>
+
+	  <bag fetch="subselect" name="LabelsHistory" inverse="true" cascade="persist,save-update" lazy="true">
+		  <key column="NodeID"/>
+		  <one-to-many class="LabelHistory"/>
+	  </bag>
+
+	  <bag fetch="subselect" name="NodeTraces" inverse="true" cascade="persist,save-update" lazy="true">
+		  <key column="NodeID"/>
+		  <one-to-many class="NodeTrace"/>
+	  </bag>
+
+	  <bag fetch="subselect" name="NodeTracesHistory" inverse="true" cascade="persist,save-update" lazy="true">
+		  <key column="NodeID"/>
+		  <one-to-many class="NodeTraceHistory"/>
+	  </bag>
+	  -->
+    
+	  <property name="CreatedBy" type="String" length="50" not-null="true"  />
+	  <property name="CreationDate" type="DateTime" not-null="true"   />
+	  <property name="CreTerminal" type="String" length="50"   />
+	  <property name="ModifiedBy" type="String" length="50"   />
+	  <property name="ModDate" type="DateTime"   />
+	  <property name="ModTerminal" type="String" length="50"   />
+  </class>
+</hibernate-mapping>

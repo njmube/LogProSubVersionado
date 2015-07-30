@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<hibernate-mapping xmlns="urn:nhibernate-mapping-2.2" namespace="Entities.Trace" assembly="Entities">
+  <class name="Label" table="Trace.Label">
+	<id name="LabelID" type="Int64">
+		<generator class="native" />
+	</id>
+	<many-to-one lazy="false" name="LabelType" class="Entities.General.DocumentType" column="LabelTypeID" not-null="true" unique-key="ULabelKey"/>
+	
+	<!--<property name="LabelCode" type="String" length="100" not-null="true"  />-->
+
+
+	  <property name="LabelCode" type="String" unique-key="ULabelKey">
+		  <column name="LabelCode" not-null="true" length="100"  index="idx_LabelCode"/>
+	  </property>  
+	  
+	  
+	<many-to-one lazy="false" name="Status" class="Entities.General.Status" column="StatusID" not-null="true" />
+	<many-to-one lazy="false" name="FatherLabel" class="Label" column="FatherLabelID"   not-found="ignore"   />
+	<many-to-one lazy="false" name="Product" class="Entities.Master.Product" column="ProductID"   not-found="ignore" unique-key="ULabelKey"/>
+	<many-to-one lazy="false" name="Unit" class="Entities.Master.Unit" column="UnitID"   not-found="ignore"  />
+
+	  <!--<property name="UnitBaseFactor" type="Double"   />-->
+	  <property name="StartQty" type="Double"   />
+	  <property name="CurrQty" type="Double"  />
+
+    
+    <property name="Manufacturer" type="String" length="50"  />
+	   	  
+	<many-to-one lazy="false" name="Node" class="Node" column="NodeID"   not-found="ignore"/>
+	<many-to-one lazy="false" name="Bin" class="Entities.Master.Bin" column="BinID" not-null="true" unique-key="ULabelKey" />
+	<property name="Printed" type="Boolean" not-null="true"  />
+	<property name="PrintingLot" type="String" length="50"   />	
+	  
+	  <property name="IsLogistic" type="Boolean"  />
+    <property name="Notes" type="String" length="255"   />
+	<property name="ReceivingDate" type="DateTime" />
+
+
+	<property name="StockQty" type="Double" formula="(select Sum(l.CurrQty) from Trace.Label l Where LabelTypeID IN (1002,1005)  AND (l.LabelID = LabelID OR l.FatherLabelID = LabelID) AND l.StatusID IN (1001,1003) )" />  
+
+	<many-to-one lazy="false" name="LastBin" class="Entities.Master.Bin" column="LastBinID" not-found="ignore" />
+	<many-to-one lazy="false" name="ReceivingDocument" class="Document" column="ReceivingDocID"   not-found="ignore"/>
+	<many-to-one lazy="false" name="ShippingDocument" class="Document" column="ShippingDocID"   not-found="ignore"/>
+
+	<many-to-one lazy="false" name="LabelSource" class="Label" column="LabelSourceID"   not-found="ignore"   />
+
+	  <bag fetch="subselect" name="DocumentPackages" inverse="true" cascade="persist,save-update,delete" lazy="false">
+		  <key column="PackLabelID"/>
+		  <one-to-many class="DocumentPackage"/>
+	  </bag>
+	  
+	  
+	  <bag fetch="subselect" name="TrackOptions" inverse="true" cascade="persist,save-update,delete" lazy="false">
+		  <key column="LabelID"/>
+		  <one-to-many class="LabelTrackOption"/>
+	  </bag>
+
+	  <bag fetch="subselect" name="MissingComponents" inverse="true" cascade="persist,save-update,delete" lazy="false">
+		  <key column="FatherLabelID"/>
+		  <one-to-many class="LabelMissingComponent"/>
+	  </bag>
+	  
+	  
+	  <bag fetch="subselect" name="ChildLabels" inverse="true" cascade="persist,save-update" lazy="true">
+		  <key column="FatherLabelID"/>
+		  <one-to-many class="Label"/>
+	  </bag>
+
+
+	  <property name="CreatedBy" type="String" length="50" not-null="true"  />
+	  <property name="CreationDate" type="DateTime" not-null="true"   />
+	  <property name="CreTerminal" type="String" length="50"   />
+	  <property name="ModifiedBy" type="String" length="50"   />
+	  <property name="ModDate" type="DateTime"   />
+	  <property name="ModTerminal" type="String" length="50"   />
+	  
+	  
+  </class>
+</hibernate-mapping>

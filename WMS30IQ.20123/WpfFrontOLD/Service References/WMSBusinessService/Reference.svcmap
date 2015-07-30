@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ReferenceGroup xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" ID="ee131fb0-a3f2-444c-b9c4-7893e07be530" xmlns="urn:schemas-microsoft-com:xml-wcfservicemap">
+  <ClientOptions>
+    <GenerateAsynchronousMethods>false</GenerateAsynchronousMethods>
+    <GenerateTaskBasedAsynchronousMethod>true</GenerateTaskBasedAsynchronousMethod>
+    <EnableDataBinding>true</EnableDataBinding>
+    <ExcludedTypes />
+    <ImportXmlTypes>false</ImportXmlTypes>
+    <GenerateInternalTypes>false</GenerateInternalTypes>
+    <GenerateMessageContracts>false</GenerateMessageContracts>
+    <NamespaceMappings />
+    <CollectionMappings>
+      <CollectionMapping TypeName="System.Collections.Generic.List`1" Category="List" />
+    </CollectionMappings>
+    <GenerateSerializableTypes>true</GenerateSerializableTypes>
+    <Serializer>Auto</Serializer>
+    <UseSerializerForFaults>true</UseSerializerForFaults>
+    <ReferenceAllAssemblies>true</ReferenceAllAssemblies>
+    <ReferencedAssemblies />
+    <ReferencedDataContractTypes />
+    <ServiceContractMappings />
+  </ClientOptions>
+  <MetadataSources>
+    <MetadataSource Address="http://localhost:12656/WMSHostedService.svc/mex" Protocol="mex" SourceId="1" />
+  </MetadataSources>
+  <Metadata>
+    <MetadataFile FileName="service.wsdl" MetadataType="Wsdl" ID="481a7a6a-28ff-404c-9367-ed42acf3f11e" SourceId="1" SourceUrl="http://localhost:12656/WMSHostedService.svc/mex" />
+    <MetadataFile FileName="service.xsd" MetadataType="Schema" ID="9b2fa227-3118-4c67-bf0b-b306bb255e1f" SourceId="1" SourceUrl="http://localhost:12656/WMSHostedService.svc/mex" />
+    <MetadataFile FileName="service1.xsd" MetadataType="Schema" ID="e6ab6363-ad7b-4836-80c9-532e9089747d" SourceId="1" SourceUrl="http://localhost:12656/WMSHostedService.svc/mex" />
+    <MetadataFile FileName="Entities.Process.xsd" MetadataType="Schema" ID="37d35aa6-900a-4fcc-b8c0-9cd0f02e53b1" SourceId="1" SourceUrl="http://localhost:12656/WMSHostedService.svc/mex" />
+    <MetadataFile FileName="Entities.Profile.xsd" MetadataType="Schema" ID="53c2fbc0-239f-4b53-a0a1-6dd5bfd50f18" SourceId="1" SourceUrl="http://localhost:12656/WMSHostedService.svc/mex" />
+    <MetadataFile FileName="Entities.General.xsd" MetadataType="Schema" ID="094166bc-ddfe-4b1d-861c-d37dcb81c37c" SourceId="1" SourceUrl="http://localhost:12656/WMSHostedService.svc/mex" />
+    <MetadataFile FileName="Entities.Master.xsd" MetadataType="Schema" ID="02701686-e39f-49a6-bc8c-59143eee6420" SourceId="1" SourceUrl="http://localhost:12656/WMSHostedService.svc/mex" />
+    <MetadataFile FileName="Entities.Trace.xsd" MetadataType="Schema" ID="7ece0cf7-fd3c-4721-961f-8c8be5b9731b" SourceId="1" SourceUrl="http://localhost:12656/WMSHostedService.svc/mex" />
+    <MetadataFile FileName="Entities.Master1.xsd" MetadataType="Schema" ID="6d262a55-1be0-4336-9ca1-a19f7cd3b3bf" SourceId="1" SourceUrl="http://localhost:12656/WMSHostedService.svc/mex" />
+    <MetadataFile FileName="System.Data.xsd" MetadataType="Schema" ID="b481d0db-a9c8-4b6f-a753-94ea8d040160" SourceId="1" SourceUrl="http://localhost:12656/WMSHostedService.svc/mex" />
+    <MetadataFile FileName="service2.xsd" MetadataType="Schema" ID="8c14e1a2-4bae-48e1-8115-843f566fe271" SourceId="1" SourceUrl="http://localhost:12656/WMSHostedService.svc/mex" />
+    <MetadataFile FileName="Entities.Report.xsd" MetadataType="Schema" ID="2705ce38-5ccc-41b1-a80c-9a526de88cb9" SourceId="1" SourceUrl="http://localhost:12656/WMSHostedService.svc/mex" />
+    <MetadataFile FileName="Arrays.xsd" MetadataType="Schema" ID="6a8015c5-f7e5-4ef8-8b6f-97a13e6c1401" SourceId="1" SourceUrl="http://localhost:12656/WMSHostedService.svc/mex" />
+    <MetadataFile FileName="Entities.Report1.xsd" MetadataType="Schema" ID="6dd52b68-0c9a-4272-a313-ea5ca7f68c53" SourceId="1" SourceUrl="http://localhost:12656/WMSHostedService.svc/mex" />
+    <MetadataFile FileName="Entities.Workflow.xsd" MetadataType="Schema" ID="b38f7688-04fd-409d-8be0-852f247d9f95" SourceId="1" SourceUrl="http://localhost:12656/WMSHostedService.svc/mex" />
+    <MetadataFile FileName="Entities.General1.xsd" MetadataType="Schema" ID="7d15fa38-e9d0-441d-bc53-55c3eebb0899" SourceId="1" SourceUrl="http://localhost:12656/WMSHostedService.svc/mex" />
+    <MetadataFile FileName="Entities.Process1.xsd" MetadataType="Schema" ID="1be28a7d-8ba9-42bc-9930-b20081551e6f" SourceId="1" SourceUrl="http://localhost:12656/WMSHostedService.svc/mex" />
+    <MetadataFile FileName="Entities.Trace1.xsd" MetadataType="Schema" ID="e7d2a3ca-ba21-497a-8cf1-0f4d10f44c16" SourceId="1" SourceUrl="http://localhost:12656/WMSHostedService.svc/mex" />
+  </Metadata>
+  <Extensions>
+    <ExtensionFile FileName="configuration91.svcinfo" Name="configuration91.svcinfo" />
+    <ExtensionFile FileName="configuration.svcinfo" Name="configuration.svcinfo" />
+  </Extensions>
+</ReferenceGroup>

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<hibernate-mapping xmlns="urn:nhibernate-mapping-2.2" namespace="Entities.Workflow" assembly="Entities">
+  <class name="DataDefinition" table="Workflow.DataDefinition">
+	<id name="RowID" type="Guid">
+		<generator class="assigned" />
+	</id>
+
+  <property name="Code" type="String" length="50" not-null="true" unique="false" />
+  <property name="DisplayName" type="String" length="100" not-null="true" unique="false" />
+  <property name="ReadOnly" type="Boolean" />
+	<many-to-one name="DataType" class="WFDataType" column="DataTypeID" not-null="true" lazy="false" />  
+  <many-to-one name="Location" class="Entities.Master.Location" column="LocationID" not-null="true" lazy="false" />
+	<property name="IsHeader" type="Boolean" />
+  <many-to-one name="Entity" class="Entities.General.ClassEntity" column="EntityID" not-null="true" lazy="false" />
+  <property name="IsSerial" type="Boolean" />
+  <property name="IsRequired" type="Boolean" />
+  <property name="Size" type="Int32" />
+  <property name="DefaultValue" type="String" length="100" />
+  <property name="NumOrder" type="Int16" />
+  <many-to-one name="MetaType" class="Entities.Master.MType" column="MetaTypeID" lazy="false" />
+
+  <property name="CreatedBy" type="String" length="50" not-null="true" />
+  <property name="CreationDate" type="DateTime" not-null="true" />
+  <property name="CreTerminal" type="String" length="50" />
+  <property name="ModifiedBy" type="String" length="50" />
+  <property name="ModDate" type="DateTime" />
+  <property name="ModTerminal" type="String" length="50" />
+	  
+	  
+  </class>
+</hibernate-mapping>

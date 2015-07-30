@@ -1,0 +1,94 @@
+﻿<WMCore:UserControlBase x:Uid="Company" x:Class="WpfFront.Views.FileProcessView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:xcdg="http://schemas.xceed.com/wpf/xaml/datagrid"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    Height="Auto" Width="Auto" HorizontalAlignment="Stretch"
+    xmlns:WMCore="clr-namespace:Core.WPF;assembly=Core"   
+    xmlns:uc="clr-namespace:WpfFront.Common.UserControls"                        
+    x:Name="Company">
+    <AdornerDecorator x:Uid="AdornerDecorator_1">
+        
+        <DockPanel x:Uid="DockPanel_1" Background="{DynamicResource WBg}" HorizontalAlignment="Left" VerticalAlignment="Stretch">
+
+
+            
+            <!-- list of Group Criterias -->
+            <TextBlock x:Uid="TextBlock_1" DockPanel.Dock="Top" Margin="15,4,4,4" FontSize="14" FontWeight="Bold" HorizontalAlignment="Left">File Process</TextBlock>
+
+            <StackPanel x:Uid="stkSearchForm" DockPanel.Dock="Left" Margin="0,0,0,0" Grid.Column="1" Grid.Row="0" x:Name="stkSearchForm">
+
+                <Border x:Uid="Border_1" Style="{DynamicResource UserControlFormInnerBorder}" Margin="7,0,7,0" >
+
+                  
+                        
+                        <Grid  x:Uid="dgSearch" HorizontalAlignment="Center"
+                            VerticalAlignment="Top" Width="Auto" Margin="0,5,0,0" x:Name="dgSearch" >
+
+                       
+
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition x:Uid="ColumnDefinition_1" Width="Auto" />
+                                <ColumnDefinition x:Uid="ColumnDefinition_2" Width="Auto" />
+                                <ColumnDefinition x:Uid="ColumnDefinition_3" Width="100" />
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition x:Uid="RowDefinition_1" Height="auto" />
+                                <RowDefinition x:Uid="RowDefinition_2" Height="auto" />
+                            </Grid.RowDefinitions>
+
+
+                            <StackPanel x:Uid="StackPanel_1" Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="3" Margin="0,5,0,0">
+
+
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Width="80"  VerticalAlignment="Center" TextAlignment="Right">Process</TextBlock>
+                                <ComboBox Width="180" x:Uid="cboProcess" Margin="5,4,0,0"  SelectedValuePath="ProcessID"  
+                                                   SelectedValue="{Binding Path=ProcessID}"
+                                                   ItemsSource="{Binding Path=EntityList}" DisplayMemberPath="Name" Name="cboProcess" >
+
+                                </ComboBox>
+                            </StackPanel>
+
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Width="80"  VerticalAlignment="Center" TextAlignment="Right">File to Upload</TextBlock>
+                                <uc:UploadFile Margin="5,0,0,0" x:Name="fUpload" />    
+                        
+                            </StackPanel>
+
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Width="80" ></TextBlock>
+                                <Button Width="90" Margin="5,5,0,0" Height="30" FontWeight="Bold" Click="Button_Click">Process File</Button>
+                        </StackPanel>
+
+            </StackPanel>
+
+            </Grid>
+              
+                    </Border>
+
+            </StackPanel>
+
+
+            <!-- End Setp Two -->
+
+
+
+            <!-- Edit Group Data -->
+
+                 <Grid x:Uid="Grid_1" DockPanel.Dock="Left"  HorizontalAlignment="Left" VerticalAlignment="Stretch">
+
+                    <Border x:Uid="Border_2" Style="{DynamicResource GrayStyle}" Margin="10" MinWidth="300"  >
+
+                        <TextBlock Name="txtResult" FontWeight="Bold" VerticalAlignment="Top" Margin="4"></TextBlock>
+
+                    </Border>
+
+                </Grid>
+
+
+            <!-- End Setp Three -->
+
+
+        </DockPanel>
+    </AdornerDecorator>
+</WMCore:UserControlBase>

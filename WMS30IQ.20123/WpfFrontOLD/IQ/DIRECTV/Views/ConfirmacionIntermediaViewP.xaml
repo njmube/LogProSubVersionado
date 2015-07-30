@@ -1,0 +1,98 @@
+﻿<WMCore:UserControlBase x:Uid="SmartCardDTV" x:Class="WpfFront.Views.ConfirmacionIntermediaViewP"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:xcdg="http://schemas.xceed.com/wpf/xaml/datagrid"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    Height="Auto" Width="Auto" HorizontalAlignment="Stretch"
+    xmlns:WMCore="clr-namespace:Core.WPF;assembly=Core"   
+    xmlns:dg="http://schemas.microsoft.com/wpf/2008/toolkit"
+    xmlns:toolkit="http://schemas.microsoft.com/wpf/2008/toolkit"
+    xmlns:uc="clr-namespace:WpfFront.Common.UserControls"
+    x:Name="ConfirmacionIntermediaP">
+
+    <AdornerDecorator x:Uid="AdornerDecorator_1">
+
+        <DockPanel x:Uid="DockPanel_1" Background="AliceBlue" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+            <StackPanel x:Uid="StackPanel_1" Orientation="Horizontal" >
+                <StackPanel x:Uid="Stack_Panel" Orientation="Vertical" Margin="3" HorizontalAlignment="Center" Width="auto" Height="auto" >
+                    <Border x:Uid="Border_1" x:Name="Border_Detail_2" Style="{DynamicResource UserControlFormInnerBorder}" Margin="3" HorizontalAlignment="Center" Visibility="Visible" Width="650" >
+
+                        <StackPanel x:Name="Stack_DetailSerial_2" Orientation="Vertical" Margin="3" HorizontalAlignment="Center" >
+
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="Seleccion de Items" HorizontalAlignment="Left" FontWeight="bold" />
+                                <Image x:Uid="ImageRefresh" Name="ImageRefresh"  Margin="10,1,5,0" Width="17"  HorizontalAlignment="Center" Source="/WpfFront;component/Images/refresh.png" ToolTip="Refresh List" MouseDown="ImageRefresh_MouseDown"  />
+                            </StackPanel>
+
+                            <Separator Margin="5,4,0,0"/>
+
+                            <StackPanel x:Uid="Stack_Adicionales_2" x:Name="Stack_Adicionales_2" Orientation="Vertical" Margin="0,6,0,0">
+                                <ListView x:Uid="lvDocumentMaster" ItemsSource="{Binding ListRecords_1}" Margin="0,4,0,0"  MaxHeight="400" x:Name="lvDocumentMaster_2" SelectionChanged="MySelectionChanged" Width="600">
+                                    <ListView.View>
+                                        <GridView x:Uid="GridViewDetails" x:Name="GridViewDetails_2">
+                                            <GridViewColumn x:Uid="GridViewColumn_2" Header="Modelo" Width="185" DisplayMemberBinding="{Binding prod_nombre}" />
+                                            <GridViewColumn x:Uid="GridViewColumn_2" Header="Serial" Width="100" DisplayMemberBinding="{Binding prod_serial}" />
+                                            <GridViewColumn x:Uid="GridViewColumn_2" Header="Receiver" Width="100" DisplayMemberBinding="{Binding prod_receiver}" />
+                                            <GridViewColumn x:Uid="GridViewColumn_2" Header="Diagnóstico" Width="90" DisplayMemberBinding="{Binding prod_status}" />
+                                            <GridViewColumn x:Uid="GridViewColumn_2" Header="Falla Diagnóstico" Width="120" DisplayMemberBinding="{Binding prod_falla}" />
+                                        </GridView>
+                                    </ListView.View>
+                                </ListView>
+                            </StackPanel>
+
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock x:Uid="textblock_recuento" Text="Unidades encontradas: " FontWeight="Bold" Margin="0,0,8,4" />
+                                <TextBlock x:Uid="textblock_recuento" x:Name="textblock_recuento" Text="{Binding Path=ListRecords_1.Count}" FontWeight="Bold" Margin="0,0,8,4" />
+                            </StackPanel>
+
+                        </StackPanel>
+                    </Border>
+                    <StackPanel Margin="15,0,0,0" Width="200" Height="10">
+                        <!--<TextBlock Text="aaa"/> AQUI-->
+                    </StackPanel>
+                </StackPanel>
+
+                <StackPanel x:Uid="Stack_Panel1" Orientation="Vertical" Margin="3" HorizontalAlignment="Center" Width="auto" Height="auto" Visibility="Visible">
+                    <TextBlock x:Uid="Text_ShowHid" Name="Text_ShowHid" HorizontalAlignment="Left" Margin="15,0,0,0" Text="Mostrar >>" Visibility="Collapsed" />
+                    <Border x:Uid="Border_Head" Name="Border_Head" Style="{DynamicResource UserControlFormInnerBorder}" Margin="3" HorizontalAlignment="Center">
+                        <StackPanel x:Uid="Stack_Panel12" Margin="5" Width="auto" HorizontalAlignment="Left" Orientation="Vertical">
+                            <StackPanel x:Uid="Stack_NumeroDoc" Name="Stack_NumeroDoc" Orientation="Horizontal" Margin="10,0,0,0" >
+                                <TextBlock Text="Cambio de Ubicacion" HorizontalAlignment="Left" FontWeight="bold" />
+                            </StackPanel>
+                            <Separator Margin="5,0,0,10"/>
+
+                            <StackPanel x:Uid="Stack_Panel2" Width="auto" Orientation="Horizontal" Margin="4,3,4,3">
+                                <TextBlock x:Uid="Text_block2" Width="150" Text="Unidad Empaque" VerticalAlignment="Center" Margin="4,0,6,0" />
+                                <ComboBox x:Uid="cb_UA" Name="cb_UA" Width="180" Height="23" >
+                                    <ComboBoxItem Content="ESTIBA"/>
+                                    <ComboBoxItem Content="CAJA"/>
+                                    <ComboBoxItem Content="BOLSA"/>
+                                </ComboBox>
+                            </StackPanel>
+                            <StackPanel x:Uid="Stack_Panel2" Width="auto" Orientation="Horizontal" Margin="4,3,4,3">
+                                <TextBlock x:Uid="Text_block2" Width="150" Text="Codigo Empaque" VerticalAlignment="Center" Margin="4,0,6,0" />
+                                <TextBox x:Uid="txt_CodEmpaque" x:Name="txt_CodEmpaque" IsReadOnly="True"  Width="160" Height="23" VerticalAlignment="Center"/>
+                                <Image x:Uid="ImageRefresh" Cursor="Hand" Name="ImageRefresh1"  Margin="3,1,5,0" Width="17"  HorizontalAlignment="Center" Source="/WpfFront;component/Images/refresh.png" ToolTip="Refresh List" MouseDown="ImageGenerate_MouseDown"/>
+                            </StackPanel>
+
+                            <StackPanel x:Uid="Stack_NumeroDoc" Name="Stack_Destino" Orientation="Horizontal" Margin="10,5,0,0" >
+                                <TextBlock Text="Destino Mercancia" HorizontalAlignment="Left" FontWeight="bold" />
+                            </StackPanel>
+                            <Separator Margin="5,5,0,10"/>
+
+                            <StackPanel x:Uid="Stack_Panel2" Width="auto" Orientation="Horizontal" Margin="4,3,4,3">
+                                <TextBlock x:Uid="Text_block2" Width="150" Text="Destino" VerticalAlignment="Center" Margin="4,0,6,0" />
+                                <ComboBox x:Uid="cb_Ubicacion" Name="cb_Ubicacion" Width="180" Height="23" ItemsSource="{Binding Path=ListUbicacionesDestino}" SelectedValue="UbicacionDestino" DisplayMemberPath="UbicacionDestino" />
+                            </StackPanel>
+                            <Separator Margin="5,4,0,10"/>
+                            <StackPanel x:Uid="Stack_Panel_2" Name="Stack_Panel_2" Width="auto" Orientation="Horizontal" Margin="4,3,4,3" HorizontalAlignment="Right" >
+                                <Button x:Uid="btn_imprimir" Name="btn_imprimir" Content="Imprimir" Click="btn_imprimir_Click_1" Margin="0,0,5,0" />
+                                <Button x:Uid="btn_confirmar_2" Name="btn_confirm" Content="Empacar" Click="btn_confirmar_Click_1" />
+                            </StackPanel>
+
+                        </StackPanel>
+                    </Border>
+                </StackPanel>
+            </StackPanel>
+        </DockPanel>
+    </AdornerDecorator>
+</WMCore:UserControlBase>

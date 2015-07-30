@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<hibernate-mapping xmlns="urn:nhibernate-mapping-2.2" namespace="Entities.Master" assembly="Entities">
+  <class name="ContactPosition" table="Master.ContactPosition">
+	<id name="ContactPositionID" type="Int32">
+		<generator class="native" />
+	</id>
+	<property name="Name" type="String" length="50" not-null="true" unique="true"  />
+	<!-- <many-to-one lazy="false" name="Status" class="Entities.General.Status" column="StatusID" not-null="true" /> -->
+   
+    <!--
+	<bag fetch="subselect" name="ContactEntityRelations" inverse="true" cascade="persist,save-update" lazy="true">
+		<key column="ContactPositionID"/><one-to-many class="ContactEntityRelation"/>
+	</bag>
+  -->
+    
+	<property name="CreatedBy" type="String" length="50" not-null="true"  />
+	<property name="CreationDate" type="DateTime" not-null="true"   />
+	<property name="CreTerminal" type="String" length="50"   />
+	<property name="ModifiedBy" type="String" length="50"   />
+	<property name="ModDate" type="DateTime"   />
+	<property name="ModTerminal" type="String" length="50"   />
+  </class>
+</hibernate-mapping>

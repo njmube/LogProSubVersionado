@@ -1,0 +1,378 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Report xmlns="http://schemas.microsoft.com/sqlserver/reporting/2005/01/reportdefinition" xmlns:rd="http://schemas.microsoft.com/SQLServer/reporting/reportdesigner">
+  <DataSources>
+    <DataSource Name="dsWMS">
+      <rd:DataSourceID>f67ed127-1f78-425d-9cd6-5aa980fd6625</rd:DataSourceID>
+      <DataSourceReference>dsWMS</DataSourceReference>
+    </DataSource>
+  </DataSources>
+  <InteractiveHeight>11in</InteractiveHeight>
+  <rd:DrawGrid>true</rd:DrawGrid>
+  <InteractiveWidth>8.5in</InteractiveWidth>
+  <rd:SnapToGrid>true</rd:SnapToGrid>
+  <RightMargin>1in</RightMargin>
+  <LeftMargin>1in</LeftMargin>
+  <BottomMargin>1in</BottomMargin>
+  <rd:ReportID>981177a4-8d17-46b1-b94f-26eb6922a357</rd:ReportID>
+  <EmbeddedImages>
+    <EmbeddedImage Name="logo">
+      <MIMEType>image/gif</MIMEType>
+      <ImageData>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</ImageData>
+    </EmbeddedImage>
+  </EmbeddedImages>
+  <DataSets>
+    <DataSet Name="Details">
+      <Fields>
+        <Field Name="consecLine">
+          <DataField>consecLine</DataField>
+          <rd:TypeName>System.Int64</rd:TypeName>
+        </Field>
+        <Field Name="productCode">
+          <DataField>productCode</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="ProductDescription">
+          <DataField>ProductDescription</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="QtyAvailable">
+          <DataField>QtyAvailable</DataField>
+          <rd:TypeName>System.Double</rd:TypeName>
+        </Field>
+        <Field Name="unit">
+          <DataField>unit</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="BarcodeProduct">
+          <DataField>BarcodeProduct</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="BarcodeLabel">
+          <DataField>BarcodeLabel</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="Date1">
+          <DataField>Date1</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="Serial">
+          <DataField>Serial</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="Lote">
+          <DataField>Lote</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="PrintLot">
+          <DataField>PrintLot</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="UserName">
+          <DataField>UserName</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="Printed">
+          <DataField>Printed</DataField>
+          <rd:TypeName>System.DateTime</rd:TypeName>
+        </Field>
+        <Field Name="Notes">
+          <DataField>Notes</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+      </Fields>
+      <Query>
+        <DataSourceName>dsWMS</DataSourceName>
+        <CommandText>select row_number() over(order by dl.lineId) consecLine, p.productCode, p.name ProductDescription, dl.quantity QtyAvailable, 'Each' unit, 
+'http://localhost:2926/GeneratedBarcodes/barcode_256%20SDRAM.jpeg' BarcodeProduct,'http://localhost/ba/Images/config.jpg' BarcodeLabel, convert(varchar(10),Date1,101) as Date1, '1548' Serial, 'lot' Lote, 'xxddrr' PrintLot,
+'user Name' UserName,  getdate() Printed, 'bla bla bla' Notes
+from Trace.DocumentLine dl 
+	 JOIN Master.Product p ON dl.productId = p.productId
+where docId in (119,129)</CommandText>
+        <rd:UseGenericDesigner>true</rd:UseGenericDesigner>
+      </Query>
+    </DataSet>
+  </DataSets>
+  <Width>6.375in</Width>
+  <Body>
+    <ReportItems>
+      <Table Name="table1">
+        <DataSetName>Details</DataSetName>
+        <Top>0.125in</Top>
+        <TableGroups>
+          <TableGroup>
+            <Grouping Name="table1_Group1">
+              <GroupExpressions>
+                <GroupExpression>=Fields!consecLine.Value</GroupExpression>
+              </GroupExpressions>
+              <PageBreakAtEnd>true</PageBreakAtEnd>
+            </Grouping>
+          </TableGroup>
+        </TableGroups>
+        <Width>6.25in</Width>
+        <Details>
+          <TableRows>
+            <TableRow>
+              <TableCells>
+                <TableCell>
+                  <ColSpan>7</ColSpan>
+                  <ReportItems>
+                    <Rectangle Name="rectangle1">
+                      <ReportItems>
+                        <Textbox Name="textbox1">
+                          <Top>0.5in</Top>
+                          <Width>2.25in</Width>
+                          <Style>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                          <ZIndex>12</ZIndex>
+                          <CanGrow>true</CanGrow>
+                          <Left>0.125in</Left>
+                          <Height>0.25in</Height>
+                          <Value>=Fields!productCode.Value</Value>
+                        </Textbox>
+                        <Textbox Name="textbox11">
+                          <Top>2.625in</Top>
+                          <Width>1.75in</Width>
+                          <Style>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                          <ZIndex>11</ZIndex>
+                          <CanGrow>true</CanGrow>
+                          <Left>4.375in</Left>
+                          <Value>="User: "&amp;Fields!UserName.Value</Value>
+                        </Textbox>
+                        <Textbox Name="textbox10">
+                          <Top>2.625in</Top>
+                          <Width>2.125in</Width>
+                          <Style>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                          <ZIndex>10</ZIndex>
+                          <CanGrow>true</CanGrow>
+                          <Left>2.25in</Left>
+                          <Value>="Date: "&amp;Fields!Printed.Value</Value>
+                        </Textbox>
+                        <Textbox Name="textbox8">
+                          <Top>2.625in</Top>
+                          <Width>2.125in</Width>
+                          <Style>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                          <ZIndex>9</ZIndex>
+                          <CanGrow>true</CanGrow>
+                          <Left>0.125in</Left>
+                          <Value>="PrintLot: "&amp;Fields!PrintLot.Value</Value>
+                        </Textbox>
+                        <Textbox Name="textbox7">
+                          <Top>2.375in</Top>
+                          <Width>6in</Width>
+                          <Style>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                          <ZIndex>8</ZIndex>
+                          <CanGrow>true</CanGrow>
+                          <Left>0.125in</Left>
+                          <Height>0.25in</Height>
+                          <Value>="Notes: "&amp;Fields!Notes.Value</Value>
+                        </Textbox>
+                        <Image Name="image2">
+                          <Sizing>AutoSize</Sizing>
+                          <Top>1.375in</Top>
+                          <Width>4.375in</Width>
+                          <MIMEType />
+                          <Source>External</Source>
+                          <Style />
+                          <ZIndex>7</ZIndex>
+                          <Left>0.875in</Left>
+                          <Height>0.875in</Height>
+                          <Value>=Fields!BarcodeLabel.Value</Value>
+                        </Image>
+                        <Textbox Name="textbox6">
+                          <Top>0.75in</Top>
+                          <Width>2.625in</Width>
+                          <Style>
+                            <BorderStyle>
+                              <Default>Solid</Default>
+                            </BorderStyle>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                          <ZIndex>6</ZIndex>
+                          <CanGrow>true</CanGrow>
+                          <Left>1.25in</Left>
+                          <Height>0.25in</Height>
+                          <Value>="Contain: "&amp;Fields!QtyAvailable.Value.ToString()+" ("+Fields!unit.Value.ToString()+")"</Value>
+                        </Textbox>
+                        <Textbox Name="textbox5">
+                          <Top>0.75in</Top>
+                          <Width>1.125in</Width>
+                          <Style>
+                            <BorderStyle>
+                              <Default>Solid</Default>
+                            </BorderStyle>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                          <ZIndex>5</ZIndex>
+                          <CanGrow>true</CanGrow>
+                          <Left>0.125in</Left>
+                          <Height>0.25in</Height>
+                          <Value>="UoM: "&amp;Fields!unit.Value</Value>
+                        </Textbox>
+                        <Textbox Name="textbox4">
+                          <Top>1in</Top>
+                          <Width>2in</Width>
+                          <Style>
+                            <BorderStyle>
+                              <Default>Solid</Default>
+                            </BorderStyle>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                          <ZIndex>4</ZIndex>
+                          <CanGrow>true</CanGrow>
+                          <Left>0.125in</Left>
+                          <Height>0.25in</Height>
+                          <Value>="ExpDate: "&amp;Fields!Date1.Value</Value>
+                        </Textbox>
+                        <Textbox Name="textbox3">
+                          <Top>1in</Top>
+                          <Width>4in</Width>
+                          <Style>
+                            <BorderStyle>
+                              <Default>Solid</Default>
+                            </BorderStyle>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                          <ZIndex>3</ZIndex>
+                          <CanGrow>true</CanGrow>
+                          <Left>2.125in</Left>
+                          <Height>0.25in</Height>
+                          <Value>="S/N: "&amp;Fields!Serial.Value</Value>
+                        </Textbox>
+                        <Textbox Name="textbox2">
+                          <Top>0.75in</Top>
+                          <Width>2.25in</Width>
+                          <Style>
+                            <BorderStyle>
+                              <Default>Solid</Default>
+                            </BorderStyle>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                          <ZIndex>2</ZIndex>
+                          <CanGrow>true</CanGrow>
+                          <Left>3.875in</Left>
+                          <Height>0.25in</Height>
+                          <Value>="Lot: "+Fields!Lote.Value</Value>
+                        </Textbox>
+                        <Image Name="image1">
+                          <Sizing>Clip</Sizing>
+                          <Top>0.25in</Top>
+                          <Width>2.625in</Width>
+                          <MIMEType />
+                          <Source>External</Source>
+                          <Style />
+                          <ZIndex>1</ZIndex>
+                          <Left>0.125in</Left>
+                          <Height>0.125in</Height>
+                          <Value>=Fields!BarcodeProduct.Value</Value>
+                        </Image>
+                        <Textbox Name="textbox9">
+                          <rd:DefaultName>textbox9</rd:DefaultName>
+                          <Width>2.25in</Width>
+                          <Style>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                          <CanGrow>true</CanGrow>
+                          <Left>0.125in</Left>
+                          <Height>0.25in</Height>
+                          <Value>=Fields!ProductDescription.Value</Value>
+                        </Textbox>
+                      </ReportItems>
+                      <Style>
+                        <BorderColor>
+                          <Default>LightGrey</Default>
+                        </BorderColor>
+                        <BorderStyle>
+                          <Default>Solid</Default>
+                        </BorderStyle>
+                      </Style>
+                    </Rectangle>
+                  </ReportItems>
+                </TableCell>
+              </TableCells>
+              <Height>2.875in</Height>
+            </TableRow>
+          </TableRows>
+        </Details>
+        <TableColumns>
+          <TableColumn>
+            <Width>1in</Width>
+          </TableColumn>
+          <TableColumn>
+            <Width>1in</Width>
+          </TableColumn>
+          <TableColumn>
+            <Width>1in</Width>
+          </TableColumn>
+          <TableColumn>
+            <Width>1in</Width>
+          </TableColumn>
+          <TableColumn>
+            <Width>1in</Width>
+          </TableColumn>
+          <TableColumn>
+            <Width>1in</Width>
+          </TableColumn>
+          <TableColumn>
+            <Width>0.25in</Width>
+          </TableColumn>
+        </TableColumns>
+        <Height>2.875in</Height>
+      </Table>
+    </ReportItems>
+    <Height>3.125in</Height>
+  </Body>
+  <Language>en-US</Language>
+  <TopMargin>1in</TopMargin>
+</Report>

@@ -1,0 +1,172 @@
+﻿<WMCore:UserControlBase x:Uid="MoverProducto" x:Class="WpfFront.Views.MoverProductoView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:xcdg="http://schemas.xceed.com/wpf/xaml/datagrid"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    Height="Auto" Width="Auto" HorizontalAlignment="Stretch"
+    xmlns:WMCore="clr-namespace:Core.WPF;assembly=Core"   
+    xmlns:dg="http://schemas.microsoft.com/wpf/2008/toolkit"
+    xmlns:toolkit="http://schemas.microsoft.com/wpf/2008/toolkit"
+    xmlns:odc="http://schemas.odyssey.com/wpf"
+    xmlns:uc="clr-namespace:WpfFront.Common.UserControls"
+    x:Name="MoverProducto">
+
+
+    <AdornerDecorator x:Uid="AdornerDecorator_1">
+
+        <DockPanel x:Uid="DockPanel_1" Background="AliceBlue" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+
+            <StackPanel x:Uid="StackPanel_1" Orientation="Horizontal" >
+                <StackPanel x:Uid="Stack_Panel1" Orientation="Vertical" Margin="3" HorizontalAlignment="Center" Width="auto" Height="auto">
+                    <Border x:Uid="Border_1" Name="Border_1"  Style="{DynamicResource UserControlFormInnerBorder}" Margin="3" HorizontalAlignment="Left">
+                        <StackPanel x:Uid="Stack_Panel_Filter" Name="Stack_Panel_Filter" Margin="5" Width="auto" HorizontalAlignment="Center" Orientation="Vertical">
+                            <TextBlock Text="1. Seleccion destino y ubicacion    " HorizontalAlignment="Left" FontWeight="bold" />
+                            <Separator Margin="5,0,0,0"/>
+                            <StackPanel x:Uid="Stack_Panel1" Name="Stack_Panel1" Width="auto" Orientation="Horizontal" Margin="4,3,4,3">
+                                <TextBlock x:Uid="Text_block1" Name="Text_block1" Width="100" Text="Bodega Origen" VerticalAlignment="Center" 
+                                           FontWeight="Bold" />
+                                <ComboBox x:Uid="cb_LocationFrom" Name="cb_LocationFrom" Width="150" ItemsSource="{Binding Path=LocationFromList}" DisplayMemberPath="Name" SelectedValue="LocationID" SelectionChanged="cb_LocationFrom_SelectionChanged" />
+                            </StackPanel>
+                            <StackPanel x:Uid="Stack_Panel2" Name="Stack_Panel2" Width="auto" Orientation="Horizontal" Margin="4,3,4,3">
+                                <TextBlock x:Uid="Text_block2" Name="Text_block2" Width="100" Text="Ubicacion Origen" VerticalAlignment="Center"  />
+                                <ComboBox x:Uid="cb_BinFrom" Name="cb_BinFrom" Width="150" ItemsSource="{Binding Path=BinFromList}" DisplayMemberPath="BinCode" SelectedValue="BinID" SelectionChanged="cb_BinFrom_SelectionChanged" />
+                            </StackPanel>
+                            <StackPanel x:Uid="Stack_Panel3" Name="Stack_Panel3" Width="auto" Orientation="Horizontal" Margin="4,3,4,3">
+                                <TextBlock x:Uid="Text_block3" Name="Text_block3" Width="100" Text="Bodega Destino" VerticalAlignment="Center"
+                                           FontWeight="Bold" />
+                                <ComboBox x:Uid="cb_LocationTo" Name="cb_LocationTo" Width="150" ItemsSource="{Binding Path=LocationToList}" DisplayMemberPath="Name" SelectedValue="LocationID" SelectionChanged="cb_LocationTo_SelectionChanged"  />
+                            </StackPanel>
+                            <StackPanel x:Uid="Stack_Panel4" Name="Stack_Panel4" Width="auto" Orientation="Horizontal" Margin="4,3,4,3">
+                                <TextBlock x:Uid="Text_block4" Name="Text_block4" Width="100" Text="Ubicacion Destino" VerticalAlignment="Center"  />
+                                <ComboBox x:Uid="cb_BinTo" Name="cb_BinTo" Width="150" ItemsSource="{Binding Path=BinToList}" DisplayMemberPath="BinTo.BinCode" SelectedValue="BinTo.BinID" SelectionChanged="cb_BinTo_SelectionChanged" />
+                            </StackPanel>
+                            <!--Nuevo StackPanel "Checkboxes".-->
+                            <StackPanel x:Uid="Stack_5" x:Name="Stack_5" Width="auto" Orientation="Horizontal" Margin="4,3,4,3" Visibility="Collapsed">
+                                <!--<TextBlock Text="Serializable:" x:Uid="textblock" Width="100"/>-->
+                                <!--<ComboBox x:Uid="cb_Serializable" x:Name="cb_Serializable" Width="150">
+                                        <ComboBoxItem>Serializable</ComboBoxItem>
+                                        <ComboBoxItem>No Serializable</ComboBoxItem>
+                                    </ComboBox>-->
+                                <RadioButton x:Uid="rb_serializable" x:Name="rb_serializable" IsChecked="False" 
+                                                 Content="Serializable                " Checked="rb_serializable_Checked" />
+                                <RadioButton x:Uid="rb_no_serializable" x:Name="rb_no_serializable" IsChecked="False" 
+                                                 Content="No Serializable       " Checked="rb_no_serializable_Checked" />
+                            </StackPanel>
+                            <StackPanel x:Uid="Stack_Panel9" Name="Stack_Panel9" Width="auto" Orientation="Horizontal" Margin="4,3,4,3" HorizontalAlignment="Right" >
+                                <Button x:Uid="btn_cancelar" Name="btn_cancelar" Content="Finalizar" Margin="0,0,5,0" Visibility="Collapsed" Click="btn_cancelar_Click" />
+                                <Button x:Uid="btn_nuevo" Name="btn_nuevo" Content="Nuevo" Margin="0,0,5,0" Click="btn_nuevo_Click" Visibility="Collapsed" />
+                                <Button x:Uid="btn_confirmar" Name="btn_confirmar" Content="Continuar" Click="btn_confirmar_Click"  />
+                            </StackPanel>
+                        </StackPanel>
+                    </Border>
+                    <odc:OdcExpander x:Uid="expHeader" x:Name="expHeader" Header="Opciones de Traslado" Margin="5,0,8,0" Visibility="Collapsed" Background="White"  
+                        Width="350" ShowEllipse="False" Expanded="expLabel_Expanded" Collapsed="expLabel_Collapsed">
+                    </odc:OdcExpander>
+                    <odc:OdcExpander x:Uid="expDetail" x:Name="expDetail" Header="Documento de Traslado" Margin="5,0,8,0" Background="White"  
+                               ShowEllipse="False" Expanded="expLabel_Expanded" Collapsed="expLabel_Collapsed" IsEnabled="False"
+                                     Visibility="Collapsed" >
+                        <Border x:Uid="Border_Header" Name="Border_Header" Style="{DynamicResource UserControlFormInnerBorder}" Margin="3" HorizontalAlignment="Left">
+                            <StackPanel x:Uid="Stack_Panel12" Margin="5" Width="auto" HorizontalAlignment="Center" Orientation="Vertical">
+                                <StackPanel x:Uid="Stack_Panel2" Name="Stack_Panel22" Width="auto" Orientation="Horizontal" Margin="4,3,4,3">
+                                    <TextBlock x:Uid="Text_block22" Name="Text_block22" Width="100" Text="Doc. Referencia" VerticalAlignment="Center" Margin="4,0,6,0" />
+                                    <TextBox x:Uid="tb_Referencia" Name="tb_Referencia" Width="180" Height="23" VerticalAlignment="Center" Text="{Binding Path=HeaderDocument.Reference}" />
+                                </StackPanel>
+                                <StackPanel x:Uid="Stack_Panel_Header" Name="Stack_Panel_Header" Margin="5" Width="auto" HorizontalAlignment="Center" Orientation="Vertical">
+                                    <!-- Aca van los campos para la creacion del documento -->
+                                </StackPanel>
+                                <StackPanel x:Uid="Stack_Panel26" Name="Stack_Panel26" Width="290" Orientation="Vertical" Margin="4,3,4,3" HorizontalAlignment="Center">
+                                    <StackPanel Orientation="Horizontal" Width="auto">
+                                        <TextBlock x:Uid="Text_block26" Name="Text_block26" Width="175" Text="Comentarios" HorizontalAlignment="Left" Margin="4,0,6,5" />
+                                        <CheckBox x:Uid="chb_ComentariosSeriales" Name="chb_ComentariosSeriales" Content="Asignar A Seriales" HorizontalAlignment="Right" IsChecked="{Binding Path=IsCheckedCommentsSerial}" />
+                                    </StackPanel>
+                                    <TextBox x:Uid="tb_Comentarios" Name="tb_Comentarios" Width="290" Height="50" HorizontalAlignment="Left" AcceptsReturn="True" TextWrapping="Wrap" Text="{Binding Path=HeaderDocument.Comment}" />
+                                </StackPanel>
+                            </StackPanel>
+                        </Border>
+                    </odc:OdcExpander>
+                </StackPanel>
+                <StackPanel x:Uid="Stack_Panel_Details" Name="Stack_Panel_Details" Orientation="Vertical" Margin="3" HorizontalAlignment="Center" Width="auto" Height="auto" >
+                    <Border x:Uid="Border_1" x:Name="Border_Detail" Style="{DynamicResource UserControlFormInnerBorder}" Margin="3" HorizontalAlignment="Center" Visibility="Collapsed">
+                        <!--AQUI-->
+                        <!---->
+                		<!---->
+                        <StackPanel x:Name="Stack_DetailSerial" Orientation="Vertical" Margin="3" HorizontalAlignment="Center" >
+                            <TextBlock Text="2. Seleccion de items a mover    " HorizontalAlignment="Left" FontWeight="bold" />
+                            <Separator Margin="5,0,0,0"/>
+                            <StackPanel x:Uid="Stack_SerialGroup" x:Name="Stack_SerialGroup" Orientation="Horizontal" Margin="0,4,0,0">
+                                <StackPanel x:Uid="Stack_Serial1" x:Name="Stack_Serial1" Orientation="Vertical" Margin="4,0,4,0" Visibility="Collapsed" >
+                                    <TextBlock x:Uid="txt_Serial1" x:Name="txt_Serial1" />
+                                    <TextBox x:Uid="tb_Serial1" x:Name="tb_Serial1" Width="100" Margin="0,4,0,0"  KeyDown="tb_Serial1_KeyDown" />
+                                </StackPanel>
+                                <StackPanel x:Uid="Stack_Serial2" x:Name="Stack_Serial2" Orientation="Vertical" Margin="4,0,4,0" Visibility="Collapsed" >
+                                    <TextBlock x:Uid="txt_Serial2" x:Name="txt_Serial2" />
+                                    <TextBox x:Uid="tb_Serial2" x:Name="tb_Serial2" Margin="0,4,0,0" Width="100" KeyDown="tb_Serial2_KeyDown" />
+                                </StackPanel>
+                                <StackPanel x:Uid="Stack_Serial3" x:Name="Stack_Serial3" Orientation="Vertical" Margin="4,0,4,0" Visibility="Collapsed" >
+                                    <TextBlock x:Uid="txt_Serial3" x:Name="txt_Serial3" />
+                                    <TextBox x:Uid="tb_Serial3" x:Name="tb_Serial3" Margin="0,4,0,0"  Width="100" KeyDown="tb_Serial3_KeyDown" />
+                                </StackPanel>
+                                <!--Nuevo stackpanel "Productos"-->
+                                <StackPanel x:Uid="Stack_Product" x:Name="Stack_Product" Orientation="Vertical"  Margin="4,0,4,0" Visibility="Collapsed">
+                                    <TextBlock x:Uid="txt_Product" x:Name="txt_Product" Text="Producto"/>
+                                    <uc:SearchProduct x:Uid="sp_Product" x:Name="sp_Product" OnLoadRecord="sp_Product_OnLoadRecord" Margin="0,3,0,0" />
+                                </StackPanel>
+
+                                <!--Nuevo stackpanel "Cantidad".-->
+                                <StackPanel x:Uid="Stack_Cantidad" x:Name="Stack_Cantidad" Orientation="Vertical" Margin="4,0,4,0" Visibility="Collapsed" >
+                                    <TextBlock x:Uid="textblock_cantidad" x:Name="textblock_cantidad" Text="Cantidad" />
+                                    <TextBox x:Uid="tb_Cantidad" x:Name="tb_Cantidad" Margin="0,4,0,0"  Width="100" KeyDown="tb_Serial3_KeyDown" />
+                                </StackPanel>
+                                <StackPanel x:Uid="Stack_UploadFile" x:Name="Stack_UploadFile" Orientation="Vertical" Margin="4,0,4,0">
+                                    <TextBlock x:Uid="txt_UploadFile" Margin="5,0,0,0" x:Name="txt_UploadFile" Text="Cargar Archivo"  />
+                                    <uc:UploadFile x:Uid="fUpload" Margin="5,0,0,0" x:Name="fUpload" OnFileUpload="fUpload_OnFileUpload"/>
+                                </StackPanel>
+                            </StackPanel>
+                            <!--k-->
+                            <StackPanel x:Uid="Stack_Adicionales" x:Name="Stack_Adicionales" Orientation="Vertical" Margin="0,10,0,0" HorizontalAlignment="Left" >
+                                <CheckBox Checked="chkRep_Checked" x:Name="chkRep" Content="Replicar información de la primera línea." />
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock x:Uid="textblock_recuento" Text="Registros Cargados: " FontWeight="Bold" Margin="0,0,8,4" />
+                                    <TextBlock x:Uid="textblock_recuento" x:Name="textblock_recuento" Text="{Binding ListRecords.Count}" FontWeight="Bold" Margin="0,0,8,4" />
+                                    <TextBlock x:Uid="textblock_recuento" Text="Registros No Cargados: " FontWeight="Bold" Margin="0,0,8,4" Visibility="Collapsed" />
+                                    <TextBlock x:Uid="txt_RegistrosNoCargados" x:Name="txt_RegistrosNoCargados" FontWeight="Bold" Margin="0,0,8,4" Visibility="Collapsed" />
+                                </StackPanel>
+
+                                <!--Nuevo control para mostrar la cantidad de registros de la grilla "lvDocumentMaster".-->
+                                <!--<TextBlock x:Uid="textblock_recuento" x:Name="textblock_recuento" FontWeight="Bold" Margin="0,0,8,4" />-->
+
+
+                                <ListView x:Uid="lvDocumentMaster" ItemsSource="{Binding ListRecords}" Margin="0,6,0,0"  MaxHeight="400" x:Name="lvDocumentMaster"  >
+                                    <ListView.View>
+                                        <GridView x:Uid="GridViewDetails" x:Name="GridViewDetails">
+                                            <!-- Aca se adicionan los datos para cada serial de manera dinamica -->
+                                        </GridView>
+                                    </ListView.View>
+                                </ListView>
+                                <StackPanel x:Uid="Stack_Button" x:Name="Stack_Button"  Margin="0,10,0,0" Orientation="Horizontal" HorizontalAlignment="Left" >
+                                    <Button x:Uid="Btn_Guardar" x:Name="Btn_Guardar" Width="70" Content="Guardar" Click="Btn_Guardar_Click" />
+                                    <Button x:Name="Btn_GuardarProductosCantidad" x:Uid="Btn_GuardarProductosCantidad" Content="Guardar" Visibility="Collapsed"/>
+                                    <Button x:Uid="Btn_Copiar" x:Name="Btn_Copiar" Width="150" Margin="10,0,0,0" 
+                    					Content="Copiar Ultimos Registros" IsEnabled="False" Click="Btn_Copiar_Click"/>
+                                </StackPanel>
+                                <StackPanel Height="Auto" Width="Auto" Orientation="Vertical"  HorizontalAlignment="Left">
+                                    <TextBlock HorizontalAlignment="Left" FontWeight="bold"  ><Span Language="en-us"><Run Text="Opciones de imprecion "/></Span></TextBlock>
+                                    <Separator Margin="5,0,0,0"/>
+                                    <WrapPanel Height="34">
+                                        <TextBlock x:Uid="txt_UploadFile" Margin="5,6,0,0" x:Name="Lbl_Etiq_Impre1" FontSize="12.5" HorizontalAlignment="Center" VerticalAlignment="Center" Height="22" Background="Transparent"  ><Run Text="Tipo de etiqueta:"/><LineBreak/><Run/></TextBlock>
+                                        <ComboBox x:Name="Cbx_Etiqueta1" ItemsSource="{Binding ListadoEtiquetas}" DisplayMemberPath="Name" SelectedItem="Code2"  Width="133" SelectionChanged="Cbx_Etiqueta_SelectedValue" Margin="10,5,0,0"/>
+                                    </WrapPanel>
+                                </StackPanel>
+                                <Separator Margin="5,0,0,0"/>
+                                <WrapPanel Height="Auto" Width="Auto" Orientation="Horizontal" HorizontalAlignment="Left">
+                                    <Button x:Name="Btn1_Impresiora_1" Content="Impresora 1" Width="75" Margin="6,6,0,0" Click="Click_Btn1_Impresiora_1" />
+                                    <Button x:Name="Btn1_Impresiora_2" Content="Impresora 2" Width="75" Margin="6,6,0,0" Click="Click_Btn2_Impresiora_2" />
+                                </WrapPanel>
+                            </StackPanel>
+                        </StackPanel>
+                    </Border>
+                </StackPanel>
+                <StackPanel  Orientation="Vertical" Margin="3" HorizontalAlignment="Center" Width="auto" Height="auto"/>
+            </StackPanel>
+        </DockPanel>
+    </AdornerDecorator>
+</WMCore:UserControlBase>
