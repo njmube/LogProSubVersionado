@@ -237,7 +237,10 @@
                                         <TextBlock x:Uid="Text_block2" Width="150" Text="Ubicacion" VerticalAlignment="Center" Margin="4,0,6,0" />
                                         <ComboBox x:Uid="cb_UbicacionDesp" Name="cb_UbicacionDesp" Width="180" Height="23" ItemsSource="{Binding Path=ListadoPosiciones}" SelectedValue="Code" DisplayMemberPath="Name" />
                                     </StackPanel>
-                                   
+                                    <!--<StackPanel x:Uid="Stack_Panel2" Width="auto" Orientation="Horizontal" Margin="4,3,4,3">
+                                        <TextBlock x:Uid="Text_block2" Width="150" Text="Estado" VerticalAlignment="Center" Margin="4,0,6,0" />
+                                        <ComboBox x:Uid="cb_EstadoPallet" Name="cb_EstadoPallet" Width="180" Height="23" ItemsSource="{Binding Path=ListadoEstadosPallet}" SelectedValue="Code" DisplayMemberPath="Name" />
+                                    </StackPanel>-->
                                     <StackPanel x:Uid="Stack_Panel_2" Name="Stack_Panel_2" Width="auto" Orientation="Horizontal" Margin="4,3,4,3" HorizontalAlignment="Right" >
                                         <Button x:Uid="btn_imprimir" Name="btn_imprimir" Content="Imprimir" Click="btn_imprimir_Click_1" Margin="0,0,5,0" />
                                         <Button x:Uid="btn_confirmar_2" Name="btn_confirm" Content="Empacar" Click="btn_confirmar_Click_1" />

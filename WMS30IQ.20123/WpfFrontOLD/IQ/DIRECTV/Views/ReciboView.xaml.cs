@@ -167,12 +167,12 @@ namespace WpfFront.Views
             //Evaluo si la tecla es un Enter
             if (e.Key == Key.Enter)
             {
-                //if (tb_Serial1.Text.Length < 14 || tb_Serial1.Text.Length > 14)
-                //{
-                //    Util.ShowError("El serial debe contener 14 digitos!");
-                //    tb_Serial1.Text = "";
-                //    return;
-                //}
+                if (tb_Serial1.Text.Length < 14 || tb_Serial1.Text.Length > 14)
+                {
+                    Util.ShowError("El serial debe contener 14 digitos!");
+                    tb_Serial1.Text = "";
+                    return;
+                }
 
                 if (tb_Serial1.Text.ToString().Contains("o") || tb_Serial1.Text.ToString().Contains("O"))
                 {
@@ -193,14 +193,14 @@ namespace WpfFront.Views
             //Evaluo si la tecla es un Enter
             if (e.Key == Key.Enter)
             {
-                //if (tb_Serial2.Text.Length < 12 || tb_Serial2.Text.Length > 12)
-                //{
-                //    Util.ShowError("El serial debe contener 12 digitos!");
-                //    tb_Serial1.Text = "";
-                //    tb_Serial2.Text = "";
-                //    GetSerial1.Focus();
-                //    return;
-                //}
+                if (tb_Serial2.Text.Length < 12 || tb_Serial2.Text.Length > 12)
+                {
+                    Util.ShowError("El serial debe contener 12 digitos!");
+                    tb_Serial1.Text = "";
+                    tb_Serial2.Text = "";
+                    GetSerial1.Focus();
+                    return;
+                }
 
                 if (tb_Serial2.Text.ToString().Contains("o") || tb_Serial2.Text.ToString().Contains("O"))
                 {
@@ -224,27 +224,27 @@ namespace WpfFront.Views
             //Evaluo si la tecla es un Enter
             if (e.Key == Key.Enter)
             {
-                //if (tb_Serial3.Text != "" && tb_Serial3.Text != null)
-                //{
-                //    if (tb_Serial3.Text.Length < 12 || tb_Serial3.Text.Length > 12)
-                //    {
+                if (tb_Serial3.Text != "" && tb_Serial3.Text != null)
+                {
+                    if (tb_Serial3.Text.Length < 12 || tb_Serial3.Text.Length > 12)
+                    {
 
-                //        Util.ShowError("La Smart Card debe contener 12 digitos!");
-                //        tb_Serial1.Text = "";
-                //        tb_Serial2.Text = "";
-                //        tb_Serial3.Text = "";
-                //        GetSerial1.Focus();
-                //        return;
-                //    }
-                //    else
-                //    {
-                //        AddLine(sender, e);
-                //    }
-                //}
-                //else { 
+                        Util.ShowError("La Smart Card debe contener 12 digitos!");
+                        tb_Serial1.Text = "";
+                        tb_Serial2.Text = "";
+                        tb_Serial3.Text = "";
+                        GetSerial1.Focus();
+                        return;
+                    }
+                    else
+                    {
+                        AddLine(sender, e);
+                    }
+                }
+                else { 
                     //Adiciono el registro al listado
                     AddLine(sender, e);
-                //}
+                }
                 
             }
         }

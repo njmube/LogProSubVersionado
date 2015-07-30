@@ -347,6 +347,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="IQ\DIRECTV\Views\NovedadesDTVView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="IQ\DIRECTV\Views\ReciboView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -356,6 +360,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="IQ\DIRECTV\Views\SmartCardDTVViewP.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="IQ\DIRECTV\Views\SmartCardProdDTVView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -1044,10 +1052,20 @@
       <SubType>Designer</SubType>
     </Page>
     <Compile Include="Common\RawPrinterHelper.cs" />
+    <Compile Include="IQ\DIRECTV\Models\NovedadesDTVModel.cs" />
+    <Compile Include="IQ\DIRECTV\Models\SmartCardProdDTVModel.cs" />
     <Compile Include="IQ\DIRECTV\Presenters\ConfirmacionIntermediaPresenterP.cs" />
     <Compile Include="IQ\DIRECTV\Models\ConfirmacionIntermediaModelP.cs" />
+    <Compile Include="IQ\DIRECTV\Presenters\NovedadesDTVPresenter.cs" />
+    <Compile Include="IQ\DIRECTV\Presenters\SmartCardProdDTVPresenter.cs" />
     <Compile Include="IQ\DIRECTV\Views\ConfirmacionIntermediaViewP.xaml.cs">
       <DependentUpon>ConfirmacionIntermediaViewP.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="IQ\DIRECTV\Views\NovedadesDTVView.xaml.cs">
+      <DependentUpon>NovedadesDTVView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="IQ\DIRECTV\Views\SmartCardProdDTVView.xaml.cs">
+      <DependentUpon>SmartCardProdDTVView.xaml</DependentUpon>
     </Compile>
     <Compile Include="IQ\Models\ActualizacionRRModel.cs" />
     <Compile Include="IQ\Models\ListViewData.cs" />
@@ -2405,6 +2423,12 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\Icons\48x48\novedad.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Icons\48x48\smartcard2.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Icons\48x48\novedad_48x48.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

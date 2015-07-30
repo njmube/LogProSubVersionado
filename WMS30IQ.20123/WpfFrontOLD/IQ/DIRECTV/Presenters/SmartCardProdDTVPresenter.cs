@@ -22,16 +22,16 @@ using System.Windows.Data;
 namespace WpfFront.Presenters
 {
 
-    public interface ISmartCardDTVPresenterP
+    public interface ISmartCardProdDTVPresenter
     {
-        ISmartCardDTVViewP View { get; set; }
+        ISmartCardProdDTVView View { get; set; }
         ToolWindow Window { get; set; }
     }
 
 
-    public class SmartCardDTVPresenterP : ISmartCardDTVPresenterP
+    public class SmartCardProdDTVPresenter : ISmartCardProdDTVPresenter
     {
-        public ISmartCardDTVViewP View { get; set; }
+        public ISmartCardProdDTVView View { get; set; }
         private readonly IUnityContainer container;
         private readonly WMSServiceClient service;
         public ToolWindow Window { get; set; }
@@ -40,19 +40,19 @@ namespace WpfFront.Presenters
         public Connection Local;
         public int offset = 1; //# columnas que no se debe replicar porque son fijas.
 
-        public SmartCardDTVPresenterP(IUnityContainer container, ISmartCardDTVViewP view)
+        public SmartCardProdDTVPresenter(IUnityContainer container, ISmartCardProdDTVView view)
         {
             View = view;
             this.container = container;
             this.service = new WMSServiceClient();
-            View.Model = this.container.Resolve<SmartCardDTVModelP>();
+            View.Model = this.container.Resolve<SmartCardProdDTVModel>();
 
             #region Metodos
 
             View.ConfirmBasicData += new EventHandler<EventArgs>(this.OnConfirmBasicData);
             //View.EvaluarTipoProducto += new EventHandler<DataEventArgs<Product>>(this.OnEvaluarTipoProducto);
-            View.AddLine += new EventHandler<EventArgs>(this.OnAddLine);
-            //View.AddLineReciclaje += new EventHandler<EventArgs>(this.OnAddLineReciclaje);
+            //View.AddLine += new EventHandler<EventArgs>(this.OnAddLine);
+            View.AddLineReciclaje += new EventHandler<EventArgs>(this.OnAddLineReciclaje);
             view.CargaMasiva += new EventHandler<DataEventArgs<DataTable>>(this.OnCargaMasiva);
             View.ReplicateDetails += new EventHandler<EventArgs>(this.OnReplicateDetails);
             View.SaveDetails += new EventHandler<EventArgs>(this.OnSaveDetails);
@@ -64,8 +64,8 @@ namespace WpfFront.Presenters
             View.ActualizarRegistrosRecibo += this.OnActualizarRegistrosRecibo;
             View.ConfirmarRecibo += this.OnConfirmarRecibo;
             //View.FilaSeleccionada += this.OnFilaSeleccionada;
-            View.ReplicateDetailsBy_Column += new EventHandler<RoutedEventArgs>(this.OnReplicateDetailsBy_Column);
-            //View.ReplicateDetailsBy_ColumnRec += new EventHandler<RoutedEventArgs>(this.OnReplicateDetailsBy_ColumnRec);
+            //View.ReplicateDetailsBy_Column += new EventHandler<RoutedEventArgs>(this.OnReplicateDetailsBy_Column);
+            View.ReplicateDetailsBy_ColumnRec += new EventHandler<RoutedEventArgs>(this.OnReplicateDetailsBy_ColumnRec);
             View.ExportCargue += new EventHandler<EventArgs>(this.OnExportCargue);
             View.ExportCargueAsig += new EventHandler<EventArgs>(this.OnExportCargueAsig);
             View.LoadSmartAsig += new EventHandler<EventArgs>(this.OnLoadSmartAsig);
@@ -91,7 +91,7 @@ namespace WpfFront.Presenters
             View.Model.ListUbicacionesDestino = table;
             View.Model.ListadoPosiciones = service.GetMMaster(new MMaster { MetaType = new MType { Code = "POSICION1" } });
             /*Andres Leonardo Arevalo - 10 de febrero 2015 - Inicializando combobox de la vista SmartCard*/
-             //view.Model.ListUbicacionesDestino = new List<string>() { "Buen estado", "BR", "CT", "CM", "AD" };
+            //view.Model.ListUbicacionesDestino = new List<string>() { "Buen estado", "BR", "CT", "CM", "AD" };
             /*Andres Leonardo Arevalo - 10 de febrero 2015 - Inicializando combobox de la vista SmartCard*/
 
             View.Model.ListEstados = service.GetMMaster(new MMaster { MetaType = new MType { Code = "ESTADOSMAR" } });
@@ -130,7 +130,7 @@ namespace WpfFront.Presenters
                     View.GetFiltroEstado.Text = "";
                 }
             }
-            
+
 
         }
 
@@ -180,83 +180,83 @@ namespace WpfFront.Presenters
             Assembly assembly;
             string TipoDato;
 
-            #region Columna Estado Material.
+            //#region Columna Estado Material.
 
-            IList<MMaster> ListadoFalla = service.GetMMaster(new MMaster { MetaType = new MType { Code = "ESTADOSMAR" } });
+            //IList<MMaster> ListadoFalla = service.GetMMaster(new MMaster { MetaType = new MType { Code = "ESTADOSMAR" } });
 
-            Columna = new GridViewColumn();
-            assembly = Assembly.GetAssembly(Type.GetType("System.Windows.Controls.ComboBox, PresentationFramework, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35"));
-            TipoDato = "System.Windows.Controls.ComboBox";
+            //Columna = new GridViewColumn();
+            //assembly = Assembly.GetAssembly(Type.GetType("System.Windows.Controls.ComboBox, PresentationFramework, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35"));
+            //TipoDato = "System.Windows.Controls.ComboBox";
 
-            Columna.Header = "Estado";
+            //Columna.Header = "Estado";
 
-            Txt = new FrameworkElementFactory(assembly.GetType(TipoDato));
-            Txt.SetValue(ComboBox.ItemsSourceProperty, ListadoFalla);
-            Txt.SetValue(ComboBox.DisplayMemberPathProperty, "Name");
-            Txt.SetValue(ComboBox.SelectedValuePathProperty, "Code");
-            Txt.SetBinding(ComboBox.SelectedValueProperty, new System.Windows.Data.Binding("ESTADO_MATERIAL"));
-            Txt.SetValue(ComboBox.WidthProperty, (double)110);
+            //Txt = new FrameworkElementFactory(assembly.GetType(TipoDato));
+            //Txt.SetValue(ComboBox.ItemsSourceProperty, ListadoFalla);
+            //Txt.SetValue(ComboBox.DisplayMemberPathProperty, "Name");
+            //Txt.SetValue(ComboBox.SelectedValuePathProperty, "Code");
+            //Txt.SetBinding(ComboBox.SelectedValueProperty, new System.Windows.Data.Binding("ESTADO_MATERIAL"));
+            //Txt.SetValue(ComboBox.WidthProperty, (double)110);
 
-             //add textbox template
-            Columna.CellTemplate = new DataTemplate();
-            Columna.CellTemplate.VisualTree = Txt;
+            ////add textbox template
+            //Columna.CellTemplate = new DataTemplate();
+            //Columna.CellTemplate.VisualTree = Txt;
 
-            View.ListadoEquipos.Columns.Add(Columna); //Creacion de la columna en el GridView
-            View.Model.ListRecords.Columns.Add("ESTADO_MATERIAL", typeof(String)); //Creacion de la columna en el DataTable
+            //View.ListadoEquipos.Columns.Add(Columna); //Creacion de la columna en el GridView
+            //View.Model.ListRecords.Columns.Add("ESTADO_MATERIAL", typeof(String)); //Creacion de la columna en el DataTable
 
-            #endregion
+            //#endregion
 
-            #region Columna Modelo
+            //#region Columna Modelo
 
-            IList<MMaster> ListadoModelo = service.GetMMaster(new MMaster { MetaType = new MType { Code = "SMARTMODEL" } });
+            //IList<MMaster> ListadoModelo = service.GetMMaster(new MMaster { MetaType = new MType { Code = "SMARTMODEL" } });
 
-            Columna = new GridViewColumn();
-            assembly = Assembly.GetAssembly(Type.GetType("System.Windows.Controls.ComboBox, PresentationFramework, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35"));
-            TipoDato = "System.Windows.Controls.ComboBox";
+            //Columna = new GridViewColumn();
+            //assembly = Assembly.GetAssembly(Type.GetType("System.Windows.Controls.ComboBox, PresentationFramework, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35"));
+            //TipoDato = "System.Windows.Controls.ComboBox";
 
-            Columna.Header = "Modelo";
+            //Columna.Header = "Modelo";
 
-            Txt = new FrameworkElementFactory(assembly.GetType(TipoDato));
-            Txt.SetValue(ComboBox.ItemsSourceProperty, ListadoModelo);
-            Txt.SetValue(ComboBox.DisplayMemberPathProperty, "Name");
-            Txt.SetValue(ComboBox.SelectedValuePathProperty, "Code");
-            Txt.SetBinding(ComboBox.SelectedValueProperty, new System.Windows.Data.Binding("Modelo"));
-            Txt.SetValue(ComboBox.WidthProperty, (double)110);
+            //Txt = new FrameworkElementFactory(assembly.GetType(TipoDato));
+            //Txt.SetValue(ComboBox.ItemsSourceProperty, ListadoModelo);
+            //Txt.SetValue(ComboBox.DisplayMemberPathProperty, "Name");
+            //Txt.SetValue(ComboBox.SelectedValuePathProperty, "Code");
+            //Txt.SetBinding(ComboBox.SelectedValueProperty, new System.Windows.Data.Binding("Modelo"));
+            //Txt.SetValue(ComboBox.WidthProperty, (double)110);
 
-            //add textbox template
-            Columna.CellTemplate = new DataTemplate();
-            Columna.CellTemplate.VisualTree = Txt;
+            ////add textbox template
+            //Columna.CellTemplate = new DataTemplate();
+            //Columna.CellTemplate.VisualTree = Txt;
 
-            View.ListadoEquipos.Columns.Add(Columna); //Creacion de la columna en el GridView
-            View.Model.ListRecords.Columns.Add("Modelo", typeof(String)); //Creacion de la columna en el DataTable
+            //View.ListadoEquipos.Columns.Add(Columna); //Creacion de la columna en el GridView
+            //View.Model.ListRecords.Columns.Add("Modelo", typeof(String)); //Creacion de la columna en el DataTable
 
-            #endregion
+            //#endregion
 
-            #region Columna Origon Material.
+            //#region Columna Origon Material.
 
-            IList<MMaster> ListadoOrigen = service.GetMMaster(new MMaster { MetaType = new MType { Code = "ORIGENSMAR" } });
+            //IList<MMaster> ListadoOrigen = service.GetMMaster(new MMaster { MetaType = new MType { Code = "ORIGENSMAR" } });
 
-            Columna = new GridViewColumn();
-            assembly = Assembly.GetAssembly(Type.GetType("System.Windows.Controls.ComboBox, PresentationFramework, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35"));
-            TipoDato = "System.Windows.Controls.ComboBox";
+            //Columna = new GridViewColumn();
+            //assembly = Assembly.GetAssembly(Type.GetType("System.Windows.Controls.ComboBox, PresentationFramework, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35"));
+            //TipoDato = "System.Windows.Controls.ComboBox";
 
-            Columna.Header = "Origen";
+            //Columna.Header = "Origen";
 
-            Txt = new FrameworkElementFactory(assembly.GetType(TipoDato));
-            Txt.SetValue(ComboBox.ItemsSourceProperty, ListadoOrigen);
-            Txt.SetValue(ComboBox.DisplayMemberPathProperty, "Name");
-            Txt.SetValue(ComboBox.SelectedValuePathProperty, "Code");
-            Txt.SetBinding(ComboBox.SelectedValueProperty, new System.Windows.Data.Binding("ORIGEN_SMARTCARD"));
-            Txt.SetValue(ComboBox.WidthProperty, (double)110);
+            //Txt = new FrameworkElementFactory(assembly.GetType(TipoDato));
+            //Txt.SetValue(ComboBox.ItemsSourceProperty, ListadoOrigen);
+            //Txt.SetValue(ComboBox.DisplayMemberPathProperty, "Name");
+            //Txt.SetValue(ComboBox.SelectedValuePathProperty, "Code");
+            //Txt.SetBinding(ComboBox.SelectedValueProperty, new System.Windows.Data.Binding("ORIGEN_SMARTCARD"));
+            //Txt.SetValue(ComboBox.WidthProperty, (double)110);
 
-            //add textbox template
-            Columna.CellTemplate = new DataTemplate();
-            Columna.CellTemplate.VisualTree = Txt;
+            ////add textbox template
+            //Columna.CellTemplate = new DataTemplate();
+            //Columna.CellTemplate.VisualTree = Txt;
 
-            View.ListadoEquipos.Columns.Add(Columna); //Creacion de la columna en el GridView
-            View.Model.ListRecords.Columns.Add("ORIGEN_SMARTCARD", typeof(String)); //Creacion de la columna en el DataTable
+            //View.ListadoEquipos.Columns.Add(Columna); //Creacion de la columna en el GridView
+            //View.Model.ListRecords.Columns.Add("ORIGEN_SMARTCARD", typeof(String)); //Creacion de la columna en el DataTable
 
-            #endregion
+            //#endregion
 
             //#region Columna Fecha Ingreso
 
@@ -275,31 +275,31 @@ namespace WpfFront.Presenters
             //View.Model.ListRecords.Columns.Add("FECHA_INGRESO", typeof(String)); //Creacion de la columna en el DataTable
             //#endregion
 
-            //#region Columna Estado Material Reciclaje.
+            #region Columna Estado Material Reciclaje.
 
-            //IList<MMaster> ListadoFallaReciclaje = service.GetMMaster(new MMaster { MetaType = new MType { Code = "ESTADOSMAR" } });
+            IList<MMaster> ListadoFallaReciclaje = service.GetMMaster(new MMaster { MetaType = new MType { Code = "ESTADOSMAR" } });
 
-            //Columna = new GridViewColumn();
-            //assembly = Assembly.GetAssembly(Type.GetType("System.Windows.Controls.ComboBox, PresentationFramework, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35"));
-            //TipoDato = "System.Windows.Controls.ComboBox";
+            Columna = new GridViewColumn();
+            assembly = Assembly.GetAssembly(Type.GetType("System.Windows.Controls.ComboBox, PresentationFramework, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35"));
+            TipoDato = "System.Windows.Controls.ComboBox";
 
-            //Columna.Header = "Estado";
+            Columna.Header = "Estado";
 
-            //Txt = new FrameworkElementFactory(assembly.GetType(TipoDato));
-            //Txt.SetValue(ComboBox.ItemsSourceProperty, ListadoFallaReciclaje);
-            //Txt.SetValue(ComboBox.DisplayMemberPathProperty, "Name");
-            //Txt.SetValue(ComboBox.SelectedValuePathProperty, "Code");
-            //Txt.SetBinding(ComboBox.SelectedValueProperty, new System.Windows.Data.Binding("ESTADO_MATERIAL"));
-            //Txt.SetValue(ComboBox.WidthProperty, (double)110);
+            Txt = new FrameworkElementFactory(assembly.GetType(TipoDato));
+            Txt.SetValue(ComboBox.ItemsSourceProperty, ListadoFallaReciclaje);
+            Txt.SetValue(ComboBox.DisplayMemberPathProperty, "Name");
+            Txt.SetValue(ComboBox.SelectedValuePathProperty, "Code");
+            Txt.SetBinding(ComboBox.SelectedValueProperty, new System.Windows.Data.Binding("ESTADO_MATERIAL"));
+            Txt.SetValue(ComboBox.WidthProperty, (double)110);
 
-            ////add textbox template
-            //Columna.CellTemplate = new DataTemplate();
-            //Columna.CellTemplate.VisualTree = Txt;
+            //add textbox template
+            Columna.CellTemplate = new DataTemplate();
+            Columna.CellTemplate.VisualTree = Txt;
 
-            //View.ListadoEquiposReciclaje.Columns.Add(Columna); //Creacion de la columna en el GridView
-            //View.Model.ListRecordsReciclaje.Columns.Add("ESTADO_MATERIAL", typeof(String)); //Creacion de la columna en el DataTable
+            View.ListadoEquiposReciclaje.Columns.Add(Columna); //Creacion de la columna en el GridView
+            View.Model.ListRecordsReciclaje.Columns.Add("ESTADO_MATERIAL", typeof(String)); //Creacion de la columna en el DataTable
 
-            //#endregion
+            #endregion
         }
 
         //Recibo
@@ -376,66 +376,66 @@ namespace WpfFront.Presenters
         }
 
 
-        private void OnAddLine(object sender, EventArgs e)
-        {
-            // Andres Leonardo Arevalo - 09 feb 2015
-          
-            //Variables Auxiliares
+        //private void OnAddLine(object sender, EventArgs e)
+        //{
+        //    // Andres Leonardo Arevalo - 09 feb 2015
 
-            if (View.GetSmartCard1.Text.Length < 12 || View.GetSmartCard1.Text.Length > 12)
-            {
-                Util.ShowError("La Smart Card debe contener 12 digitos");
-                View.GetSmartCard1.Text = "";
-                return;
-            }
+        //    //Variables Auxiliares
 
-            DataRow dr = View.Model.ListRecords.NewRow();
-            String ConsultaBuscar = "";
-            String ConsultaBuscar1 = "";
+        //    if (View.GetSmartCard1.Text.Length < 12 || View.GetSmartCard1.Text.Length > 12)
+        //    {
+        //        Util.ShowError("La Smart Card debe contener 12 digitos");
+        //        View.GetSmartCard1.Text = "";
+        //        return;
+        //    }
 
-            if (String.IsNullOrEmpty(View.GetSmartCard1.Text.ToString()))
-            {
-                Util.ShowError("El campo smart card no puede ser vacio.");
-                return;
-            }
+        //    DataRow dr = View.Model.ListRecords.NewRow();
+        //    String ConsultaBuscar = "";
+        //    String ConsultaBuscar1 = "";
 
-            //Validacion existe o no el equipo en DB
-            ConsultaBuscar = "SELECT SMART_CARD_ENTRADA FROM dbo.EquiposDIRECTVC WHERE SMART_CARD_ENTRADA = UPPER('" + View.GetSmartCard1.Text.ToString() + "')";
-            ConsultaBuscar1 = "SELECT SMART_SERIAL FROM dbo.SmartCardEquiposDIRECTV WHERE SMART_SERIAL = UPPER('" + View.GetSmartCard1.Text.ToString() + "')";
-            
-            DataTable Resultado = service.DirectSQLQuery(ConsultaBuscar, "", "dbo.EquiposDIRECTVC", Local);
-            DataTable Resultado1 = service.DirectSQLQuery(ConsultaBuscar1, "", "dbo.SmartCardEquiposDIRECTV", Local);
+        //    if (String.IsNullOrEmpty(View.GetSmartCard1.Text.ToString()))
+        //    {
+        //        Util.ShowError("El campo smart card no puede ser vacio.");
+        //        return;
+        //    }
 
-            if ((Resultado.Rows.Count == 0) && (Resultado1.Rows.Count == 0))
-            {
-                //Recorro el listado de equipos ingresados al listado para saber que el serial no este ya ingresado
-                foreach (DataRow item in View.Model.ListRecords.Rows)
-                {
-                    if (View.GetSmartCard1.Text == item["SmartCard"].ToString())
-                    {
-                        Util.ShowError("El serial " + View.GetSmartCard1.Text + " ya esta en el listado.");
-                        View.GetSmartCard1.Text = "";
-                        return;
-                    }
-                }
+        //    //Validacion existe o no el equipo en DB
+        //    ConsultaBuscar = "SELECT SMART_CARD_ENTRADA FROM dbo.EquiposDIRECTVC WHERE SMART_CARD_ENTRADA = UPPER('" + View.GetSmartCard1.Text.ToString() + "')";
+        //    ConsultaBuscar1 = "SELECT SMART_SERIAL FROM dbo.SmartCardEquiposDIRECTV WHERE SMART_SERIAL = UPPER('" + View.GetSmartCard1.Text.ToString() + "')";
 
-                //Asigno los campos
-                dr["SmartCard"] = View.GetSmartCard1.Text.ToString();
+        //    DataTable Resultado = service.DirectSQLQuery(ConsultaBuscar, "", "dbo.EquiposDIRECTVC", Local);
+        //    DataTable Resultado1 = service.DirectSQLQuery(ConsultaBuscar1, "", "dbo.SmartCardEquiposDIRECTV", Local);
 
-                //Agrego el registro al listado
-                View.Model.ListRecords.Rows.Add(dr);
+        //    if ((Resultado.Rows.Count == 0) && (Resultado1.Rows.Count == 0))
+        //    {
+        //        //Recorro el listado de equipos ingresados al listado para saber que el serial no este ya ingresado
+        //        foreach (DataRow item in View.Model.ListRecords.Rows)
+        //        {
+        //            if (View.GetSmartCard1.Text == item["SmartCard"].ToString())
+        //            {
+        //                Util.ShowError("El serial " + View.GetSmartCard1.Text + " ya esta en el listado.");
+        //                View.GetSmartCard1.Text = "";
+        //                return;
+        //            }
+        //        }
 
-                //Limpio los seriales para digitar nuevos datos
-                View.GetSmartCard1.Text = "";
-                View.GetSmartCard1.Focus();
-            }
-            else
-            {
-                Util.ShowError("La smart card " + View.GetSmartCard1.Text.ToString() + " ya se encuentra registrada.");
-                View.GetSmartCard1.Text = "";
-                return;
-            }
-        }
+        //        //Asigno los campos
+        //        dr["SmartCard"] = View.GetSmartCard1.Text.ToString();
+
+        //        //Agrego el registro al listado
+        //        View.Model.ListRecords.Rows.Add(dr);
+
+        //        //Limpio los seriales para digitar nuevos datos
+        //        View.GetSmartCard1.Text = "";
+        //        View.GetSmartCard1.Focus();
+        //    }
+        //    else
+        //    {
+        //        Util.ShowError("La smart card " + View.GetSmartCard1.Text.ToString() + " ya se encuentra registrada.");
+        //        View.GetSmartCard1.Text = "";
+        //        return;
+        //    }
+        //}
 
         //private void OnFilaSeleccionada(object sender, SelectionChangedEventArgs e)
         //{
@@ -506,7 +506,7 @@ namespace WpfFront.Presenters
             String ConsultaGuardar = "", Estado = "";
             Int32 ContadorFilas = 0;
 
-            
+
 
             try
             {
@@ -522,7 +522,7 @@ namespace WpfFront.Presenters
                         ConsultaGuardar += "INSERT INTO dbo.SmartCardEquiposDIRECTV(SMART_SERIAL,SMART_ESTADO,SMART_FECHA, ORIGEN_SMARTCARD, SMART_MODELO) VALUES(";
                         ConsultaGuardar = ConsultaGuardar + "'" + DataRow["SmartCard"].ToString() + "','" + DataRow["ESTADO_MATERIAL"].ToString() + "',CONVERT(nvarchar(100), GETDATE(), 120),'" + DataRow["ORIGEN_SMARTCARD"].ToString() + "','" + DataRow["Modelo"].ToString() + "');";
                     }
-                    
+
                 }
 
                 //Evaluo si la consulta no envio los ultimos registros para forzar a enviarlos
@@ -540,7 +540,7 @@ namespace WpfFront.Presenters
                 Util.ShowMessage("Registros guardados satisfactoriamente.");
 
                 //Reinicio los campos
-                
+
                 LimpiarDatosIngresoSeriales();
 
                 return;
@@ -556,7 +556,7 @@ namespace WpfFront.Presenters
         //    //Evaluo que haya sido seleccionado un registro
         //    if (View.ListadoItems.SelectedItems.Count == 0)
         //        return;
-          
+
         //    //Evaluo que haya seleccionado la nueva clasificacion
         //    if (View.SmartCardEstado.SelectedIndex == -1)
         //    {
@@ -566,7 +566,7 @@ namespace WpfFront.Presenters
 
         //    //Coloco la ubicacion
         //    NuevoEstado = ((DataRowView)View.SmartCardEstado.SelectedItem).Row["SmartEstadoAsig"].ToString();
-            
+
         //    foreach (DataRowView item in View.ListadoItems.SelectedItems)
         //    {
         //        //Creo la consulta para cambiar la ubicacion de la estiba
@@ -598,54 +598,54 @@ namespace WpfFront.Presenters
             View.Model.ListRecordsReciclaje.Rows.Clear();
         }
 
-        //private void OnAddLineReciclaje(object sender, EventArgs e)
-        //{
-        //    DataRow dr = View.Model.ListRecordsReciclaje.NewRow();
-        //    String ConsultaBuscar = "";
-        //    String ConsultaBuscar1 = "";
+        private void OnAddLineReciclaje(object sender, EventArgs e)
+        {
+            DataRow dr = View.Model.ListRecordsReciclaje.NewRow();
+            String ConsultaBuscar = "";
+            String ConsultaBuscar1 = "";
 
-        //    if (String.IsNullOrEmpty(View.GetSmartCardReciclaje.Text.ToString()))
-        //    {
-        //        Util.ShowError("El campo smart card no puede ser vacio.");
-        //        return;
-        //    }
+            if (String.IsNullOrEmpty(View.GetSmartCardReciclaje.Text.ToString()))
+            {
+                Util.ShowError("El campo smart card no puede ser vacio.");
+                return;
+            }
 
-        //    //Validacion existe o no el equipo en DB
-        //    ConsultaBuscar = "SELECT TOP 1 SMART_CARD_ENTRADA as SmartCard FROM dbo.EquiposDIRECTVC WHERE SMART_CARD_ENTRADA = '" + View.GetSmartCardReciclaje.Text.ToString() + "'";
-        //    ConsultaBuscar1 = "SELECT TOP 1 SMART_SERIAL,SMART_MODELO as Modelo FROM dbo.SmartCardEquiposDIRECTV WHERE SMART_SERIAL = '" + View.GetSmartCardReciclaje.Text.ToString() + "'";
+            //Validacion existe o no el equipo en DB
+            ConsultaBuscar = "SELECT TOP 1 SMART_CARD_ENTRADA as SmartCard FROM dbo.EquiposDIRECTVC WHERE SMART_CARD_ENTRADA = '" + View.GetSmartCardReciclaje.Text.ToString() + "'";
+            ConsultaBuscar1 = "SELECT TOP 1 SMART_SERIAL,SMART_MODELO as Modelo FROM dbo.SmartCardEquiposDIRECTV WHERE SMART_SERIAL = '" + View.GetSmartCardReciclaje.Text.ToString() + "'";
 
-        //    DataTable Resultado = service.DirectSQLQuery(ConsultaBuscar, "", "dbo.EquiposDIRECTVC", Local);
-        //    DataTable Resultado1 = service.DirectSQLQuery(ConsultaBuscar1, "", "dbo.SmartCardEquiposDIRECTV", Local);
+            DataTable Resultado = service.DirectSQLQuery(ConsultaBuscar, "", "dbo.EquiposDIRECTVC", Local);
+            DataTable Resultado1 = service.DirectSQLQuery(ConsultaBuscar1, "", "dbo.SmartCardEquiposDIRECTV", Local);
 
-        //    if ((Resultado1.Rows.Count > 0) || (Resultado.Rows.Count > 0))
-        //    {
-        //        //Recorro el listado de equipos ingresados al listado para saber que el serial no este ya ingresado
-        //        foreach (DataRow item in View.Model.ListRecordsReciclaje.Rows)
-        //        {
-        //            if (View.GetSmartCardReciclaje.Text == item["SmartCard"].ToString())
-        //            {
-        //                Util.ShowError("El serial " + View.GetSmartCard1.Text + " ya esta en el listado.");
-        //                return;
-        //            }
-        //        }
+            if ((Resultado1.Rows.Count > 0) || (Resultado.Rows.Count > 0))
+            {
+                //Recorro el listado de equipos ingresados al listado para saber que el serial no este ya ingresado
+                foreach (DataRow item in View.Model.ListRecordsReciclaje.Rows)
+                {
+                    if (View.GetSmartCardReciclaje.Text == item["SmartCard"].ToString())
+                    {
+                        Util.ShowError("El serial " + View.GetSmartCardReciclaje.Text + " ya esta en el listado.");
+                        return;
+                    }
+                }
 
-        //        //Asigno los campos
-        //        dr["SmartCard"] = View.GetSmartCardReciclaje.Text.ToString();
-        //        dr["Modelo"] = Resultado1.Rows[0]["Modelo"].ToString();
+                //Asigno los campos
+                dr["SmartCard"] = View.GetSmartCardReciclaje.Text.ToString();
+                dr["Modelo"] = Resultado1.Rows[0]["Modelo"].ToString();
 
-        //        //Agrego el registro al listado
-        //        View.Model.ListRecordsReciclaje.Rows.Add(dr);
+                //Agrego el registro al listado
+                View.Model.ListRecordsReciclaje.Rows.Add(dr);
 
-        //        //Limpio los seriales para digitar nuevos datos
-        //        View.GetSmartCardReciclaje.Text = "";
-        //        View.GetSmartCardReciclaje.Focus();
-        //    }
-        //    else
-        //    {
-        //        Util.ShowError("La smart card " + View.GetSmartCardReciclaje.Text.ToString() + " no se encuentra registrada.");
-        //    }
-            
-        //}
+                //Limpio los seriales para digitar nuevos datos
+                View.GetSmartCardReciclaje.Text = "";
+                View.GetSmartCardReciclaje.Focus();
+            }
+            else
+            {
+                Util.ShowError("La smart card " + View.GetSmartCardReciclaje.Text.ToString() + " no se encuentra registrada.");
+            }
+
+        }
 
         private void OnSaveDetailsReciclaje(object sender, EventArgs e)
         {
@@ -667,11 +667,11 @@ namespace WpfFront.Presenters
                     }
                     else
                     {
-                        ConsultaGuardar += "update dbo.SmartCardEquiposDIRECTV set SMART_ESTADO = '" + DataRow["ESTADO_MATERIAL"].ToString() 
+                        ConsultaGuardar += "update dbo.SmartCardEquiposDIRECTV set SMART_ESTADO = '" + DataRow["ESTADO_MATERIAL"].ToString()
                                     + "', SMART_FECHA_RECICLAJE = GETDATE()"
                                     + " where SMART_SERIAL = '" + DataRow["SmartCard"].ToString() + "';";
                     }
-                    
+
                 }
 
                 //Evaluo si la consulta no envio los ultimos registros para forzar a enviarlos
@@ -697,43 +697,43 @@ namespace WpfFront.Presenters
             catch (Exception Ex) { Util.ShowError("Hubo un error al momento de guardar los registros. Error: " + Ex.Message); }
         }
 
-        private void OnReplicateDetailsBy_Column(object sender, RoutedEventArgs e)
-        {
-            //Obtiene una referencia del encabezado de la lista
-            GridViewColumnHeader headerClicked = e.OriginalSource as GridViewColumnHeader;
+        //private void OnReplicateDetailsBy_Column(object sender, RoutedEventArgs e)
+        //{
+        //    //Obtiene una referencia del encabezado de la lista
+        //    GridViewColumnHeader headerClicked = e.OriginalSource as GridViewColumnHeader;
 
-            //Cuando se selecciona uno de los select dentro de la lista se ejecuta este metodo por eso se valida que sea el encabezado
-            if (headerClicked != null)
-            {
-                //Obtenemos el indice del encabezado
-                var index = View.ListadoEquipos.Columns.IndexOf(headerClicked.Column);
+        //    //Cuando se selecciona uno de los select dentro de la lista se ejecuta este metodo por eso se valida que sea el encabezado
+        //    if (headerClicked != null)
+        //    {
+        //        //Obtenemos el indice del encabezado
+        //        var index = View.ListadoEquipos.Columns.IndexOf(headerClicked.Column);
 
-                if (View.ListadoEquiposAProcesar.SelectedIndex != -1)
-                {
+        //        if (View.ListadoEquiposAProcesar.SelectedIndex != -1)
+        //        {
 
-                    if (View.ListadoEquiposAProcesar.SelectedItems.Count > 1)// Se selecciona mas de una fila
-                    {
-                        DataRowView drv = (DataRowView)View.ListadoEquiposAProcesar.SelectedItem;
-                        String valueOfItem = drv[index].ToString();
+        //            if (View.ListadoEquiposAProcesar.SelectedItems.Count > 1)// Se selecciona mas de una fila
+        //            {
+        //                DataRowView drv = (DataRowView)View.ListadoEquiposAProcesar.SelectedItem;
+        //                String valueOfItem = drv[index].ToString();
 
-                        //Replica el valor de la primera fila seleccionada en las demas filas seleccionadas
-                        foreach (DataRowView dr in View.ListadoEquiposAProcesar.SelectedItems)
-                        {
-                            dr[index] = valueOfItem;
-                        }
-                    }
-                    else
-                    {
-                        //Filtramos las columnas descartando las que no son para replicar
-                        if (index >= offset)
-                        {
-                            for (int i = View.ListadoEquiposAProcesar.SelectedIndex; i < View.Model.ListRecords.Rows.Count; i++)
-                                View.Model.ListRecords.Rows[i][index] = View.Model.ListRecords.Rows[View.ListadoEquiposAProcesar.SelectedIndex][index];
-                        }
-                    }
-                }
-            }
-        }
+        //                //Replica el valor de la primera fila seleccionada en las demas filas seleccionadas
+        //                foreach (DataRowView dr in View.ListadoEquiposAProcesar.SelectedItems)
+        //                {
+        //                    dr[index] = valueOfItem;
+        //                }
+        //            }
+        //            else
+        //            {
+        //                //Filtramos las columnas descartando las que no son para replicar
+        //                if (index >= offset)
+        //                {
+        //                    for (int i = View.ListadoEquiposAProcesar.SelectedIndex; i < View.Model.ListRecords.Rows.Count; i++)
+        //                        View.Model.ListRecords.Rows[i][index] = View.Model.ListRecords.Rows[View.ListadoEquiposAProcesar.SelectedIndex][index];
+        //                }
+        //            }
+        //        }
+        //    }
+        //}
 
         private void OnExportCargue(object sender, EventArgs e)
         {
@@ -833,43 +833,43 @@ namespace WpfFront.Presenters
             }
         }
 
-        //private void OnReplicateDetailsBy_ColumnRec(object sender, RoutedEventArgs e)
-        //{
-        //    //Obtiene una referencia del encabezado de la lista
-        //    GridViewColumnHeader headerClicked = e.OriginalSource as GridViewColumnHeader;
+        private void OnReplicateDetailsBy_ColumnRec(object sender, RoutedEventArgs e)
+        {
+            //Obtiene una referencia del encabezado de la lista
+            GridViewColumnHeader headerClicked = e.OriginalSource as GridViewColumnHeader;
 
-        //    //Cuando se selecciona uno de los select dentro de la lista se ejecuta este metodo por eso se valida que sea el encabezado
-        //    if (headerClicked != null)
-        //    {
-        //        //Obtenemos el indice del encabezado
-        //        var index = View.ListadoEquiposReciclaje.Columns.IndexOf(headerClicked.Column);
+            //Cuando se selecciona uno de los select dentro de la lista se ejecuta este metodo por eso se valida que sea el encabezado
+            if (headerClicked != null)
+            {
+                //Obtenemos el indice del encabezado
+                var index = View.ListadoEquiposReciclaje.Columns.IndexOf(headerClicked.Column);
 
-        //        if (View.ListEquiposReciclaje.SelectedIndex != -1)
-        //        {
+                if (View.ListEquiposReciclaje.SelectedIndex != -1)
+                {
 
-        //            if (View.ListEquiposReciclaje.SelectedItems.Count > 1)// Se selecciona mas de una fila
-        //            {
-        //                DataRowView drv = (DataRowView)View.ListEquiposReciclaje.SelectedItem;
-        //                String valueOfItem = drv[index].ToString();
+                    if (View.ListEquiposReciclaje.SelectedItems.Count > 1)// Se selecciona mas de una fila
+                    {
+                        DataRowView drv = (DataRowView)View.ListEquiposReciclaje.SelectedItem;
+                        String valueOfItem = drv[index].ToString();
 
-        //                //Replica el valor de la primera fila seleccionada en las demas filas seleccionadas
-        //                foreach (DataRowView dr in View.ListEquiposReciclaje.SelectedItems)
-        //                {
-        //                    dr[index] = valueOfItem;
-        //                }
-        //            }
-        //            else
-        //            {
-        //                //Filtramos las columnas descartando las que no son para replicar
-        //                if (index >= offset)
-        //                {
-        //                    for (int i = View.ListEquiposReciclaje.SelectedIndex; i < View.Model.ListRecordsReciclaje.Rows.Count; i++)
-        //                        View.Model.ListRecordsReciclaje.Rows[i][index] = View.Model.ListRecordsReciclaje.Rows[View.ListEquiposReciclaje.SelectedIndex][index];
-        //                }
-        //            }
-        //        }
-        //    }
-        //}
+                        //Replica el valor de la primera fila seleccionada en las demas filas seleccionadas
+                        foreach (DataRowView dr in View.ListEquiposReciclaje.SelectedItems)
+                        {
+                            dr[index] = valueOfItem;
+                        }
+                    }
+                    else
+                    {
+                        //Filtramos las columnas descartando las que no son para replicar
+                        if (index >= offset)
+                        {
+                            for (int i = View.ListEquiposReciclaje.SelectedIndex; i < View.Model.ListRecordsReciclaje.Rows.Count; i++)
+                                View.Model.ListRecordsReciclaje.Rows[i][index] = View.Model.ListRecordsReciclaje.Rows[View.ListEquiposReciclaje.SelectedIndex][index];
+                        }
+                    }
+                }
+            }
+        }
 
         #endregion
     }

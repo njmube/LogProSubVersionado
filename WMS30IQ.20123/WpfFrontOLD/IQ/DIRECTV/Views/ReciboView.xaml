@@ -21,7 +21,7 @@
                                         <TextBlock Text="MODULO PREALERTA" HorizontalAlignment="Left" FontWeight="bold" />
                                     </StackPanel>
                                     <Separator Margin="5,0,0,0"/>
-                                    <StackPanel x:Uid="Stack_SerialGroup" x:Name="Stack_SerialGroup2" Orientation="Horizontal" Margin="0,6,0,0">
+                                    <StackPanel x:Uid="Stack_SerialGroup" x:Name="Stack_SerialGroup2" Orientation="Horizontal" Margin="0,6,0,0" Visibility="Collapsed">
                                         <StackPanel x:Uid="Stack_UploadFile" x:Name="Stack_UploadFile2" Orientation="Vertical" Margin="4,-3,4,0" >
                                             <TextBlock x:Uid="txt_UploadFilePrea" x:Name="txt_UploadFilePrea" Text="Cargar Archivo"  />
                                             <uc:UploadFile x:Uid="fUploadPrea" Margin="0,0,0,0" x:Name="fUploadPrea" OnFileUpload="fUpload_OnFileUpload_Prea" />

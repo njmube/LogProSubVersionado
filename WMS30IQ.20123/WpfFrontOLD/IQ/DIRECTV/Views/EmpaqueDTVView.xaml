@@ -207,24 +207,30 @@
                                             <ListView.View>
                                                 <GridView x:Uid="GridViewDetails" x:Name="GridViewDetails13">
 
-                                                    <GridViewColumn x:Uid="GridViewColumn_2" Width="120" DisplayMemberBinding="{Binding Path=Serial}">
+                                                    <GridViewColumn x:Uid="GridViewColumn_2" Width="auto" DisplayMemberBinding="{Binding Path=Serial}">
                                                         <GridViewColumn.Header>
                                                             <TextBlock Text="Serial" ToolTip="Serial del equipo."/>
                                                         </GridViewColumn.Header>
                                                     </GridViewColumn>
 
-                                                    <GridViewColumn x:Uid="GridViewColumn_2" Width="120" DisplayMemberBinding="{Binding Path=SMART_CARD_ASIGNADA}">
+                                                    <GridViewColumn x:Uid="GridViewColumn_2" Width="auto" DisplayMemberBinding="{Binding Path=SMART_CARD_ASIGNADA}">
                                                         <GridViewColumn.Header>
                                                             <TextBlock Text="Smart Card" ToolTip="Smart Card Asignada." />
                                                         </GridViewColumn.Header>
                                                     </GridViewColumn>
 
-                                                    <GridViewColumn x:Uid="GridViewColumn_2" Width="150" DisplayMemberBinding="{Binding Path=Estado}">
+                                                    <GridViewColumn x:Uid="GridViewColumn_2" Width="auto" DisplayMemberBinding="{Binding Path=Estado}">
                                                         <GridViewColumn.Header>
                                                             <TextBlock Text="Estado" ToolTip="Nombre del producto." />
                                                         </GridViewColumn.Header>
                                                     </GridViewColumn>
 
+                                                    <GridViewColumn x:Uid="GridViewColumn_2" Width="auto" DisplayMemberBinding="{Binding Path=Modelo}">
+                                                        <GridViewColumn.Header>
+                                                            <TextBlock Text="Modelo" ToolTip="Modelo del equipo." />
+                                                        </GridViewColumn.Header>
+                                                    </GridViewColumn>
+                                                    
                                                     <GridViewColumn x:Uid="GridViewColumn_2" Width="0" DisplayMemberBinding="{Binding Path=RowID}">
                                                         <GridViewColumn.Header>
                                                             <TextBlock Text="RowID" ToolTip="Identificador." />

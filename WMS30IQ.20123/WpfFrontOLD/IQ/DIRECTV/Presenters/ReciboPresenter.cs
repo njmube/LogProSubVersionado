@@ -1046,18 +1046,27 @@ namespace WpfFront.Presenters
                 String ConsultaSemana = "EXEC sp_GetProcesosDIRECTVC 'OBTENERSEMANA'";
                 DataTable Resultado = service.DirectSQLQuery(ConsultaSemana, "", "dbo.EquiposDIRECTVC", Local);
 
-                if (Resultado.Rows[0]["Semana"].ToString() == "5")
-                {
-                    Estado = "CUARENTENA";
-                }
-                else
-                {
-                    Estado = "PARA PROCESO";
-                }
+                
 
                 ConsultaGuardar = "Declare @RowId int ";
                 foreach (DataRow DataRow in this.serialesSave_Aux.Rows)
                 {
+                    if (Resultado.Rows[0]["Semana"].ToString() == "5")
+                    {
+                        if (DataRow["Novedad"].ToString() == "SI")
+                            Estado = "NOVEDAD";
+                        else
+                            Estado = "CUARENTENA";
+                    }
+                    else
+                    {
+                        if (DataRow["Novedad"].ToString() == "SI")
+                            Estado = "NOVEDAD";
+                        else
+                            Estado = "PARA PROCESO";
+                    }
+
+
                     //Aumento el contador de filas
                     ContadorFilas++;
 
@@ -1073,10 +1082,8 @@ namespace WpfFront.Presenters
                         //Obtengo la cantidad de columnas del listado
                         ContadorCampos = this.serialesSave_Aux.Columns.Count;
 
-                        
-                    
                         //Construyo la consulta para guardar los datos
-                        ConsultaGuardar += " INSERT INTO dbo.EquiposDIRECTVC(Serial,Receiver,SMART_CARD_ENTRADA,MODELO,DESCRIPCION,TIPO_ORIGEN,TIPOS_DEVOLUCIONES,DOA,Ciudad,ESTADO_MATERIAL,FECHA_INGRESO, ESTADO) VALUES(";
+                        ConsultaGuardar += " INSERT INTO dbo.EquiposDIRECTVC(Serial,Receiver,SMART_CARD_ENTRADA,GABETAS_DIAG,MODELO,DESCRIPCION,TIPO_ORIGEN,TIPOS_DEVOLUCIONES,DOA,Ciudad,ESTADO_MATERIAL,FECHA_INGRESO, ESTADO) VALUES(";
                         
                         //Obtengo los datos de cada campo con su nombre
                         foreach (DataColumn c in this.serialesSave_Aux.Columns)
@@ -1384,14 +1391,14 @@ namespace WpfFront.Presenters
             {
                 if (dr[0].ToString() == ((ComboBox)sender).Tag.ToString())
                 {
-                    if (dr[6].ToString() == "MANTENIMIENTO")
+                    if (dr[7].ToString() == "MANTENIMIENTO")
                     {
-                        dr[7] = "SI";
+                        dr[8] = "SI";
                         break;
                     }
                     else
                     {
-                        dr[7] = "NO";
+                        dr[8] = "NO";
                         break;
                     }
                 }
@@ -1405,7 +1412,7 @@ namespace WpfFront.Presenters
             {
                 if (dr[0].ToString() == ((ComboBox)sender).Tag.ToString())
                 {
-                    dr[4] = View.Model.ListadoModelosDescripcion.Where(f => f.Code == dr[3].ToString()).First().Description.ToString();
+                    dr[5] = View.Model.ListadoModelosDescripcion.Where(f => f.Code == dr[4].ToString()).First().Description.ToString();
                     break;
                 }
             }

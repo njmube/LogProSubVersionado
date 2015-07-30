@@ -17,7 +17,7 @@ namespace WpfFront.Views
     /// <summary>
     /// Interaction logic for DespachoDTVView.xaml
     /// </summary>
-    public partial class SmartCardDTVViewP : UserControlBase, ISmartCardDTVViewP
+    public partial class SmartCardProdDTVView : UserControlBase, ISmartCardProdDTVView
     {
 
         #region Eventos
@@ -46,7 +46,7 @@ namespace WpfFront.Views
 
         #endregion
 
-        public SmartCardDTVViewP()
+        public SmartCardProdDTVView()
         {
             InitializeComponent();
             //Text_ShowHide.Text = "<< Ocultar";
@@ -54,9 +54,9 @@ namespace WpfFront.Views
 
         #region Variables
 
-        public SmartCardDTVModelP Model
+        public SmartCardProdDTVModel Model
         {
-            get { return this.DataContext as SmartCardDTVModelP; }
+            get { return this.DataContext as SmartCardProdDTVModel; }
             set { this.DataContext = value; }
         }
 
@@ -72,17 +72,17 @@ namespace WpfFront.Views
         //    set { this.cb_smartEstado = value; }
         //}
 
-        public TextBox GetSmartCard1
-        {
-            get { return this.tb_Smart1; }
-            set { this.tb_Smart1 = value; }
-        }
-
-        //public TextBox GetSmartCardReciclaje
+        //public TextBox GetSmartCard1
         //{
-        //    get { return this.tb_Smart11; }
-        //    set { this.tb_Smart11 = value; }
+        //    get { return this.tb_Smart1; }
+        //    set { this.tb_Smart1 = value; }
         //}
+
+        public TextBox GetSmartCardReciclaje
+        {
+            get { return this.tb_Smart11; }
+            set { this.tb_Smart11 = value; }
+        }
 
         //public ComboBox UnidadAlmacenamiento
         //{
@@ -114,17 +114,17 @@ namespace WpfFront.Views
             set { this.lvDocumentMaster_2 = value; }
         }
 
-        public ListView ListadoEquiposAProcesar
-        {
-            get { return this.lvDocumentMaster; }
-            set { this.lvDocumentMaster = value; }
-        }
-
-        //public ListView ListEquiposReciclaje
+        //public ListView ListadoEquiposAProcesar
         //{
-        //    get { return this.lvDocumentMaster1; }
-        //    set { this.lvDocumentMaster1 = value; }
+        //    get { return this.lvDocumentMaster; }
+        //    set { this.lvDocumentMaster = value; }
         //}
+
+        public ListView ListEquiposReciclaje
+        {
+            get { return this.lvDocumentMaster1; }
+            set { this.lvDocumentMaster1 = value; }
+        }
 
         public ListView ListadoItemsAsignados
         {
@@ -166,11 +166,11 @@ namespace WpfFront.Views
         //    set { this.Border_Detail = value; }
         //}
 
-        public GridView ListadoEquipos
-        {
-            get { return this.GridViewDetails; }
-            set { this.GridViewDetails = value; }
-        }
+        //public GridView ListadoEquipos
+        //{
+        //    get { return this.GridViewDetails; }
+        //    set { this.GridViewDetails = value; }
+        //}
 
         public GridView ListadoEquipos1
         {
@@ -178,11 +178,11 @@ namespace WpfFront.Views
             set { this.GridViewDetails_2 = value; }
         }
 
-        //public GridView ListadoEquiposReciclaje
-        //{
-        //    get { return this.GridViewDetails1; }
-        //    set { this.GridViewDetails1 = value; }
-        //}
+        public GridView ListadoEquiposReciclaje
+        {
+            get { return this.GridViewDetails1; }
+            set { this.GridViewDetails1 = value; }
+        }
 
         //Recibo
         //public TextBox BuscarEstibaRecibo
@@ -216,7 +216,7 @@ namespace WpfFront.Views
                 //Util.ShowError("Bienvenidos");
                 AddLine(sender, e);
             }
-            
+
         }
 
         //private void btn_confirmar_Click_1(object sender, RoutedEventArgs e)
@@ -363,7 +363,7 @@ namespace WpfFront.Views
                 //Util.ShowError("Bienvenidos");
                 AddLineReciclaje(sender, e);
             }
-            
+
         }
 
         private void Btn_Guardar_Click_11(object sender, RoutedEventArgs e)
@@ -410,22 +410,22 @@ namespace WpfFront.Views
 
     }
 
-    public interface ISmartCardDTVViewP
+    public interface ISmartCardProdDTVView
     {
         //Clase Modelo
-        SmartCardDTVModelP Model { get; set; }
+        SmartCardProdDTVModel Model { get; set; }
 
         #region Variables
 
         //ComboBox GetListBinInicio { get; set; }
         //ComboBox SmartCardEstado { get; set; }
-        TextBox GetSmartCard1 { get; set; }
-        //TextBox GetSmartCardReciclaje { get; set; }
+        //TextBox GetSmartCard1 { get; set; }
+        TextBox GetSmartCardReciclaje { get; set; }
         ComboBox GetFiltroEstado { get; set; }
         //TextBlock GetTextHideShowHeader { get; set; }
         //Border GetBorderHeader { get; set; }
-        GridView ListadoEquipos { get; set; }
-        //GridView ListadoEquiposReciclaje { get; set; }
+        //GridView ListadoEquipos { get; set; }
+        GridView ListadoEquiposReciclaje { get; set; }
         GridView ListadoEquipos1 { get; set; }
         //Button GetButtonConfirmar { get; set; }
         //TextBox GetSerial1 { get; set; }
@@ -433,8 +433,8 @@ namespace WpfFront.Views
         //TextBox CodigoEmpaque { get; set; }
         //Border BorderDetails { get; set; }
         ListView ListadoItems { get; set; }
-        ListView ListadoEquiposAProcesar { get; set; }
-        //ListView ListEquiposReciclaje { get; set; }
+        //ListView ListadoEquiposAProcesar { get; set; }
+        ListView ListEquiposReciclaje { get; set; }
         ListView ListadoItemsAsignados { get; set; }
         //Recibo
         //TextBox BuscarEstibaRecibo { get; set; }

@@ -74,6 +74,7 @@ namespace WpfFront.Presenters
             View.ListarEquiposSeleccion += new EventHandler<EventArgs>(this.OnListarEquiposSeleccion);
             View.ImprimirHabladorAlmacen += new EventHandler<EventArgs>(this.OnImprimirHabladorAlmacen);
             View.EliminarEquipo_Fila += new EventHandler<EventArgs>(this.OnEliminarEquipo_Fila);
+            View.GenerarNumero += new EventHandler<EventArgs>(this.OnGenerarNumero);
 
             #endregion
 
@@ -85,6 +86,7 @@ namespace WpfFront.Presenters
 
             //Cargo las ubicaciones
             View.Model.ListadoPosiciones = service.GetMMaster(new MMaster { MetaType = new MType { Code = "DTVPOSIC" } });
+            View.Model.ListadoEstadosPallet = service.GetMMaster(new MMaster { MetaType = new MType { Code = "DTVESTREC" } });
             this.Actualizar_UbicacionDisponible();
 
             View.Model.ListUbicacionesDestino = service.DirectSQLQuery("EXEC sp_GetProcesos 'UBICACIONESDESTINO', 'RECIBOALMACEN', 'CLARO'", "", "dbo.Ubicaciones", Local);
@@ -154,21 +156,12 @@ namespace WpfFront.Presenters
 
             try
             {
-
-                //Validacion existe o no el equipo en DB
-                ConsultaBuscar = "SELECT * FROM dbo.EquiposDIRECTVC WHERE upper(Serial) = upper('" + View.GetSerial1.Text.ToString() + "') AND (Estado = 'CUARENTENA' OR Estado = 'PARA PROCESO') AND ESTADO IS NOT NULL";
-                DataTable Resultado = service.DirectSQLQuery(ConsultaBuscar, "", "dbo.EquiposDIRECTVC", Local);
-
-                if (Resultado.Rows.Count > 0)
-                {
-
-                    //Busco el registro en la DB para validar que exista y que este en la ubicacion valida
-                    RegistroValidado = service.DirectSQLQuery("EXEC sp_GetProcesosDIRECTVC 'BUSCAREQUIPO','" + View.GetSerial1.Text + "'", "", "dbo.EquiposDIRECTVC", Local);
+                RegistroValidado = service.DirectSQLQuery("EXEC sp_GetProcesosDIRECTVC 'BUSCAREQUIPO','" + View.GetSerial1.Text + "'", "", "dbo.EquiposDIRECTVC", Local);
 
                     //Evaluo si el serial existe
                     if (RegistroValidado.Rows.Count == 0)
                     {
-                        Util.ShowError("El serial no existe o no esta en la ubicacion requerida.");
+                        Util.ShowError("El serial no existe en el sistema.");
                         View.GetSerial1.Text = "";
                         View.GetSerial2.Text = "";
                         View.GetSerial1.Focus();
@@ -176,71 +169,38 @@ namespace WpfFront.Presenters
                     }
                     else
                     {
-                        //Asigno los campos
-                        dr["RowID"] = RegistroValidado.Rows[0]["RowID"].ToString();
-                        dr["Modelo"] = RegistroValidado.Rows[0]["Modelo"].ToString().ToUpper();
-                        dr["Serial"] = RegistroValidado.Rows[0]["Serial"].ToString().ToUpper();
-                        dr["Receiver"] = RegistroValidado.Rows[0]["Receiver"].ToString().ToUpper();
-                        dr["SmartCard"] = RegistroValidado.Rows[0]["SmartCard"].ToString().ToUpper();
-                        //dr["Estado"] = RegistroValidado.Rows[0]["Estado"].ToString();
-                        //dr["IdPallet"] = RegistroValidado.Rows[0]["IdPallet"].ToString();
+                        //Validacion existe o no el equipo en DB
+                        ConsultaBuscar = "SELECT * FROM dbo.EquiposDIRECTVC WHERE upper(Serial) = upper('" + View.GetSerial1.Text.ToString() + "') AND (Estado = 'CUARENTENA' OR Estado = 'PARA PROCESO')";
+                        DataTable Resultado = service.DirectSQLQuery(ConsultaBuscar, "", "dbo.EquiposDIRECTVC", Local);
 
-                        //Agrego el registro al listado
-                        View.Model.ListRecords.Rows.Add(dr);
+                        if (Resultado.Rows.Count > 0)
+                        { 
+                            //Asigno los campos
+                            dr["RowID"] = RegistroValidado.Rows[0]["RowID"].ToString();
+                            dr["Modelo"] = RegistroValidado.Rows[0]["Modelo"].ToString().ToUpper();
+                            dr["Serial"] = RegistroValidado.Rows[0]["Serial"].ToString().ToUpper();
+                            dr["Receiver"] = RegistroValidado.Rows[0]["Receiver"].ToString().ToUpper();
+                            dr["SmartCard"] = RegistroValidado.Rows[0]["SmartCard"].ToString().ToUpper();
+                            
 
-                        //Limpio los seriales para digitar nuevos datos
-                        View.GetSerial1.Text = "";
-                        View.GetSerial2.Text = "";
-                        View.GetSerial1.Focus();
-                    }
-                }
-                else
-                {
-                    ConsultaBuscar = "SELECT * FROM dbo.EquiposDIRECTVC WHERE upper(Serial) = upper('" + View.GetSerial1.Text.ToString() + "')";
-                    DataTable Result = service.DirectSQLQuery(ConsultaBuscar, "", "dbo.EquiposDIRECTVC", Local);
+                            //Agrego el registro al listado
+                            View.Model.ListRecords.Rows.Add(dr);
 
-                    if (Result.Rows.Count > 0)
-                    {
-                        Util.ShowError("El serial " + View.GetSerial1.Text + " ya esta en el sistema. Por favor verificar");
-                        View.GetSerial1.Text = "";
-                        View.GetSerial2.Text = "";
-                        View.GetSerial1.Focus();
-                        return;
-                    }
-
-                    //Busco el registro en la DB para validar que exista y que este en la ubicacion valida
-                    RegistroValidado = service.DirectSQLQuery("EXEC sp_GetProcesosDIRECTVC 'BUSCAREQUIPO','" + View.GetSerial1.Text + "'", "", "dbo.EquiposDIRECTVC", Local);
-
-                    //Evaluo si el serial existe
-                    if (RegistroValidado.Rows.Count == 0)
-                    {
-                        Util.ShowError("El serial no existe o no esta en la ubicacion requerida.");
-                        View.GetSerial1.Text = "";
-                        View.GetSerial2.Text = "";
-                        View.GetSerial1.Focus();
-                        return;
-                    }
-                    else
-                    {
-                        //Asigno los campos
-                        dr["RowID"] = RegistroValidado.Rows[0]["RowID"].ToString();
-                        dr["Modelo"] = RegistroValidado.Rows[0]["Modelo"].ToString().ToUpper();
-                        dr["Serial"] = RegistroValidado.Rows[0]["Serial"].ToString().ToUpper();
-                        dr["Receiver"] = RegistroValidado.Rows[0]["Receiver"].ToString().ToUpper();
-                        dr["SmartCard"] = RegistroValidado.Rows[0]["SmartCard"].ToString().ToUpper();
-                        //dr["Estado"] = RegistroValidado.Rows[0]["Estado"].ToString();
-                        //dr["IdPallet"] = RegistroValidado.Rows[0]["IdPallet"].ToString();
-
-                        //Agrego el registro al listado
-                        View.Model.ListRecords.Rows.Add(dr);
-
-                        //Limpio los seriales para digitar nuevos datos
-                        View.GetSerial1.Text = "";
-                        View.GetSerial2.Text = "";
-                        View.GetSerial1.Focus();
+                            //Limpio los seriales para digitar nuevos datos
+                            View.GetSerial1.Text = "";
+                            View.GetSerial2.Text = "";
+                            View.GetSerial1.Focus();
+                        }
+                        else
+                        {
+                            Util.ShowError("El serial no se encuentra en la ubicacion requerida. Esta en estado " + RegistroValidado.Rows[0]["Estado"].ToString());
+                            //Limpio los seriales para digitar nuevos datos
+                            View.GetSerial1.Text = "";
+                            View.GetSerial2.Text = "";
+                            View.GetSerial1.Focus();
+                        }
                     }
 
-                }
             }
             catch (Exception Ex)
             {
@@ -1151,6 +1111,44 @@ namespace WpfFront.Presenters
                         Util.ShowMessage("Error en eliminación de equipo - almacenamiento, " + ex.Message);
                     }
                 }
+            }
+        }
+
+
+        private void OnGenerarNumero(object sender, EventArgs e)
+        {
+            String ConsultaBuscar = "";
+            String ConsultaValidar = "";
+            try{
+
+                ConsultaBuscar = "select concat('DTV-',CONVERT(NVARCHAR, getdate(), 12),cast(NEXT VALUE FOR dbo.PalletSecuence as varchar)) as idpallet";
+                DataTable Resultado = service.DirectSQLQuery(ConsultaBuscar, "", "dbo.PalletSecuence", Local);
+
+                //ConsultaBuscar = "SELECT concat(right('0000'+cast(NEXT VALUE FOR dbo.PalletSecuence as varchar),5),right('0'+cast(ABS(CAST(NEWID() as binary(5)) % 1000) as varchar),3)) as idpallet";
+                //DataTable Resultado = service.DirectSQLQuery(ConsultaBuscar, "", "dbo.EquiposCLARO", Local);
+
+                if (Resultado.Rows.Count > 0)
+                {
+                    ConsultaValidar = "select RowId from dbo.EquiposDIRECTVC where IDPALLET = '" + Resultado.Rows[0]["idpallet"].ToString()
+                                                                             + "' or CodigoEmpaque = '" + Resultado.Rows[0]["idpallet"].ToString() 
+                                                                             + "' or CodigoEmpaque2 = '" + Resultado.Rows[0]["idpallet"].ToString() + "';";
+                    Console.WriteLine(ConsultaValidar);
+                    DataTable RegistroValidado = service.DirectSQLQuery(ConsultaValidar, "", "dbo.EquiposDIRECTVC", Local);
+
+                    if(RegistroValidado.Rows.Count > 0)            
+                    {
+                        Util.ShowError("El codigo de pallet ya se encuentra registrado. Por favor genere uno nuevo!");
+                    }
+                    else
+                    {
+                        View.GetCodPallet.Text = Resultado.Rows[0]["idpallet"].ToString();
+                    }
+
+                ConsultaBuscar = "";
+                ConsultaValidar = "";
+                }
+            }catch(Exception ex){
+                Util.ShowError("Se presento un error generando el pallet: " + ex.Message);
             }
         }
 

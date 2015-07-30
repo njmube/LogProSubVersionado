@@ -13,6 +13,7 @@ namespace WpfFront.Models
         DataTable ListRecords { get; set; }
         IList<MMaster> ListadoPosiciones { get; set; }
 
+        IList<MMaster> ListadoEstadosPallet { get; set; }
         DataTable ListadoRecibo { get; set; }
         DataTable ListUbicacionesDestino { get; set; }
 
@@ -53,6 +54,17 @@ namespace WpfFront.Models
             {
                 _ListadoPosiciones = value;
                 OnPropertyChanged("ListadoPosiciones");
+            }
+        }
+
+        private IList<MMaster> _ListadoEstadosPallet;
+        public IList<MMaster> ListadoEstadosPallet
+        {
+            get { return _ListadoEstadosPallet; }
+            set
+            {
+                _ListadoEstadosPallet = value;
+                OnPropertyChanged("ListadoEstadosPallet");
             }
         }
 

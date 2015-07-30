@@ -21,7 +21,7 @@
     </SccAuxPath>
     <SccProvider>
     </SccProvider>
-    <SignAssembly>false</SignAssembly>
+    <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>WMS30Key.pfx</AssemblyOriginatorKeyFile>
     <FileUpgradeFlags>
     </FileUpgradeFlags>

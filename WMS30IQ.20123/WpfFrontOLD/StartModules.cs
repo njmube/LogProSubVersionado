@@ -299,6 +299,12 @@ namespace WpfFront
             container.RegisterType<ISmartCardDTVModelP, SmartCardDTVModelP>();
             ///////////////////////////////////////////////////////////////////////
 
+            //////30 JULIO 2015 ERWIN PARDO////////////
+            container.RegisterType<ISmartCardProdDTVView, SmartCardProdDTVView>();
+            container.RegisterType<ISmartCardProdDTVPresenter, SmartCardProdDTVPresenter>();
+            container.RegisterType<ISmartCardProdDTVModel, SmartCardProdDTVModel>();
+            //////30 JULIO 2015 ERWIN PARDO////////////
+
             container.RegisterType<IDespachoDTVView, DespachoDTVView>();
             container.RegisterType<IDespachoDTVPresenter, DespachoDTVPresenter>();
             container.RegisterType<IDespachoDTVModel, DespachoDTVModel>();
@@ -322,6 +328,12 @@ namespace WpfFront
             container.RegisterType<IEmpaqueDTVView, EmpaqueDTVView>();
             container.RegisterType<IEmpaqueDTVPresenter, EmpaqueDTVPresenter>();
             container.RegisterType<IEmpaqueDTVModel, EmpaqueDTVModel>();
+
+            //MODULO 30 DE JULIO DE 2015//////////////////////////////////////////////////
+            container.RegisterType<INovedadesDTVView, NovedadesDTVView>();
+            container.RegisterType<INovedadesDTVPresenter, NovedadesDTVPresenter>();
+            container.RegisterType<INovedadesDTVModel, NovedadesDTVModel>();
+            //MODULO 30 DE JULIO DE 2015//////////////////////////////////////////////////
 
             container.RegisterType<IGeneradorEstibasView, GeneradorEstibasView>();
             container.RegisterType<IGeneradorEstibasPresenter, GeneradorEstibasPresenter>();
@@ -842,6 +854,20 @@ namespace WpfFront
                     SmartCardDTVpp.Window = window;
                     return SmartCardDTVpp.View;
                 //////////////////////////////////////////////////////////////////////////////////////
+
+                /////////////////////////////////////////////////////////////////////////////////////
+                case "SmartCardProdDTVPresenter":
+                    SmartCardProdDTVPresenter SmartCardProdDTVPresenterP = container.Resolve<SmartCardProdDTVPresenter>();
+                    SmartCardProdDTVPresenterP.Window = window;
+                    return SmartCardProdDTVPresenterP.View;
+                //////////////////////////////////////////////////////////////////////////////////////
+
+                ////////// 30 DE JULIO DE 2015 /////////////
+                case "NovedadesDTVPresenter":
+                    NovedadesDTVPresenter NovedadesDTVPresenterP = container.Resolve<NovedadesDTVPresenter>();
+                    NovedadesDTVPresenterP.Window = window;
+                    return NovedadesDTVPresenterP.View;
+                ////////// 30 DE JULIO DE 2015 /////////////
 
                 case "GeneradorEstibasPresenter":
                     GeneradorEstibasPresenter GeneradorEstibas = container.Resolve<GeneradorEstibasPresenter>();

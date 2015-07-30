@@ -38,6 +38,7 @@ namespace WpfFront.Views
         public event EventHandler<EventArgs> ListarEquiposSeleccion;
         public event EventHandler<EventArgs> ImprimirHabladorAlmacen;
         public event EventHandler<EventArgs> EliminarEquipo_Fila;
+        public event EventHandler<EventArgs> GenerarNumero;
 
         #endregion
 
@@ -303,7 +304,8 @@ namespace WpfFront.Views
 
         private void ImgGenerate_estiba(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
-            GenerarPallet(sender, e);
+            //GenerarPallet(sender, e);
+            GenerarNumero(sender, e);
         }
 
         private void KeyUp_BuscarPallet(object sender, KeyEventArgs e)
@@ -397,6 +399,7 @@ namespace WpfFront.Views
         event EventHandler<EventArgs> ListarEquiposSeleccion;
         event EventHandler<EventArgs> ImprimirHabladorAlmacen;
         event EventHandler<EventArgs> EliminarEquipo_Fila;
+        event EventHandler<EventArgs> GenerarNumero;
 
         #endregion
 

@@ -237,6 +237,7 @@ namespace WpfFront.Presenters
                         dr["Serial"] = RegistroValidado.Rows[0]["Serial"].ToString();
                         dr["SMART_CARD_ASIGNADA"] = RegistroValidado.Rows[0]["SMART_CARD_ASIGNADA"].ToString();
                         dr["Estado"] = RegistroValidado.Rows[0]["Estado"].ToString();
+                        dr["Modelo"] = RegistroValidado.Rows[0]["Modelo"].ToString();
                         dr["RowID"] = RegistroValidado.Rows[0]["RowID"].ToString();
 
                         //Agrego el registro al listado
@@ -591,140 +592,176 @@ namespace WpfFront.Presenters
 
         private void OnGenerarPallet(object sender, EventArgs e)
         {
-            //DataRow dr = View.Model.ListRecords.NewRow();
-            DataTable RegistroValidado;
             String ConsultaBuscar = "";
-
+            String ConsultaValidar = "";
             try
             {
-                //Si el contador de equipos por pallet es igual a la lista de almacenamiento, quiere decir que no se agregaron nuevos equipos y se puede crear el nuevo pallet sin problema
-                if (View.Model.ListPallets_Empaque.Rows.Count == this.contFilas_byPallet)
+
+                ConsultaBuscar = "select concat('DTV-',CONVERT(NVARCHAR, getdate(), 12),cast(NEXT VALUE FOR dbo.PalletSecuence as varchar)) as idpallet";
+                DataTable Resultado = service.DirectSQLQuery(ConsultaBuscar, "", "dbo.PalletSecuence", Local);
+
+                //ConsultaBuscar = "SELECT concat(right('0000'+cast(NEXT VALUE FOR dbo.PalletSecuence as varchar),5),right('0'+cast(ABS(CAST(NEWID() as binary(5)) % 1000) as varchar),3)) as idpallet";
+                //DataTable Resultado = service.DirectSQLQuery(ConsultaBuscar, "", "dbo.EquiposCLARO", Local);
+
+                if (Resultado.Rows.Count > 0)
                 {
+                    ConsultaValidar = "select RowId from dbo.EquiposDIRECTVC where IDPALLET = '" + Resultado.Rows[0]["idpallet"].ToString()
+                                                                             + "' or CodigoEmpaque = '" + Resultado.Rows[0]["idpallet"].ToString()
+                                                                             + "' or CodigoEmpaque2 = '" + Resultado.Rows[0]["idpallet"].ToString() + "';";
+                    Console.WriteLine(ConsultaValidar);
+                    DataTable RegistroValidado = service.DirectSQLQuery(ConsultaValidar, "", "dbo.EquiposDIRECTVC", Local);
 
-                    View.Model.ListPallets_Empaque.Clear();
-
-                    //Creo el número de pallet aleatorio 
-                    ConsultaBuscar = "SELECT concat(right('0000'+cast(NEXT VALUE FOR dbo.PalletSecuence as varchar),5),right('0'+cast(ABS(CAST(NEWID() as binary(5)) % 1000) as varchar),3)) as idpallet";
-                    DataTable Resultado = service.DirectSQLQuery(ConsultaBuscar, "", "dbo.EquiposDIRECTVC", Local);
-
-                    this.contFilas_byPallet = 0; // Se crea un nueva pallet por lo tanto se vacia el contador de equipos por pallet
-
-                    if (Resultado.Rows.Count > 0)
+                    if (RegistroValidado.Rows.Count > 0)
                     {
-                        //Busco el registro en la DB para validar que exista y que este en la ubicacion valida
-                        RegistroValidado = service.DirectSQLQuery("SELECT TOP 1 Serial FROM dbo.EquiposDIRECTVC WHERE idpallet ='" + Resultado.Rows[0]["idpallet"].ToString() + "' AND idpallet is not null", "", "dbo.EquiposDIRECTVC", Local);
-
-                        //Evaluo si el serial existe
-                        if (RegistroValidado.Rows.Count > 0)
-                        {
-                            Util.ShowError("El número de pallet ya existe, intente generarlo nuevamente.");
-                        }
-                        else
-                        {
-                            //Asigno los campos
-                            View.GetCodPallet.Text = "RES-E" + Resultado.Rows[0]["idpallet"].ToString();
-                            this.codigoPallet = "RES-E" + Resultado.Rows[0]["idpallet"].ToString();
-
-                            this.seleccionUbicacion = false;
-                            ////Limpio los seriales para digitar nuevos datos
-                            //View.GetSerial1.Text = "";
-                            //View.GetSerial2.Text = "";
-                            //View.GetSerial1.Focus();
-                        }
+                        Util.ShowError("El codigo de pallet ya se encuentra registrado. Por favor genere uno nuevo!");
                     }
                     else
                     {
-                        Util.ShowError("No es posible generar el número de pallet, intente en unos momentos.");
-                    }
-                }
-                else if (this.codigoPallet == "")
-                {
-                    //Creo el número de pallet aleatorio 
-                    ConsultaBuscar = "SELECT concat(right('0000'+cast(NEXT VALUE FOR dbo.PalletSecuence as varchar),5),right('0'+cast(ABS(CAST(NEWID() as binary(5)) % 1000) as varchar),3)) as idpallet";
-                    DataTable Resultado = service.DirectSQLQuery(ConsultaBuscar, "", "dbo.EquiposDIRECTVC", Local);
-
-                    this.contFilas_byPallet = 0; // Se crea un nueva pallet por lo tanto se vacia el contador de equipos por pallet
-
-                    if (Resultado.Rows.Count > 0)
-                    {
-                        //Busco el registro en la DB para validar que exista y que este en la ubicacion valida
-                        RegistroValidado = service.DirectSQLQuery("SELECT TOP 1 Serial FROM dbo.EquiposDIRECTVC WHERE idpallet ='" + Resultado.Rows[0]["idpallet"].ToString() + "' AND idpallet is not null", "", "dbo.EquiposDIRECTVC", Local);
-
-                        //Evaluo si el serial existe
-                        if (RegistroValidado.Rows.Count > 0)
-                        {
-                            Util.ShowError("El número de pallet ya existe, intente generarlo nuevamente.");
-                            return;
-                        }
-                        else
-                        {
-                            //Asigno los campos
-                            View.GetCodPallet.Text = "RES-E" + Resultado.Rows[0]["idpallet"].ToString();
-                            this.codigoPallet = "RES-E" + Resultado.Rows[0]["idpallet"].ToString();
-
-                            this.seleccionUbicacion = false;
-                            ////Limpio los seriales para digitar nuevos datos
-                            //View.GetSerial1.Text = "";
-                            //View.GetSerial2.Text = "";
-                            //View.GetSerial1.Focus();
-                        }
-                    }
-                    else
-                    {
-                        Util.ShowError("No es posible generar el número de pallet, intente en unos momentos.");
-                    }
-                }
-                else
-                {
-                    // Si no son iguales quiere decir que se agregaron nuevos equipos al pallet
-                    ////Util.ShowMessage("Esta seguro de crear un nuevo pallet, si realiza esto los cambios realizados se perderan");
-                    //Console.WriteLine("Se borraran los seriales no guardados");
-
-                    if (!UtilWindow.ConfirmOK("Esta seguro de crear un nuevo pallet, si realiza esto los cambios realizados se perderan?") == true)
-                        return;
-                    View.Model.ListRecords.Clear();
-
-                    //Creo el número de pallet aleatorio 
-                    ConsultaBuscar = "SELECT concat(right('0000'+cast(NEXT VALUE FOR dbo.PalletSecuence as varchar),5),right('0'+cast(ABS(CAST(NEWID() as binary(5)) % 1000) as varchar),3)) as idpallet";
-                    DataTable Resultado = service.DirectSQLQuery(ConsultaBuscar, "", "dbo.EquiposDIRECTVC", Local);
-
-                    this.contFilas_byPallet = 0; // Se crea un nueva pallet por lo tanto se vacia el contador de equipos por pallet
-
-                    if (Resultado.Rows.Count > 0)
-                    {
-                        //Busco el registro en la DB para validar que exista y que este en la ubicacion valida
-                        RegistroValidado = service.DirectSQLQuery("SELECT TOP 1 Serial FROM dbo.EquiposDIRECTVC WHERE idpallet ='" + Resultado.Rows[0]["idpallet"].ToString() + "' AND idpallet is not null", "", "dbo.EquiposDIRECTVC", Local);
-
-                        //Evaluo si el serial existe
-                        if (RegistroValidado.Rows.Count > 0)
-                        {
-                            Util.ShowError("El número de pallet ya existe, intente generarlo nuevamente.");
-                        }
-                        else
-                        {
-                            //Asigno los campos
-                            View.GetCodPallet.Text = "RES-E" + Resultado.Rows[0]["idpallet"].ToString();
-                            this.codigoPallet = "RES-E" + Resultado.Rows[0]["idpallet"].ToString();
-
-                            this.seleccionUbicacion = false;
-                            ////Limpio los seriales para digitar nuevos datos
-                            //View.GetSerial1.Text = "";
-                            //View.GetSerial2.Text = "";
-                            //View.GetSerial1.Focus();
-                        }
-                    }
-                    else
-                    {
-                        Util.ShowError("No es posible generar el número de pallet, intente en unos momentos.");
+                        View.GetCodPallet.Text = Resultado.Rows[0]["idpallet"].ToString();
                     }
 
+                    ConsultaBuscar = "";
+                    ConsultaValidar = "";
                 }
             }
-            catch (Exception Ex)
+            catch (Exception ex)
             {
-                Util.ShowError("Hubo un error al momento de generar el pallet. Error: " + Ex.Message);
-                return;
+                Util.ShowError("Se presento un error generando el pallet: " + ex.Message);
             }
+            ////DataRow dr = View.Model.ListRecords.NewRow();
+            //DataTable RegistroValidado;
+            //String ConsultaBuscar = "";
+
+            //try
+            //{
+            //    //Si el contador de equipos por pallet es igual a la lista de almacenamiento, quiere decir que no se agregaron nuevos equipos y se puede crear el nuevo pallet sin problema
+            //    if (View.Model.ListPallets_Empaque.Rows.Count == this.contFilas_byPallet)
+            //    {
+
+            //        View.Model.ListPallets_Empaque.Clear();
+
+            //        //Creo el número de pallet aleatorio 
+            //        ConsultaBuscar = "SELECT concat(right('0000'+cast(NEXT VALUE FOR dbo.PalletSecuence as varchar),5),right('0'+cast(ABS(CAST(NEWID() as binary(5)) % 1000) as varchar),3)) as idpallet";
+            //        DataTable Resultado = service.DirectSQLQuery(ConsultaBuscar, "", "dbo.EquiposDIRECTVC", Local);
+
+            //        this.contFilas_byPallet = 0; // Se crea un nueva pallet por lo tanto se vacia el contador de equipos por pallet
+
+            //        if (Resultado.Rows.Count > 0)
+            //        {
+            //            //Busco el registro en la DB para validar que exista y que este en la ubicacion valida
+            //            RegistroValidado = service.DirectSQLQuery("SELECT TOP 1 Serial FROM dbo.EquiposDIRECTVC WHERE idpallet ='" + Resultado.Rows[0]["idpallet"].ToString() + "' AND idpallet is not null", "", "dbo.EquiposDIRECTVC", Local);
+
+            //            //Evaluo si el serial existe
+            //            if (RegistroValidado.Rows.Count > 0)
+            //            {
+            //                Util.ShowError("El número de pallet ya existe, intente generarlo nuevamente.");
+            //            }
+            //            else
+            //            {
+            //                //Asigno los campos
+            //                View.GetCodPallet.Text = "RES-E" + Resultado.Rows[0]["idpallet"].ToString();
+            //                this.codigoPallet = "RES-E" + Resultado.Rows[0]["idpallet"].ToString();
+
+            //                this.seleccionUbicacion = false;
+            //                ////Limpio los seriales para digitar nuevos datos
+            //                //View.GetSerial1.Text = "";
+            //                //View.GetSerial2.Text = "";
+            //                //View.GetSerial1.Focus();
+            //            }
+            //        }
+            //        else
+            //        {
+            //            Util.ShowError("No es posible generar el número de pallet, intente en unos momentos.");
+            //        }
+            //    }
+            //    else if (this.codigoPallet == "")
+            //    {
+            //        //Creo el número de pallet aleatorio 
+            //        ConsultaBuscar = "SELECT concat(right('0000'+cast(NEXT VALUE FOR dbo.PalletSecuence as varchar),5),right('0'+cast(ABS(CAST(NEWID() as binary(5)) % 1000) as varchar),3)) as idpallet";
+            //        DataTable Resultado = service.DirectSQLQuery(ConsultaBuscar, "", "dbo.EquiposDIRECTVC", Local);
+
+            //        this.contFilas_byPallet = 0; // Se crea un nueva pallet por lo tanto se vacia el contador de equipos por pallet
+
+            //        if (Resultado.Rows.Count > 0)
+            //        {
+            //            //Busco el registro en la DB para validar que exista y que este en la ubicacion valida
+            //            RegistroValidado = service.DirectSQLQuery("SELECT TOP 1 Serial FROM dbo.EquiposDIRECTVC WHERE idpallet ='" + Resultado.Rows[0]["idpallet"].ToString() + "' AND idpallet is not null", "", "dbo.EquiposDIRECTVC", Local);
+
+            //            //Evaluo si el serial existe
+            //            if (RegistroValidado.Rows.Count > 0)
+            //            {
+            //                Util.ShowError("El número de pallet ya existe, intente generarlo nuevamente.");
+            //                return;
+            //            }
+            //            else
+            //            {
+            //                //Asigno los campos
+            //                View.GetCodPallet.Text = "RES-E" + Resultado.Rows[0]["idpallet"].ToString();
+            //                this.codigoPallet = "RES-E" + Resultado.Rows[0]["idpallet"].ToString();
+
+            //                this.seleccionUbicacion = false;
+            //                ////Limpio los seriales para digitar nuevos datos
+            //                //View.GetSerial1.Text = "";
+            //                //View.GetSerial2.Text = "";
+            //                //View.GetSerial1.Focus();
+            //            }
+            //        }
+            //        else
+            //        {
+            //            Util.ShowError("No es posible generar el número de pallet, intente en unos momentos.");
+            //        }
+            //    }
+            //    else
+            //    {
+            //        // Si no son iguales quiere decir que se agregaron nuevos equipos al pallet
+            //        ////Util.ShowMessage("Esta seguro de crear un nuevo pallet, si realiza esto los cambios realizados se perderan");
+            //        //Console.WriteLine("Se borraran los seriales no guardados");
+
+            //        if (!UtilWindow.ConfirmOK("Esta seguro de crear un nuevo pallet, si realiza esto los cambios realizados se perderan?") == true)
+            //            return;
+            //        View.Model.ListRecords.Clear();
+
+            //        //Creo el número de pallet aleatorio 
+            //        ConsultaBuscar = "SELECT concat(right('0000'+cast(NEXT VALUE FOR dbo.PalletSecuence as varchar),5),right('0'+cast(ABS(CAST(NEWID() as binary(5)) % 1000) as varchar),3)) as idpallet";
+            //        DataTable Resultado = service.DirectSQLQuery(ConsultaBuscar, "", "dbo.EquiposDIRECTVC", Local);
+
+            //        this.contFilas_byPallet = 0; // Se crea un nueva pallet por lo tanto se vacia el contador de equipos por pallet
+
+            //        if (Resultado.Rows.Count > 0)
+            //        {
+            //            //Busco el registro en la DB para validar que exista y que este en la ubicacion valida
+            //            RegistroValidado = service.DirectSQLQuery("SELECT TOP 1 Serial FROM dbo.EquiposDIRECTVC WHERE idpallet ='" + Resultado.Rows[0]["idpallet"].ToString() + "' AND idpallet is not null", "", "dbo.EquiposDIRECTVC", Local);
+
+            //            //Evaluo si el serial existe
+            //            if (RegistroValidado.Rows.Count > 0)
+            //            {
+            //                Util.ShowError("El número de pallet ya existe, intente generarlo nuevamente.");
+            //            }
+            //            else
+            //            {
+            //                //Asigno los campos
+            //                View.GetCodPallet.Text = "RES-E" + Resultado.Rows[0]["idpallet"].ToString();
+            //                this.codigoPallet = "RES-E" + Resultado.Rows[0]["idpallet"].ToString();
+
+            //                this.seleccionUbicacion = false;
+            //                ////Limpio los seriales para digitar nuevos datos
+            //                //View.GetSerial1.Text = "";
+            //                //View.GetSerial2.Text = "";
+            //                //View.GetSerial1.Focus();
+            //            }
+            //        }
+            //        else
+            //        {
+            //            Util.ShowError("No es posible generar el número de pallet, intente en unos momentos.");
+            //        }
+
+            //    }
+            //}
+            //catch (Exception Ex)
+            //{
+            //    Util.ShowError("Hubo un error al momento de generar el pallet. Error: " + Ex.Message);
+            //    return;
+            //}
 
         }
 

@@ -503,39 +503,75 @@ namespace WpfFront.Presenters
 
         private void OnGenerarCodigo(object sender, EventArgs e)
         {
-            //Variables Auxiliares
-            DataTable RegistroValidado;
             String ConsultaBuscar = "";
-
-            //Creo el número de pallet aleatorio 
-            ConsultaBuscar = "SELECT concat(right('0000'+cast(NEXT VALUE FOR dbo.PalletSecuence as varchar),5),right('0'+cast(ABS(CAST(NEWID() as binary(5)) % 1000) as varchar),3)) as idpallet";
-            DataTable Resultado = service.DirectSQLQuery(ConsultaBuscar, "", "dbo.EquiposDIRECTVC", Local);
-
-            if (Resultado.Rows.Count > 0)
+            String ConsultaValidar = "";
+            try
             {
-                //Busco el registro en la DB para validar que exista y que este en la ubicacion valida
-                RegistroValidado = service.DirectSQLQuery("SELECT TOP 1 Serial FROM dbo.EquiposDIRECTVC WHERE idpallet ='" + Resultado.Rows[0]["idpallet"].ToString() + "' AND idpallet is not null", "", "dbo.EquiposDIRECTVC", Local);
 
-                //Evaluo si el serial existe
-                if (RegistroValidado.Rows.Count > 0)
-                {
-                    Util.ShowError("El número de pallet ya existe, intente generarlo nuevamente.");
-                }
-                else
-                {
-                    //Asigno los campos
-                    View.CodigoEmpaque.Text = "RES-D" + Resultado.Rows[0]["idpallet"].ToString();
+                ConsultaBuscar = "select concat('DTV-',CONVERT(NVARCHAR, getdate(), 12),cast(NEXT VALUE FOR dbo.PalletSecuence as varchar)) as idpallet";
+                DataTable Resultado = service.DirectSQLQuery(ConsultaBuscar, "", "dbo.PalletSecuence", Local);
 
-                    ////Limpio los seriales para digitar nuevos datos
-                    //View.GetSerial1.Text = "";
-                    //View.GetSerial2.Text = "";
-                    //View.GetSerial1.Focus();
+                //ConsultaBuscar = "SELECT concat(right('0000'+cast(NEXT VALUE FOR dbo.PalletSecuence as varchar),5),right('0'+cast(ABS(CAST(NEWID() as binary(5)) % 1000) as varchar),3)) as idpallet";
+                //DataTable Resultado = service.DirectSQLQuery(ConsultaBuscar, "", "dbo.EquiposCLARO", Local);
+
+                if (Resultado.Rows.Count > 0)
+                {
+                    ConsultaValidar = "select RowId from dbo.EquiposDIRECTVC where IDPALLET = '" + Resultado.Rows[0]["idpallet"].ToString()
+                                                                             + "' or CodigoEmpaque = '" + Resultado.Rows[0]["idpallet"].ToString()
+                                                                             + "' or CodigoEmpaque2 = '" + Resultado.Rows[0]["idpallet"].ToString() + "';";
+                    Console.WriteLine(ConsultaValidar);
+                    DataTable RegistroValidado = service.DirectSQLQuery(ConsultaValidar, "", "dbo.EquiposDIRECTVC", Local);
+
+                    if (RegistroValidado.Rows.Count > 0)
+                    {
+                        Util.ShowError("El codigo de pallet ya se encuentra registrado. Por favor genere uno nuevo!");
+                    }
+                    else
+                    {
+                        View.CodigoEmpaque.Text = Resultado.Rows[0]["idpallet"].ToString();
+                    }
+
+                    ConsultaBuscar = "";
+                    ConsultaValidar = "";
                 }
             }
-            else
+            catch (Exception ex)
             {
-                Util.ShowError("No es posible generar el número de pallet, intente en unos momentos.");
+                Util.ShowError("Se presento un error generando el pallet: " + ex.Message);
             }
+            ////Variables Auxiliares
+            //DataTable RegistroValidado;
+            //String ConsultaBuscar = "";
+
+            ////Creo el número de pallet aleatorio 
+            //ConsultaBuscar = "SELECT concat(right('0000'+cast(NEXT VALUE FOR dbo.PalletSecuence as varchar),5),right('0'+cast(ABS(CAST(NEWID() as binary(5)) % 1000) as varchar),3)) as idpallet";
+            //DataTable Resultado = service.DirectSQLQuery(ConsultaBuscar, "", "dbo.EquiposDIRECTVC", Local);
+
+            //if (Resultado.Rows.Count > 0)
+            //{
+            //    //Busco el registro en la DB para validar que exista y que este en la ubicacion valida
+            //    RegistroValidado = service.DirectSQLQuery("SELECT TOP 1 Serial FROM dbo.EquiposDIRECTVC WHERE idpallet ='" + Resultado.Rows[0]["idpallet"].ToString() + "' AND idpallet is not null", "", "dbo.EquiposDIRECTVC", Local);
+
+            //    //Evaluo si el serial existe
+            //    if (RegistroValidado.Rows.Count > 0)
+            //    {
+            //        Util.ShowError("El número de pallet ya existe, intente generarlo nuevamente.");
+            //    }
+            //    else
+            //    {
+            //        //Asigno los campos
+            //        View.CodigoEmpaque.Text = "RES-D" + Resultado.Rows[0]["idpallet"].ToString();
+
+            //        ////Limpio los seriales para digitar nuevos datos
+            //        //View.GetSerial1.Text = "";
+            //        //View.GetSerial2.Text = "";
+            //        //View.GetSerial1.Focus();
+            //    }
+            //}
+            //else
+            //{
+            //    Util.ShowError("No es posible generar el número de pallet, intente en unos momentos.");
+            //}
         }
 
         private void OnConfirmarImpresion(object sender, EventArgs e)
