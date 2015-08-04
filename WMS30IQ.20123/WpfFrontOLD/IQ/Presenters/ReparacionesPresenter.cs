@@ -54,7 +54,6 @@ namespace WpfFront.Presenters
             this.service = new WMSServiceClient();
             View.Model = this.container.Resolve<ReparacionesModel>();
 
-
             #region Metodos
 
             View.ConfirmBasicData += new EventHandler<EventArgs>(this.OnConfirmBasicData);
@@ -89,6 +88,7 @@ namespace WpfFront.Presenters
             View.RemoveSelection += new EventHandler<EventArgs>(this.OnRemoveSelection);
             View.HabilitarMotivo += new EventHandler<EventArgs>(this.OnHabilitarMotivo);
             View.CargarHistorico += new EventHandler<EventArgs>(this.CargarHistorico);
+            View.BuscarEquiposPorTecnico += new EventHandler<MouseButtonEventArgs>(this.OnBuscarEquiposPorTecnico);
 
             #endregion
 
@@ -107,11 +107,14 @@ namespace WpfFront.Presenters
             CargarDatosDetails();
             ListarDatos();
             CargarTecnicosReparacion();
+        
 
             View.Model.ListRecordsAddToPallet = service.DirectSQLQuery("EXEC sp_GetProcesos 'BUSCARMERCANCIAENTREGAREP', '', '',''", "", "dbo.EquiposClaro", Local);
 
             //Cargo los tecnicos
             View.Model.ListadoTecnicos = service.GetSysUser (new SysUser());
+            View.Model.ListadoTecnicos = View.Model.ListadoTecnicos.OrderBy(x => x.UserName).ToList();
+
             this.Actualizar_UbicacionDisponible();
 
             if (App.curUser.UserRols.Where(f => f.Rol.RolCode == "ADMIN" || f.Rol.RolCode == "CLARODIAG").Count() == 0)
@@ -129,6 +132,15 @@ namespace WpfFront.Presenters
         }
 
         #region Metodos
+
+        private void OnBuscarEquiposPorTecnico(object sender, MouseButtonEventArgs e)
+        {
+            string currentUser = this.user.ToUpper().ToString();
+            View.txt_User.Text = "Equipos reparados por el usuario: " + currentUser;
+            string ConsultaSQL = "EXEC dbo.sp_GetProcesos 'BUSCAREQUIPOSPORTECNICO', '" + currentUser + "'";
+            DataTable Resultado = service.DirectSQLQuery(ConsultaSQL, "", "dbo.EquiposClaro", Local);
+            View.Model.ListEquiposReparadosByUser = Resultado;
+        }
 
         private void OnConfirmarImpresion(object sender, EventArgs e)
         {
@@ -196,7 +208,8 @@ namespace WpfFront.Presenters
                 return;
             }
 
-            if (((ComboBoxItem)View.GetListaEstado.SelectedItem).Content.ToString().Contains("REP") == false)
+            string tipoEstado = ((ComboBoxItem)View.GetListaEstado.SelectedItem).Content.ToString();
+            if (tipoEstado.Contains("REP") == false)
             {
                 tipo_listado = "SCRAP";
                 estado = "PARA SCRAP";
@@ -206,6 +219,12 @@ namespace WpfFront.Presenters
                 tipo_listado = "REPARADOS";
                 estado = "REPARADOS";
             }
+            if (tipoEstado.Contains("ERRÓNEA"))
+            {
+                tipo_listado = "ETIQUETA ERRONEA";
+                estado = "ETIQUETA ERRONEA";
+            }
+            
 
             //Imprimo los registros
             PrinterControl.PrintMovimientosBodega(SerialesImprimir, unidad_almacenamiento, codigoEmp, estado, "CLARO", "REPARACIÓN - " + destino, tipo_listado, "AUX");
@@ -258,9 +277,14 @@ namespace WpfFront.Presenters
         {
             //Variables Auxiliares
             String ConsultaSQL;
+            string tipoEstado = ((ComboBoxItem)View.GetListaEstado.SelectedItem).Content.ToString();
+            if (tipoEstado.Equals("REPARADO"))
+            {
+                tipoEstado = "REP";
+            }
 
             //Creo la consulta para buscar los registros
-            ConsultaSQL = "EXEC sp_GetProcesos 'BUSCARMERCANCIAFILTRADA_REP', '" + ((ComboBoxItem)View.GetListaEstado.SelectedItem).Content.ToString() + "', 'REPARACION','" + this.user + "';";
+            ConsultaSQL = "EXEC sp_GetProcesos 'BUSCARMERCANCIAFILTRADA_REP', '" + tipoEstado + "', 'REPARACION','" + this.user + "';";
             
 
             //Ejecuto la consulta
@@ -774,8 +798,6 @@ namespace WpfFront.Presenters
                 }
                 else
                 {
-                   
-
                     if (View.MotivoSCRAP.Text == "" || View.MotivoSCRAP.Text == null)
                     {
                         Util.ShowError("Por favor ingresar el motivo de SCRAP");

@@ -287,6 +287,9 @@
                                             <TextBlock x:Uid="txt_Serial2" Name="txt_Serial2_2" Text="Mac" />
                                             <TextBox x:Uid="tb_Serial2" Name="tb_Serial2_2" Width="150" KeyDown="tb_Serial2_KeyDown_1" />
                                         </StackPanel>
+                                        <StackPanel Orientation="Vertical" HorizontalAlignment="Left" Margin="70,20,0,0">
+                                            <TextBlock x:Uid="txt_showItemsByUser" Name="txt_showItemsByUser"  Width="210" MouseDown = "txt_showItemsByUser_MouseDownClick_1" Cursor="Hand" FontStyle="Oblique" FontWeight="Bold" /> 
+                                        </StackPanel>
                                     </StackPanel>
                                     <StackPanel Margin="5,5,0,0" Orientation="Horizontal">
                                         <TextBlock x:Uid="textblock_recuento" Text="Tecnico Asignado: " FontWeight="Bold" Margin="0,0,8,4" />
@@ -317,7 +320,7 @@
                                         </StackPanel>
                                         <StackPanel x:Uid="Stack_FallaAdicional" Width="auto" Orientation="Horizontal" Margin="4,3,4,3">
                                             <TextBlock x:Uid="Text_block" Width="100" Text="Falla Adicional" VerticalAlignment="Center" Margin="4,0,6,0" />
-                                            <ComboBox x:Uid="cb_FallaAdic" Name="cb_FallaAdic" Width="180" Height="23" ItemsSource="{Binding Path=ListadoFallaDiagnostico}" SelectedValue="Falla_Diagnostico" DisplayMemberPath="Name" />
+                                            <ComboBox x:Uid="cb_FallaAdic" x:Name="cb_FallaAdic" Width="180" Height="23" ItemsSource="{Binding ListadoFallaDiagnostico}" SelectedValue="Falla_Diagnostico" DisplayMemberPath="Name" />
                                             <StackPanel x:Uid="Stack_ObservacionesAdic" Width="auto" Orientation="Horizontal" Margin="4,3,4,3">
                                                 <TextBlock x:Uid="Text_block" Width="100" Text="Observaciones" VerticalAlignment="Center" Margin="4,0,6,0" />
                                                 <TextBox x:Uid="txt_ObservacionesAdic" x:Name="txt_ObservacionesAdic" Width="180" Height="23" VerticalAlignment="Center"/>
@@ -450,7 +453,25 @@
                                     </ListView.View>
                                 </ListView>
                             </StackPanel>
-                        </Border>    
+                        </Border>
+                        <Border x:Uid="Border2" x:Name="BorderDetailJ" Style="{DynamicResource UserControlFormInnerBorder}" Margin="3" HorizontalAlignment="Center" Visibility="Collapsed" Height="400" Width="676" VerticalAlignment="Top">
+                            <StackPanel x:Name="Stack_EquiposPorUsuario" x:Uid="Stack_EquiposPorUsuario" Orientation="Vertical" Margin="-7,3,-280,3" HorizontalAlignment="Center" Width="984" Height="auto">
+                                <TextBlock x:Name="txt_currentUser"  HorizontalAlignment="Left" FontWeight="bold" Margin="30,0,0,10" Width="300" />
+                                <Separator Margin="26,0,302,0"/>
+                                <ListView x:Uid="c" x:Name="lv_EquiposPorUsario"  ItemsSource="{Binding ListEquiposReparadosByUser}" Margin="26,4,302,0"  MaxHeight="400" >
+                                    <ListView.View>
+                                        <GridView x:Uid="GridViewEquiposPorUsuario" x:Name="GridViewEquiposPorUsuario">
+                                            <GridViewColumn x:Uid="GridViewColumn_1" Header="Modelo" Width="180" DisplayMemberBinding="{Binding Path = MODELO}" />
+                                            <GridViewColumn x:Uid="GridViewColumn_2" Header="Serial" Width="100" DisplayMemberBinding="{Binding Path=SERIAL}" />
+                                            <GridViewColumn x:Uid="GridViewColumn_3" Header="MAC" Width="75" DisplayMemberBinding="{Binding Path=MAC}" />
+                                            <GridViewColumn x:Uid="GridViewColumn_4" Header="Estado" Width="100" DisplayMemberBinding="{Binding Path=ESTADO}" />
+                                            <GridViewColumn x:Uid="GridViewColumn_5" Header="Fecha reparación" Width="130" DisplayMemberBinding="{Binding Path=FECHAREPARACION}" />
+                                            <GridViewColumn x:Uid="GridViewColumn_6" Header="Caja" Width="50" DisplayMemberBinding="{Binding Path=CAJA}" />
+                                        </GridView>
+                                    </ListView.View>
+                                </ListView>
+                            </StackPanel>
+                        </Border>
                     </StackPanel>
                 </TabItem>
 
@@ -473,13 +494,9 @@
                                         <TextBlock x:Uid="TextBlock_4" Width="50" FontWeight="Bold" Margin="0,4,4,0" HorizontalAlignment="Left" Text="Estado" />
                                         <ComboBox x:Uid="cb_BuscarItems" Name="cb_BuscarItems" Width="100" Height="23" SelectionChanged="cb_BuscarItem_SelectionChanged" >
                                             <ComboBoxItem Content="SCRAP"/>
-                                            <ComboBoxItem Content="REINSCRAPLP"/>
-                                            <ComboBoxItem Content="REINSCRAPTEC"/>
                                             <ComboBoxItem Content="REPARADO"/>
-                                            <ComboBoxItem Content="REINREPLP"/>
-                                            <ComboBoxItem Content="REINREPTEC"/>    
+                                            <ComboBoxItem Content="ETIQUETAERRÓNEA"/>    
                                         </ComboBox>
-
                                         <TextBlock x:Uid="Text_block2" Width="110" FontWeight="Bold" Text="Tecnico Reparacion" VerticalAlignment="Center" Margin="50,0,6,0" Visibility="Collapsed" Name="txtTecnico"/>
                                         <ComboBox x:Uid="cb_FiltroTecnico" Name="cb_FiltroTecnico" Width="180" Height="23" ItemsSource="{Binding Path=ListadoTecnicosReparacion}" SelectedValue="Tecnico" DisplayMemberPath="Tecnico" SelectionChanged="cbFilter" Visibility="Collapsed"/>
                                         

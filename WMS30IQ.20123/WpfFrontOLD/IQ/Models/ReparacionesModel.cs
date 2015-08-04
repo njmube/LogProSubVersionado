@@ -33,11 +33,23 @@ namespace WpfFront.Models
         DataTable ListadoTecnicosReparacion { get; set; }
         DataTable ListRecordsAddToPallet { get; set; }
         DataTable ListReparaciones { get; set; }
+        DataTable ListEquiposReparadosByUser { get; set; }
 
     }
 
     public class ReparacionesModel : BusinessEntityBase, IReparacionesModel
     {
+        private DataTable _ListEquiposReparadosByUser;
+        public DataTable ListEquiposReparadosByUser
+        {
+            get { return this._ListEquiposReparadosByUser; }
+            set 
+            {
+                this._ListEquiposReparadosByUser = value;
+                OnPropertyChanged("ListEquiposReparadosByUser");
+            }
+        }
+
         private Location _RecordCliente;
         public Location RecordCliente
         {

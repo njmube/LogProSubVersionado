@@ -104,6 +104,12 @@ namespace WpfFront.Presenters
 
         public void OnexportarTracking(object sender, EventArgs e)
         {
+            if (View.ListadoEquipos_Track.SelectedIndex == -1)
+            {
+                Util.ShowMessage("Por favor seleccione un equipo para poder exportar todos sus movimientos");
+                return;
+            }
+            
             Microsoft.Office.Interop.Excel.Application excel = null;
             Microsoft.Office.Interop.Excel.Workbook wb = null;
 
@@ -119,7 +125,7 @@ namespace WpfFront.Presenters
 
                 for (int i = 0; i < View.Model.ListMovimientos.Columns.Count; i++)
                 {
-                    ws.Range["A1"].Offset[0, i].Value = View.Model.ListMovimientos.Columns[i].ColumnName;
+                    ws.Range["A1"].Offset[0, i].Value = View.Model.ListMovimientos.Columns[i].ColumnName.ToString().ToUpper(); ;
                     ws.Range["A1"].Offset[0, i].Interior.Color = System.Drawing.ColorTranslator.ToOle(System.Drawing.Color.Red);
                 }
 
@@ -133,6 +139,7 @@ namespace WpfFront.Presenters
                 rng.Cells.HorizontalAlignment = Microsoft.Office.Interop.Excel.XlHAlign.xlHAlignLeft;
                 rng.Columns.AutoFit();
 
+                ws.Name = "Movimiento del equipo ";
                 excel.Visible = true;
                 wb.Activate();
             }

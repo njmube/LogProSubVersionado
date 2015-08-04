@@ -406,7 +406,7 @@
                                                     <ListView x:Uid="lv_equipos" x:Name="lv_equipos" SelectionMode="Single" ItemsSource="{Binding ListadoEquipos}" SelectionChanged="lv_listEquipos_selectionChanged"  TextElement.FontSize="10" Margin="12,4,10,0"  Height="157" HorizontalAlignment="Center" Width="498">
                                                         <ListView.View>
                                                             <GridView x:Uid="GridViewDetails_2" x:Name="GridViewDetails3">
-                                                                <GridViewColumn x:Uid="GridViewColumn_1"  Header="#Ingresos" Width="53" DisplayMemberBinding="{Binding ingresos}" />
+                                                                <GridViewColumn x:Uid="GridViewColumn_1"  Header="# Ingresos" Width="53" DisplayMemberBinding="{Binding ingresos}" />
                                                                 <GridViewColumn x:Uid="GridViewColumn_2" Header="Serial" Width="100" DisplayMemberBinding="{Binding serial}" />
                                                                 <GridViewColumn x:Uid="GridViewColumn_3" Header="Mac" Width="100" DisplayMemberBinding="{Binding mac}" />
                                                                 <GridViewColumn x:Uid="GridViewColumn_4" Header="Estado" Width="85" DisplayMemberBinding="{Binding estado_actual}" />

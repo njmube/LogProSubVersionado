@@ -53,6 +53,7 @@ namespace WpfFront.Views
         public event EventHandler<EventArgs> RemoveSelection;
         public event EventHandler<EventArgs> HabilitarMotivo;
         public event EventHandler<EventArgs> CargarHistorico;
+        public event EventHandler<MouseButtonEventArgs> BuscarEquiposPorTecnico;
 
         #endregion
 
@@ -60,9 +61,16 @@ namespace WpfFront.Views
         {
             InitializeComponent();
             Text_ShowHide.Text = "<< Ocultar";
+            txt_showItemsByUser.Text = "Mostrar equipos por técnico >>";
         }
 
         #region Variables
+
+        public TextBlock txt_User
+        {
+            get { return this.txt_currentUser; }
+            set { this.txt_currentUser = value; }
+        }
 
         public ReparacionesModel Model
         {
@@ -406,6 +414,12 @@ namespace WpfFront.Views
             set { this.Border_DetailH = value; }
         }
 
+        public Border Border_ListEquipos
+        {
+            get { return this.BorderDetailJ; }
+            set { this.BorderDetailJ = value; }
+        }
+
         public TextBox GetQuery
         {
             get { return this.txt_Query; }
@@ -415,7 +429,6 @@ namespace WpfFront.Views
         #endregion
 
         #region Metodos
-
 
         private void btn_confirmar_Click_1(object sender, RoutedEventArgs e)
         {
@@ -542,7 +555,6 @@ namespace WpfFront.Views
         {
             FilaSeleccionada(sender, e);
         }
-
 
         private void CheckBox_Checked_HEADER(object sender, RoutedEventArgs e)
         {
@@ -705,8 +717,24 @@ namespace WpfFront.Views
             RemoveSelection(sender, e);
         }
 
+        private void txt_showItemsByUser_MouseDownClick_1(object sender, MouseButtonEventArgs e)
+        {
+            BuscarEquiposPorTecnico(sender, e);
+            Stack_EquiposPorUsuario.Visibility = Visibility.Visible;
+            string texto = txt_showItemsByUser.Text;
+            if (texto.Contains("Mostrar"))
+            {
+                txt_showItemsByUser.Text = "Ocultar busqueda de equipos <<";
+                Border_ListEquipos.Visibility = Visibility.Visible;
+            }
+            else
+            {
+                txt_showItemsByUser.Text = "Mostrar equipos por técnico >>";
+                Border_ListEquipos.Visibility = Visibility.Collapsed;
+            }
+        }
+        
         #endregion
-
     }
 
     public interface IReparacionesView
@@ -770,6 +798,8 @@ namespace WpfFront.Views
         TextBlock TextBlockTecnico { get; set; }
         StackPanel StackListaEquiposEntrega { get; set; }
         Border Border_ListaHP { get; set; }
+        Border Border_ListEquipos { get; set; }
+        TextBlock txt_User { get; set; }
 
         TextBox GetQuery { get; set; }
 
@@ -807,6 +837,7 @@ namespace WpfFront.Views
         event EventHandler<EventArgs> RemoveSelection;
         event EventHandler<EventArgs> HabilitarMotivo;
         event EventHandler<EventArgs> CargarHistorico;
+        event EventHandler<MouseButtonEventArgs> BuscarEquiposPorTecnico;
 
         #endregion
 
