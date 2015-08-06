@@ -69,7 +69,8 @@ namespace WpfFront.Presenters
             View.MostrarEquiposDespacho += new EventHandler<EventArgs>(this.OnMostrarEquiposDespacho);
             View.FilaSeleccionada += this.OnFilaSeleccionada;
             View.ExportPalletSeleccion += this.OnExportPalletSeleccion;
-          
+            View.ListarEquiposSeleccion += new EventHandler<EventArgs>(this.OnListarEquiposSeleccion);
+
             //ConfirmarMovimiento
             #endregion
 
@@ -709,6 +710,7 @@ namespace WpfFront.Presenters
             //Quito la seleccion del listado
             View.ListadoItems.SelectedIndex = -1;
 
+            View.Model.Listado_PalletSerialDespacho.Rows.Clear();
         }
 
         public void LimpiarDatosIngresoSeriales()
@@ -763,6 +765,30 @@ namespace WpfFront.Presenters
             //Imprimo los registros
             PrinterControl.PrintMovimientosBodegaDIRECTV(SerialesImprimir, "PALLET", pallet, destino, "DIRECTV", "ALMACENAMIENTO - DESPACHO", "", "DIRECTV");
         }
+
+        private void OnListarEquiposSeleccion(object sender, EventArgs e)
+        {
+            //Evaluo que haya sido seleccionado un registro
+            if (View.ListadoItems.SelectedIndex == -1)
+                return;
+
+            string aux_idPallet = ((DataRowView)View.ListadoItems.SelectedItem).Row["Estiba"].ToString();
+
+            String Consulta = "SELECT IdPallet as PPallet, "
+                            + "serial as PSerial, "
+                            + "RECEIVER as Receiver, "
+                            + "SMART_CARD_ASIGNADA as SmartCardAsignada,  "
+                            + "MODELO as Modelo "
+                            + "from dbo.EquiposDIRECTVC WHERE ((IdPallet IS NOT NULL) AND (ESTADO = 'DESPACHO')) "
+                            + " AND IdPallet = '" + aux_idPallet + "';";
+
+            Console.WriteLine(Consulta);
+
+            View.Model.Listado_PalletSerialDespacho =
+            service.DirectSQLQuery(Consulta, "", "dbo.EquiposDIRECTVC", Local);
+
+        }
+
         #endregion
 
     }

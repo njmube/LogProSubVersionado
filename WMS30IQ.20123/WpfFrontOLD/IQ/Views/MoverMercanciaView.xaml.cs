@@ -342,6 +342,7 @@ namespace WpfFront.Views
             FilaSeleccionada(sender, e);
         }
 
+      
         #endregion
 
         #region Recibo

@@ -17,6 +17,9 @@ using WpfFront.Common.WFUserControls;
 using Microsoft.Windows.Controls;
 using WpfFront.Common.Windows;
 using System.Windows.Input;
+using System.Threading;
+using System.Data.OleDb;
+using System.Diagnostics;
 
 namespace WpfFront.Presenters
 {
@@ -41,6 +44,20 @@ namespace WpfFront.Presenters
         private String userName = App.curUser.UserName;
         private String user = App.curUser.FirstName + " " + App.curUser.LastName;
 
+        private DataTable SerialesIngresados = new DataTable();
+        private DataRow NoLoad_Row = null;
+        private Timer t;
+        private Timer t1;
+        private Timer tserial;
+        private Timer treceiver;
+        private Timer tsmart;
+        private Timer talmacenado;
+        private Thread updateLabelThread;
+        private Boolean estado_cargue = false, busqueda_Repetidos = false, busqueda_serial = false, busqueda_receiver = false, busqueda_smart = false, busqueda_almacenado = false;
+        private OleDbConnection oledbcon;
+        private OleDbDataAdapter adaptador;
+        private Thread hilo_repetidos;
+
         private int contFilas_byPallet = 0; // Almacena el conteo de los equipos que tiene un pallet seleccionado en la lista de busqueda
         private String codigoPallet = ""; // Guarda el codigo pallet cuando se selecciona una fila de la lista de pallets o cuando se genera un nuevo codigo de pallet
         private String ubicacionPallet = ""; // Guarda la ubicacion del pallet seleccionado de la lista de pallets
@@ -58,7 +75,7 @@ namespace WpfFront.Presenters
             #region Metodos
 
             View.AddLine += new EventHandler<EventArgs>(this.OnAddLine);
-            view.CargaMasiva += new EventHandler<DataEventArgs<DataTable>>(this.OnCargaMasiva);
+            //view.CargaMasiva += new EventHandler<DataEventArgs<DataTable>>(this.OnCargaMasiva);
             View.ReplicateDetails += new EventHandler<EventArgs>(this.OnReplicateDetails);
             View.SaveDetails += new EventHandler<EventArgs>(this.OnSaveDetails);
             View.ConfirmarMovimiento += new EventHandler<EventArgs>(this.OnConfirmarMovimiento);
@@ -76,6 +93,9 @@ namespace WpfFront.Presenters
             View.EliminarEquipo_Fila += new EventHandler<EventArgs>(this.OnEliminarEquipo_Fila);
             View.GenerarNumero += new EventHandler<EventArgs>(this.OnGenerarNumero);
 
+            view.CargaMasiva += new EventHandler<EventArgs>(this.OnCargaMasiva);
+            view.KillProcess += new EventHandler<EventArgs>(this.OnKillProcess);
+
             #endregion
 
             #region Datos
@@ -90,8 +110,6 @@ namespace WpfFront.Presenters
             this.Actualizar_UbicacionDisponible();
 
             View.Model.ListUbicacionesDestino = service.DirectSQLQuery("EXEC sp_GetProcesos 'UBICACIONESDESTINO', 'RECIBOALMACEN', 'CLARO'", "", "dbo.Ubicaciones", Local);
-
-            
 
             CargarListPallets();
             //Cargo los datos del listado
@@ -232,6 +250,8 @@ namespace WpfFront.Presenters
 
             //Ejecuto la consulta
             View.Model.ListadoRecibo = service.DirectSQLQuery(ConsultaSQL, "", "dbo.EquiposDIRECTVC", Local);
+
+            View.Model.Listado_PalletSerial.Rows.Clear();
         }
 
         private void OnActualizarRegistrosRecibo(object sender, EventArgs e)
@@ -266,7 +286,7 @@ namespace WpfFront.Presenters
         {
 
             //Variables Auxiliares
-            String ConsultaSQL = "", NuevaUbicacion, NuevoEstado, ConsultaTrack = "";
+            String ConsultaSQL = "", NuevaUbicacion, NuevoEstado, NuevoEstadoRecibido, ConsultaTrack = "";
 
             //Evaluo que haya registros en el listado
             if (View.ListadoBusquedaRecibo.Items.Count == 0)
@@ -274,6 +294,7 @@ namespace WpfFront.Presenters
 
             //Coloco la ubicacion
             NuevaUbicacion = ((DataRowView)View.Ubicacion.SelectedItem).Row["UbicacionDestino"].ToString();
+            NuevoEstadoRecibido = ((MMaster)View.EstadoRecibo.SelectedItem).Name.ToString();
 
             //Valido la ubicacion para colocar el estado
             if (NuevaUbicacion != "DESPACHO")
@@ -283,7 +304,7 @@ namespace WpfFront.Presenters
                 foreach (DataRowView Registros in View.ListadoBusquedaRecibo.SelectedItems)
                 {
                     //Creo la consulta para confirmar el cambio de ubicacion de la estiba
-                    ConsultaSQL = "EXEC sp_GetProcesosDIRECTVC 'UPDATE_ALMACENAMIENTO','" + NuevoEstado + "', '" + NuevaUbicacion + "','" + ((MMaster)View.UbicacionDesp.SelectedItem).Code.ToString() + "','" + Registros.Row["Pallet"].ToString() + "';";
+                    ConsultaSQL = "EXEC sp_GetProcesosDIRECTVC 'UPDATE_ALMACENAMIENTO','" + NuevoEstado + "', '" + NuevoEstadoRecibido + "','" + ((MMaster)View.UbicacionDesp.SelectedItem).Code.ToString() + "','" + Registros.Row["Pallet"].ToString() + "';";
                     ConsultaTrack = "UPDATE dbo.TrackEquiposDIRECTV SET ESTADO_ALMACEN2 = 'DESDE PRODUCCION', UBICACION_ALMACEN2 = '" + ((MMaster)View.UbicacionDesp.SelectedItem).Code.ToString() + "' WHERE CODEMPAQUE_EMPAQ_ENTR = '" + Registros.Row["Pallet"].ToString() + "';";
 
                     ConsultaSQL += "exec sp_InsertarNuevo_MovimientoDIRECTV 'PALLET RECIBIDO PARA DESPACHO','RECEPCIÓN ALMACENAMIENTO','Z DESPACHO','" + Registros.Row["Pallet"].ToString()
@@ -298,19 +319,27 @@ namespace WpfFront.Presenters
             else
             { 
                 NuevoEstado = "DESPACHO";
-                //Recorro el listado de registros para confirmar
-                foreach (DataRowView Registros in View.ListadoBusquedaRecibo.SelectedItems)
+
+                if (NuevoEstadoRecibido == "CUARENTENA")
                 {
-                    //Creo la consulta para confirmar el cambio de ubicacion de la estiba
-                    ConsultaSQL = "EXEC sp_GetProcesosDIRECTVC 'UPDATE_ALMACENAMIENTO','" + NuevoEstado + "', '" + NuevaUbicacion + "','" + ((MMaster)View.UbicacionDesp.SelectedItem).Code.ToString() + "','" + Registros.Row["Pallet"].ToString() + "';";
-                    ConsultaTrack = "UPDATE dbo.TrackEquiposDIRECTV SET ESTADO_ALMACEN2 = 'DESDE PRODUCCION', UBICACION_ALMACEN2 = '" + ((MMaster)View.UbicacionDesp.SelectedItem).Code.ToString() + "' WHERE CODEMPAQUE_EMPAQ_ENTR = '" + Registros.Row["Pallet"].ToString() + "';";
+                    Util.ShowError("EL pallet esta en CUARENTENA y no puede ser enviado a DESPACHO");
+                    return;
+                }
+                else { 
+                    //Recorro el listado de registros para confirmar
+                    foreach (DataRowView Registros in View.ListadoBusquedaRecibo.SelectedItems)
+                    {
+                        //Creo la consulta para confirmar el cambio de ubicacion de la estiba
+                        ConsultaSQL = "EXEC sp_GetProcesosDIRECTVC 'UPDATE_ALMACENAMIENTOPDESPACHO','" + NuevoEstado + "', '" + NuevoEstadoRecibido + "','" + ((MMaster)View.UbicacionDesp.SelectedItem).Code.ToString() + "','" + Registros.Row["Pallet"].ToString() + "';";
+                        ConsultaTrack = "UPDATE dbo.TrackEquiposDIRECTV SET ESTADO_ALMACEN2 = 'DESDE PRODUCCION', UBICACION_ALMACEN2 = '" + ((MMaster)View.UbicacionDesp.SelectedItem).Code.ToString() + "' WHERE CODEMPAQUE_EMPAQ_ENTR = '" + Registros.Row["Pallet"].ToString() + "';";
 
-                    ConsultaSQL += "exec sp_InsertarNuevo_MovimientoDIRECTV 'PALLET POSIIONADO EN ALMACEN','RECEPCIÓN ALMACENAMIENTO','ALMACENAMIENTO','" + Registros.Row["Pallet"].ToString()
-                                            + "','','ALMACENAMIENTO','UBICACIONALMACEN_SALIDAS','" + this.user + "','';";
+                        ConsultaSQL += "exec sp_InsertarNuevo_MovimientoDIRECTV 'PALLET POSIIONADO EN ALMACEN','RECEPCIÓN ALMACENAMIENTO','ALMACENAMIENTO','" + Registros.Row["Pallet"].ToString()
+                                                + "','','ALMACENAMIENTO','UBICACIONALMACEN_SALIDAS','" + this.user + "','';";
 
-                    //Ejecuto la consulta
-                    service.DirectSQLNonQuery(ConsultaSQL, Local);
-                    service.DirectSQLNonQuery(ConsultaTrack, Local);
+                        //Ejecuto la consulta
+                        service.DirectSQLNonQuery(ConsultaSQL, Local);
+                        service.DirectSQLNonQuery(ConsultaTrack, Local);
+                    }
                 }
             }
                 
@@ -328,7 +357,7 @@ namespace WpfFront.Presenters
 
             //Busco los registros para actualizar el listado
             BuscarRegistrosEntrega();
-
+            View.Model.Listado_PalletSerial.Rows.Clear();
         }
 
         public void CargarDatosDetails()
@@ -349,6 +378,12 @@ namespace WpfFront.Presenters
             View.Model.ListRecords.Columns.Add("Receiver", typeof(String));
             View.Model.ListRecords.Columns.Add("SmartCard", typeof(String));
             //View.Model.ListRecords.Columns.Add("IdPallet", typeof(String));
+
+
+            // Datatable lista de seriales no cargados
+            View.Model.List_Nocargue = new DataTable("ListadoNoCargue");
+            View.Model.List_Nocargue.Columns.Add("Serial", typeof(String));
+            View.Model.List_Nocargue.Columns.Add("Motivo", typeof(String)); // Motivo del no cargue
 
             //#region Columna Fecha Cambio a bodega
 
@@ -413,155 +448,155 @@ namespace WpfFront.Presenters
             //#endregion 
         }
 
-        private void OnCargaMasiva(object sender, DataEventArgs<DataTable> e)
-        {
-            //Variables Auxiliares
-            DataRow RegistroGuardar;
-            DataTable RegistroValidado;
-            DataTable SerialesIngresados;
-            List<String> listRepetidos = new List<string>(); //Guarda los seriales que estan repetidos en el carge masivo
-            List<String> listReceiver = new List<string>(); // Guarda los receiver repetidos en el carge masivo
-            List<String> listSmartCard = new List<string>(); // Guarda los SmartCard repetidos en el carge masivo
-            Boolean Existe;
-            Boolean aux;
+        //private void OnCargaMasiva(object sender, DataEventArgs<DataTable> e)
+        //{
+        //    //Variables Auxiliares
+        //    DataRow RegistroGuardar;
+        //    DataTable RegistroValidado;
+        //    DataTable SerialesIngresados;
+        //    List<String> listRepetidos = new List<string>(); //Guarda los seriales que estan repetidos en el carge masivo
+        //    List<String> listReceiver = new List<string>(); // Guarda los receiver repetidos en el carge masivo
+        //    List<String> listSmartCard = new List<string>(); // Guarda los SmartCard repetidos en el carge masivo
+        //    Boolean Existe;
+        //    Boolean aux;
 
-            //Valido la existencia de los equipos ingresados
-            SerialesIngresados = ValidarSerialesIngresados(e.Value);
+        //    //Valido la existencia de los equipos ingresados
+        //    SerialesIngresados = ValidarSerialesIngresados(e.Value);
 
-            foreach (DataRow dr in e.Value.Rows)
-            {
+        //    foreach (DataRow dr in e.Value.Rows)
+        //    {
 
-                //Iniciamos la variable para validar existencia
-                Existe = false;
+        //        //Iniciamos la variable para validar existencia
+        //        Existe = false;
 
-                //Validamos si el serial existe o no en el sistema
-                foreach (DataRow dr1 in SerialesIngresados.Rows)
-                {
-                    if (dr1["SERIAL"].ToString().ToUpper() == dr[0].ToString().ToUpper())
-                    {
-                        Existe = true;
-                        break;
-                    }
-                }
+        //        //Validamos si el serial existe o no en el sistema
+        //        foreach (DataRow dr1 in SerialesIngresados.Rows)
+        //        {
+        //            if (dr1["SERIAL"].ToString().ToUpper() == dr[0].ToString().ToUpper())
+        //            {
+        //                Existe = true;
+        //                break;
+        //            }
+        //        }
 
-                //Valido el serial si existe
-                if (Existe)
-                    continue;
+        //        //Valido el serial si existe
+        //        if (Existe)
+        //            continue;
 
-                //Inicializo el registro para guardar el dato
-                RegistroGuardar = View.Model.ListRecords.NewRow();
+        //        //Inicializo el registro para guardar el dato
+        //        RegistroGuardar = View.Model.ListRecords.NewRow();
 
-                try
-                {
-                    //Busco el registro en la DB para validar que exista y que este en la ubicacion valida
-                    RegistroValidado = service.DirectSQLQuery("EXEC sp_GetProcesosDIRECTVC 'BUSCAREQUIPO','" + dr[0].ToString() + "'", "", "dbo.EquiposDIRECTVC", Local);
-                    aux = true;
+        //        try
+        //        {
+        //            //Busco el registro en la DB para validar que exista y que este en la ubicacion valida
+        //            RegistroValidado = service.DirectSQLQuery("EXEC sp_GetProcesosDIRECTVC 'BUSCAREQUIPO','" + dr[0].ToString() + "'", "", "dbo.EquiposDIRECTVC", Local);
+        //            aux = true;
 
-                    //Recorro el listado de equipos ingresados al listado para saber que el serial no este ya ingresado
-                    foreach (DataRow item in View.Model.ListRecords.Rows)
-                    {
-                        if (dr[0].ToString().ToUpper() == item["Serial"].ToString().ToUpper())
-                        {
-                            //Util.ShowError("El serial " + dr[0].ToString() + " y Mac " + dr[1].ToString() + " esta repetido, por favor verificar.");
-                            aux = false;
-                            listRepetidos.Add(dr[0].ToString());
-                        }
-                    }
+        //            //Recorro el listado de equipos ingresados al listado para saber que el serial no este ya ingresado
+        //            foreach (DataRow item in View.Model.ListRecords.Rows)
+        //            {
+        //                if (dr[0].ToString().ToUpper() == item["Serial"].ToString().ToUpper())
+        //                {
+        //                    //Util.ShowError("El serial " + dr[0].ToString() + " y Mac " + dr[1].ToString() + " esta repetido, por favor verificar.");
+        //                    aux = false;
+        //                    listRepetidos.Add(dr[0].ToString());
+        //                }
+        //            }
 
-                    //Recorro el listado de equipos ingresados al listado para saber que el serial no este ya ingresado
-                    foreach (DataRow item in View.Model.ListRecords.Rows)
-                    {
-                        if (dr[1].ToString().ToUpper() == item["Mac"].ToString().ToUpper())
-                        {
-                            aux = false;
-                            listReceiver.Add(dr[1].ToString());
-                        }
-                    }
+        //            //Recorro el listado de equipos ingresados al listado para saber que el serial no este ya ingresado
+        //            foreach (DataRow item in View.Model.ListRecords.Rows)
+        //            {
+        //                if (dr[1].ToString().ToUpper() == item["Mac"].ToString().ToUpper())
+        //                {
+        //                    aux = false;
+        //                    listReceiver.Add(dr[1].ToString());
+        //                }
+        //            }
 
-                    //Recorro el listado de equipos ingresados al listado para saber que el serial no este ya ingresado
-                    foreach (DataRow item in View.Model.ListRecords.Rows)
-                    {
-                        if (dr[2].ToString().ToUpper() == item["SmartCard"].ToString().ToUpper())
-                        {
-                            aux = false;
-                            listSmartCard.Add(dr[2].ToString());
-                        }
-                    }
+        //            //Recorro el listado de equipos ingresados al listado para saber que el serial no este ya ingresado
+        //            foreach (DataRow item in View.Model.ListRecords.Rows)
+        //            {
+        //                if (dr[2].ToString().ToUpper() == item["SmartCard"].ToString().ToUpper())
+        //                {
+        //                    aux = false;
+        //                    listSmartCard.Add(dr[2].ToString());
+        //                }
+        //            }
 
-                    if (aux)
-                    {
-                        //Asigno los campos
-                        RegistroGuardar["RowID"] = RegistroValidado.Rows[0]["RowID"].ToString();
-                        RegistroGuardar["ProductoID"] = RegistroValidado.Rows[0]["Modelo"].ToString();
-                        RegistroGuardar["Serial"] = dr[0].ToString();
-                        RegistroGuardar["Mac"] = dr[1].ToString();
-                        RegistroGuardar["SmartCard"] = dr[2].ToString();
-                        RegistroGuardar["IdPallet"] = dr[3].ToString();
-                        RegistroGuardar["FECHA_CAMBIO_BODEGA"] = dr[4].ToString();
-                        RegistroGuardar["ENSAMBLADO"] = dr[5].ToString();
-                        RegistroGuardar["Posicion"] = dr[6].ToString();
+        //            if (aux)
+        //            {
+        //                //Asigno los campos
+        //                RegistroGuardar["RowID"] = RegistroValidado.Rows[0]["RowID"].ToString();
+        //                RegistroGuardar["ProductoID"] = RegistroValidado.Rows[0]["Modelo"].ToString();
+        //                RegistroGuardar["Serial"] = dr[0].ToString();
+        //                RegistroGuardar["Mac"] = dr[1].ToString();
+        //                RegistroGuardar["SmartCard"] = dr[2].ToString();
+        //                RegistroGuardar["IdPallet"] = dr[3].ToString();
+        //                RegistroGuardar["FECHA_CAMBIO_BODEGA"] = dr[4].ToString();
+        //                RegistroGuardar["ENSAMBLADO"] = dr[5].ToString();
+        //                RegistroGuardar["Posicion"] = dr[6].ToString();
 
-                        //Agrego el registro al listado
-                        View.Model.ListRecords.Rows.Add(RegistroGuardar);
-                    }
-                }
-                catch (Exception Ex)
-                {
-                    //Util.ShowMessage(Ex.ToString());
-                    continue;
-                }
-            }
+        //                //Agrego el registro al listado
+        //                View.Model.ListRecords.Rows.Add(RegistroGuardar);
+        //            }
+        //        }
+        //        catch (Exception Ex)
+        //        {
+        //            //Util.ShowMessage(Ex.ToString());
+        //            continue;
+        //        }
+        //    }
 
-            //Si existen seriales repetidos muestra en un dialog los seriales
-            if (listRepetidos.Count > 0 || listReceiver.Count > 0 || listSmartCard.Count > 0)
-            {
-                String cadena = "";
+        //    //Si existen seriales repetidos muestra en un dialog los seriales
+        //    if (listRepetidos.Count > 0 || listReceiver.Count > 0 || listSmartCard.Count > 0)
+        //    {
+        //        String cadena = "";
 
-                if (listRepetidos.Count > 0)
-                {
-                    cadena = cadena + "[FILAS REPETIDAS, SERIALES TRUNCADOS]: \n";
-                    //Impresion de seriales no aceptados
+        //        if (listRepetidos.Count > 0)
+        //        {
+        //            cadena = cadena + "[FILAS REPETIDAS, SERIALES TRUNCADOS]: \n";
+        //            //Impresion de seriales no aceptados
 
-                    foreach (var item in listRepetidos)
-                    {
-                        if (!cadena.Contains(item))
-                        {
-                            cadena = cadena + " " + item + "\n";
-                        }
-                    }
-                }
+        //            foreach (var item in listRepetidos)
+        //            {
+        //                if (!cadena.Contains(item))
+        //                {
+        //                    cadena = cadena + " " + item + "\n";
+        //                }
+        //            }
+        //        }
 
-                if (listReceiver.Count > 0)
-                {
-                    cadena = cadena + "[FILAS REPETIDAS, RECEIVER TRUNCADOS]: \n";
-                    //Impresion de seriales no aceptados
+        //        if (listReceiver.Count > 0)
+        //        {
+        //            cadena = cadena + "[FILAS REPETIDAS, RECEIVER TRUNCADOS]: \n";
+        //            //Impresion de seriales no aceptados
 
-                    foreach (var item in listReceiver)
-                    {
-                        if (!cadena.Contains(item))
-                        {
-                            cadena = cadena + " " + item + "\n";
-                        }
-                    }
-                }
+        //            foreach (var item in listReceiver)
+        //            {
+        //                if (!cadena.Contains(item))
+        //                {
+        //                    cadena = cadena + " " + item + "\n";
+        //                }
+        //            }
+        //        }
 
-                if (listSmartCard.Count > 0)
-                {
-                    cadena = cadena + "[FILAS REPETIDAS, SMARTCARD TRUNCADOS]: \n";
-                    //Impresion de seriales no aceptados
+        //        if (listSmartCard.Count > 0)
+        //        {
+        //            cadena = cadena + "[FILAS REPETIDAS, SMARTCARD TRUNCADOS]: \n";
+        //            //Impresion de seriales no aceptados
 
-                    foreach (var item in listSmartCard)
-                    {
-                        if (!cadena.Contains(item))
-                        {
-                            cadena = cadena + " " + item + "\n";
-                        }
-                    }
-                }
+        //            foreach (var item in listSmartCard)
+        //            {
+        //                if (!cadena.Contains(item))
+        //                {
+        //                    cadena = cadena + " " + item + "\n";
+        //                }
+        //            }
+        //        }
 
-                Util.ShowError(cadena);
-            }
-        }
+        //        Util.ShowError(cadena);
+        //    }
+        //}
 
         private void OnReplicateDetails(object sender, EventArgs e)
         {
@@ -679,6 +714,8 @@ namespace WpfFront.Presenters
                 CargarListPallets();
                 //actualizo el listado de posiciones
                 this.Actualizar_UbicacionDisponible();
+
+                LimpiarList();
                 return;
             }
             catch (Exception Ex) { Util.ShowError("Hubo un error al momento de guardar los registros. Error: " + Ex.Message); }
@@ -1014,6 +1051,11 @@ namespace WpfFront.Presenters
 
         private void OnListarEquiposSeleccion(object sender, EventArgs e)
         {
+            ListarEquiposSeleccion();
+        }
+
+        private void ListarEquiposSeleccion()
+        {
             //Evaluo que haya sido seleccionado un registro
             if (View.ListadoBusquedaCambioClasificacion.SelectedIndex == -1)
                 return;
@@ -1114,9 +1156,10 @@ namespace WpfFront.Presenters
             }
         }
 
-
         private void OnGenerarNumero(object sender, EventArgs e)
         {
+            CargarListPallets();
+            LimpiarList();
             String ConsultaBuscar = "";
             String ConsultaValidar = "";
             try{
@@ -1146,12 +1189,465 @@ namespace WpfFront.Presenters
 
                 ConsultaBuscar = "";
                 ConsultaValidar = "";
+                
                 }
             }catch(Exception ex){
                 Util.ShowError("Se presento un error generando el pallet: " + ex.Message);
             }
+            
         }
 
+        private void OnCargaMasiva(object sender, EventArgs e)
+        {
+            hilo_repetidos = new Thread(new ParameterizedThreadStart(SetRepeat));
+            hilo_repetidos.SetApartmentState(ApartmentState.STA);
+            hilo_repetidos.IsBackground = true;
+            hilo_repetidos.Priority = ThreadPriority.Highest;
+
+            String Cadena = View.GetUpLoadFile.FileName.ToString();
+            String conexion = "Provider=Microsoft.Jet.OleDb.4.0; Extended Properties=\"Excel 8.0; HDR=yes\"; Data Source=" + Cadena;
+            try
+            {
+                //creo la coneccion para leer  el .xls
+                //OleDbConnection oledbcon = default(OleDbConnection);
+                oledbcon = new OleDbConnection(conexion);
+
+                //traigo los datos del .xls
+                adaptador = new OleDbDataAdapter("select * from [Hoja1$]", oledbcon);
+
+                //guardo la info en un datatable
+                adaptador.Fill(SerialesIngresados);
+
+                oledbcon.Close();
+                oledbcon.Dispose();
+
+                //valido que existan registros
+                if (SerialesIngresados.Rows.Count == 0)
+                {
+                    Util.ShowMessage("No hay registros para procesar");
+                }
+                else
+                {
+                    View.Progress_Cargue.Value = 0;
+                    View.GetEstado_Cargue.Text = "Iniciando operación";
+                    hilo_repetidos.Start(SerialesIngresados);
+
+                    StartTimer();//Inicia el timmer para mostrar visualmente el progreso del cargue masivo
+
+                }
+            }
+            catch (Exception ex)
+            {
+                Util.ShowError("El archivo a cargar no cuenta con la estructura correcta.");
+            }
+        }
+
+        int cont = 0;
+        int cont_cargue = 0;
+        int cont_repeat = 0;
+        private void StartTimer()
+        {
+            int num_seriales = SerialesIngresados.Rows.Count;
+            // Creamos diferentes hilos a través de un temporizador
+            t = new Timer(new TimerCallback((o) =>
+            {
+                // Invocamos un método anónimo que cumpla con un delegado genérico
+                (o as System.Windows.Controls.ProgressBar).Dispatcher.Invoke(new System.Action(() =>
+                {
+                    cont++;
+
+                    if (cont == 1)
+                    {
+                        View.GetEstado_Cargue.Text = "Buscando equipos duplicados";
+                    }
+                    else if (cont == 2)
+                    {
+                        View.GetEstado_Cargue.Text = "Buscando equipos duplicados.";
+                    }
+                    else if (cont == 3)
+                    {
+                        View.GetEstado_Cargue.Text = "Buscando equipos duplicados..";
+                    }
+                    else if (cont == 4 || cont > 4)
+                    {
+                        View.GetEstado_Cargue.Text = "Buscando equipos duplicados...";
+                        cont = 0;
+                    }
+
+                    // Implementación del método anónimo
+                    if (View.Progress_Cargue.Value < 100D && busqueda_Repetidos == false)
+                    {
+                        if (num_seriales == 0) { num_seriales = 1; }
+                        View.Progress_Cargue.Value = cont_repeat * 100D / num_seriales;
+                    }
+                    else
+                    {
+                        // Anulamos el ciclo del temporizador ya que el proceso de la barra de progreso ha acabado
+                        t.Change(System.Threading.Timeout.Infinite, System.Threading.Timeout.Infinite);
+
+                        // Invocamos de nuevo al mismo delegado para modificar la apariencia visual de la barra de progreso
+                        (o as System.Windows.Controls.ProgressBar).Dispatcher.Invoke(new System.Action(() =>
+                        {
+                            View.GetEstado_Cargue.Text = "Verificación de equipos duplicados terminada.";
+                            View.Progress_Cargue.Value = 100D;
+                        }));
+                    }
+                }));
+            }), View.Progress_Cargue, 0, 1000);
+        }
+
+        int cont2 = 0;
+        int cont_repeat2 = 0;
+        private void StartTimerSerial()
+        {
+            int num_seriales = SerialesIngresados.Rows.Count;
+            // Creamos diferentes hilos a través de un temporizador
+            tserial = new Timer(new TimerCallback((o) =>
+            {
+                // Invocamos un método anónimo que cumpla con un delegado genérico
+                (o as System.Windows.Controls.ProgressBar).Dispatcher.Invoke(new System.Action(() =>
+                {
+                    cont2++;
+
+                    if (cont2 == 1)
+                    {
+                        View.GetEstado_Cargue.Text = "Validando Seriales previamente ingresados";
+                    }
+                    else if (cont2 == 2)
+                    {
+                        View.GetEstado_Cargue.Text = "Validando Seriales previamente ingresados.";
+                    }
+                    else if (cont2 == 3)
+                    {
+                        View.GetEstado_Cargue.Text = "Validando Seriales previamente ingresados..";
+                    }
+                    else if (cont2 == 4 || cont > 4)
+                    {
+                        View.GetEstado_Cargue.Text = "Validando Seriales previamente ingresados...";
+                        cont2 = 0;
+                    }
+
+                    // Implementación del método anónimo
+                    if (busqueda_serial == false)
+                    {
+                        if (num_seriales == 0) { num_seriales = 1; }
+                        View.Progress_Cargue.Value = cont_repeat2 * 100D / num_seriales;
+                    }
+                    else
+                    {
+                        // Anulamos el ciclo del temporizador ya que el proceso de la barra de progreso ha acabado
+                        tserial.Change(System.Threading.Timeout.Infinite, System.Threading.Timeout.Infinite);
+                        //Util.ShowMessage("Cargue masivo finalizado");
+                        // Invocamos de nuevo al mismo delegado para modificar la apariencia visual de la barra de progreso
+                        (o as System.Windows.Controls.ProgressBar).Dispatcher.Invoke(new System.Action(() =>
+                        {
+                            View.GetEstado_Cargue.Text = "Verificación de seriales terminada.";
+                            View.Progress_Cargue.Value = 100D;
+                        }));
+                    }
+                }));
+            }), View.Progress_Cargue, 0, 1000);
+        }
+
+        int cont3 = 0;
+        int cont_repeat3 = 0;
+        private void StartTimerAlmacenado()
+        {
+            int num_seriales = SerialesIngresados.Rows.Count;
+            // Creamos diferentes hilos a través de un temporizador
+            talmacenado = new Timer(new TimerCallback((o) =>
+            {
+                // Invocamos un método anónimo que cumpla con un delegado genérico
+                (o as System.Windows.Controls.ProgressBar).Dispatcher.Invoke(new System.Action(() =>
+                {
+                    cont3++;
+
+                    if (cont3 == 1)
+                    {
+                        View.GetEstado_Cargue.Text = "Validando Seriales previamente ingresados";
+                    }
+                    else if (cont3 == 2)
+                    {
+                        View.GetEstado_Cargue.Text = "Validando Seriales previamente ingresados.";
+                    }
+                    else if (cont3 == 3)
+                    {
+                        View.GetEstado_Cargue.Text = "Validando Seriales previamente ingresados..";
+                    }
+                    else if (cont3 == 4 || cont > 4)
+                    {
+                        View.GetEstado_Cargue.Text = "Validando Seriales previamente ingresados...";
+                        cont3 = 0;
+                    }
+
+                    // Implementación del método anónimo
+                    if (busqueda_almacenado == false)
+                    {
+                        if (num_seriales == 0) { num_seriales = 1; }
+                        View.Progress_Cargue.Value = cont_repeat3 * 100D / num_seriales;
+                    }
+                    else
+                    {
+                        // Anulamos el ciclo del temporizador ya que el proceso de la barra de progreso ha acabado
+                        talmacenado.Change(System.Threading.Timeout.Infinite, System.Threading.Timeout.Infinite);
+                        //Util.ShowMessage("Cargue masivo finalizado");
+                        // Invocamos de nuevo al mismo delegado para modificar la apariencia visual de la barra de progreso
+                        (o as System.Windows.Controls.ProgressBar).Dispatcher.Invoke(new System.Action(() =>
+                        {
+                            View.GetEstado_Cargue.Text = "Verificación de seriales terminada.";
+                            View.Progress_Cargue.Value = 100D;
+                        }));
+                    }
+                }));
+            }), View.Progress_Cargue, 0, 1000);
+        }
+
+        private void StartTimer2()
+        {
+            int num_seriales = SerialesIngresados.Rows.Count;
+            // Creamos diferentes hilos a través de un temporizador
+            t1 = new Timer(new TimerCallback((o) =>
+            {
+                // Invocamos un método anónimo que cumpla con un delegado genérico
+                (o as System.Windows.Controls.ProgressBar).Dispatcher.Invoke(new System.Action(() =>
+                {
+                    cont_cargue++;
+
+                    if (cont_cargue == 1)
+                    {
+                        View.GetEstado_Cargue.Text = "Cargando archivo";
+                    }
+                    else if (cont_cargue == 2)
+                    {
+                        View.GetEstado_Cargue.Text = "Cargando archivo.";
+                    }
+                    else if (cont_cargue == 3)
+                    {
+                        View.GetEstado_Cargue.Text = "Cargando archivo..";
+                    }
+                    else if (cont_cargue == 4 || cont_cargue > 4)
+                    {
+                        View.GetEstado_Cargue.Text = "Cargando archivo...";
+                        cont_cargue = 0;
+                    }
+                    // Implementación del método anónimo  && SerialesIngresados.Rows.Count > 0
+                    if (estado_cargue == false)
+                    {
+                        if (num_seriales == 0) { num_seriales = 1; }
+                        View.Progress_Cargue.Value = ((View.Model.ListRecords.Rows.Count * 100D) / num_seriales);
+                    }
+                    else
+                    {
+                        // Anulamos el ciclo del temporizador ya que el proceso de la barra de progreso ha acabado
+                        t1.Change(System.Threading.Timeout.Infinite, System.Threading.Timeout.Infinite);
+
+                        // Invocamos de nuevo al mismo delegado para modificar la apariencia visual de la barra de progreso
+                        (o as System.Windows.Controls.ProgressBar).Dispatcher.Invoke(new System.Action(() =>
+                        {
+                            View.GetEstado_Cargue.Text = "Carga de archivo terminada.";
+                            View.Progress_Cargue.Value = 100D;
+                            t1.Dispose();
+                        }));
+                    }
+                }));
+            }), View.Progress_Cargue, 0, 1000);
+        }
+
+        private void SetRepeat(object o)
+        {
+            busqueda_Repetidos = false;
+            busqueda_serial = false;
+            busqueda_receiver = false;
+            busqueda_smart = false;
+            busqueda_almacenado = false;
+            estado_cargue = false;
+
+            List<String> listNoCargue = new List<String>(); //Guarda los seriales que no cumplen con los requisitos del cargue
+
+            for (int i = 0; i < SerialesIngresados.Rows.Count; i++)
+            {
+                for (int j = i + 1; j < SerialesIngresados.Rows.Count; j++)
+                {
+                    if (SerialesIngresados.Rows[i]["Serial"].ToString() == "" & SerialesIngresados.Rows[j]["Serial"].ToString() == "")
+                    {
+                        SerialesIngresados.Rows.RemoveAt(i); //Elimino el primer serial y dejo el repetido o posterior.
+                        //j = i + 1; //Como borre el elemento de la posicion i provoco que j continue un serial posterior al borrado
+                        if (j > 0)
+                            j = i - 1;
+                    }
+                    //if (SerialesIngresados.Rows[i]["SERIAL"].ToString() != "" && SerialesIngresados.Rows[j]["SERIAL"].ToString() != "")
+                    else
+                    {
+                        if (SerialesIngresados.Rows[i]["SERIAL"].ToString() == SerialesIngresados.Rows[j]["SERIAL"].ToString())
+                        {
+                            listNoCargue.InsertRange(listNoCargue.Count, new string[] {SerialesIngresados.Rows[j]["SERIAL"].ToString(), 
+                                                                                       "Serial duplicado dentro del archivo de cargue"});
+
+                            SerialesIngresados.Rows.RemoveAt(i); //Elimino el primer serial y dejo el repetido o posterior.
+                            j = i + 1; //Como borre el elemento de la posicion i provoco que j continue un serial posterior al borrado
+                        }
+                    }
+                }
+                cont_repeat++;
+            }
+
+            busqueda_Repetidos = true;
+            Thread.Sleep(1000);
+            t.Dispose();
+
+            View.Dispatcher_Cargue.Invoke(new System.Action(() =>
+            {
+                View.Progress_Cargue.Value = 0;
+            }), null);
+
+            StartTimerSerial();
+
+            //validamos que los seriales ya se encuentren liberados
+            String ConsultaBuscarSerial = "";
+            int temp2 = 0;
+            while (temp2 < SerialesIngresados.Rows.Count)
+            {
+                ConsultaBuscarSerial = "SELECT serial from dbo.EquiposDIRECTVC WHERE UPPER(Serial) = UPPER('" + SerialesIngresados.Rows[temp2]["SERIAL"].ToString() + "')";
+                DataTable Resultado = service.DirectSQLQuery(ConsultaBuscarSerial, "", "dbo.EquiposDIRECTVC", Local);
+
+                if (Resultado.Rows.Count == 0)
+                {
+                    listNoCargue.InsertRange(listNoCargue.Count, new string[] {SerialesIngresados.Rows[temp2]["SERIAL"].ToString(), 
+                                                                                        "Serial NO existente en el sistema."});
+
+                    SerialesIngresados.Rows.RemoveAt(temp2);
+                }
+                else
+                {
+                    temp2++;
+                }
+                cont_repeat2++;
+            }
+
+            busqueda_serial = true;
+            Thread.Sleep(1000);
+            tserial.Dispose();
+
+            View.Dispatcher_Cargue.Invoke(new System.Action(() =>
+            {
+                View.Progress_Cargue.Value = 0;
+            }), null);
+
+            StartTimerAlmacenado();
+
+            //validamos que los seriales ya se encuentren liberados
+            String ConsultaBuscarAlmacenado = "";
+            int temp3 = 0;
+            while (temp3 < SerialesIngresados.Rows.Count)
+            {
+                ConsultaBuscarAlmacenado = "SELECT serial from dbo.EquiposDIRECTVC WHERE UPPER(Serial) = UPPER('" + SerialesIngresados.Rows[temp3]["SERIAL"].ToString() + "') and Estado = 'ALMACENAMIENTO'";
+                DataTable ResultadoAlmacenado = service.DirectSQLQuery(ConsultaBuscarAlmacenado, "", "dbo.EquiposDIRECTVC", Local);
+
+                if (ResultadoAlmacenado.Rows.Count > 0)
+                {
+                    listNoCargue.InsertRange(listNoCargue.Count, new string[] {SerialesIngresados.Rows[temp3]["SERIAL"].ToString(), 
+                                                                                        "Serial ya se encuentra almacenado."});
+
+                    SerialesIngresados.Rows.RemoveAt(temp3);
+                }
+                else
+                {
+                    temp3++;
+                }
+                cont_repeat3++;
+            }
+
+            busqueda_almacenado = true;
+            Thread.Sleep(1000);
+            talmacenado.Dispose();
+
+            View.Dispatcher_Cargue.Invoke(new System.Action(() =>
+            {
+                View.Progress_Cargue.Value = 0;
+            }), null);
+
+
+            this.MostrarErrores_Cargue(listNoCargue); // Agrega a un segundo listview los equipos que no fueron cargados
+
+            StartTimer2();
+
+            cont = 0;
+            cont2 = 0;
+            cont3 = 0;
+
+            CargarListDetails();
+
+            estado_cargue = true;
+        }
+
+        private void MostrarErrores_Cargue(List<String> listNoCargue)
+        {
+            int columna = 0;
+            View.Dispatcher_Cargue.Invoke(new System.Action(() =>
+            {
+                NoLoad_Row = View.Model.List_Nocargue.NewRow();
+            }), null);
+
+            foreach (var dr in listNoCargue)
+            {
+                View.Dispatcher_Cargue.Invoke(new System.Action(() =>
+                {
+                    if (columna != View.Model.List_Nocargue.Columns.Count - 1)
+                    {
+                        NoLoad_Row[columna] = dr;
+                        columna++;
+                    }
+                    else
+                    {
+                        NoLoad_Row[columna] = dr;
+                        columna = 0;
+                        View.Model.List_Nocargue.Rows.Add(NoLoad_Row);
+                        NoLoad_Row = View.Model.List_Nocargue.NewRow();
+                    }
+                }), null);
+            }
+        }
+
+        public void CargarListDetails()
+        {
+            
+            foreach (DataRow dr in SerialesIngresados.Rows)
+            {
+                // Modificamos un UIElement que no corresponde con este hilo, para ello usamos su dispatcher
+                View.Dispatcher_Cargue.Invoke(new System.Action(() =>
+                {
+                    DataRow RegistroGuardar = View.Model.ListRecords.NewRow();
+
+                    //Asigno los campos
+                    RegistroGuardar["Modelo"] = dr[0].ToString();
+                    RegistroGuardar["Serial"] = dr[1].ToString();
+                    RegistroGuardar["Receiver"] = dr[2].ToString();
+                    RegistroGuardar["SmartCard"] = dr[3].ToString();
+                    RegistroGuardar["ENSAMBLADO"] = dr[4].ToString();
+
+                    View.Model.ListRecords.Rows.Add(RegistroGuardar);
+
+                }), null);
+            }
+
+            adaptador.Dispose();
+        }
+
+        public void OnKillProcess(object sender, EventArgs e)
+        {
+            LimpiarList();
+            //detengo procesos activos de excel para el cargue masivo
+            Process[] proceso = Process.GetProcessesByName("EXCEL");
+
+            if (proceso.Length > 0)
+                proceso[0].Kill();
+        }
+
+        public void LimpiarList()
+        {
+            View.Model.ListRecords.Rows.Clear();
+            View.Model.List_Nocargue.Rows.Clear();
+        }
         #endregion
 
     }

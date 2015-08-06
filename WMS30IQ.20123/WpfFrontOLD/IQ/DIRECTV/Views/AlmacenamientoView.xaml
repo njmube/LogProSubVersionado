@@ -133,7 +133,49 @@
                                         <StackPanel x:Uid="Stack_Button" Name="Stack_Button"  Margin="0,10,0,0" Orientation="Horizontal" HorizontalAlignment="Left">
                                             <Button x:Uid="Btn_Guardar" x:Name="Btn_Guardar" Width="70" Content="Aceptar" Click="Btn_Guardar_Click_1" />
                                             <Button x:Uid="Btn_Eliminar" x:Name="Btn_Eliminar" Margin="10,0,0,0" Width="70" Content="Eliminar" Click="Btn_Eliminar_Click_1" />
+
+                                            <Grid Margin="120,0,0,0">
+                                                <TextBlock x:Uid="textblock_estadoCargue" x:Name="textblock_estadoCargue" Text="Operación detenida" Margin="0,-17,0,0" />
+                                                <ProgressBar x:Uid="PBar_cargue" x:Name="PBar_cargue" Margin="0,3,0,3" Width="255" Minimum="0" Maximum="100"/>
+                                                <TextBlock Text="{Binding Value, ElementName=PBar_cargue, StringFormat=\{0:0\}%}" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                                            </Grid>
                                         </StackPanel>
+
+                                        <Expander Grid.Row="1" Margin="0,10,0,0" VerticalAlignment="Stretch" Width="auto" Cursor="Hand">
+                                            <Expander.Header>
+                                                <Border Background="SeaShell">
+                                                    <TextBlock><Run Text="Equipos no almacenados: ("/><Run Text=" "/><Run Text="{Binding List_Nocargue.Count}"/><Run Text=" "/><Run Text=")"/></TextBlock>
+                                                </Border>
+                                            </Expander.Header>
+                                            <Border Margin="0,0,0,0" Background="AliceBlue">
+                                                <StackPanel x:Name="stackpanel1111">
+                                                    <ListView x:Uid="lv_NoCargue" ItemsSource="{Binding List_Nocargue}" Margin="0,0,0,0"  MaxHeight="280" x:Name="lv_NoCargue">
+                                                        <ListView.ItemContainerStyle>
+                                                            <Style TargetType="{x:Type ListViewItem}">
+                                                                <Setter Property="HorizontalContentAlignment" Value="Center"/>
+                                                            </Style>
+                                                        </ListView.ItemContainerStyle>
+                                                        <ListView.View>
+                                                            <GridView x:Uid="GridViewDetails" x:Name="GridViewDetails1111">
+
+                                                                <GridViewColumn x:Uid="GridViewColumn_2" Width="150" DisplayMemberBinding="{Binding Serial}">
+                                                                    <TextBlock Text="Serial" ToolTip="Serial" />
+                                                                </GridViewColumn>
+
+                                                                <GridViewColumn x:Uid="GridViewColumn_2" Width="300" DisplayMemberBinding="{Binding Motivo}">
+                                                                    <TextBlock Text="Motivo" ToolTip="Motivo del no cargue" />
+                                                                </GridViewColumn>
+                                                            </GridView>
+                                                        </ListView.View>
+                                                    </ListView>
+                                                    <!--<StackPanel Orientation="Horizontal" Margin="5,10,0,5">
+                                                        <Image x:Uid="ImageRefresh" x:Name="ImageRefresh"  Margin="0,-6,5,0"  HorizontalAlignment="Center" Source="/WpfFront;component/Images/excel2.png" ToolTip="Exportar a archivo de excel" MouseDown="Btn_Exportar_Click_1"/>
+                                                        <TextBlock Text="Exportar" HorizontalAlignment="Left" FontWeight="bold" />
+                                                    </StackPanel>-->
+                                                </StackPanel>
+                                            </Border>
+                                        </Expander>
+
                                     </StackPanel>
                                 </StackPanel>
                             </Border>
@@ -237,10 +279,10 @@
                                         <TextBlock x:Uid="Text_block2" Width="150" Text="Ubicacion" VerticalAlignment="Center" Margin="4,0,6,0" />
                                         <ComboBox x:Uid="cb_UbicacionDesp" Name="cb_UbicacionDesp" Width="180" Height="23" ItemsSource="{Binding Path=ListadoPosiciones}" SelectedValue="Code" DisplayMemberPath="Name" />
                                     </StackPanel>
-                                    <!--<StackPanel x:Uid="Stack_Panel2" Width="auto" Orientation="Horizontal" Margin="4,3,4,3">
+                                    <StackPanel x:Uid="Stack_Panel2" Width="auto" Orientation="Horizontal" Margin="4,3,4,3">
                                         <TextBlock x:Uid="Text_block2" Width="150" Text="Estado" VerticalAlignment="Center" Margin="4,0,6,0" />
-                                        <ComboBox x:Uid="cb_EstadoPallet" Name="cb_EstadoPallet" Width="180" Height="23" ItemsSource="{Binding Path=ListadoEstadosPallet}" SelectedValue="Code" DisplayMemberPath="Name" />
-                                    </StackPanel>-->
+                                        <ComboBox x:Uid="cb_EstadoPallet" Name="cb_EstadoPallet" Width="180" Height="23" ItemsSource="{Binding Path=ListadoEstadosPallet}" SelectedValue="Name" DisplayMemberPath="Name" />
+                                    </StackPanel>
                                     <StackPanel x:Uid="Stack_Panel_2" Name="Stack_Panel_2" Width="auto" Orientation="Horizontal" Margin="4,3,4,3" HorizontalAlignment="Right" >
                                         <Button x:Uid="btn_imprimir" Name="btn_imprimir" Content="Imprimir" Click="btn_imprimir_Click_1" Margin="0,0,5,0" />
                                         <Button x:Uid="btn_confirmar_2" Name="btn_confirm" Content="Empacar" Click="btn_confirmar_Click_1" />

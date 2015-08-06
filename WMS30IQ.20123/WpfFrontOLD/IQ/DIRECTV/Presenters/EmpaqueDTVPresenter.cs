@@ -594,6 +594,8 @@ namespace WpfFront.Presenters
         {
             String ConsultaBuscar = "";
             String ConsultaValidar = "";
+            View.Model.ListCajas_Empaque.Rows.Clear();
+            View.Model.ListSeriales_Empaque.Rows.Clear();
             try
             {
 

@@ -20,7 +20,11 @@
                         <StackPanel x:Name="Stack_DetailSerial_3" Orientation="Vertical" Margin="3" HorizontalAlignment="Center" >
                             <StackPanel>
                                 <TextBlock Text="Listado Novedades Equipos" HorizontalAlignment="Left" FontWeight="bold" />
+                                <Image x:Uid="ImageRefresh" Cursor="Hand" x:Name="ImageRefrqesh1"  Margin="553,0,0,0" Width="17"   HorizontalAlignment="Center" Source="/WpfFront;component/Images/refresh.png" ToolTip="Generar estiba" MouseDown="ImgActualizar"/>
                             </StackPanel>
+                            
+                            
+                                
                             <Separator Margin="5,0,0,0"/>
                             <StackPanel x:Uid="Stack_Panel2" Width="auto" Orientation="Horizontal" Margin="4,3,4,3">
                             </StackPanel>

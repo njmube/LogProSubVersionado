@@ -368,7 +368,7 @@ namespace WpfFront.Presenters
             Thread.Sleep(1000);
             busqueda_RepetidosSerial = true;
             t3.Dispose();
-            cont_repeatSerial = 0;
+            //cont_repeatSerial = 0;
 
             View.Dispatcher_PreAlertas.Invoke(new System.Action(() =>
             {
@@ -402,7 +402,7 @@ namespace WpfFront.Presenters
             Thread.Sleep(1000);
             busqueda_RBDSerial = true;
             trbd.Dispose();
-            cont_RepBDseriales = 0;
+            //cont_RepBDseriales = 0;
 
             View.Dispatcher_PreAlertas.Invoke(new System.Action(() =>
             {
@@ -435,7 +435,7 @@ namespace WpfFront.Presenters
             Thread.Sleep(1000);
             busqueda_SAPSerial = true;
             trsap.Dispose();
-            cont_SAPseriales = 0;
+           // cont_SAPseriales = 0;
 
             this.MostrarErrores_Cargue(listNoCargue); // Agrega a un segundo listview los equipos que no fueron cargados
 
@@ -445,7 +445,7 @@ namespace WpfFront.Presenters
             }), null);
 
             StartTimer_Seriales();
-
+         
             foreach (DataRow dr in SerialesIngresados.Rows)
             {
                 // Modificamos un UIElement que no corresponde con este hilo, para ello usamos su dispatcher

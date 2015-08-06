@@ -72,6 +72,7 @@
                                                     <GridViewColumn x:Uid="GridViewColumn_6" Header="Número dias" Width="80" DisplayMemberBinding="{Binding Path=NumeroDias}" />
                                                     <GridViewColumn x:Uid="GridViewColumn_7" Header="Horas" Width="80" DisplayMemberBinding="{Binding Path=Horas}" />
                                                     <GridViewColumn x:Uid="GridViewColumn_8" Header="Estado" Width="120" DisplayMemberBinding="{Binding Path=Ubicacion}" />
+                                                    <GridViewColumn x:Uid="GridViewColumn_8" Header="Estado Recibido" Width="120" DisplayMemberBinding="{Binding Path=Estado}" />
                                                 </GridView>
                                             </ListView.View>
                                         </ListView>
@@ -79,7 +80,8 @@
                                 </StackPanel>
                             </Border>
                         </StackPanel>
-                        <StackPanel x:Uid="Stack_CambioUbicacion" Name="Stack_CambioUbicacion" Orientation="Vertical" Margin="3" HorizontalAlignment="Center" Width="auto" Height="auto" Visibility="Visible">
+                    <StackPanel Orientation="Vertical">
+                    <StackPanel x:Uid="Stack_CambioUbicacion" Name="Stack_CambioUbicacion" Orientation="Vertical" Margin="3" HorizontalAlignment="Center" Width="auto" Height="auto" Visibility="Visible">
                             <Border x:Uid="Border_Head" Name="Border_Head" Style="{DynamicResource UserControlFormInnerBorder}" Margin="3" HorizontalAlignment="Center">
                                 <StackPanel x:Uid="Stack_Panel12" Margin="5" Width="auto" HorizontalAlignment="Left" Orientation="Vertical">
                                     <StackPanel x:Uid="Stack_NumeroDoc" Name="Stack_NumeroDoc" Orientation="Horizontal" Margin="10,0,0,0" >
@@ -100,7 +102,32 @@
                                 </StackPanel>
                             </Border>
                         </StackPanel>
+                        
+
+                        <StackPanel x:Uid="Stack_CambioUbicacion" Name="Stack_CambioEstado" Orientation="Vertical" Margin="3" HorizontalAlignment="Center" Width="auto" Height="auto" Visibility="Visible">
+                            <Border x:Uid="Border_Head" Name="Border_Head2" Style="{DynamicResource UserControlFormInnerBorder}" Margin="3" HorizontalAlignment="Center">
+                                <StackPanel x:Uid="Stack_Panel12" Margin="5" Width="auto" HorizontalAlignment="Left" Orientation="Vertical">
+                                    <StackPanel x:Uid="Stack_NumeroDoc" Name="Stack_NumeroDocc" Orientation="Horizontal" Margin="10,0,0,0" >
+                                        <TextBlock Text="Cambio de Estado" HorizontalAlignment="Left" FontWeight="bold" />
+                                    </StackPanel>
+                                    <Separator Margin="5,0,0,10"/>
+                                    <StackPanel x:Uid="Stack_Panel2" Width="auto" Orientation="Horizontal" Margin="4,3,4,3">
+                                        <TextBlock x:Uid="Text_block2" Width="110" Text="Estado Actual" VerticalAlignment="Center" Margin="4,0,6,0" />
+                                        <TextBlock x:Uid="txt_EstadoActual" Name="txt_EstadoActual" Width="120" VerticalAlignment="Center" Margin="4,0,6,0" FontWeight="bold" />
+                                    </StackPanel>
+                                    <StackPanel x:Uid="Stack_Panel2" Width="auto" Orientation="Horizontal" Margin="4,3,4,3">
+                                        <TextBlock x:Uid="Text_block2" Width="110" Text="Estado Nuevo" VerticalAlignment="Center" Margin="4,0,6,0" />
+                                            <ComboBox x:Uid="cb_NuevoEstado" Name="cb_NuevoEstado" Width="180" Height="23" ItemsSource="{Binding Path=ListadoEstadosPallet}" SelectedValue="Name" DisplayMemberPath="Name" />
+                                    </StackPanel>
+                                    <StackPanel x:Uid="Stack_Panel_2" Name="Stack_Panel_22" Width="auto" Orientation="Horizontal" Margin="4,3,4,3" HorizontalAlignment="Right" >
+                                        <Button x:Uid="btn_ConfirmarCambioEstado" Name="btn_ConfirmarCambioEstado" Content="Confirmar" Click="btn_ConfirmarCambioEstado_Click_1" />
+                                    </StackPanel>
+                                </StackPanel>
+                            </Border>
+                        </StackPanel>
+                        </StackPanel>
                     </StackPanel>
+                    
                 </TabItem>
                 <TabItem x:Uid="TabItem_1" Header="Envio a Produccion" HorizontalAlignment="Right" Width="119" Height="23" VerticalAlignment="Top" Margin="-2,1,-2,-1">
                     <StackPanel x:Uid="StackPanel_1" Orientation="Horizontal" >                    
@@ -160,8 +187,8 @@
                                                     <GridViewColumn x:Uid="GridViewColumn_5" Header="Fecha" Width="100" DisplayMemberBinding="{Binding Path=FechaIngreso}" />
                                                     <GridViewColumn x:Uid="GridViewColumn_6" Header="Número dias" Width="80" DisplayMemberBinding="{Binding Path=NumeroDias}" />
                                                     <GridViewColumn x:Uid="GridViewColumn_7" Header="Horas" Width="80" DisplayMemberBinding="{Binding Path=Horas}" />
-                                                    <GridViewColumn x:Uid="GridViewColumn_8" Header="Estado" Width="120" DisplayMemberBinding="{Binding Path=Ubicacion}" />
-
+                                                    <GridViewColumn x:Uid="GridViewColumn_8" Header="Ubicacion" Width="120" DisplayMemberBinding="{Binding Path=Ubicacion}" />
+                                                    <GridViewColumn x:Uid="GridViewColumn_8" Header="Estado Recibido" Width="120" DisplayMemberBinding="{Binding Path=Estado}" />
                                                 </GridView>
                                             </ListView.View>
                                         </ListView>

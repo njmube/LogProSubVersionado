@@ -326,7 +326,7 @@ namespace WpfFront.Presenters
             View.Model.ListRecords.Columns.Add("Mac", typeof(String));
             View.Model.ListRecords.Columns.Add("Estado", typeof(String));
             View.Model.ListRecords.Columns.Add("IdPallet", typeof(String));
-            //View.Model.ListRecords.Columns.Add("Tecnico", typeof(String));
+            View.Model.ListRecords.Columns.Add("Tecnico", typeof(String));
 
             View.Model.ListRecords_1 = new DataTable("ListadoEquiposEntrega");
             //Asigno las columnas
@@ -1326,7 +1326,7 @@ namespace WpfFront.Presenters
 
         public void CargarTecnicosReparacion()
         {
-            String ConsultaSQL = "Select TECNICO_REPARACION from dbo.EquiposCLARO where Estado = 'REPARACION' group by TECNICO_REPARACION";
+            String ConsultaSQL = "Select TECNICO_REPARACION as Tecnico from dbo.EquiposCLARO where Estado = 'REPARACION' group by TECNICO_REPARACION";
             DataTable Resultado = service.DirectSQLQuery(ConsultaSQL, "", "dbo.EquiposCLARO", Local);
             //View.Model.ListadoTecnicosReparacion = service.DirectSQLQuery(ConsultaSQL, "", "dbo.EquiposCLARO", Local);
 
@@ -1337,7 +1337,7 @@ namespace WpfFront.Presenters
             {
                 foreach (DataRow item in Resultado.Rows)
                 {
-                    String Cadena = item["TECNICO_REPARACION"].ToString();
+                    String Cadena = item["Tecnico"].ToString();
 
                     if (Cadena.Contains(","))
                     {
@@ -1364,12 +1364,13 @@ namespace WpfFront.Presenters
             String filtro = ((DataRowView)View.TecnicosReparacion.SelectedItem).Row["Tecnico"].ToString();
             Console.WriteLine(filtro);
             Console.WriteLine(this.user + "   " + this.userName);
+            //Util.ShowMessage(filtro);
             //Variables Auxiliares
             String ConsultaSQL;
 
             //Creo la consulta para buscar los registros
             ConsultaSQL = "EXEC sp_GetProcesos 'BUSCARMERCANCIAFILTRADA_REP_BYTecnico', '" + ((ComboBoxItem)View.GetListaEstado.SelectedItem).Content.ToString() + "', 'REPARACION','" + filtro + "';";
-
+            //Util.ShowMessage(ConsultaSQL);
             //if (this.userName == "admin") {
             //    View.GetQuery.Visibility = Visibility.Visible;
             //    View.GetQuery.Text = ConsultaSQL;

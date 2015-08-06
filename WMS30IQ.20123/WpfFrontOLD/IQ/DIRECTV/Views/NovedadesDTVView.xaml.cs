@@ -21,6 +21,7 @@ namespace WpfFront.Views
         #region Eventos
 
         public event EventHandler<EventArgs> ExportNovedades;
+        public event EventHandler<EventArgs> ActualizarListNovedades;
 
         #endregion
 
@@ -58,6 +59,11 @@ namespace WpfFront.Views
             ExportNovedades(sender, e);
         }
 
+        private void ImgActualizar(object sender, RoutedEventArgs e)
+        {
+            ActualizarListNovedades(sender, e);
+        }
+
         #endregion
 
     }
@@ -76,6 +82,7 @@ namespace WpfFront.Views
         #region Obtener Metodos
 
         event EventHandler<EventArgs> ExportNovedades;
+        event EventHandler<EventArgs> ActualizarListNovedades;
 
         #endregion
 

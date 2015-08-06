@@ -93,7 +93,7 @@ namespace WpfFront.Presenters
             //ListarDatos();
             OcultarPestanas();
 
-            View.Model.ListRecordsAddToPallet = service.DirectSQLQuery("EXEC sp_GetProcesos 'BUSCARMERCANCIAENTREGAREP', '', '',''", "", "dbo.EquiposClaro", Local);
+            View.Model.ListRecordsAddToPallet = service.DirectSQLQuery("EXEC sp_GetProcesos 'BUSCARMERCANCIAENTREGADIAG', '', '',''", "", "dbo.EquiposClaro", Local);
 
             //Cargo las ubicaciones
             View.Model.ListadoPosiciones = service.GetMMaster(new MMaster { MetaType = new MType { Code = "POSICION1" } });
@@ -602,11 +602,11 @@ namespace WpfFront.Presenters
             
 
             //Evaluo que haya sido seleccionado un registro
-            if (View.ListadoItems.SelectedItems.Count == 0)
-            {
-                Util.ShowError("Por favor seleccionar uno o más equipos");
-                return;
-            }
+            //if (View.ListadoItems.SelectedItems.Count == 0)
+            //{
+            //    Util.ShowError("Por favor seleccionar uno o más equipos");
+            //    return;
+            //}
 
             //Evaluo que haya seleccionado la nueva clasificacion
             if (View.Ubicacion.SelectedIndex == -1)
@@ -633,7 +633,7 @@ namespace WpfFront.Presenters
 
             if (NuevoEstado == "PARA ALMACENAMIENTO")
             {
-                foreach (DataRowView item in View.ListadoItems.SelectedItems)
+                foreach (DataRowView item in View.ListadoItemsAgregados.Items)
                 {
                     //Si se asigna desde reparacion una ubicacion, Posicion = '"+ ((MMaster)View.NuevaUbicacion.SelectedItem).Code.ToString()+ "' 
                     //Creo la consulta para cambiar la ubicacion de la estiba
@@ -651,7 +651,7 @@ namespace WpfFront.Presenters
             }
             else
             {
-                foreach (DataRowView item in View.ListadoItems.SelectedItems)
+                foreach (DataRowView item in View.ListadoItemsAgregados.Items)
                 {
                     //Creo la consulta para cambiar la ubicacion de la estiba
                     ConsultaSQL += " UPDATE dbo.EquiposCLARO SET Ubicacion = '" + NuevaUbicacion + "',Estado = '" + NuevoEstado + "', UA = '" + ((ComboBoxItem)View.UnidadAlmacenamiento.SelectedItem).Content.ToString() + "', CodigoEmpaque = '" + View.CodigoEmpaque.Text.ToString() +
@@ -682,6 +682,8 @@ namespace WpfFront.Presenters
 
             //Quito la seleccion del listado
             View.UnidadAlmacenamiento.SelectedIndex = -1;
+
+            View.Model.ListRecordsAddToPallet.Rows.Clear();
 
             View.CodigoEmpaque.Text = "";
         }
@@ -1028,7 +1030,7 @@ namespace WpfFront.Presenters
                     View.Model.ListRecordsAddToPallet.Rows.Add(dr);
 
                     //cambio el estado para no mostrar mas en el listado general
-                    ConsultaAgregar = "update dbo.EquiposCLARO set Estado = 'REPARACION_ENTREGA' where RowID = " + item.Row["RowID"];
+                    ConsultaAgregar = "update dbo.EquiposCLARO set Estado = 'DIAGNOSTICO_ENTREGA' where RowID = " + item.Row["RowID"];
                     service.DirectSQLNonQuery(ConsultaAgregar, Local);
                     ConsultaAgregar = "";
                 }

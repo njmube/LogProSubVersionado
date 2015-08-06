@@ -459,19 +459,18 @@ namespace WpfFront.Presenters
             {
                 String EstadoActual = View.EstadoSerial.Text.ToString();
 
-                String FechaIngreso = "";
+                string FechaIngreso = "";
                 DateTime aux_fechaIngreso;
-                string dateFormat = "MM/dd/yyyy";
+                string dateFormat = "yyyy-MM-dd";
                 FechaIngreso = View.FechaIngreso.Text;
-                //aux_fechaIngreso = DateTime.Parse(View.FechaIngreso.Text);
-                //FechaIngreso = aux_fechaIngreso.ToString(dateFormat);
+                aux_fechaIngreso = DateTime.Parse(View.FechaIngreso.Text);
+                FechaIngreso = aux_fechaIngreso.ToString(dateFormat);
 
-                String FechaDoc = "";
+                string FechaDoc = "";
                 DateTime aux_fechaDoc;
-                string dateFormatDoc = "MM/dd/yyyy";
-                FechaDoc = View.FechaDoc.Text;
-                //aux_fechaDoc = DateTime.Parse(View.FechaDoc.Text);
-                //FechaDoc = aux_fechaDoc.ToString(dateFormatDoc);
+                string dateFormatDoc = "yyyy-MM-dd";
+                aux_fechaDoc = DateTime.Parse(View.FechaDoc.Text);
+                FechaDoc = aux_fechaDoc.ToString(dateFormatDoc);
 
                 ConsultaGuardar += "";
 
@@ -553,12 +552,82 @@ namespace WpfFront.Presenters
 
                 //insertar movimiento
                 ConsultaGuardar += "EXEC sp_InsertarNuevo_Movimiento 'MODIFICACION DEL EQUIPO EN ADMIN. SERIALES','" + Resultado.Rows[0]["Estado"].ToString() + "','" + View.EstadoSerial.Text.ToString() + "',''," + Resultado.Rows[0]["RowId"] + ",'" + View.EstadoSerial.Text.ToString() + "','CAMBIOADMINSERIALES','" + this.user + "','';";
+                
+                // Declaramos variables Globales
+                string nombreMovimiento = "MODIFICACION DEL EQUIPO EN ADMIN. SERIALES PRODUCCION";
+                string origen = View.Origen.Text.ToString();
+                string destino = View.EstadoSerial.Text.ToString();
+                string movPallet = View.IdPallet.Text.ToString();
+                string idSerial = View.GetSerial1.Text.ToString();
+
+                #region Insertar Movimiento Reparacion 
+                // Declaramos las variables para realizar la insersión de REPARACION
+                string repaTecnico = View.TecnicoAsignadoRep.Text.ToString();
+                string fallaPrincipal = View.FallaReparacion.Text.ToString();
+                string fallaRep1 = View.FallaReparacion1.Text.ToString();
+                string fallaRep2 = View.FallaReparacion2.Text.ToString();
+                string fallaRep3 = View.FallaReparacion3.Text.ToString();
+                string fallaRep4 = View.FallaReparacion4.Text.ToString();
+                string estadoFinalReparacion = View.EstadoReparacion.Text.ToString();
+                string repaScrap = View.MotivoScrap.Text.ToString();
+                string usuario = this.user.ToString();
+                // Insertar movimiento en la tabla de reparación
+                ConsultaGuardar += " EXEC [dbo].[sp_InsertarNuevo_MovimientoReparacion] @nombre_movimiento = '" + nombreMovimiento + "', " +
+                "@origen = '" + origen + "', " +
+                "@destino = '" + destino + "', " +
+                "@mov_pallet = '" + movPallet + "', " +
+                "@id_serial = '" + idSerial + "', " +
+                "@repa_tecnico = '" + repaTecnico + "', " +
+                "@repa_fallaPrincipal = '" + fallaPrincipal + "', " +
+                "@repa_falla1 = '" + fallaRep1 + "', " +
+                "@repa_falla2 = '" + fallaRep2 + "', " +
+                "@repa_falla3 = '" + fallaRep3 + "', " +
+                "@repa_falla4 = '" + fallaRep4 + "', " +
+                "@repa_estadoFinal = '" + estadoFinalReparacion + "', " +
+                "@repa_scrap = '" + repaScrap + "', " +
+                "@usuario = '" + usuario + "'; ";
+                #endregion
+
+                #region Insertar Movimiento Diagnostico
+
+                string diagFalla = View.FallaDiagnostico.Text.ToString();
+                string diagStatus = View.EstatusDiagnostico.Text.ToString();
+                string diagDiagnosticador = View.TecnicoAsigDiag.Text.ToString();
+                string diagUsuario = this.user.ToString();
+
+                ConsultaGuardar += " EXEC [dbo].[sp_InsertarNuevo_MovimientoDiagnostico] @nombre_movimiento = '" + nombreMovimiento + "', " +
+                "@origen = '" + origen + "', " +
+                "@destino = '" + destino + "', " +
+                "@mov_pallet = '" + movPallet + "', " +
+                "@id_serial = '" + idSerial + "', " +
+                "@diag_falla = '" + diagFalla + "', " +
+                "@diag_status = '" + diagStatus + "', " +
+                "@diag_diagnosticador = '" + diagDiagnosticador + "', " +
+                "@usuario = '" + diagUsuario + "';";
+                #endregion
+
+                #region Insertar Movimiento Verificacion
+
+                string verif_falla = View.FallaVerificacion.Text.ToString();
+                string verif_status = View.StatusVerificacion.Text.ToString();
+                string verif_diagnosticador = "N/A";
+                string verif_usuario = this.user.ToString();
+
+                ConsultaGuardar += " EXEC [dbo].[sp_InsertarNuevo_MovimientoVerificacion] @nombre_movimiento = '" + nombreMovimiento + "', " +
+                "@origen = '" + origen + "', " +
+                "@destino = '" + destino + "', " +
+                "@mov_pallet = '" + movPallet + "', " +
+                "@id_serial = '" + idSerial + "', " +
+                "@verif_falla = '" + verif_falla + "', " +
+                "@verif_status = '" + verif_status + "', " +
+                "@verif_diagnosticador = '" + verif_diagnosticador + "', " +
+                "@usuario = '" + diagUsuario + "';";
+
+                #endregion
 
                 //Evaluo si la consulta no envio los ultimos registros para forzar a enviarlos
                 if (!String.IsNullOrEmpty(ConsultaGuardar))
                 {
-                    Console.WriteLine(ConsultaGuardar);
-                    View.TxtQuery.Text = ConsultaGuardar.ToString();
                     //Ejecuto la consulta
                     service.DirectSQLNonQuery(ConsultaGuardar, Local);
 
@@ -568,9 +637,6 @@ namespace WpfFront.Presenters
 
                 //Muestro el mensaje de confirmacion
                 Util.ShowMessage("Registros guardados satisfactoriamente.");
-
-                //Reinicio los campos
-                LimpiarDatosIngresoSeriales();
 
                 return;
             }

@@ -11,6 +11,7 @@ using System.Windows.Input;
 using System.Data;
 using WpfFront.Common.UserControls;
 using WpfFront.WMSBusinessService;
+using System.Windows.Threading;
 
 namespace WpfFront.Views
 {
@@ -23,7 +24,7 @@ namespace WpfFront.Views
         #region Eventos
 
         public event EventHandler<EventArgs> AddLine;
-        public event EventHandler<DataEventArgs<DataTable>> CargaMasiva;
+        //public event EventHandler<DataEventArgs<DataTable>> CargaMasiva;
         public event EventHandler<EventArgs> ReplicateDetails;
         public event EventHandler<EventArgs> GenerarPallet;
         public event EventHandler<EventArgs> SaveDetails;
@@ -37,13 +38,14 @@ namespace WpfFront.Views
         public event EventHandler<KeyEventArgs> KeyConsultarPallet;
         public event EventHandler<KeyEventArgs> EnterConsultarPallet;
         public event EventHandler<EventArgs> ImprimirHablador;
+        public event EventHandler<EventArgs> KillProcess;
+        public event EventHandler<EventArgs> CargaMasiva;
 
         #endregion
 
         public BodegasView()
         {
             InitializeComponent();
-            Stack_UploadFile.Visibility = Visibility.Collapsed;
         }
 
         #region Variables
@@ -157,15 +159,56 @@ namespace WpfFront.Views
             set { this.tb_CodPalletBusqueda = value; }
         }
 
-        public TextBlock setFechaGuardado
+        public Dispatcher Dispatcher_Cargue
         {
-            get { return this.textblock_Guardar; }
-            set { this.textblock_Guardar = value; }
+            get { return this.Dispatcher; }
+        }
+
+        public ProgressBar Progress_Cargue
+        {
+            get { return this.PBar_cargue; }
+            set { this.PBar_cargue = value; }
+        }
+
+        public TextBlock GetEstado_Cargue
+        {
+            get { return this.textblock_estadoCargue; }
+            set { this.textblock_estadoCargue = value; }
         }
 
         #endregion
 
         #region Metodos
+
+        private void fUpload_OnFileUpload_1(object sender, EventArgs e)
+        {
+            KillProcess(sender, e);
+            string Cadena = fUpload.FileName.ToString();
+
+            //Valido que el Archivo seleccionado tengo formato .txt 
+            if (Cadena.Contains(".xls") == false || Cadena.Contains(".xlsx") == true)
+            {
+                Util.ShowError("El Archivo cargado no tiene el formato correcto");
+                return;
+            }
+            else
+            {
+                //Procesar el Archivo Cargado
+                if (fUpload.StreamFile != null)
+                {
+                    try
+                    {
+                        fUpload.IsEnabled = false;
+                        CargaMasiva(sender, e);
+                    }
+                    catch (Exception)
+                    {
+                        Util.ShowError("Error al cargar el archivo, revise que el formato de cargue sea correcto");
+                    }
+                }
+            }
+            fUpload.StreamFile = null;
+        }
 
         private void tb_Serial1_KeyDown_1(object sender, KeyEventArgs e)
         {
@@ -190,35 +233,6 @@ namespace WpfFront.Views
         private void ImgGenerate_estiba(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
             GenerarPallet(sender, e);
-        }
-
-        private void fUpload_OnFileUpload_1(object sender, EventArgs e)
-        {
-            //Mostrar ventana de Cargando...
-            ProcessWindow pw = new ProcessWindow("Cargando registros...por favor espere...");
-            string Cadena = fUpload.FileName.ToString();
-
-            //Valido que el Archivo seleccionado tengo formato .txt 
-            if (Cadena.Contains(".txt") == false)
-            {
-                Util.ShowError("El Archivo cargado no tiene el formato correcto");
-                pw.Close();
-                return;
-            }
-            else
-            {
-                //Procesar el Archivo Cargado
-                if (fUpload.StreamFile != null)
-                {
-                    string dataFile = Util.GetPlainTextString(fUpload.StreamFile);
-
-                    ProcessFile1(sender, e, dataFile);
-                }
-            }
-
-            //Cierro ventana de Cargando...
-            pw.Visibility = Visibility.Collapsed;
-            pw.Close();
         }
 
         private void ProcessFile(object sender, EventArgs e, string dataFile)
@@ -385,14 +399,17 @@ namespace WpfFront.Views
         //TextBlock TotalSeriales { get; set; }
         TextBlock GetTotalEquipos { get; set; }
         //TextBlock Estibas_Seleccionadas { get; set; }
-        TextBlock setFechaGuardado { get; set; }
+
+        Dispatcher Dispatcher_Cargue { get; }
+        ProgressBar Progress_Cargue { get; set; }
+        TextBlock GetEstado_Cargue { get; set; }
 
         #endregion
 
         #region Obtener Metodos
 
         event EventHandler<EventArgs> AddLine;
-        event EventHandler<DataEventArgs<DataTable>> CargaMasiva;
+        //event EventHandler<DataEventArgs<DataTable>> CargaMasiva;
         event EventHandler<EventArgs> ReplicateDetails;
         event EventHandler<EventArgs> GenerarPallet;
         event EventHandler<EventArgs> SaveDetails;
@@ -406,6 +423,8 @@ namespace WpfFront.Views
         event EventHandler<KeyEventArgs> KeyConsultarPallet;
         event EventHandler<KeyEventArgs> EnterConsultarPallet;
         event EventHandler<EventArgs> ImprimirHablador;
+        event EventHandler<EventArgs> KillProcess;
+        event EventHandler<EventArgs> CargaMasiva;
 
         #endregion
 

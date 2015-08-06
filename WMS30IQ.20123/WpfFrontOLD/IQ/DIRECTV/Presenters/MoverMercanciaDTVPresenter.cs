@@ -56,6 +56,7 @@ namespace WpfFront.Presenters
             View.ActualizarRegistrosCambioUbicaciones += this.OnActualizarRegistrosCambioUbicaciones;
             View.HabilitarCambioUbicacion += this.OnHabilitarCambioUbicacion;
             View.GuardarNuevaUbicacion += this.OnGuardarNuevaUbicacion;
+            View.GuardarNuevoEstado += this.OnGuardarNuevoEstado;
             View.FilaSeleccionada += this.OnFilaSeleccionadas;
 
             #endregion
@@ -85,7 +86,7 @@ namespace WpfFront.Presenters
 
             // Cargo el nombre de los productos en almacenamiento a los combobox de filtrado
             View.Model.ListadoProductosActivos = service.DirectSQLQuery("SELECT MODELO FROM dbo.EquiposDIRECTVC WHERE ESTADO = 'ALMACENAMIENTO' GROUP BY MODELO", "", "dbo.EquiposDIRECTVC", Local);
-
+            View.Model.ListadoEstadosPallet = service.GetMMaster(new MMaster { MetaType = new MType { Code = "DTVESTREC" } });
             //Cargo los datos del listado de ubicaciones destino
             View.Model.ListUbicacionesDestino = service.DirectSQLQuery("EXEC sp_GetProcesos 'UBICACIONESDESTINO', 'ALMACENAMIENTO', 'CLARO'", "", "dbo.Ubicaciones", Local);
 
@@ -98,6 +99,7 @@ namespace WpfFront.Presenters
         {
             try
             {
+                View.Model.ListadoPosiciones = service.GetMMaster(new MMaster { MetaType = new MType { Code = "DTVPOSIC" } });
                 //List<String> validValues = new List<String>() { "A1A1", "A1A2" };
                 System.Data.DataTable dt_auxiliar = service.DirectSQLQuery("select POSICION from dbo.EquiposDIRECTVC where posicion is not null ", "", "dbo.EquiposDIRECTVC", Local);
 
@@ -110,7 +112,7 @@ namespace WpfFront.Presenters
                             select item;
 
                 View.Model.ListadoPosiciones = query.ToList();
-                View.Model.ListadoPosicionesOcupadas = service.DirectSQLQuery("SELECT POSICION FROM dbo.EquiposDIRECTVC WHERE ESTADO = 'ALMACENAMIENTO' and POSICION is not null", "", "dbo.EquiposDIRECTVC", Local);
+                View.Model.ListadoPosicionesOcupadas = service.DirectSQLQuery("SELECT POSICION FROM dbo.EquiposDIRECTVC WHERE ESTADO = 'ALMACENAMIENTO' and POSICION is not null GROUP BY POSICION", "", "dbo.EquiposDIRECTVC", Local);
             }
             catch (Exception ex)
             {
@@ -175,6 +177,7 @@ namespace WpfFront.Presenters
 
             //Coloco la ubicacion del registro seleccionado en el campo de ubicacion actual
             View.TextoUbicacionActual.Text = ((DataRowView)View.ListadoBusquedaCambioUbicacion.SelectedItem).Row["Posicion"].ToString();
+            View.TextoEstadoActual.Text = ((DataRowView)View.ListadoBusquedaCambioUbicacion.SelectedItem).Row["Estado"].ToString();
         }
 
         private void OnGuardarNuevaUbicacion(object sender, EventArgs e)
@@ -219,7 +222,54 @@ namespace WpfFront.Presenters
 
             //Hago la busqueda de registros para actualizar el listado
             BuscarRegistrosCambioUbicaciones();
+            BuscarRegistrosCambioClasificacion();
             Actualizar_UbicacionDisponible();
+        }
+
+        private void OnGuardarNuevoEstado(object sender, EventArgs e)
+        {
+            //Variables Auxiliares
+            String ConsultaSQL;
+            String pallet = ((DataRowView)View.ListadoBusquedaCambioUbicacion.SelectedItem).Row["IdPallet"].ToString();
+            String estado_seleccionado = ((MMaster)View.NuevoEstado.SelectedItem).Name.ToString();
+            String estado_actual = ((DataRowView)View.ListadoBusquedaCambioUbicacion.SelectedItem).Row["Estado"].ToString();
+
+            //Evaluo que haya sido seleccionado un registro
+            if (View.ListadoBusquedaCambioUbicacion.SelectedIndex == -1)
+                return;
+
+            //Evaluo que haya seleccionado la nueva ubicacion
+            if (View.NuevoEstado.SelectedIndex == -1)
+            {
+                Util.ShowError("Por favor seleccionar el nuevo estado.");
+                return;
+            }
+
+            //Creo la consulta para cambiar la ubicacion de la estiba
+            ConsultaSQL = "EXEC sp_GetProcesosDIRECTVC 'UPDATEESTADORECIBO','" + estado_seleccionado + "','" + pallet + "';";
+
+            ConsultaSQL += "EXEC sp_InsertarNuevo_MovimientoDIRECTV 'CAMBIO DE ESTADO ALMACENAMIENTO','" + estado_actual + "','" + estado_seleccionado + "','" + pallet + "','','ALMACENAMIENTO','UBICACIONALMACEN','" + this.user + "','';";
+            Console.WriteLine("###### " + ConsultaSQL);
+
+            //Ejecuto la consulta
+            service.DirectSQLNonQuery(ConsultaSQL, Local);
+
+            //Muestro el mensaje de confirmacion
+            Util.ShowMessage("Cambio de ubicacion realizado satisfactoriamente.");
+
+            //Oculto el bloque de actualizacion
+            //View.StackCambioUbicacion.Visibility = Visibility.Collapsed;
+
+            //Quito la selecion de la nueva ubicacion
+            View.NuevoEstado.SelectedIndex = -1;
+
+            //Quito la seleccion del listado
+            View.ListadoBusquedaCambioUbicacion.SelectedIndex = -1;
+
+            //Hago la busqueda de registros para actualizar el listado
+            BuscarRegistrosCambioUbicaciones();
+            BuscarRegistrosCambioClasificacion();
+            //Actualizar_UbicacionDisponible();
         }
 
         #endregion
@@ -321,6 +371,7 @@ namespace WpfFront.Presenters
             if (View.ListadoBusquedaCambioClasificacion.SelectedItems.Count == 0)
                 return;
 
+
             //Evaluo que haya seleccionado la nueva clasificacion
             if (View.NuevaClasificacion.SelectedIndex == -1)
             {
@@ -342,35 +393,54 @@ namespace WpfFront.Presenters
                 if (NuevaUbicacion == "TRANSITO A REP.")
                 {
                     NuevoEstado = "PARA REPARACION";
+                    if (fila.Row["Estado"].ToString() == "CUARENTENA")
+                    {
+                        Util.ShowError("No es posible enviar pallet en CUARENTENA para REPARACION");
+                        return;
+                    }
+                    else
+                    {
+                        //Creo la consulta la cambiar la clasificacion de la estiba
+                        ConsultaSQL = "UPDATE dbo.EquiposDIRECTVC SET Estado = '" + NuevoEstado + "', Ubicacion = '" + NuevaUbicacion + "', CodigoEmpaque = '" + fila.Row["idPallet"].ToString() + "' WHERE IdPallet = '" + fila.Row["idPallet"].ToString() + "' AND ESTADO = 'ALMACENAMIENTO' AND ESTADO != 'DESPACHADO';";
+                        ConsultaTrack = "UPDATE dbo.TrackEquiposDIRECTV SET ESTADO_MOVMERCANCIA = '" + NuevoEstado + "' WHERE ESTIBA_ENTRADA = '" + fila.Row["idPallet"].ToString() + "';";
+                        //Guardo en la tabla de movimientos el cambio de ubicacion del equipo
+                        ConsultaMovSQL = "EXEC sp_InsertarNuevo_MovimientoDIRECTV 'ENVIO A PRODUCCIÓN " + NuevoEstado + "','ALMACENAMIENTO','REPARACIÓN','" + fila.Row["idPallet"].ToString() + "','','ALMACENAMIENTO','UBICACIONALMACEN','" + this.user + "','';";
 
-                    //Creo la consulta la cambiar la clasificacion de la estiba
-                    ConsultaSQL = "UPDATE dbo.EquiposDIRECTVC SET Estado = '" + NuevoEstado + "', Ubicacion = '" + NuevaUbicacion + "', CodigoEmpaque = '" + fila.Row["idPallet"].ToString() + "' WHERE IdPallet = '" + fila.Row["idPallet"].ToString() + "' AND ESTADO = 'ALMACENAMIENTO' AND ESTADO != 'DESPACHADO';";
-                    ConsultaTrack = "UPDATE dbo.TrackEquiposDIRECTV SET ESTADO_MOVMERCANCIA = '" + NuevoEstado + "' WHERE ESTIBA_ENTRADA = '" + fila.Row["idPallet"].ToString() + "';";
-                    //Guardo en la tabla de movimientos el cambio de ubicacion del equipo
-                    ConsultaMovSQL = "EXEC sp_InsertarNuevo_MovimientoDIRECTV 'ENVIO A PRODUCCIÓN " + NuevoEstado + "','ALMACENAMIENTO','REPARACIÓN','" + fila.Row["idPallet"].ToString() + "','','ALMACENAMIENTO','UBICACIONALMACEN','" + this.user + "','';";
-
-                    //Ejecuto la consulta
-                    service.DirectSQLNonQuery(ConsultaSQL, Local);
-                    service.DirectSQLNonQuery(ConsultaTrack, Local);
-                    service.DirectSQLNonQuery(ConsultaMovSQL, Local);
+                        //Ejecuto la consulta
+                        service.DirectSQLNonQuery(ConsultaSQL, Local);
+                        service.DirectSQLNonQuery(ConsultaTrack, Local);
+                        service.DirectSQLNonQuery(ConsultaMovSQL, Local);
+                    }
                 }
                 else if (NuevaUbicacion == "TRANSITO A DIAG.")
                 {
                     NuevoEstado = "PARA DIAGNOSTICO";
-
-                    //Creo la consulta la cambiar la clasificacion de la estiba
-                    ConsultaSQL = "UPDATE dbo.EquiposDIRECTVC SET Estado = '" + NuevoEstado + "', Ubicacion = '" + NuevaUbicacion + "' WHERE IdPallet = '" + fila.Row["idPallet"].ToString() + "' AND ESTADO = 'ALMACENAMIENTO' AND ESTADO != 'DESPACHADO';";
-                    ConsultaTrack = "UPDATE dbo.TrackEquiposDIRECTV SET ESTADO_MOVMERCANCIA = '" + NuevoEstado + "' WHERE ESTIBA_ENTRADA = '" + fila.Row["idPallet"].ToString() + "';";
-                    ConsultaMovSQL = "EXEC sp_InsertarNuevo_MovimientoDIRECTV 'ENVIO A PRODUCCIÓN " + NuevoEstado + "','ALMACENAMIENTO','DIAGNOSTICO','" + fila.Row["idPallet"].ToString() + "','','ALMACENAMIENTO','UBICACIONALMACEN','" + this.user + "','';";
-                    //Ejecuto la consulta
-                    service.DirectSQLNonQuery(ConsultaSQL, Local);
-                    service.DirectSQLNonQuery(ConsultaTrack, Local);
-                    service.DirectSQLNonQuery(ConsultaMovSQL, Local);
+                    if (fila.Row["Estado"].ToString() == "CUARENTENA")
+                    {
+                        Util.ShowError("No es posible enviar pallet en CUARENTENA para DIAGNOSTICO");
+                        return;
+                    }
+                    else
+                    {
+                        //Creo la consulta la cambiar la clasificacion de la estiba
+                        ConsultaSQL = "UPDATE dbo.EquiposDIRECTVC SET Estado = '" + NuevoEstado + "', Ubicacion = '" + NuevaUbicacion + "' WHERE IdPallet = '" + fila.Row["idPallet"].ToString() + "' AND ESTADO = 'ALMACENAMIENTO' AND ESTADO != 'DESPACHADO';";
+                        ConsultaTrack = "UPDATE dbo.TrackEquiposDIRECTV SET ESTADO_MOVMERCANCIA = '" + NuevoEstado + "' WHERE ESTIBA_ENTRADA = '" + fila.Row["idPallet"].ToString() + "';";
+                        ConsultaMovSQL = "EXEC sp_InsertarNuevo_MovimientoDIRECTV 'ENVIO A PRODUCCIÓN " + NuevoEstado + "','ALMACENAMIENTO','DIAGNOSTICO','" + fila.Row["idPallet"].ToString() + "','','ALMACENAMIENTO','UBICACIONALMACEN','" + this.user + "','';";
+                        //Ejecuto la consulta
+                        service.DirectSQLNonQuery(ConsultaSQL, Local);
+                        service.DirectSQLNonQuery(ConsultaTrack, Local);
+                        service.DirectSQLNonQuery(ConsultaMovSQL, Local);
+                    }
                 }
                 else
                 {
                     NuevoEstado = "DESPACHO";
-
+                    if (fila.Row["Estado"].ToString() == "CUARENTENA")
+                    {
+                        Util.ShowError("No es posible enviar pallet en CUARENTENA para DESPACHO");
+                        return;
+                    }
+                    else { 
                     //Creo la consulta la cambiar la clasificacion de la estiba
                     ConsultaSQL = "UPDATE dbo.equiposDIRECTVC SET CodigoEmpaque2 = IdPallet, Estado = '" + NuevoEstado + "', Ubicacion = '" + NuevaUbicacion + "' WHERE IdPallet = '" + fila.Row["idPallet"].ToString() + "'  AND ESTADO = 'ALMACENAMIENTO' AND ESTADO != 'DESPACHADO';";
                     //Guardo en la tabla de movimientos el cambio de ubicacion del equipo
@@ -381,6 +451,7 @@ namespace WpfFront.Presenters
                     service.DirectSQLNonQuery(ConsultaSQL, Local);
                     service.DirectSQLNonQuery(ConsultaMovSQL, Local);
                     service.DirectSQLNonQuery(ConsultaTrack, Local);
+                    }
                 }
             }
 

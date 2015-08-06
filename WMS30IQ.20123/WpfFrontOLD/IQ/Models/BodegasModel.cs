@@ -18,6 +18,8 @@ namespace WpfFront.Models
 
         DataTable ListadoRecibo { get; set; }
         DataTable ListUbicacionesDestino { get; set; }
+
+        DataTable List_Nocargue { get; set; }
     }
 
     public class BodegasModel : BusinessEntityBase, IBodegasModel
@@ -74,6 +76,17 @@ namespace WpfFront.Models
             {
                 _ListadoRecibo = value;
                 OnPropertyChanged("ListadoRecibo");
+            }
+        }
+
+        private DataTable _List_Nocargue;
+        public DataTable List_Nocargue
+        {
+            get { return _List_Nocargue; }
+            set
+            {
+                _List_Nocargue = value;
+                OnPropertyChanged("List_Nocargue");
             }
         }
     }

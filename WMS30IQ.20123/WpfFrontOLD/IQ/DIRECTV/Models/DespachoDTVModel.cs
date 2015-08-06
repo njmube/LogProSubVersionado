@@ -24,6 +24,7 @@ namespace WpfFront.Models
         DataTable ListadoDespachos { get; set; }
         DataTable Listado_PalletSerial { get; set; }
 
+        DataTable Listado_PalletSerialDespacho { get; set; }
         DataTable ListadoRecibo { get; set; }
     }
 
@@ -158,6 +159,17 @@ namespace WpfFront.Models
             {
                 this._Listado_PalletSerial = value;
                 OnPropertyChanged("Listado_PalletSerial");
+            }
+        }
+
+        private DataTable _Listado_PalletSerialDespacho;
+        public DataTable Listado_PalletSerialDespacho
+        {
+            get { return _Listado_PalletSerialDespacho; }
+            set
+            {
+                this._Listado_PalletSerialDespacho = value;
+                OnPropertyChanged("Listado_PalletSerialDespacho");
             }
         }
 

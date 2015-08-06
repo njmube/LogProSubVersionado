@@ -41,6 +41,8 @@ namespace WpfFront.Views
         public event EventHandler<EventArgs> MostrarEquiposDespacho;
         public event EventHandler<SelectionChangedEventArgs> FilaSeleccionada;
         public event EventHandler<EventArgs> ExportPalletSeleccion;
+        public event EventHandler<EventArgs> ListarEquiposSeleccion;
+
         #endregion
 
         public DespachoDTVView()
@@ -115,6 +117,12 @@ namespace WpfFront.Views
             get { return this.GridViewDetails2; }
             set { this.GridViewDetails2 = value; }
         }
+
+        //public ListView ListadoBusquedaCambioClasificacion
+        //{
+        //    get { return this.lvDocumentMaster_2; }
+        //    set { this.lvDocumentMaster_2 = value; }
+        //}
 
         #endregion
 
@@ -280,6 +288,12 @@ namespace WpfFront.Views
         {
             ExportPalletSeleccion(sender, e);
         }
+
+        private void MySelectionChangedDespacho(object sender, SelectionChangedEventArgs e)
+        {
+            ListarEquiposSeleccion(sender, e);
+        }
+
         #endregion
 
     }
@@ -301,6 +315,8 @@ namespace WpfFront.Views
         TextBlock Estibas_Seleccionadas { get; set; }
         GridView GridViewListaDespacho { get; set; }
         GridView GridViewListaEquiposDespacho { get; set; }
+
+        //ListView ListadoBusquedaCambioClasificacion { get; set; }
 
         #endregion
 
@@ -330,6 +346,7 @@ namespace WpfFront.Views
         event EventHandler<EventArgs> MostrarEquiposDespacho;
         event EventHandler<SelectionChangedEventArgs> FilaSeleccionada;
         event EventHandler<EventArgs> ExportPalletSeleccion;
+        event EventHandler<EventArgs> ListarEquiposSeleccion;
 
         #endregion
 

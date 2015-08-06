@@ -18,6 +18,8 @@ namespace WpfFront.Models
         DataTable ListadoCambioUbicacion { get; set; }
         DataTable ListadoCambioClasificacion { get; set; }
         DataTable Listado_PalletSerial { get; set; }
+
+        IList<MMaster> ListadoEstadosPallet { get; set; }
     }
 
     public class MoverMercanciaDTVModel : BusinessEntityBase, IMoverMercanciaDTVModel
@@ -108,6 +110,17 @@ namespace WpfFront.Models
             {
                 _Listado_PalletSerial = value;
                 OnPropertyChanged("Listado_PalletSerial");
+            }
+        }
+
+        private IList<MMaster> _ListadoEstadosPallet;
+        public IList<MMaster> ListadoEstadosPallet
+        {
+            get { return _ListadoEstadosPallet; }
+            set
+            {
+                _ListadoEstadosPallet = value;
+                OnPropertyChanged("ListadoEstadosPallet");
             }
         }
     }

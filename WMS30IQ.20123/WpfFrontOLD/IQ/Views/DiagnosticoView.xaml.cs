@@ -222,7 +222,7 @@ namespace WpfFront.Views
         {
             ConfirmarMovimiento(sender, e);
 
-            ListadoItems.Visibility = Visibility.Collapsed;
+            //ListadoItems.Visibility = Visibility.Collapsed;
         }
 
         private void btn_imprimirHablador_Click_1(object sender, RoutedEventArgs e)

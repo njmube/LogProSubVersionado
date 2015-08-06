@@ -28,6 +28,7 @@ namespace WpfFront.Views
         public event EventHandler<EventArgs> ActualizarRegistrosCambioUbicaciones;
         public event EventHandler<EventArgs> HabilitarCambioUbicacion;
         public event EventHandler<EventArgs> GuardarNuevaUbicacion;
+        public event EventHandler<EventArgs> GuardarNuevoEstado;
 
         #endregion
 
@@ -107,6 +108,18 @@ namespace WpfFront.Views
         {
             get { return this.cb_NuevaUbicacion; }
             set { this.cb_NuevaUbicacion = value; }
+        }
+
+        public TextBlock TextoEstadoActual
+        {
+            get { return this.txt_EstadoActual; }
+            set { this.txt_EstadoActual = value; }
+        }
+
+        public ComboBox NuevoEstado
+        {
+            get { return this.cb_NuevoEstado; }
+            set { this.cb_NuevoEstado = value; }
         }
 
         #endregion
@@ -214,6 +227,11 @@ namespace WpfFront.Views
             GuardarNuevaUbicacion(sender, e);
         }
 
+        private void btn_ConfirmarCambioEstado_Click_1(object sender, RoutedEventArgs e)
+        {
+            GuardarNuevoEstado(sender, e);
+        }
+
         #endregion
 
         #region Cambio Clasificacion
@@ -277,6 +295,8 @@ namespace WpfFront.Views
         TextBlock TextoUbicacionActual { get; set; }
         ComboBox NuevaUbicacion { get; set; }
 
+        TextBlock TextoEstadoActual { get; set; }
+        ComboBox NuevoEstado { get; set; }
         #endregion
 
         #region Cambio Clasificacion
@@ -307,6 +327,7 @@ namespace WpfFront.Views
         event EventHandler<EventArgs> ActualizarRegistrosCambioUbicaciones;
         event EventHandler<EventArgs> HabilitarCambioUbicacion;
         event EventHandler<EventArgs> GuardarNuevaUbicacion;
+        event EventHandler<EventArgs> GuardarNuevoEstado;
 
         #endregion
 

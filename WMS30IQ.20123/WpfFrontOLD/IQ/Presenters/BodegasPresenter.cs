@@ -18,6 +18,9 @@ using Microsoft.Windows.Controls;
 using WpfFront.Common.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
+using System.Threading;
+using System.Data.OleDb;
+using System.Diagnostics;
 
 namespace WpfFront.Presenters
 {
@@ -46,6 +49,19 @@ namespace WpfFront.Presenters
         private String userName = App.curUser.UserName;
         private String user = App.curUser.FirstName + " " + App.curUser.LastName;
 
+        private DataTable SerialesIngresados = new DataTable();
+        private DataRow NoLoad_Row = null;
+        private Timer t;
+        private Timer t1;
+        private Timer tserial;
+        private Timer treceiver;
+        private Timer tsmart;
+        private Timer talmacenado;
+        private Thread updateLabelThread;
+        private Boolean estado_cargue = false, busqueda_Repetidos = false, busqueda_serial = false, busqueda_receiver = false, busqueda_smart = false, busqueda_almacenado = false;
+        private OleDbConnection oledbcon;
+        private OleDbDataAdapter adaptador;
+        private Thread hilo_repetidos;
 
         public BodegasPresenter(IUnityContainer container, IBodegasView view)
         {
@@ -57,7 +73,7 @@ namespace WpfFront.Presenters
             #region Metodos
 
             View.AddLine += new EventHandler<EventArgs>(this.OnAddLine);
-            view.CargaMasiva += new EventHandler<DataEventArgs<DataTable>>(this.OnCargaMasiva);
+            //view.CargaMasiva += new EventHandler<DataEventArgs<DataTable>>(this.OnCargaMasiva);
             View.ReplicateDetails += new EventHandler<EventArgs>(this.OnReplicateDetails);
             View.SaveDetails += new EventHandler<EventArgs>(this.OnSaveDetails);
             //View.ConfirmarMovimiento += new EventHandler<EventArgs>(this.OnConfirmarMovimiento);
@@ -72,6 +88,9 @@ namespace WpfFront.Presenters
             //View.ActualizarRegistrosRecibo += this.OnActualizarRegistrosRecibo;
             //View.BuscarRegistrosRecibo += this.OnBuscarRegistrosRecibo;
             //View.FilaSeleccionada += this.OnFilaSeleccionada;
+
+            view.CargaMasiva += new EventHandler<EventArgs>(this.OnCargaMasiva);
+            view.KillProcess += new EventHandler<EventArgs>(this.OnKillProcess);
 
             #endregion
 
@@ -99,6 +118,450 @@ namespace WpfFront.Presenters
         }
 
         #region Metodos
+
+        #region Metodos cargue masivo
+
+        private void OnCargaMasiva(object sender, EventArgs e)
+        {
+            hilo_repetidos = new Thread(new ParameterizedThreadStart(SetRepeat));
+            hilo_repetidos.SetApartmentState(ApartmentState.STA);
+            hilo_repetidos.IsBackground = true;
+            hilo_repetidos.Priority = ThreadPriority.Highest;
+
+            String Cadena = View.GetUpLoadFile.FileName.ToString();
+            String conexion = "Provider=Microsoft.Jet.OleDb.4.0; Extended Properties=\"Excel 8.0; HDR=yes\"; Data Source=" + Cadena;
+            try
+            {
+                //creo la coneccion para leer  el .xls
+                //OleDbConnection oledbcon = default(OleDbConnection);
+                oledbcon = new OleDbConnection(conexion);
+
+                //traigo los datos del .xls
+                adaptador = new OleDbDataAdapter("select * from [Hoja1$]", oledbcon);
+
+                //guardo la info en un datatable
+                adaptador.Fill(SerialesIngresados);
+
+                oledbcon.Close();
+                oledbcon.Dispose();
+
+                //valido que existan registros
+                if (SerialesIngresados.Rows.Count == 0)
+                {
+                    Util.ShowMessage("No hay registros para procesar");
+                }
+                else
+                {
+                    View.Progress_Cargue.Value = 0;
+                    View.GetEstado_Cargue.Text = "Iniciando operación";
+                    hilo_repetidos.Start(SerialesIngresados);
+
+                    StartTimer();//Inicia el timmer para mostrar visualmente el progreso del cargue masivo
+
+                }
+            }
+            catch (Exception ex)
+            {
+                Util.ShowError("El archivo a cargar no cuenta con la estructura correcta.");
+            }
+        }
+
+        int cont = 0;
+        int cont_cargue = 0;
+        int cont_repeat = 0;
+        private void StartTimer()
+        {
+            int num_seriales = SerialesIngresados.Rows.Count;
+            // Creamos diferentes hilos a través de un temporizador
+            t = new Timer(new TimerCallback((o) =>
+            {
+                // Invocamos un método anónimo que cumpla con un delegado genérico
+                (o as System.Windows.Controls.ProgressBar).Dispatcher.Invoke(new System.Action(() =>
+                {
+                    cont++;
+
+                    if (cont == 1)
+                    {
+                        View.GetEstado_Cargue.Text = "Buscando equipos duplicados";
+                    }
+                    else if (cont == 2)
+                    {
+                        View.GetEstado_Cargue.Text = "Buscando equipos duplicados.";
+                    }
+                    else if (cont == 3)
+                    {
+                        View.GetEstado_Cargue.Text = "Buscando equipos duplicados..";
+                    }
+                    else if (cont == 4 || cont > 4)
+                    {
+                        View.GetEstado_Cargue.Text = "Buscando equipos duplicados...";
+                        cont = 0;
+                    }
+
+                    // Implementación del método anónimo
+                    if (View.Progress_Cargue.Value < 100D && busqueda_Repetidos == false)
+                    {
+                        if (num_seriales == 0) { num_seriales = 1; }
+                        View.Progress_Cargue.Value = cont_repeat * 100D / num_seriales;
+                    }
+                    else
+                    {
+                        // Anulamos el ciclo del temporizador ya que el proceso de la barra de progreso ha acabado
+                        t.Change(System.Threading.Timeout.Infinite, System.Threading.Timeout.Infinite);
+
+                        // Invocamos de nuevo al mismo delegado para modificar la apariencia visual de la barra de progreso
+                        (o as System.Windows.Controls.ProgressBar).Dispatcher.Invoke(new System.Action(() =>
+                        {
+                            View.GetEstado_Cargue.Text = "Verificación de equipos duplicados terminada.";
+                            View.Progress_Cargue.Value = 100D;
+                        }));
+                    }
+                }));
+            }), View.Progress_Cargue, 0, 1000);
+        }
+
+        private void SetRepeat(object o)
+        {
+            busqueda_Repetidos = false;
+            busqueda_serial = false;
+            busqueda_receiver = false;
+            busqueda_smart = false;
+            busqueda_almacenado = false;
+            estado_cargue = false;
+
+            List<String> listNoCargue = new List<String>(); //Guarda los seriales que no cumplen con los requisitos del cargue
+
+            for (int i = 0; i < SerialesIngresados.Rows.Count; i++)
+            {
+                for (int j = i + 1; j < SerialesIngresados.Rows.Count; j++)
+                {
+                    if (SerialesIngresados.Rows[i]["Serial"].ToString() == "" & SerialesIngresados.Rows[j]["Serial"].ToString() == "")
+                    {
+                        SerialesIngresados.Rows.RemoveAt(i); //Elimino el primer serial y dejo el repetido o posterior.
+                        //j = i + 1; //Como borre el elemento de la posicion i provoco que j continue un serial posterior al borrado
+                        if (j > 0)
+                            j = i - 1;
+                    }
+                    //if (SerialesIngresados.Rows[i]["SERIAL"].ToString() != "" && SerialesIngresados.Rows[j]["SERIAL"].ToString() != "")
+                    else
+                    {
+                        if (SerialesIngresados.Rows[i]["SERIAL"].ToString() == SerialesIngresados.Rows[j]["SERIAL"].ToString())
+                        {
+                            listNoCargue.InsertRange(listNoCargue.Count, new string[] {SerialesIngresados.Rows[j]["SERIAL"].ToString(), 
+                                                                                       "Serial duplicado dentro del archivo de cargue"});
+
+                            SerialesIngresados.Rows.RemoveAt(i); //Elimino el primer serial y dejo el repetido o posterior.
+                            j = i + 1; //Como borre el elemento de la posicion i provoco que j continue un serial posterior al borrado
+                        }
+                    }
+                }
+                cont_repeat++;
+            }
+
+            busqueda_Repetidos = true;
+            Thread.Sleep(1000);
+            t.Dispose();
+
+            View.Dispatcher_Cargue.Invoke(new System.Action(() =>
+            {
+                View.Progress_Cargue.Value = 0;
+            }), null);
+
+            StartTimerSerial();
+
+            //validamos que los seriales ya se encuentren liberados
+            String ConsultaBuscarSerial = "";
+            int temp2 = 0;
+            while (temp2 < SerialesIngresados.Rows.Count)
+            {
+                ConsultaBuscarSerial = "SELECT serial from dbo.EquiposCLARO WHERE UPPER(Serial) = UPPER('" + SerialesIngresados.Rows[temp2]["SERIAL"].ToString() + "')";
+                DataTable Resultado = service.DirectSQLQuery(ConsultaBuscarSerial, "", "dbo.EquiposCLARO", Local);
+
+                if (Resultado.Rows.Count == 0)
+                {
+                    listNoCargue.InsertRange(listNoCargue.Count, new string[] {SerialesIngresados.Rows[temp2]["SERIAL"].ToString(), 
+                                                                                        "Serial NO existente en el sistema."});
+
+                    SerialesIngresados.Rows.RemoveAt(temp2);
+                }
+                else
+                {
+                    temp2++;
+                }
+                cont_repeat2++;
+            }
+
+            busqueda_serial = true;
+            Thread.Sleep(1000);
+            tserial.Dispose();
+
+            View.Dispatcher_Cargue.Invoke(new System.Action(() =>
+            {
+                View.Progress_Cargue.Value = 0;
+            }), null);
+
+            StartTimerAlmacenado();
+
+            //validamos que los seriales ya se encuentren liberados
+            String ConsultaBuscarAlmacenado = "";
+            int temp3 = 0;
+            while (temp3 < SerialesIngresados.Rows.Count)
+            {
+                ConsultaBuscarAlmacenado = "SELECT serial from dbo.EquiposCLARO WHERE UPPER(Serial) = UPPER('" + SerialesIngresados.Rows[temp3]["SERIAL"].ToString() + "') and Estado = 'ALMACENAMIENTO'";
+                DataTable ResultadoAlmacenado = service.DirectSQLQuery(ConsultaBuscarAlmacenado, "", "dbo.EquiposCLARO", Local);
+
+                if (ResultadoAlmacenado.Rows.Count > 0)
+                {
+                    listNoCargue.InsertRange(listNoCargue.Count, new string[] {SerialesIngresados.Rows[temp3]["SERIAL"].ToString(), 
+                                                                                        "Serial ya se encuentra almacenado."});
+
+                    SerialesIngresados.Rows.RemoveAt(temp3);
+                }
+                else
+                {
+                    temp3++;
+                }
+                cont_repeat3++;
+            }
+
+            busqueda_almacenado = true;
+            Thread.Sleep(1000);
+            talmacenado.Dispose();
+
+            View.Dispatcher_Cargue.Invoke(new System.Action(() =>
+            {
+                View.Progress_Cargue.Value = 0;
+            }), null);
+
+
+            this.MostrarErrores_Cargue(listNoCargue); // Agrega a un segundo listview los equipos que no fueron cargados
+
+            StartTimer2();
+
+            cont = 0;
+            cont2 = 0;
+            cont3 = 0;
+
+            CargarListDetails();
+            estado_cargue = true;
+        }
+
+        private void MostrarErrores_Cargue(List<String> listNoCargue)
+        {
+            int columna = 0;
+            View.Dispatcher_Cargue.Invoke(new System.Action(() =>
+            {
+                NoLoad_Row = View.Model.List_Nocargue.NewRow();
+            }), null);
+
+            foreach (var dr in listNoCargue)
+            {
+                View.Dispatcher_Cargue.Invoke(new System.Action(() =>
+                {
+                    if (columna != View.Model.List_Nocargue.Columns.Count - 1)
+                    {
+                        NoLoad_Row[columna] = dr;
+                        columna++;
+                    }
+                    else
+                    {
+                        NoLoad_Row[columna] = dr;
+                        columna = 0;
+                        View.Model.List_Nocargue.Rows.Add(NoLoad_Row);
+                        NoLoad_Row = View.Model.List_Nocargue.NewRow();
+                    }
+                }), null);
+            }
+        }
+
+        private void StartTimer2()
+        {
+            int num_seriales = SerialesIngresados.Rows.Count;
+            // Creamos diferentes hilos a través de un temporizador
+            t1 = new Timer(new TimerCallback((o) =>
+            {
+                // Invocamos un método anónimo que cumpla con un delegado genérico
+                (o as System.Windows.Controls.ProgressBar).Dispatcher.Invoke(new System.Action(() =>
+                {
+                    cont_cargue++;
+
+                    if (cont_cargue == 1)
+                    {
+                        View.GetEstado_Cargue.Text = "Cargando archivo";
+                    }
+                    else if (cont_cargue == 2)
+                    {
+                        View.GetEstado_Cargue.Text = "Cargando archivo.";
+                    }
+                    else if (cont_cargue == 3)
+                    {
+                        View.GetEstado_Cargue.Text = "Cargando archivo..";
+                    }
+                    else if (cont_cargue == 4 || cont_cargue > 4)
+                    {
+                        View.GetEstado_Cargue.Text = "Cargando archivo...";
+                        cont_cargue = 0;
+                    }
+                    // Implementación del método anónimo  && SerialesIngresados.Rows.Count > 0
+                    if (estado_cargue == false)
+                    {
+                        if (num_seriales == 0) { num_seriales = 1; }
+                        View.Progress_Cargue.Value = ((View.Model.ListRecords.Rows.Count * 100D) / num_seriales);
+                    }
+                    else
+                    {
+                        // Anulamos el ciclo del temporizador ya que el proceso de la barra de progreso ha acabado
+                        t1.Change(System.Threading.Timeout.Infinite, System.Threading.Timeout.Infinite);
+
+                        // Invocamos de nuevo al mismo delegado para modificar la apariencia visual de la barra de progreso
+                        (o as System.Windows.Controls.ProgressBar).Dispatcher.Invoke(new System.Action(() =>
+                        {
+                            View.GetEstado_Cargue.Text = "Carga de archivo terminada.";
+                            View.Progress_Cargue.Value = 100D;
+                        }));
+                    }
+                }));
+            }), View.Progress_Cargue, 0, 1000);
+        }
+
+        int cont2 = 0;
+        int cont_repeat2 = 0;
+        private void StartTimerSerial()
+        {
+            int num_seriales = SerialesIngresados.Rows.Count;
+            // Creamos diferentes hilos a través de un temporizador
+            tserial = new Timer(new TimerCallback((o) =>
+            {
+                // Invocamos un método anónimo que cumpla con un delegado genérico
+                (o as System.Windows.Controls.ProgressBar).Dispatcher.Invoke(new System.Action(() =>
+                {
+                    cont2++;
+
+                    if (cont2 == 1)
+                    {
+                        View.GetEstado_Cargue.Text = "Validando Seriales previamente ingresados";
+                    }
+                    else if (cont2 == 2)
+                    {
+                        View.GetEstado_Cargue.Text = "Validando Seriales previamente ingresados.";
+                    }
+                    else if (cont2 == 3)
+                    {
+                        View.GetEstado_Cargue.Text = "Validando Seriales previamente ingresados..";
+                    }
+                    else if (cont2 == 4 || cont > 4)
+                    {
+                        View.GetEstado_Cargue.Text = "Validando Seriales previamente ingresados...";
+                        cont2 = 0;
+                    }
+
+                    // Implementación del método anónimo
+                    if (busqueda_serial == false)
+                    {
+                        if (num_seriales == 0) { num_seriales = 1; }
+                        View.Progress_Cargue.Value = cont_repeat2 * 100D / num_seriales;
+                    }
+                    else
+                    {
+                        // Anulamos el ciclo del temporizador ya que el proceso de la barra de progreso ha acabado
+                        tserial.Change(System.Threading.Timeout.Infinite, System.Threading.Timeout.Infinite);
+                        //Util.ShowMessage("Cargue masivo finalizado");
+                        // Invocamos de nuevo al mismo delegado para modificar la apariencia visual de la barra de progreso
+                        (o as System.Windows.Controls.ProgressBar).Dispatcher.Invoke(new System.Action(() =>
+                        {
+                            View.GetEstado_Cargue.Text = "Verificación de seriales terminada.";
+                            View.Progress_Cargue.Value = 100D;
+                        }));
+                    }
+                }));
+            }), View.Progress_Cargue, 0, 1000);
+        }
+
+        int cont3 = 0;
+        int cont_repeat3 = 0;
+        private void StartTimerAlmacenado()
+        {
+            int num_seriales = SerialesIngresados.Rows.Count;
+            // Creamos diferentes hilos a través de un temporizador
+            talmacenado = new Timer(new TimerCallback((o) =>
+            {
+                // Invocamos un método anónimo que cumpla con un delegado genérico
+                (o as System.Windows.Controls.ProgressBar).Dispatcher.Invoke(new System.Action(() =>
+                {
+                    cont3++;
+
+                    if (cont3 == 1)
+                    {
+                        View.GetEstado_Cargue.Text = "Validando Seriales previamente ingresados";
+                    }
+                    else if (cont3 == 2)
+                    {
+                        View.GetEstado_Cargue.Text = "Validando Seriales previamente ingresados.";
+                    }
+                    else if (cont3 == 3)
+                    {
+                        View.GetEstado_Cargue.Text = "Validando Seriales previamente ingresados..";
+                    }
+                    else if (cont3 == 4 || cont > 4)
+                    {
+                        View.GetEstado_Cargue.Text = "Validando Seriales previamente ingresados...";
+                        cont3 = 0;
+                    }
+
+                    // Implementación del método anónimo
+                    if (busqueda_almacenado == false)
+                    {
+                        if (num_seriales == 0) { num_seriales = 1; }
+                        View.Progress_Cargue.Value = cont_repeat3 * 100D / num_seriales;
+                    }
+                    else
+                    {
+                        // Anulamos el ciclo del temporizador ya que el proceso de la barra de progreso ha acabado
+                        talmacenado.Change(System.Threading.Timeout.Infinite, System.Threading.Timeout.Infinite);
+                        //Util.ShowMessage("Cargue masivo finalizado");
+                        // Invocamos de nuevo al mismo delegado para modificar la apariencia visual de la barra de progreso
+                        (o as System.Windows.Controls.ProgressBar).Dispatcher.Invoke(new System.Action(() =>
+                        {
+                            View.GetEstado_Cargue.Text = "Verificación de seriales terminada.";
+                            View.Progress_Cargue.Value = 100D;
+                        }));
+                    }
+                }));
+            }), View.Progress_Cargue, 0, 1000);
+        }
+
+        #endregion
+
+        public void CargarListDetails()
+        {
+            String ConsultaBuscar = "";
+            DataTable RegistroValidado;
+            foreach (DataRow dr in SerialesIngresados.Rows)
+            {
+                // Modificamos un UIElement que no corresponde con este hilo, para ello usamos su dispatcher
+                View.Dispatcher_Cargue.Invoke(new System.Action(() =>
+                {
+                    ConsultaBuscar = "EXEC sp_GetProcesos 'BUSCAREQUIPOSALMACENAR', '" + dr["SERIAL"].ToString() +"', NULL, NULL";
+                    RegistroValidado = service.DirectSQLQuery(ConsultaBuscar, "", "dbo.EquiposCLARO", Local);
+
+                    DataRow RegistroGuardar = View.Model.ListRecords.NewRow();
+
+                    //Asigno los campos
+                    RegistroGuardar["Serial"] = dr[0].ToString();
+                    RegistroGuardar["Mac"] = dr[1].ToString();
+                    RegistroGuardar["Sap"] = dr[2].ToString();
+                    RegistroGuardar["ProductoID"] = RegistroValidado.Rows[0]["ProductoID"].ToString();
+                    RegistroGuardar["Fecha_RR"] = RegistroValidado.Rows[0]["Fecha_RR"].ToString();
+                    RegistroGuardar["Fecha_SAP"] = RegistroValidado.Rows[0]["Fecha_SAP"].ToString();
+                    RegistroGuardar["TLiberado"] = RegistroValidado.Rows[0]["TLiberado"].ToString();
+
+                    View.Model.ListRecords.Rows.Add(RegistroGuardar);
+
+                }), null);
+            }
+
+            adaptador.Dispose();
+        }
 
         /*Actualiza la informacion de los combobox cambio de ubicacion, permite que una posicion que esta ocupada no aparecezca en el comobobox*/
         private void Actualizar_UbicacionDisponible()
@@ -165,11 +628,11 @@ namespace WpfFront.Presenters
 
                     if (estado == "LIBERADO")
                     {
-                        String doc_rr = RegistroValidado.Rows[0]["fecha_doc"].ToString();
-                        String doc_sap = RegistroValidado.Rows[0]["fecha_doc_sap"].ToString();
+                        String doc_rr = RegistroValidado.Rows[0]["Fecha_RR"].ToString();
+                        String doc_sap = RegistroValidado.Rows[0]["Fecha_SAP"].ToString();
                         String estado_rr = RegistroValidado.Rows[0]["estado_RR"].ToString();
                         String ubicacion = RegistroValidado.Rows[0]["Ubicacion"].ToString();
-
+                        string tliberado = RegistroValidado.Rows[0]["TLiberado"].ToString();
                         if (doc_rr == null || doc_rr == "")
                         {
                             if (doc_sap == null || doc_sap == "")
@@ -206,8 +669,8 @@ namespace WpfFront.Presenters
                                     dr["Mac"] = RegistroValidado.Rows[0]["Mac"].ToString().ToUpper();
                                     dr["Sap"] = RegistroValidado.Rows[0]["CODIGO_SAP"].ToString().ToUpper();
                                     dr["ProductoID"] = RegistroValidado.Rows[0]["productoid"].ToString().ToUpper();
-                                    dr["Fecha_RR"] = RegistroValidado.Rows[0]["fecha_doc"].ToString().ToUpper();
-                                    dr["Fecha_SAP"] = RegistroValidado.Rows[0]["fecha_doc_sap"].ToString().ToUpper();
+                                    dr["Fecha_RR"] = RegistroValidado.Rows[0]["Fecha_RR"].ToString().ToUpper();
+                                    dr["Fecha_SAP"] = RegistroValidado.Rows[0]["Fecha_SAP"].ToString().ToUpper();
                                     dr["TLiberado"] = RegistroValidado.Rows[0]["TLiberado"].ToString().ToUpper();
                                     //Agrego el registro al listado
                                     View.Model.ListRecords.Rows.Add(dr);
@@ -319,7 +782,8 @@ namespace WpfFront.Presenters
                 Console.WriteLine(ConsultaSQL);
                 View.Model.ListPallets_Almacenamiento = service.DirectSQLQuery(ConsultaSQL, "", "dbo.EquiposCLARO", Local);
                 this.Calcular_TotalEquipos();
-            }catch(Exception ex){
+            }
+            catch(Exception ex){
                 Util.ShowError(ex.Message);
             }
         }
@@ -724,6 +1188,79 @@ namespace WpfFront.Presenters
             }
         }
 
+        //public void CargarDatosDetails()
+        //{
+        //    //Variables Auxiliares
+        //    GridViewColumn Columna;
+        //    FrameworkElementFactory Txt;
+        //    Assembly assembly;
+        //    string TipoDato;
+
+        //    //Inicializo el DataTable
+        //    View.Model.ListRecords = new DataTable("ListadoRegistros");
+
+        //    //Asigno las columnas
+        //    View.Model.ListRecords.Columns.Add("RowID", typeof(String));
+        //    View.Model.ListRecords.Columns.Add("Serial", typeof(String));
+        //    View.Model.ListRecords.Columns.Add("Mac", typeof(String));
+        //    View.Model.ListRecords.Columns.Add("Sap", typeof(String));
+        //    View.Model.ListRecords.Columns.Add("ProductoID", typeof(String));
+        //    View.Model.ListRecords.Columns.Add("Fecha_RR", typeof(String));
+        //    View.Model.ListRecords.Columns.Add("Fecha_SAP", typeof(String));
+        //    View.Model.ListRecords.Columns.Add("TLiberado", typeof(String));
+
+        //    //Inicializo el DataTable
+        //    View.Model.ListPallets_Almacenamiento = new DataTable("ListadoPallets");
+
+        //    //Asigno las columnas
+        //    View.Model.ListPallets_Almacenamiento.Columns.Add("Pallet", typeof(String));
+        //    View.Model.ListPallets_Almacenamiento.Columns.Add("Posicion", typeof(String));
+        //    View.Model.ListPallets_Almacenamiento.Columns.Add("Cantidad", typeof(String));
+        //    View.Model.ListPallets_Almacenamiento.Columns.Add("FechaIngreso", typeof(String));
+        //    View.Model.ListPallets_Almacenamiento.Columns.Add("Usuario", typeof(String));
+
+        //    //View.Model.ListRecords.Columns.Add("Estado", typeof(String));
+        //    //View.Model.ListRecords.Columns.Add("IdPallet", typeof(String));           
+
+        //    //  Columna = new GridViewColumn();
+        //    //  assembly = Assembly.GetAssembly(Type.GetType("System.Windows.Controls.ComboBox, PresentationFramework, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35"));
+        //    //  TipoDato = "System.Windows.Controls.ComboBox";
+        //    //  Columna.Header = "Ubicaciones";
+        //    //  Txt = new FrameworkElementFactory(assembly.GetType(TipoDato));
+        //    //  Txt.SetValue(ComboBox.ItemsSourceProperty, View.Model.ListadoPosiciones);
+        //    //  Txt.SetValue(ComboBox.DisplayMemberPathProperty, "Name");
+        //    //  //Txt.SetValue(ComboBox.SelectedValuePathProperty, "MetaMasterID");
+        //    //  Txt.SetValue(ComboBox.SelectedValuePathProperty, "Code");
+        //    //// Txt.SetBinding(ComboBox.SelectedValueProperty, new System.Windows.Data.Binding("Posicion"));
+        //    //  Txt.SetValue(ComboBox.WidthProperty, (double)110);
+
+        //    //// add textbox template
+        //    //Columna.CellTemplate = new DataTemplate();
+        //    //Columna.CellTemplate.VisualTree = Txt;
+        //    //View.ListadoEquipos.Columns.Add(Columna); //Creacion de la columna en el GridView
+        //    //View.Model.ListRecords.Columns.Add("Posicion", typeof(String)); //Creacion de la columna en el DataTable
+
+        //    //COLUMNA ESTADO
+        //    IList<MMaster> ListadoEstados = service.GetMMaster(new MMaster { MetaType = new MType { Code = "ESTADOS-AL" } });
+        //    Columna = new GridViewColumn();
+        //    assembly = Assembly.GetAssembly(Type.GetType("System.Windows.Controls.ComboBox, PresentationFramework, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35"));
+        //    TipoDato = "System.Windows.Controls.ComboBox";
+        //    Columna.Header = "Estado";
+        //    Txt = new FrameworkElementFactory(assembly.GetType(TipoDato));
+        //    Txt.SetValue(ComboBox.ItemsSourceProperty, ListadoEstados);
+        //    Txt.SetValue(ComboBox.DisplayMemberPathProperty, "Name");
+        //    Txt.SetValue(ComboBox.SelectedValuePathProperty, "Code");
+        //    Txt.SetBinding(ComboBox.SelectedValueProperty, new System.Windows.Data.Binding("ESTADO_SAP"));
+        //    Txt.SetValue(ComboBox.WidthProperty, (double)110);
+
+
+        //    // add textbox template
+        //    Columna.CellTemplate = new DataTemplate();
+        //    Columna.CellTemplate.VisualTree = Txt;
+        //    View.ListadoEquipos.Columns.Add(Columna); //Creacion de la columna en el GridView
+        //    View.Model.ListRecords.Columns.Add("ESTADO_SAP", typeof(String)); //Creacion de la columna en el DataTable
+        //}
+
         public void CargarDatosDetails()
         {
             //Variables Auxiliares
@@ -745,56 +1282,32 @@ namespace WpfFront.Presenters
             View.Model.ListRecords.Columns.Add("Fecha_SAP", typeof(String));
             View.Model.ListRecords.Columns.Add("TLiberado", typeof(String));
 
-            //Inicializo el DataTable
-            View.Model.ListPallets_Almacenamiento = new DataTable("ListadoPallets");
+            // Datatable lista de seriales no cargados
+            View.Model.List_Nocargue = new DataTable("ListadoNoCargue");
+            View.Model.List_Nocargue.Columns.Add("Serial", typeof(String));
+            View.Model.List_Nocargue.Columns.Add("Motivo", typeof(String)); // Motivo del no cargue
 
-            //Asigno las columnas
-            View.Model.ListPallets_Almacenamiento.Columns.Add("Pallet", typeof(String));
-            View.Model.ListPallets_Almacenamiento.Columns.Add("Posicion", typeof(String));
-            View.Model.ListPallets_Almacenamiento.Columns.Add("Cantidad", typeof(String));
-            View.Model.ListPallets_Almacenamiento.Columns.Add("FechaIngreso", typeof(String));
-            View.Model.ListPallets_Almacenamiento.Columns.Add("Usuario", typeof(String));
+            #region Columna Estado Material.
 
-            //View.Model.ListRecords.Columns.Add("Estado", typeof(String));
-            //View.Model.ListRecords.Columns.Add("IdPallet", typeof(String));           
-
-            //  Columna = new GridViewColumn();
-            //  assembly = Assembly.GetAssembly(Type.GetType("System.Windows.Controls.ComboBox, PresentationFramework, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35"));
-            //  TipoDato = "System.Windows.Controls.ComboBox";
-            //  Columna.Header = "Ubicaciones";
-            //  Txt = new FrameworkElementFactory(assembly.GetType(TipoDato));
-            //  Txt.SetValue(ComboBox.ItemsSourceProperty, View.Model.ListadoPosiciones);
-            //  Txt.SetValue(ComboBox.DisplayMemberPathProperty, "Name");
-            //  //Txt.SetValue(ComboBox.SelectedValuePathProperty, "MetaMasterID");
-            //  Txt.SetValue(ComboBox.SelectedValuePathProperty, "Code");
-            //// Txt.SetBinding(ComboBox.SelectedValueProperty, new System.Windows.Data.Binding("Posicion"));
-            //  Txt.SetValue(ComboBox.WidthProperty, (double)110);
-
-            //// add textbox template
-            //Columna.CellTemplate = new DataTemplate();
-            //Columna.CellTemplate.VisualTree = Txt;
-            //View.ListadoEquipos.Columns.Add(Columna); //Creacion de la columna en el GridView
-            //View.Model.ListRecords.Columns.Add("Posicion", typeof(String)); //Creacion de la columna en el DataTable
-
-            //COLUMNA ESTADO
-            IList<MMaster> ListadoEstados = service.GetMMaster(new MMaster { MetaType = new MType { Code = "ESTADOS-AL" } });
+            IList<MMaster> ListadoSerializados = service.GetMMaster(new MMaster { MetaType = new MType { Code = "SI _NO" } });
             Columna = new GridViewColumn();
             assembly = Assembly.GetAssembly(Type.GetType("System.Windows.Controls.ComboBox, PresentationFramework, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35"));
             TipoDato = "System.Windows.Controls.ComboBox";
-            Columna.Header = "Estado";
+            Columna.Header = "Ensamblado";
             Txt = new FrameworkElementFactory(assembly.GetType(TipoDato));
-            Txt.SetValue(ComboBox.ItemsSourceProperty, ListadoEstados);
+            Txt.SetValue(ComboBox.ItemsSourceProperty, ListadoSerializados);
             Txt.SetValue(ComboBox.DisplayMemberPathProperty, "Name");
             Txt.SetValue(ComboBox.SelectedValuePathProperty, "Code");
-            Txt.SetBinding(ComboBox.SelectedValueProperty, new System.Windows.Data.Binding("ESTADO_SAP"));
+            Txt.SetBinding(ComboBox.SelectedValueProperty, new System.Windows.Data.Binding("ENSAMBLADO"));
             Txt.SetValue(ComboBox.WidthProperty, (double)110);
-
 
             // add textbox template
             Columna.CellTemplate = new DataTemplate();
             Columna.CellTemplate.VisualTree = Txt;
             View.ListadoEquipos.Columns.Add(Columna); //Creacion de la columna en el GridView
-            View.Model.ListRecords.Columns.Add("ESTADO_SAP", typeof(String)); //Creacion de la columna en el DataTable
+            View.Model.ListRecords.Columns.Add("ENSAMBLADO", typeof(String)); //Creacion de la columna en el DataTable
+
+            #endregion
         }
 
         private void OnCargaMasiva(object sender, DataEventArgs<DataTable> e)
@@ -996,7 +1509,7 @@ namespace WpfFront.Presenters
                             else
                             {
                                 //Construyo la consulta para guardar los datos
-                                ConsultaGuardar += " UPDATE dbo.EquiposCLARO SET Posicion = '" + ubicacion + "', IdPallet = '" + this.codigoPallet + "', Ubicacion = 'ALMACENAMIENTO', Estado= 'ALMACENAMIENTO', ESTADO_SAP = '" + View.Model.ListRecords.Rows[i]["ESTADO_SAP"].ToString() + "'  WHERE Serial = '" + View.Model.ListRecords.Rows[i]["Serial"].ToString() + "' AND (Estado ='LIBERADO' or Estado IS NULL OR Estado ='');";
+                                ConsultaGuardar += " UPDATE dbo.EquiposCLARO SET Posicion = '" + ubicacion + "', IdPallet = '" + this.codigoPallet + "', Ubicacion = 'ALMACENAMIENTO', Estado= 'ALMACENAMIENTO'  WHERE Serial = '" + View.Model.ListRecords.Rows[i]["Serial"].ToString() + "' AND (Estado ='LIBERADO' or Estado IS NULL OR Estado ='' OR Estado = 'CUARENTENA');";
                                 ConsultaGuardarTrack += "UPDATE dbo.TrackEquiposCLARO SET ESTIBA_ENTRADA = '" + this.codigoPallet + "', ESTADO_ALMACEN1 = 'ALMACENAMIENTO', UBICACION_ENTRADA = 'ALMACENAMIENTO', FECHA_ING_ALMACEN = GETDATE() WHERE Serial = '" + View.Model.ListRecords.Rows[i]["Serial"].ToString() + "'";
                                 ConsultaGuardar += "EXEC sp_InsertarNuevo_Movimiento 'ALMACENAMIENTO DE EQUIPOS EN BODEGA','ESPERANDO POR ENVIO A PRODUCCION','" + ubicacion  + "','" + View.GetCodPallet.Text + "','','ALMACENAMIENTO','ALMACENARENBODEGA','" + this.user + "','" + View.Model.ListRecords.Rows[i]["Serial"].ToString() + "';";
                 
@@ -1028,27 +1541,19 @@ namespace WpfFront.Presenters
                     ConsultaGuardar = "";
                     ConsultaGuardarTrack = "";
 
-                    if (sender == null)
-                    {
-                        View.setFechaGuardado.Text = "Guardado a las: " + DateTime.Now.ToString();
-                    }
-                    else
-                    {
-                        //Muestro el mensaje de confirmacion
-                        Util.ShowMessage("Registros guardados satisfactoriamente.");
-                        //Reinicio los campos
-                        LimpiarDatosIngresoSeriales();
-                        View.GetCodPallet.Text = "";
-                        Actualizar_UbicacionDisponible();
-                        this.ubicacionPallet = "";
-                        this.contFilas_byPallet = 0;
-                        this.codigoPallet = "";
-                        ConsultarPallets();
-                    }
-                    
-                }
-       
+                    //Muestro el mensaje de confirmacion
+                    Util.ShowMessage("Registros guardados satisfactoriamente.");
+                    //Reinicio los campos
+                    LimpiarDatosIngresoSeriales();
+                    View.GetCodPallet.Text = "";
+                    View.GetUpLoadFile.IsEnabled = true;
+                    Actualizar_UbicacionDisponible();
+                    this.ubicacionPallet = "";
+                    this.contFilas_byPallet = 0;
+                    this.codigoPallet = "";
+                    ConsultarPallets();
 
+                }
             }
             catch (Exception Ex) { Util.ShowError("Se presento un error al momento de guardar los registros. Error: " + Ex.Message); }
         }
@@ -1172,6 +1677,22 @@ namespace WpfFront.Presenters
 
             //Imprimo los registros
             PrinterControl.PrintMovimientosBodega(SerialesImprimir, "PALLET", pallet, destino, "CLARO", "ALMACENAMIENTO", "", "CLARO");
+        }
+
+        public void OnKillProcess(object sender, EventArgs e)
+        {
+            LimpiarList();
+            //detengo procesos activos de excel para el cargue masivo
+            Process[] proceso = Process.GetProcessesByName("EXCEL");
+
+            if (proceso.Length > 0)
+                proceso[0].Kill();
+        }
+
+        public void LimpiarList()
+        {
+            View.Model.ListRecords.Rows.Clear();
+            View.Model.List_Nocargue.Rows.Clear();
         }
 
         #endregion

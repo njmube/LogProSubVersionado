@@ -343,9 +343,47 @@
                                     </StackPanel>
                                 </StackPanel>
                             </Border>
+
+                            <Border x:Uid="Border_Head" Name="Border_Head_2" Style="{DynamicResource UserControlFormInnerBorder}" Margin="3" HorizontalAlignment="Center" Height="auto" Width="auto" Visibility="Visible">
+                                <StackPanel x:Uid="Stack_Panel12" Margin="5" Width="auto" HorizontalAlignment="Left" Orientation="Vertical">
+                                    <StackPanel x:Uid="Stack_NumeroDoc" Name="Stack_NumeroDoc_2" Margin="10,0,0,0" >
+                                        <TextBlock Text="Unión de estibas" HorizontalAlignment="Left" FontWeight="bold" />
+                                    </StackPanel>
+                                    <Separator Margin="5,0,0,10"/>
+                                    <StackPanel x:Name="Stack_Panel13" Orientation="Vertical">
+                                        <StackPanel x:Name="Stack_Panel14" Orientation="Horizontal">
+                                            <TextBlock Text="Seleccione una ubicación" HorizontalAlignment="Left"></TextBlock>
+                                            <ComboBox x:Name="cbo_UbicacionUnionEstibas" Height="23" Width="155" Margin="20,0,0,0"></ComboBox>
+                                        </StackPanel>
+                                        <StackPanel x:Name="Stack_Panel15" Orientation="Horizontal" Margin="0,10,0,0">
+                                            <TextBlock Text="Generar pallet nuevo"></TextBlock>
+                                            <TextBox x:Name="txt_palletGeneratedUnionEstibas"  Margin="42,0,0,0" Width="135" Height="20" IsReadOnly="True"></TextBox>
+                                            <Image x:Uid="ImageRefresh" Cursor="Hand" x:Name="ImageRefreshUnionEstiba"  Margin="3,5,0,0" Width="16" VerticalAlignment="Center"  HorizontalAlignment="Center" Source="/WpfFront;component/Images/refresh.png" ToolTip="Generar estiba automáticamente" RenderTransformOrigin="0.462,0.41" Height="10"/>
+                                        </StackPanel>
+                                        <StackPanel x:Name="Stack_Panel16" Orientation="Horizontal" Margin="0,10,0,0">
+                                            <Button Content="Combinar pallets seleccionados" HorizontalAlignment="Center"  FontWeight="Bold" IsEnabled="false" Margin="60,0,0,0"></Button>
+                                        </StackPanel>
+                                    </StackPanel>
+                                </StackPanel>
+                            </Border>
+
+                            <Border x:Uid="Border_Head" Name="Border_Head_3" Style="{DynamicResource UserControlFormInnerBorder}" Margin="3" HorizontalAlignment="Center" Height="auto" Width="auto" Visibility="Visible">
+                                <StackPanel x:Uid="Stack_Panel12" Margin="5" Width="auto" HorizontalAlignment="Left" Orientation="Vertical">
+                                    <StackPanel x:Uid="Stack_NumeroDoc" Name="Stack_NumeroDoc_3" Margin="10,0,0,0" >
+                                        <TextBlock Text="Adición de seriales 1 a 1" HorizontalAlignment="Left" FontWeight="bold" />
+                                    </StackPanel>
+                                    <Separator Margin="5,0,0,10"/>
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Text="Lectura de serial"></TextBlock>
+                                        <TextBox x:Name="txt_serialAdicionSeriales" Height="22" Width="150" Margin="70,0,0,0"></TextBox>
+                                    </StackPanel>
+                                </StackPanel>
+                            </Border>
                         </StackPanel>
                     </StackPanel>
                 </TabItem>
+                
+                
                 <TabItem x:Uid="TabItem_1" Header="Recibo Pallets">
                     <StackPanel x:Uid="StackPanel_1" Orientation="Horizontal" >
                         <StackPanel x:Uid="Stack_Panel" Orientation="Vertical" Margin="3" HorizontalAlignment="Center" Width="auto" Height="auto" >

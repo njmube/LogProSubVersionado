@@ -597,8 +597,8 @@ namespace WpfFront.Views
 
             return items;
         }
-        #endregion
 
+        #endregion
     }
 
     public interface IAdministradorView

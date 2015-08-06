@@ -69,8 +69,8 @@ namespace WpfFront.Presenters
         private DataTable SerialesIngresadosPrea = new DataTable();
         private DataRow NoLoad_RowPrea = null;
         private Thread hilo_prealerta;
-        private Boolean estado_cargueprea = false, busqueda_Repetidosprea = false;
-        private Timer tprea;
+        private Boolean estado_cargueprea = false, busqueda_Repetidosprea = false, busqueda_Digitosprea = false;
+        private Timer tprea, tdigitos;
         private Timer tcargueprea;
 
         private Thread hilo_savePrealerta;
@@ -158,7 +158,7 @@ namespace WpfFront.Presenters
 
             if (ResultadoCruce.Rows.Count == 0)
             {
-                Util.ShowError("NOVEDAD: El equipo no ingreso en ninguna prealerta!");
+                //Util.ShowError("NOVEDAD: El equipo no ingreso en ninguna prealerta!");
             }
             
             //Validacion existe o no el equipo en DB
@@ -318,9 +318,6 @@ namespace WpfFront.Presenters
             {
                 Util.ShowError("El archivo a cargar no cuenta con la estructura correcta.");
             }
-
-                    
-
         }
 
         int cont = 0;
@@ -1540,9 +1537,10 @@ namespace WpfFront.Presenters
             }
         }
 
-        int contprea = 0;
+        int contprea = 0, contdigitos = 0;
         int cont_cargueprea = 0;
         int cont_repeatprea = 0;
+        int cont_digitosprea = 0;
         private void StartTimerPrea()
         {
             int num_seriales = SerialesIngresadosPrea.Rows.Count;
@@ -1554,7 +1552,7 @@ namespace WpfFront.Presenters
                 {
                     contprea++;
 
-                    if (cont == 1)
+                    if (contprea == 1)
                     {
                         View.GetEstado_CarguePrealerta.Text = "Buscando equipos duplicados";
                     }
@@ -1582,6 +1580,57 @@ namespace WpfFront.Presenters
                     {
                         // Anulamos el ciclo del temporizador ya que el proceso de la barra de progreso ha acabado
                         tprea.Change(System.Threading.Timeout.Infinite, System.Threading.Timeout.Infinite);
+
+                        // Invocamos de nuevo al mismo delegado para modificar la apariencia visual de la barra de progreso
+                        (o as System.Windows.Controls.ProgressBar).Dispatcher.Invoke(new System.Action(() =>
+                        {
+                            View.GetEstado_CarguePrealerta.Text = "Verificación de equipos duplicados terminada.";
+                            View.Progress_CarguePrealerta.Value = 100D;
+                        }));
+                    }
+                }));
+            }), View.Progress_CarguePrealerta, 0, 1000);
+        }
+
+        private void StartTimerDigitos()
+        {
+            int num_seriales = SerialesIngresadosPrea.Rows.Count;
+            // Creamos diferentes hilos a través de un temporizador
+            tdigitos = new Timer(new TimerCallback((o) =>
+            {
+                // Invocamos un método anónimo que cumpla con un delegado genérico
+                (o as System.Windows.Controls.ProgressBar).Dispatcher.Invoke(new System.Action(() =>
+                {
+                    contdigitos++;
+
+                    if (contdigitos == 1)
+                    {
+                        View.GetEstado_CarguePrealerta.Text = "Validando cantidad de digitos";
+                    }
+                    else if (contdigitos == 2)
+                    {
+                        View.GetEstado_CarguePrealerta.Text = "Validando cantidad de digitos.";
+                    }
+                    else if (contdigitos == 3)
+                    {
+                        View.GetEstado_CarguePrealerta.Text = "Validando cantidad de digitos..";
+                    }
+                    else if (contdigitos == 4 || contdigitos > 4)
+                    {
+                        View.GetEstado_CarguePrealerta.Text = "Validando cantidad de digitos...";
+                        contdigitos = 0;
+                    }
+
+                    // Implementación del método anónimo
+                    if (View.Progress_CarguePrealerta.Value < 100D && busqueda_Repetidosprea == false)
+                    {
+                        if (num_seriales == 0) { num_seriales = 1; }
+                        View.Progress_CarguePrealerta.Value = cont_digitosprea * 100D / num_seriales;
+                    }
+                    else
+                    {
+                        // Anulamos el ciclo del temporizador ya que el proceso de la barra de progreso ha acabado
+                        tdigitos.Change(System.Threading.Timeout.Infinite, System.Threading.Timeout.Infinite);
 
                         // Invocamos de nuevo al mismo delegado para modificar la apariencia visual de la barra de progreso
                         (o as System.Windows.Controls.ProgressBar).Dispatcher.Invoke(new System.Action(() =>
@@ -1648,6 +1697,7 @@ namespace WpfFront.Presenters
         private void SetPrealert(object o)
         {
             busqueda_Repetidosprea = false;
+            busqueda_Digitosprea = false;
 
             List<String> listNoCarguePrea = new List<String>(); //Guarda los seriales que no cumplen con los requisitos del cargue en Prealerta
 
@@ -1693,7 +1743,41 @@ namespace WpfFront.Presenters
                 View.Progress_Cargue.Value = 0;
             }), null);
 
-            listNoCarguePrea = listNoCarguePrea.Distinct().ToList();
+            StartTimerDigitos();
+
+            int contdig = 0;
+            while (contdig < SerialesIngresadosPrea.Rows.Count)
+            //for (int i = 0; i < SerialesIngresadosPrea.Rows.Count; i++)
+            {
+                if (SerialesIngresadosPrea.Rows[contdig]["SERIAL"].ToString().Length != 9)
+                {
+                    listNoCarguePrea.InsertRange(listNoCarguePrea.Count, new string[] {
+                                SerialesIngresadosPrea.Rows[contdig]["CODIGO_TIPO_ELEMENTO"].ToString(),
+                                SerialesIngresadosPrea.Rows[contdig]["TIPO_ELEMENTO"].ToString(), 
+                                SerialesIngresadosPrea.Rows[contdig]["SERIAL"].ToString(),
+                                SerialesIngresadosPrea.Rows[contdig]["RID"].ToString(), 
+                                SerialesIngresadosPrea.Rows[contdig]["SERIAL_VINCULADO"].ToString(), 
+                                SerialesIngresadosPrea.Rows[contdig]["ESTADO"].ToString(), 
+                                "El serial no cuenta con la cantidad de digitos correcta (9)"});
+
+                    SerialesIngresadosPrea.Rows.RemoveAt(contdig); //Elimino el primer serial y dejo el repetido o posterior.
+                }
+                else {
+                    contdig++;
+                }
+                cont_digitosprea++;
+            }
+
+            busqueda_Digitosprea = true;
+            Thread.Sleep(1000);
+            tdigitos.Dispose();
+
+            View.Dispatcher_CarguePrealerta.Invoke(new System.Action(() =>
+            {
+                View.Progress_Cargue.Value = 0;
+            }), null);
+
+            //listNoCarguePrea = listNoCarguePrea.Distinct().ToList();
             this.MostrarErrores_CarguePrea(listNoCarguePrea); // Agrega a un segundo listview los equipos que no fueron cargados
 
             StartTimerCargaPrea();
@@ -1830,6 +1914,8 @@ namespace WpfFront.Presenters
 
         private void SavePrealerta(Object e)
         {
+            DataTable validar;
+            
             if (this.serialesSave_AuxPrea.Rows.Count == 0)
             {
                 Util.ShowMessage("No hay registros para guardar");
@@ -1841,6 +1927,7 @@ namespace WpfFront.Presenters
                     string[] split = Cadena.Split(new Char[] { '\\' });
                     Cadena = split.Last();
                     
+                    String ConsultaLiberar = "update dbo.EquiposDIRECTVC set ESTADO = 'PARA PROCESO' where SERIAL in(";
                     String ConsultaGuardar = "Declare @prea_id int, @aleEquip_id int; ";
 
                     ConsultaGuardar = ConsultaGuardar + "INSERT INTO dbo.preAlertaDIRECTV(prea_archivo)" +
@@ -1848,6 +1935,8 @@ namespace WpfFront.Presenters
                     ConsultaGuardar = ConsultaGuardar + "SET @prea_id = SCOPE_IDENTITY();";
 
                     int contcoma = 1;
+                    int contador = 1;
+                    
                     foreach (DataRow DataRow in this.serialesSave_AuxPrea.Rows)
                     {
                         int ContadorCampos = this.serialesSave_AuxPrea.Columns.Count;
@@ -1864,21 +1953,45 @@ namespace WpfFront.Presenters
                             {
                                 ConsultaGuardar = ConsultaGuardar + "'" + DataRow[c.ColumnName].ToString() + "',";
                             }
+
+
                             contcoma++;
                         }
                         ConsultaGuardar = ConsultaGuardar + ");";
                         ConsultaGuardar = ConsultaGuardar + "SET @aleEquip_id = SCOPE_IDENTITY();";
                         ConsultaGuardar = ConsultaGuardar + "INSERT INTO dbo.PreAlertaDIRECTV_EquiposDIRECTV(prea_id,aleEquip_id) VALUES(@prea_id, @aleEquip_id);";
+                        
+                        String consultaValidar = "select top 1 SERIAL from dbo.EquiposDIRECTVC where SERIAL like '%" + DataRow["SERIAL"].ToString() + "' and ESTADO = 'NOVEDAD'";
+                        validar = service.DirectSQLQuery(consultaValidar, "", "dbo.EquiposDIRECTVC", Local);
+                        
+                        Console.WriteLine(consultaValidar);
+                        
+                        if (validar.Rows.Count > 0)
+                        {
+                           //ConsultaLiberar = ConsultaLiberar + "'" + DataRow["SERIAL"].ToString() + "',";
+                            ConsultaLiberar = ConsultaLiberar + "'" + validar.Rows[0]["SERIAL"].ToString() + "',";
+                        }
+
                         ContadorSavePrea++;
+                        contador++;
                         contcoma = 1;
                     }
+
+                    ConsultaLiberar = ConsultaLiberar + ");";
+                    ConsultaLiberar = ConsultaLiberar.Replace(",);", ");");
+
+
+                    contador = 1;
 
                     //Evaluo si la consulta no envio los ultimos registros para forzar a enviarlos
                     if (!String.IsNullOrEmpty(ConsultaGuardar))
                     {
-                        
+                        Console.WriteLine(ConsultaLiberar);
+
+                        service.DirectSQLNonQuery(ConsultaLiberar, Local);
                         service.DirectSQLNonQuery(ConsultaGuardar, Local);
                         ConsultaGuardar = "";
+                        ConsultaLiberar = "";
                     }
                     estado_almacenamiento = true;
 

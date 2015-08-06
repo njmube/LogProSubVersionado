@@ -20,6 +20,8 @@ namespace WpfFront.Models
         DataTable ListPallets_Almacenamiento { get; set; }
 
         DataTable Listado_PalletSerial { get; set; }
+
+        DataTable List_Nocargue { get; set; }
     }
 
     public class AlmacenamientoModel : BusinessEntityBase, IAlmacenamientoModel
@@ -98,6 +100,17 @@ namespace WpfFront.Models
             {
                 _Listado_PalletSerial = value;
                 OnPropertyChanged("Listado_PalletSerial");
+            }
+        }
+
+        private DataTable _List_Nocargue;
+        public DataTable List_Nocargue
+        {
+            get { return _List_Nocargue; }
+            set
+            {
+                _List_Nocargue = value;
+                OnPropertyChanged("List_Nocargue");
             }
         }
     }

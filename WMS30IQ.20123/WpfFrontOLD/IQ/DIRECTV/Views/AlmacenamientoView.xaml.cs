@@ -11,6 +11,7 @@ using System.Windows.Input;
 using System.Data;
 using WpfFront.Common.UserControls;
 using WpfFront.WMSBusinessService;
+using System.Windows.Threading;
 
 namespace WpfFront.Views
 {
@@ -23,7 +24,7 @@ namespace WpfFront.Views
         #region Eventos
 
         public event EventHandler<EventArgs> AddLine;
-        public event EventHandler<DataEventArgs<DataTable>> CargaMasiva;
+        //public event EventHandler<DataEventArgs<DataTable>> CargaMasiva;
         public event EventHandler<EventArgs> ReplicateDetails;
         public event EventHandler<EventArgs> SaveDetails;
         public event EventHandler<EventArgs> ActualizarRegistrosRecibo;
@@ -39,13 +40,14 @@ namespace WpfFront.Views
         public event EventHandler<EventArgs> ImprimirHabladorAlmacen;
         public event EventHandler<EventArgs> EliminarEquipo_Fila;
         public event EventHandler<EventArgs> GenerarNumero;
+        public event EventHandler<EventArgs> KillProcess;
+        public event EventHandler<EventArgs> CargaMasiva;
 
         #endregion
 
         public AlmacenamientoView()
         {
             InitializeComponent();
-            this.Stack_UploadFile.Visibility = Visibility.Collapsed;
         }
 
         #region Variables
@@ -90,6 +92,12 @@ namespace WpfFront.Views
         {
             get { return this.cb_UbicacionDesp; }
             set { this.cb_UbicacionDesp = value; }
+        }
+
+        public ComboBox EstadoRecibo
+        {
+            get { return this.cb_EstadoPallet; }
+            set { this.cb_EstadoPallet = value; }
         }
 
         public ListView ListadoEquiposAProcesar
@@ -161,6 +169,30 @@ namespace WpfFront.Views
             set { this.tb_UbicacionPallet = value; }
         }
 
+        public TextBlock GetEstado_Cargue
+        {
+            get { return this.textblock_estadoCargue; }
+            set { this.textblock_estadoCargue = value; }
+        }
+
+        public ProgressBar Progress_Cargue
+        {
+            get { return this.PBar_cargue; }
+            set { this.PBar_cargue = value; }
+        }
+
+
+        public Dispatcher Dispatcher_Cargue
+        {
+            get { return this.Dispatcher; }
+        }
+
+        public ListView ListadoNo_Cargue
+        {
+            get { return this.lv_NoCargue; }
+            set { this.lv_NoCargue = value; }
+        }
+
         #endregion
 
         #region Metodos
@@ -187,18 +219,33 @@ namespace WpfFront.Views
 
         private void fUpload_OnFileUpload_1(object sender, EventArgs e)
         {
-            //Mostrar ventana de Cargando...
-            ProcessWindow pw = new ProcessWindow("Cargando registros...por favor espere...");
-            //Procesar el Archivo Cargado
-            if (fUpload.StreamFile != null)
-            {
-                string dataFile = Util.GetPlainTextString(fUpload.StreamFile);
+            KillProcess(sender, e);
+            string Cadena = fUpload.FileName.ToString();
 
-                ProcessFile1(sender, e, dataFile);
+            //Valido que el Archivo seleccionado tengo formato .txt 
+            if (Cadena.Contains(".xls") == false || Cadena.Contains(".xlsx") == true)
+            {
+                Util.ShowError("El Archivo cargado no tiene el formato correcto");
+                return;
             }
-            //Cierro ventana de Cargando...
-            pw.Visibility = Visibility.Collapsed;
-            pw.Close();
+            else
+            {
+                //Procesar el Archivo Cargado
+                if (fUpload.StreamFile != null)
+                {
+                    try
+                    {
+                        fUpload.IsEnabled = false;
+                        CargaMasiva(sender, e);
+                    }
+                    catch (Exception)
+                    {
+                        Util.ShowError("Error al cargar el archivo, revise que el formato de cargue sea correcto");
+                    }
+
+                }
+            }
+            fUpload.StreamFile = null;
         }
 
 
@@ -265,7 +312,7 @@ namespace WpfFront.Views
                 return;
             }
 
-            CargaMasiva(sender, new DataEventArgs<DataTable>(lines));
+            //CargaMasiva(sender, new DataEventArgs<DataTable>(lines));
 
             fUpload.StreamFile = null;
         }
@@ -299,6 +346,7 @@ namespace WpfFront.Views
             SaveDetails(sender, e);
             //Cierro ventana de Cargando...
             pw.Visibility = Visibility.Collapsed;
+            fUpload.IsEnabled = true;
             pw.Close();
         }
 
@@ -367,6 +415,7 @@ namespace WpfFront.Views
         ComboBox Ubicacion { get; set; }
         ComboBox UbicacionDesp { get; set; }
 
+        ComboBox EstadoRecibo { get; set; }
         TextBox GetCodPallet { get; set; }
         TextBox GetCodPalletBusqueda { get; set; }
         ComboBox GetUbicacionPallet { get; set; }
@@ -374,6 +423,12 @@ namespace WpfFront.Views
         ListView ListadoEquiposAProcesar { get; set; }
 
         ListView ListadoBusquedaCambioClasificacion { get; set; }
+
+        TextBlock GetEstado_Cargue { get; set; }
+        Dispatcher Dispatcher_Cargue { get; }
+        ProgressBar Progress_Cargue { get; set; }
+
+        ListView ListadoNo_Cargue { get; set; }
 
         //TextBox CodigoEmpaque { get; set; }
         //ComboBox UnidadAlmacenamiento { get; set; }
@@ -384,7 +439,7 @@ namespace WpfFront.Views
         #region Obtener Metodos
 
         event EventHandler<EventArgs> AddLine;
-        event EventHandler<DataEventArgs<DataTable>> CargaMasiva;
+        //event EventHandler<DataEventArgs<DataTable>> CargaMasiva;
         event EventHandler<EventArgs> ReplicateDetails;
         event EventHandler<EventArgs> SaveDetails;
         event EventHandler<EventArgs> ActualizarRegistrosRecibo;
@@ -400,6 +455,9 @@ namespace WpfFront.Views
         event EventHandler<EventArgs> ImprimirHabladorAlmacen;
         event EventHandler<EventArgs> EliminarEquipo_Fila;
         event EventHandler<EventArgs> GenerarNumero;
+        event EventHandler<EventArgs> KillProcess;
+        event EventHandler<EventArgs> CargaMasiva;
+
 
         #endregion
 

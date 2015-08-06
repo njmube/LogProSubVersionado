@@ -21,7 +21,7 @@
                                         <TextBlock Text="MODULO PREALERTA" HorizontalAlignment="Left" FontWeight="bold" />
                                     </StackPanel>
                                     <Separator Margin="5,0,0,0"/>
-                                    <StackPanel x:Uid="Stack_SerialGroup" x:Name="Stack_SerialGroup2" Orientation="Horizontal" Margin="0,6,0,0" Visibility="Collapsed">
+                                    <StackPanel x:Uid="Stack_SerialGroup" x:Name="Stack_SerialGroup2" Orientation="Horizontal" Margin="0,6,0,0">
                                         <StackPanel x:Uid="Stack_UploadFile" x:Name="Stack_UploadFile2" Orientation="Vertical" Margin="4,-3,4,0" >
                                             <TextBlock x:Uid="txt_UploadFilePrea" x:Name="txt_UploadFilePrea" Text="Cargar Archivo"  />
                                             <uc:UploadFile x:Uid="fUploadPrea" Margin="0,0,0,0" x:Name="fUploadPrea" OnFileUpload="fUpload_OnFileUpload_Prea" />
@@ -133,7 +133,7 @@
                                             <TextBlock x:Uid="txt_Serial3" x:Name="txt_Serial3" Text="Smart Card"  />
                                             <TextBox x:Uid="tb_Serial3" x:Name="tb_Serial3" Width="110" KeyDown="tb_Serial3_KeyDown_1" />
                                         </StackPanel>
-                                        <StackPanel x:Uid="Stack_UploadFile" x:Name="Stack_UploadFile" Orientation="Vertical" Margin="4,-3,4,0" >
+                                        <StackPanel x:Uid="Stack_UploadFile" x:Name="Stack_UploadFile" Orientation="Vertical" Margin="4,-3,4,0" Visibility="Visible">
                                             <TextBlock x:Uid="txt_UploadFile" x:Name="txt_UploadFile" Text="Cargar Archivo"  />
                                             <uc:UploadFile x:Uid="fUpload" Margin="0,0,0,0" x:Name="fUpload" OnFileUpload="fUpload_OnFileUpload_1" />
                                         </StackPanel>

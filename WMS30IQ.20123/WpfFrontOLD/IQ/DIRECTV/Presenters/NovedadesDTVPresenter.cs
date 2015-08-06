@@ -49,6 +49,7 @@ namespace WpfFront.Presenters
             #region Metodos
 
             View.ExportNovedades += new EventHandler<EventArgs>(this.OnExportNovedades);
+            View.ActualizarListNovedades += new EventHandler<EventArgs>(this.OnActualizarListNovedades);
 
             #endregion
 
@@ -72,6 +73,11 @@ namespace WpfFront.Presenters
         {
             String ConsultaSQL = "EXEC sp_GetProcesosDIRECTVC 'BUSCARLISTNOVEDADES','','','',''";
             View.Model.ListadoNovedades = service.DirectSQLQuery(ConsultaSQL, "", "dbo.EquiposDIRECTVC", Local);
+        }
+
+        private void OnActualizarListNovedades(object sender, EventArgs e)
+        {
+            CargarListadoNovedades();
         }
 
         private void OnExportNovedades(object sender, EventArgs e)

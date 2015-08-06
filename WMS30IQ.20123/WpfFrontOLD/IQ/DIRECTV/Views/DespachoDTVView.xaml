@@ -45,12 +45,12 @@
                                                 <Button x:Uid="btn_ActualizarCambioClasificacion" Name="btn_ActualizarCambioClasificacion" Height="23" Margin="8,0,0,0" Content="Actualizar" Click="btn_ActualizarCambioClasificacion_Click_1"  />
                                             </StackPanel>
                                         </StackPanel>-->
-                                        <ListView x:Uid="lvDocumentMaster" ItemsSource="{Binding ListRecords_1}" Margin="0,4,0,0"  MaxHeight="400" x:Name="lvDocumentMaster_2">
+                                        <ListView x:Uid="lvDocumentMaster" ItemsSource="{Binding ListRecords_1}" Margin="0,4,0,0"  MaxHeight="400" x:Name="lvDocumentMaster_2" SelectionChanged="MySelectionChangedDespacho">
                                             <ListView.View>
                                                 <GridView x:Uid="GridViewDetails" x:Name="GridViewDetails_2">
 
                                                     <GridViewColumn x:Uid="GridViewColumn_2" Header="Cajas" Width="0" DisplayMemberBinding="{Binding UA}" />
-                                                    <GridViewColumn x:Uid="GridViewColumn_2" Header="Estiba" Width="100" DisplayMemberBinding="{Binding Estiba}" />
+                                                    <GridViewColumn x:Uid="GridViewColumn_2" Header="Pallet" Width="100" DisplayMemberBinding="{Binding Estiba}" />
                                                     <GridViewColumn x:Uid="GridViewColumn_2" Header="Posicion" Width="100" DisplayMemberBinding="{Binding Posicion}" />
                                                     <GridViewColumn x:Uid="GridViewColumn_2" Header="Modelo" Width="100" DisplayMemberBinding="{Binding Modelo}" />
                                                     <GridViewColumn x:Uid="GridViewColumn_2" Header="Número Items" Width="100" DisplayMemberBinding="{Binding Cantidad}" />
@@ -59,7 +59,50 @@
                                                 </GridView>
                                             </ListView.View>
                                         </ListView>
+
+                                        
+
                                     </StackPanel>
+
+                                    <Expander Margin="-5,10,0,0" VerticalAlignment="Bottom" Cursor="Hand" Width="648">
+                                        <Expander.Header>
+                                            <Border Background="WhiteSmoke">
+                                                <TextBlock><Run Text="Listado de equipos X estiba"/></TextBlock>
+                                            </Border>
+                                        </Expander.Header>
+
+                                        <Border Margin="0,0,0,0" Background="AliceBlue">
+                                            <StackPanel x:Name="stackpanel1111">
+                                                <ListView x:Uid="lv_PalletSerialesDespacho" ItemsSource="{Binding Listado_PalletSerialDespacho}" Margin="0,0,0,0"  MaxHeight="280" x:Name="lv_PalletSerialesDespacho">
+                                                    <!--<ListView.ItemContainerStyle>
+                                                        <Style TargetType="{x:Type ListViewItem}">
+                                                            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+                                                        </Style>
+                                                    </ListView.ItemContainerStyle>-->
+                                                    <ListView.View>
+                                                        <GridView x:Uid="GridViewDetails" x:Name="GridViewDetails11">
+
+                                                            <GridViewColumn x:Uid="GridViewColumn_1" Header="Pallet" Width="100" DisplayMemberBinding="{Binding PPallet}" />
+
+                                                            <GridViewColumn Header="Serial" x:Uid="GridViewColumn_2" Width="140" DisplayMemberBinding="{Binding PSerial}"/>
+
+                                                            <GridViewColumn Header="Receiver" x:Uid="GridViewColumn_2" Width="90" DisplayMemberBinding="{Binding Receiver }"/>
+
+                                                            <GridViewColumn Header="Smart Card" x:Uid="GridViewColumn_2" Width="90" DisplayMemberBinding="{Binding SmartCardAsignada}"/>
+
+                                                            <GridViewColumn Header="Modelo" x:Uid="GridViewColumn_2" Width="100" DisplayMemberBinding="{Binding Modelo}"/>
+
+                                                        </GridView>
+                                                    </ListView.View>
+                                                </ListView>
+                                                <StackPanel Orientation="Horizontal">
+                                                    <TextBlock x:Uid="textblock_recuento" Text="Total de equipos: " FontWeight="Bold" Margin="0,6,8,4" />
+                                                    <TextBlock x:Uid="textblock_recuento1" x:Name="textblock_recuento4" Text="{Binding Listado_PalletSerial.Count}" FontWeight="Bold" Margin="0,6,8,4" />
+                                                </StackPanel>
+                                            </StackPanel>
+                                        </Border>
+                                    </Expander>
+
                                 </StackPanel>
                             </Border>
                             <StackPanel Margin="15,0,0,0" Width="200" Height="10">
