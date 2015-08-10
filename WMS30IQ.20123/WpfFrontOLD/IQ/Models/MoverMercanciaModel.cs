@@ -13,6 +13,7 @@ namespace WpfFront.Models
     public interface IMoverMercanciaModel
     {
         IList<MMaster> ListadoPosiciones { get; set; }
+        IList<MMaster> ListadoPosicionesUnionEstibas { get; set; }
         IList<MMaster> ListadoPosicionesCambioUbicacion { get; set; }
         DataTable ListadoProductosActivos { get; set; }
         DataTable ListUbicacionesDestino { get; set; }
@@ -25,10 +26,33 @@ namespace WpfFront.Models
         DataTable ListadoRecibo { get; set; }
         IList<MMaster> ListadoPosicionesRecibo { get; set; }
         DataTable ListadoUbicacionesDestinoRecibo { get; set; }
+        DataTable ListSerialsOneByOne { get; set; }
     }
 
     public class MoverMercanciaModel : BusinessEntityBase, IMoverMercanciaModel
     {
+        private DataTable _ListSerialsOneByOne;
+        public DataTable ListSerialsOneByOne
+        {
+            get { return _ListSerialsOneByOne; }
+            set 
+            {
+                this._ListSerialsOneByOne = value;
+                OnPropertyChanged("ListSerialsOneByOne");
+            }
+        }
+
+        private IList<MMaster> _ListadoPosicionesUnionEstibas;
+        public IList<MMaster> ListadoPosicionesUnionEstibas
+        {
+            get { return _ListadoPosicionesUnionEstibas; }
+            set
+            {
+                _ListadoPosicionesUnionEstibas = value;
+                OnPropertyChanged("ListadoPosicionesUnionEstibas");
+            }
+        }
+
         private IList<MMaster> _ListadoPosiciones;
         public IList<MMaster> ListadoPosiciones
         {

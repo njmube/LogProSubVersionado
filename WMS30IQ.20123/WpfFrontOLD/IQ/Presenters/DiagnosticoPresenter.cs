@@ -74,7 +74,7 @@ namespace WpfFront.Presenters
             View.FiltrarPorTecnico += new EventHandler<SelectionChangedEventArgs>(this.OnFiltrarPorTecnico);
             View.AddToList += new EventHandler<EventArgs>(this.OnAddToList);
             View.RemoveSelection += new EventHandler<EventArgs>(this.OnRemoveSelection);
-            //ConfirmarMovimiento
+            
             #endregion
 
             #region Datos
@@ -598,8 +598,6 @@ namespace WpfFront.Presenters
         public void OnConfirmarMovimiento(object sender, EventArgs e)
         {
             String ConsultaSQL = "", NuevaUbicacion, NuevoEstado;
-
-            
 
             //Evaluo que haya sido seleccionado un registro
             //if (View.ListadoItems.SelectedItems.Count == 0)

@@ -272,7 +272,7 @@
                                         <!--</StackPanel>-->
                                         <!--</StackPanel>-->
 
-                                        <ListView x:Uid="lvDocumentMaster" ItemsSource="{Binding Path=ListRecords_1}" Margin="0,4,0,0"  MaxHeight="400" Name="lvDocumentMaster_2" Visibility="Collapsed">
+                                        <ListView x:Uid="lvDocumentMaster" ItemsSource="{Binding Path=ListRecords_1}" Margin="0,4,0,0"  MaxHeight="400" Name="lvDocumentMaster_2" Visibility="Visible">
                                             <ListView.View>
                                                 <GridView x:Uid="GridViewDetails" x:Name="GridViewDetails_2">
                                                     <GridViewColumn x:Uid="GridViewColumn_2" Header="Producto" Width="275" DisplayMemberBinding="{Binding Path=Producto}" />

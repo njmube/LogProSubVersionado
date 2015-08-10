@@ -235,43 +235,43 @@ namespace WpfFront.Views
             GenerarPallet(sender, e);
         }
 
-        private void ProcessFile(object sender, EventArgs e, string dataFile)
-        {
+        //private void ProcessFile(object sender, EventArgs e, string dataFile)
+        //{
 
-            //Linea por linea obtiene el dato del serial y del RR y lo procesa.
-            //Obtiene los errores de procesamiento, muestra los que el RR no es IQRE
+        //    //Linea por linea obtiene el dato del serial y del RR y lo procesa.
+        //    //Obtiene los errores de procesamiento, muestra los que el RR no es IQRE
 
-            DataTable lines = Util.ConvertToDataTable(dataFile, "RR", "\t", false);
+        //    DataTable lines = Util.ConvertToDataTable(dataFile, "RR", "\t", false);
 
-            if (lines == null || lines.Rows.Count == 0)
-            {
-                Util.ShowError("No hay registros a procesar.\n" + dataFile);
-                return;
-            }
+        //    if (lines == null || lines.Rows.Count == 0)
+        //    {
+        //        Util.ShowError("No hay registros a procesar.\n" + dataFile);
+        //        return;
+        //    }
 
-            int NumeroSerial;
-            foreach (DataRow dr in lines.Rows)
-            {
-                NumeroSerial = 1;
-                foreach (DataColumn dc in lines.Columns)
-                {
-                    switch (NumeroSerial.ToString())
-                    {
-                        case "1":
-                            GetSerial1.Text = dr[dc.ColumnName].ToString();
-                            break;
-                        case "2":
-                            GetSerial2.Text = dr[dc.ColumnName].ToString();
-                            break;
-                    }
-                    NumeroSerial++;
-                }
+        //    int NumeroSerial;
+        //    foreach (DataRow dr in lines.Rows)
+        //    {
+        //        NumeroSerial = 1;
+        //        foreach (DataColumn dc in lines.Columns)
+        //        {
+        //            switch (NumeroSerial.ToString())
+        //            {
+        //                case "1":
+        //                    GetSerial1.Text = dr[dc.ColumnName].ToString();
+        //                    break;
+        //                case "2":
+        //                    GetSerial2.Text = dr[dc.ColumnName].ToString();
+        //                    break;
+        //            }
+        //            NumeroSerial++;
+        //        }
 
-                AddLine(sender, e);
-            }
+        //        AddLine(sender, e);
+        //    }
 
-            fUpload.StreamFile = null;
-        }
+        //    fUpload.StreamFile = null;
+        //}
 
         //private void btn_imprimir_Click_1(object sender, RoutedEventArgs e)
         //{

@@ -127,6 +127,31 @@
     <xs:attribute ref="ser:Ref" />
   </xs:complexType>
   <xs:element name="ClassEntity" nillable="true" type="tns:ClassEntity" />
+  <xs:complexType name="AccountType">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="AccountTypeID" type="xs:short" />
+      <xs:element minOccurs="0" name="Name" nillable="true" type="xs:string" />
+    </xs:sequence>
+    <xs:attribute ref="ser:Id" />
+    <xs:attribute ref="ser:Ref" />
+  </xs:complexType>
+  <xs:element name="AccountType" nillable="true" type="tns:AccountType" />
+  <xs:complexType name="DocumentConcept">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="DocClass" nillable="true" type="tns:DocumentClass" />
+      <xs:element minOccurs="0" name="DocConceptID" type="xs:short" />
+      <xs:element minOccurs="0" name="Name" nillable="true" type="xs:string" />
+    </xs:sequence>
+    <xs:attribute ref="ser:Id" />
+    <xs:attribute ref="ser:Ref" />
+  </xs:complexType>
+  <xs:element name="DocumentConcept" nillable="true" type="tns:DocumentConcept" />
+  <xs:complexType name="ArrayOfPickMethod">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="PickMethod" nillable="true" type="tns:PickMethod" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfPickMethod" nillable="true" type="tns:ArrayOfPickMethod" />
   <xs:complexType name="MeasureUnit">
     <xs:complexContent mixed="false">
       <xs:extension xmlns:q3="Entities.Profile" base="q3:Auditing">
@@ -148,15 +173,6 @@
     <xs:attribute ref="ser:Ref" />
   </xs:complexType>
   <xs:element name="MeasureType" nillable="true" type="tns:MeasureType" />
-  <xs:complexType name="AccountType">
-    <xs:sequence>
-      <xs:element minOccurs="0" name="AccountTypeID" type="xs:short" />
-      <xs:element minOccurs="0" name="Name" nillable="true" type="xs:string" />
-    </xs:sequence>
-    <xs:attribute ref="ser:Id" />
-    <xs:attribute ref="ser:Ref" />
-  </xs:complexType>
-  <xs:element name="AccountType" nillable="true" type="tns:AccountType" />
   <xs:complexType name="DataType">
     <xs:sequence>
       <xs:element minOccurs="0" name="DataTypeID" type="xs:short" />
@@ -167,16 +183,12 @@
     <xs:attribute ref="ser:Ref" />
   </xs:complexType>
   <xs:element name="DataType" nillable="true" type="tns:DataType" />
-  <xs:complexType name="DocumentConcept">
+  <xs:complexType name="ArrayOfDataType">
     <xs:sequence>
-      <xs:element minOccurs="0" name="DocClass" nillable="true" type="tns:DocumentClass" />
-      <xs:element minOccurs="0" name="DocConceptID" type="xs:short" />
-      <xs:element minOccurs="0" name="Name" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="DataType" nillable="true" type="tns:DataType" />
     </xs:sequence>
-    <xs:attribute ref="ser:Id" />
-    <xs:attribute ref="ser:Ref" />
   </xs:complexType>
-  <xs:element name="DocumentConcept" nillable="true" type="tns:DocumentConcept" />
+  <xs:element name="ArrayOfDataType" nillable="true" type="tns:ArrayOfDataType" />
   <xs:complexType name="ArrayOfShowData">
     <xs:sequence>
       <xs:element minOccurs="0" maxOccurs="unbounded" name="ShowData" nillable="true" type="tns:ShowData" />
@@ -199,105 +211,6 @@
     <xs:attribute ref="ser:Ref" />
   </xs:complexType>
   <xs:element name="OptionType" nillable="true" type="tns:OptionType" />
-  <xs:complexType name="ArrayOfPickMethod">
-    <xs:sequence>
-      <xs:element minOccurs="0" maxOccurs="unbounded" name="PickMethod" nillable="true" type="tns:PickMethod" />
-    </xs:sequence>
-  </xs:complexType>
-  <xs:element name="ArrayOfPickMethod" nillable="true" type="tns:ArrayOfPickMethod" />
-  <xs:complexType name="ArrayOfDataType">
-    <xs:sequence>
-      <xs:element minOccurs="0" maxOccurs="unbounded" name="DataType" nillable="true" type="tns:DataType" />
-    </xs:sequence>
-  </xs:complexType>
-  <xs:element name="ArrayOfDataType" nillable="true" type="tns:ArrayOfDataType" />
-  <xs:complexType name="GroupCriteriaDetail">
-    <xs:complexContent mixed="false">
-      <xs:extension xmlns:q4="Entities.Profile" base="q4:Auditing">
-        <xs:sequence>
-          <xs:element minOccurs="0" name="CriteriaDetID" type="xs:int" />
-          <xs:element minOccurs="0" name="Description" nillable="true" type="xs:string" />
-          <xs:element minOccurs="0" name="GroupCriteria" nillable="true" type="tns:GroupCriteria" />
-          <xs:element minOccurs="0" name="Name" nillable="true" type="xs:string" />
-        </xs:sequence>
-      </xs:extension>
-    </xs:complexContent>
-  </xs:complexType>
-  <xs:element name="GroupCriteriaDetail" nillable="true" type="tns:GroupCriteriaDetail" />
-  <xs:complexType name="GroupCriteria">
-    <xs:complexContent mixed="false">
-      <xs:extension xmlns:q5="Entities.Profile" base="q5:Auditing">
-        <xs:sequence>
-          <xs:element xmlns:q6="Entities.Master" minOccurs="0" name="Company" nillable="true" type="q6:Company" />
-          <xs:element minOccurs="0" name="Description" nillable="true" type="xs:string" />
-          <xs:element minOccurs="0" name="GroupCriteriaID" type="xs:int" />
-          <xs:element minOccurs="0" name="Name" nillable="true" type="xs:string" />
-          <xs:element minOccurs="0" name="Rank" type="xs:int" />
-        </xs:sequence>
-      </xs:extension>
-    </xs:complexContent>
-  </xs:complexType>
-  <xs:element name="GroupCriteria" nillable="true" type="tns:GroupCriteria" />
-  <xs:complexType name="GroupCriteriaRelation">
-    <xs:complexContent mixed="false">
-      <xs:extension xmlns:q7="Entities.Profile" base="q7:Auditing">
-        <xs:sequence>
-          <xs:element minOccurs="0" name="ClassEntity" nillable="true" type="tns:ClassEntity" />
-          <xs:element xmlns:q8="Entities.Master" minOccurs="0" name="Company" nillable="true" type="q8:Company" />
-          <xs:element minOccurs="0" name="GroupCriteria" nillable="true" type="tns:GroupCriteria" />
-          <xs:element minOccurs="0" name="RowID" type="xs:int" />
-        </xs:sequence>
-      </xs:extension>
-    </xs:complexContent>
-  </xs:complexType>
-  <xs:element name="GroupCriteriaRelation" nillable="true" type="tns:GroupCriteriaRelation" />
-  <xs:complexType name="ArrayOfGroupCriteriaRelation">
-    <xs:sequence>
-      <xs:element minOccurs="0" maxOccurs="unbounded" name="GroupCriteriaRelation" nillable="true" type="tns:GroupCriteriaRelation" />
-    </xs:sequence>
-  </xs:complexType>
-  <xs:element name="ArrayOfGroupCriteriaRelation" nillable="true" type="tns:ArrayOfGroupCriteriaRelation" />
-  <xs:complexType name="GroupCriteriaRelationData">
-    <xs:complexContent mixed="false">
-      <xs:extension xmlns:q9="Entities.Profile" base="q9:Auditing">
-        <xs:sequence>
-          <xs:element minOccurs="0" name="CriteriaDet" nillable="true" type="tns:GroupCriteriaDetail" />
-          <xs:element minOccurs="0" name="CriteriaDetData" nillable="true" type="xs:string" />
-          <xs:element minOccurs="0" name="CriteriaRel" nillable="true" type="tns:GroupCriteriaRelation" />
-          <xs:element minOccurs="0" name="EntityRowID" type="xs:int" />
-          <xs:element minOccurs="0" name="RowID" type="xs:int" />
-        </xs:sequence>
-      </xs:extension>
-    </xs:complexContent>
-  </xs:complexType>
-  <xs:element name="GroupCriteriaRelationData" nillable="true" type="tns:GroupCriteriaRelationData" />
-  <xs:complexType name="ArrayOfGroupCriteriaRelationData">
-    <xs:sequence>
-      <xs:element minOccurs="0" maxOccurs="unbounded" name="GroupCriteriaRelationData" nillable="true" type="tns:GroupCriteriaRelationData" />
-    </xs:sequence>
-  </xs:complexType>
-  <xs:element name="ArrayOfGroupCriteriaRelationData" nillable="true" type="tns:ArrayOfGroupCriteriaRelationData" />
-  <xs:complexType name="LabelMapping">
-    <xs:complexContent mixed="false">
-      <xs:extension xmlns:q10="Entities.Profile" base="q10:Auditing">
-        <xs:sequence>
-          <xs:element xmlns:q11="Entities.Master" minOccurs="0" name="Account" nillable="true" type="q11:Account" />
-          <xs:element minOccurs="0" name="DataKey" nillable="true" type="xs:string" />
-          <xs:element minOccurs="0" name="DataValue" nillable="true" type="xs:string" />
-          <xs:element minOccurs="0" name="Description" nillable="true" type="xs:string" />
-          <xs:element minOccurs="0" name="LabelType" nillable="true" type="tns:DocumentType" />
-          <xs:element minOccurs="0" name="RowID" type="xs:int" />
-        </xs:sequence>
-      </xs:extension>
-    </xs:complexContent>
-  </xs:complexType>
-  <xs:element name="LabelMapping" nillable="true" type="tns:LabelMapping" />
-  <xs:complexType name="ArrayOfLabelMapping">
-    <xs:sequence>
-      <xs:element minOccurs="0" maxOccurs="unbounded" name="LabelMapping" nillable="true" type="tns:LabelMapping" />
-    </xs:sequence>
-  </xs:complexType>
-  <xs:element name="ArrayOfLabelMapping" nillable="true" type="tns:ArrayOfLabelMapping" />
   <xs:complexType name="ArrayOfMeasureType">
     <xs:sequence>
       <xs:element minOccurs="0" maxOccurs="unbounded" name="MeasureType" nillable="true" type="tns:MeasureType" />
@@ -312,7 +225,7 @@
   <xs:element name="ArrayOfMeasureUnit" nillable="true" type="tns:ArrayOfMeasureUnit" />
   <xs:complexType name="MeasureUnitConvertion">
     <xs:complexContent mixed="false">
-      <xs:extension xmlns:q12="Entities.Profile" base="q12:Auditing">
+      <xs:extension xmlns:q4="Entities.Profile" base="q4:Auditing">
         <xs:sequence>
           <xs:element minOccurs="0" name="ConvertionFactor" type="xs:double" />
           <xs:element minOccurs="0" name="Description" nillable="true" type="xs:string" />
@@ -369,21 +282,21 @@
   <xs:complexType name="ProductStock">
     <xs:sequence>
       <xs:element minOccurs="0" name="AuxQty1" type="xs:double" />
-      <xs:element xmlns:q13="Entities.Master" minOccurs="0" name="Bin" nillable="true" type="q13:Bin" />
+      <xs:element xmlns:q5="Entities.Master" minOccurs="0" name="Bin" nillable="true" type="q5:Bin" />
       <xs:element minOccurs="0" name="BinType" type="xs:short" />
       <xs:element minOccurs="0" name="BinTypeDesc" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="FullStock" type="xs:double" />
-      <xs:element xmlns:q14="Entities.Trace" minOccurs="0" name="Label" nillable="true" type="q14:Label" />
+      <xs:element xmlns:q6="Entities.Trace" minOccurs="0" name="Label" nillable="true" type="q6:Label" />
       <xs:element minOccurs="0" name="Mark" type="xs:boolean" />
       <xs:element minOccurs="0" name="MaxDate" nillable="true" type="xs:dateTime" />
       <xs:element minOccurs="0" name="MaxStock" type="xs:double" />
       <xs:element minOccurs="0" name="MinDate" nillable="true" type="xs:dateTime" />
       <xs:element minOccurs="0" name="MinStock" type="xs:double" />
       <xs:element minOccurs="0" name="PackStock" type="xs:double" />
-      <xs:element xmlns:q15="Entities.Master" minOccurs="0" name="Product" nillable="true" type="q15:Product" />
+      <xs:element xmlns:q7="Entities.Master" minOccurs="0" name="Product" nillable="true" type="q7:Product" />
       <xs:element minOccurs="0" name="Stock" type="xs:double" />
-      <xs:element xmlns:q16="Entities.Master" minOccurs="0" name="Unit" nillable="true" type="q16:Unit" />
-      <xs:element xmlns:q17="Entities.Master" minOccurs="0" name="Zone" nillable="true" type="q17:Zone" />
+      <xs:element xmlns:q8="Entities.Master" minOccurs="0" name="Unit" nillable="true" type="q8:Unit" />
+      <xs:element xmlns:q9="Entities.Master" minOccurs="0" name="Zone" nillable="true" type="q9:Zone" />
     </xs:sequence>
   </xs:complexType>
   <xs:element name="ProductStock" nillable="true" type="tns:ProductStock" />
@@ -419,10 +332,10 @@
   <xs:element name="ArrayOfDocumentType" nillable="true" type="tns:ArrayOfDocumentType" />
   <xs:complexType name="DocumentTypeSequence">
     <xs:complexContent mixed="false">
-      <xs:extension xmlns:q18="Entities.Profile" base="q18:Auditing">
+      <xs:extension xmlns:q10="Entities.Profile" base="q10:Auditing">
         <xs:sequence>
           <xs:element minOccurs="0" name="CodeSequence" nillable="true" type="xs:string" />
-          <xs:element xmlns:q19="Entities.Master" minOccurs="0" name="Company" nillable="true" type="q19:Company" />
+          <xs:element xmlns:q11="Entities.Master" minOccurs="0" name="Company" nillable="true" type="q11:Company" />
           <xs:element minOccurs="0" name="DocType" nillable="true" type="tns:DocumentType" />
           <xs:element minOccurs="0" name="NumSequence" type="xs:long" />
           <xs:element minOccurs="0" name="Prefix" nillable="true" type="xs:string" />
@@ -438,18 +351,105 @@
     </xs:sequence>
   </xs:complexType>
   <xs:element name="ArrayOfDocumentTypeSequence" nillable="true" type="tns:ArrayOfDocumentTypeSequence" />
+  <xs:complexType name="GroupCriteria">
+    <xs:complexContent mixed="false">
+      <xs:extension xmlns:q12="Entities.Profile" base="q12:Auditing">
+        <xs:sequence>
+          <xs:element xmlns:q13="Entities.Master" minOccurs="0" name="Company" nillable="true" type="q13:Company" />
+          <xs:element minOccurs="0" name="Description" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="GroupCriteriaID" type="xs:int" />
+          <xs:element minOccurs="0" name="Name" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="Rank" type="xs:int" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="GroupCriteria" nillable="true" type="tns:GroupCriteria" />
   <xs:complexType name="ArrayOfGroupCriteria">
     <xs:sequence>
       <xs:element minOccurs="0" maxOccurs="unbounded" name="GroupCriteria" nillable="true" type="tns:GroupCriteria" />
     </xs:sequence>
   </xs:complexType>
   <xs:element name="ArrayOfGroupCriteria" nillable="true" type="tns:ArrayOfGroupCriteria" />
+  <xs:complexType name="GroupCriteriaDetail">
+    <xs:complexContent mixed="false">
+      <xs:extension xmlns:q14="Entities.Profile" base="q14:Auditing">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="CriteriaDetID" type="xs:int" />
+          <xs:element minOccurs="0" name="Description" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="GroupCriteria" nillable="true" type="tns:GroupCriteria" />
+          <xs:element minOccurs="0" name="Name" nillable="true" type="xs:string" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="GroupCriteriaDetail" nillable="true" type="tns:GroupCriteriaDetail" />
   <xs:complexType name="ArrayOfGroupCriteriaDetail">
     <xs:sequence>
       <xs:element minOccurs="0" maxOccurs="unbounded" name="GroupCriteriaDetail" nillable="true" type="tns:GroupCriteriaDetail" />
     </xs:sequence>
   </xs:complexType>
   <xs:element name="ArrayOfGroupCriteriaDetail" nillable="true" type="tns:ArrayOfGroupCriteriaDetail" />
+  <xs:complexType name="GroupCriteriaRelation">
+    <xs:complexContent mixed="false">
+      <xs:extension xmlns:q15="Entities.Profile" base="q15:Auditing">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="ClassEntity" nillable="true" type="tns:ClassEntity" />
+          <xs:element xmlns:q16="Entities.Master" minOccurs="0" name="Company" nillable="true" type="q16:Company" />
+          <xs:element minOccurs="0" name="GroupCriteria" nillable="true" type="tns:GroupCriteria" />
+          <xs:element minOccurs="0" name="RowID" type="xs:int" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="GroupCriteriaRelation" nillable="true" type="tns:GroupCriteriaRelation" />
+  <xs:complexType name="ArrayOfGroupCriteriaRelation">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="GroupCriteriaRelation" nillable="true" type="tns:GroupCriteriaRelation" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfGroupCriteriaRelation" nillable="true" type="tns:ArrayOfGroupCriteriaRelation" />
+  <xs:complexType name="GroupCriteriaRelationData">
+    <xs:complexContent mixed="false">
+      <xs:extension xmlns:q17="Entities.Profile" base="q17:Auditing">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="CriteriaDet" nillable="true" type="tns:GroupCriteriaDetail" />
+          <xs:element minOccurs="0" name="CriteriaDetData" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="CriteriaRel" nillable="true" type="tns:GroupCriteriaRelation" />
+          <xs:element minOccurs="0" name="EntityRowID" type="xs:int" />
+          <xs:element minOccurs="0" name="RowID" type="xs:int" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="GroupCriteriaRelationData" nillable="true" type="tns:GroupCriteriaRelationData" />
+  <xs:complexType name="ArrayOfGroupCriteriaRelationData">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="GroupCriteriaRelationData" nillable="true" type="tns:GroupCriteriaRelationData" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfGroupCriteriaRelationData" nillable="true" type="tns:ArrayOfGroupCriteriaRelationData" />
+  <xs:complexType name="LabelMapping">
+    <xs:complexContent mixed="false">
+      <xs:extension xmlns:q18="Entities.Profile" base="q18:Auditing">
+        <xs:sequence>
+          <xs:element xmlns:q19="Entities.Master" minOccurs="0" name="Account" nillable="true" type="q19:Account" />
+          <xs:element minOccurs="0" name="DataKey" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="DataValue" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="Description" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="LabelType" nillable="true" type="tns:DocumentType" />
+          <xs:element minOccurs="0" name="RowID" type="xs:int" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="LabelMapping" nillable="true" type="tns:LabelMapping" />
+  <xs:complexType name="ArrayOfLabelMapping">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="LabelMapping" nillable="true" type="tns:LabelMapping" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfLabelMapping" nillable="true" type="tns:ArrayOfLabelMapping" />
   <xs:complexType name="ArrayOfLabelTemplate">
     <xs:sequence>
       <xs:element minOccurs="0" maxOccurs="unbounded" name="LabelTemplate" nillable="true" type="tns:LabelTemplate" />

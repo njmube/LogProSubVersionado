@@ -1826,56 +1826,56 @@
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
-    <None Include="Service References\WMSBusinessService\Arrays.xsd">
+    <None Include="Service References\WMSBusinessService\Arrays1.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Service References\WMSBusinessService\Entities.General.xsd">
+    <None Include="Service References\WMSBusinessService\Entities.General2.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Service References\WMSBusinessService\Entities.General1.xsd">
+    <None Include="Service References\WMSBusinessService\Entities.General21.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Service References\WMSBusinessService\Entities.Master.xsd">
+    <None Include="Service References\WMSBusinessService\Entities.Master2.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Service References\WMSBusinessService\Entities.Master1.xsd">
+    <None Include="Service References\WMSBusinessService\Entities.Master21.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Service References\WMSBusinessService\Entities.Process.xsd">
+    <None Include="Service References\WMSBusinessService\Entities.Process2.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Service References\WMSBusinessService\Entities.Process1.xsd">
+    <None Include="Service References\WMSBusinessService\Entities.Process21.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Service References\WMSBusinessService\Entities.Profile.xsd">
+    <None Include="Service References\WMSBusinessService\Entities.Profile1.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Service References\WMSBusinessService\Entities.Report.xsd">
+    <None Include="Service References\WMSBusinessService\Entities.Report2.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Service References\WMSBusinessService\Entities.Report1.xsd">
+    <None Include="Service References\WMSBusinessService\Entities.Report21.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Service References\WMSBusinessService\Entities.Trace.xsd">
+    <None Include="Service References\WMSBusinessService\Entities.Trace2.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Service References\WMSBusinessService\Entities.Trace1.xsd">
+    <None Include="Service References\WMSBusinessService\Entities.Trace21.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Service References\WMSBusinessService\Entities.Workflow.xsd">
+    <None Include="Service References\WMSBusinessService\Entities.Workflow1.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Service References\WMSBusinessService\service.wsdl" />
-    <None Include="Service References\WMSBusinessService\service.xsd">
+    <None Include="Service References\WMSBusinessService\service1.wsdl" />
+    <None Include="Service References\WMSBusinessService\service3.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Service References\WMSBusinessService\service1.xsd">
+    <None Include="Service References\WMSBusinessService\service31.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Service References\WMSBusinessService\service2.xsd">
+    <None Include="Service References\WMSBusinessService\service32.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Service References\WMSBusinessService\System.Data.xsd">
+    <None Include="Service References\WMSBusinessService\System.Data1.xsd">
       <SubType>Designer</SubType>
     </None>
     <None Include="Service References\WMSBusinessService\WpfFront.WMSBusinessService.Account.datasource">

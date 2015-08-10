@@ -19,6 +19,12 @@
     </xs:complexContent>
   </xs:complexType>
   <xs:element name="CustomProcessActivity" nillable="true" type="tns:CustomProcessActivity" />
+  <xs:complexType name="ArrayOfCustomProcessActivity">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="CustomProcessActivity" nillable="true" type="tns:CustomProcessActivity" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfCustomProcessActivity" nillable="true" type="tns:ArrayOfCustomProcessActivity" />
   <xs:complexType name="CustomProcessRoute">
     <xs:complexContent mixed="false">
       <xs:extension xmlns:q4="Entities.Profile" base="q4:Auditing">
@@ -147,10 +153,4 @@
     </xs:sequence>
   </xs:complexType>
   <xs:element name="ArrayOfCustomProcessContext" nillable="true" type="tns:ArrayOfCustomProcessContext" />
-  <xs:complexType name="ArrayOfCustomProcessActivity">
-    <xs:sequence>
-      <xs:element minOccurs="0" maxOccurs="unbounded" name="CustomProcessActivity" nillable="true" type="tns:CustomProcessActivity" />
-    </xs:sequence>
-  </xs:complexType>
-  <xs:element name="ArrayOfCustomProcessActivity" nillable="true" type="tns:ArrayOfCustomProcessActivity" />
 </xs:schema>

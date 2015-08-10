@@ -628,10 +628,10 @@ namespace WpfFront.Presenters
 
                     if (estado == "LIBERADO")
                     {
-                        String doc_rr = RegistroValidado.Rows[0]["Fecha_RR"].ToString();
-                        String doc_sap = RegistroValidado.Rows[0]["Fecha_SAP"].ToString();
-                        String estado_rr = RegistroValidado.Rows[0]["estado_RR"].ToString();
-                        String ubicacion = RegistroValidado.Rows[0]["Ubicacion"].ToString();
+                        string doc_rr = RegistroValidado.Rows[0]["Fecha_RR"].ToString();
+                        string doc_sap = RegistroValidado.Rows[0]["Fecha_SAP"].ToString();
+                        string estado_rr = RegistroValidado.Rows[0]["estado_RR"].ToString();
+                        string ubicacion = RegistroValidado.Rows[0]["Ubicacion"].ToString();
                         string tliberado = RegistroValidado.Rows[0]["TLiberado"].ToString();
                         if (doc_rr == null || doc_rr == "")
                         {
@@ -879,7 +879,7 @@ namespace WpfFront.Presenters
                     ////Util.ShowMessage("Esta seguro de crear un nuevo pallet, si realiza esto los cambios realizados se perderan");
                     //Console.WriteLine("Se borraran los seriales no guardados");
 
-                    if (!UtilWindow.ConfirmOK("Esta seguro de crear un nuevo pallet, si realiza esto los cambios realizados se perderan?") == true)
+                    if (!UtilWindow.ConfirmOK("¿Está seguro de crear un nuevo pallet, si realiza esto los cambios realizados se perderan?") == true)
                         return;
                     View.Model.ListRecords.Clear();
 
@@ -1509,7 +1509,7 @@ namespace WpfFront.Presenters
                             else
                             {
                                 //Construyo la consulta para guardar los datos
-                                ConsultaGuardar += " UPDATE dbo.EquiposCLARO SET Posicion = '" + ubicacion + "', IdPallet = '" + this.codigoPallet + "', Ubicacion = 'ALMACENAMIENTO', Estado= 'ALMACENAMIENTO'  WHERE Serial = '" + View.Model.ListRecords.Rows[i]["Serial"].ToString() + "' AND (Estado ='LIBERADO' or Estado IS NULL OR Estado ='' OR Estado = 'CUARENTENA');";
+                                ConsultaGuardar += " UPDATE dbo.EquiposCLARO SET Posicion = '" + ubicacion + "', IdPallet = '" + this.codigoPallet + "', Ubicacion = 'ALMACENAMIENTO', Estado= 'ALMACENAMIENTO'  WHERE Serial = '" + View.Model.ListRecords.Rows[i]["Serial"].ToString() + "';";
                                 ConsultaGuardarTrack += "UPDATE dbo.TrackEquiposCLARO SET ESTIBA_ENTRADA = '" + this.codigoPallet + "', ESTADO_ALMACEN1 = 'ALMACENAMIENTO', UBICACION_ENTRADA = 'ALMACENAMIENTO', FECHA_ING_ALMACEN = GETDATE() WHERE Serial = '" + View.Model.ListRecords.Rows[i]["Serial"].ToString() + "'";
                                 ConsultaGuardar += "EXEC sp_InsertarNuevo_Movimiento 'ALMACENAMIENTO DE EQUIPOS EN BODEGA','ESPERANDO POR ENVIO A PRODUCCION','" + ubicacion  + "','" + View.GetCodPallet.Text + "','','ALMACENAMIENTO','ALMACENARENBODEGA','" + this.user + "','" + View.Model.ListRecords.Rows[i]["Serial"].ToString() + "';";
                 
@@ -1527,6 +1527,7 @@ namespace WpfFront.Presenters
                         return;
                     }
                 }
+
 
                 //Evaluo si la consulta no envio los ultimos registros para forzar a enviarlos
                 if (!String.IsNullOrEmpty(ConsultaGuardar))

@@ -130,19 +130,6 @@
     </xs:sequence>
   </xs:complexType>
   <xs:element name="ArrayOfSysUser" nillable="true" type="tns:ArrayOfSysUser" />
-  <xs:complexType name="ConfigOptionByCompany">
-    <xs:complexContent mixed="false">
-      <xs:extension base="tns:Auditing">
-        <xs:sequence>
-          <xs:element xmlns:q4="Entities.Master" minOccurs="0" name="Company" nillable="true" type="q4:Company" />
-          <xs:element minOccurs="0" name="ConfigOption" nillable="true" type="tns:ConfigOption" />
-          <xs:element minOccurs="0" name="RowID" type="xs:int" />
-          <xs:element minOccurs="0" name="Value" nillable="true" type="xs:string" />
-        </xs:sequence>
-      </xs:extension>
-    </xs:complexContent>
-  </xs:complexType>
-  <xs:element name="ConfigOptionByCompany" nillable="true" type="tns:ConfigOptionByCompany" />
   <xs:complexType name="ConfigOption">
     <xs:complexContent mixed="false">
       <xs:extension base="tns:Auditing">
@@ -150,7 +137,7 @@
           <xs:element minOccurs="0" name="Code" nillable="true" type="xs:string" />
           <xs:element minOccurs="0" name="ConfigOptionID" type="xs:int" />
           <xs:element minOccurs="0" name="ConfigType" nillable="true" type="tns:ConfigType" />
-          <xs:element xmlns:q5="Entities.General" minOccurs="0" name="DataType" nillable="true" type="q5:DataType" />
+          <xs:element xmlns:q4="Entities.General" minOccurs="0" name="DataType" nillable="true" type="q4:DataType" />
           <xs:element minOccurs="0" name="DefValue" nillable="true" type="xs:string" />
           <xs:element minOccurs="0" name="Description" nillable="true" type="xs:string" />
           <xs:element minOccurs="0" name="IsAdmin" nillable="true" type="xs:boolean" />
@@ -172,12 +159,6 @@
     <xs:attribute ref="ser:Ref" />
   </xs:complexType>
   <xs:element name="ConfigType" nillable="true" type="tns:ConfigType" />
-  <xs:complexType name="ArrayOfConfigOptionByCompany">
-    <xs:sequence>
-      <xs:element minOccurs="0" maxOccurs="unbounded" name="ConfigOptionByCompany" nillable="true" type="tns:ConfigOptionByCompany" />
-    </xs:sequence>
-  </xs:complexType>
-  <xs:element name="ArrayOfConfigOptionByCompany" nillable="true" type="tns:ArrayOfConfigOptionByCompany" />
   <xs:complexType name="ArrayOfConfigOption">
     <xs:sequence>
       <xs:element minOccurs="0" maxOccurs="unbounded" name="ConfigOption" nillable="true" type="tns:ConfigOption" />
@@ -194,11 +175,11 @@
     <xs:complexContent mixed="false">
       <xs:extension base="tns:Auditing">
         <xs:sequence>
-          <xs:element xmlns:q6="Entities.Master" minOccurs="0" name="Company" nillable="true" type="q6:Company" />
+          <xs:element xmlns:q5="Entities.Master" minOccurs="0" name="Company" nillable="true" type="q5:Company" />
           <xs:element minOccurs="0" name="MenuOption" nillable="true" type="tns:MenuOption" />
           <xs:element minOccurs="0" name="Rol" nillable="true" type="tns:Rol" />
           <xs:element minOccurs="0" name="RowID" type="xs:int" />
-          <xs:element xmlns:q7="Entities.General" minOccurs="0" name="Status" nillable="true" type="q7:Status" />
+          <xs:element xmlns:q6="Entities.General" minOccurs="0" name="Status" nillable="true" type="q6:Status" />
         </xs:sequence>
       </xs:extension>
     </xs:complexContent>
@@ -222,4 +203,23 @@
     </xs:sequence>
   </xs:complexType>
   <xs:element name="ArrayOfRol" nillable="true" type="tns:ArrayOfRol" />
+  <xs:complexType name="ConfigOptionByCompany">
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:Auditing">
+        <xs:sequence>
+          <xs:element xmlns:q7="Entities.Master" minOccurs="0" name="Company" nillable="true" type="q7:Company" />
+          <xs:element minOccurs="0" name="ConfigOption" nillable="true" type="tns:ConfigOption" />
+          <xs:element minOccurs="0" name="RowID" type="xs:int" />
+          <xs:element minOccurs="0" name="Value" nillable="true" type="xs:string" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="ConfigOptionByCompany" nillable="true" type="tns:ConfigOptionByCompany" />
+  <xs:complexType name="ArrayOfConfigOptionByCompany">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="ConfigOptionByCompany" nillable="true" type="tns:ConfigOptionByCompany" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfConfigOptionByCompany" nillable="true" type="tns:ArrayOfConfigOptionByCompany" />
 </xs:schema>
