@@ -1,0 +1,33 @@
+﻿<Window
+	x:Uid="Window_1" x:Class="WpfFront.Common.MsgWindow"
+	xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+	xmlns:aw="clr-namespace:Assergs.Windows;assembly=Assergs.Windows"
+    ResizeMode="NoResize"
+    Topmost="True"
+    Icon="/WpfFront;component/Images/Icons/Confirm.png"
+    WindowStartupLocation="CenterScreen" Height="200" Width="350">
+
+
+    <Window.Background>
+        <LinearGradientBrush x:Uid="LinearGradientBrush_1" EndPoint="1,1" StartPoint="0,0">
+            <GradientStop x:Uid="GradientStop_1" Color="LightSteelBlue" Offset="0"/>
+            <GradientStop x:Uid="GradientStop_2" Color="AliceBlue" Offset="1"/>
+        </LinearGradientBrush>
+    </Window.Background>
+
+    <Grid x:Uid="Grid_1">
+		<Grid.RowDefinitions>
+			<RowDefinition x:Uid="RowDefinition_1"  />
+			<RowDefinition x:Uid="RowDefinition_2"  />
+		</Grid.RowDefinitions>
+
+		<TextBlock x:Uid="txtMesage" FontSize="12" Name="txtMesage" Margin="20"
+			HorizontalAlignment="Center" VerticalAlignment="Center" TextWrapping="Wrap"></TextBlock>
+
+		<Button x:Uid="btn1" Name="btn1" Grid.Row="1" Width="75" FontSize="12"
+			HorizontalAlignment="Center" Margin="3" VerticalAlignment="Center" Click="btn1_Click_1">Ok</Button>
+
+	</Grid>		
+
+</Window>

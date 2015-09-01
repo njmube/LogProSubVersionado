@@ -1,0 +1,42 @@
+﻿<Window x:Class="WpfFront.Common.AuthorizationWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+	xmlns:aw="clr-namespace:Assergs.Windows;assembly=Assergs.Windows"
+	xmlns:awc="clr-namespace:Assergs.Windows.Controls;assembly=Assergs.Windows"
+    Icon="/WpfFront;component/Images/Icons/Confirm.png"
+    WindowStartupLocation="CenterScreen"        
+    Title="Authorization Window" Height="240" Width="350" Loaded="Window_Loaded">
+    
+    <Grid x:Uid="Grid_1" Background="WhiteSmoke" Margin="20">
+        
+        
+        
+        <StackPanel x:Uid="StackPanel_5" Orientation="Vertical" Margin="5,10,5,10">
+        
+            <TextBlock FontSize="12" Foreground="Brown" FontWeight="Bold" HorizontalAlignment="Center">
+                Autorization Window</TextBlock>
+            
+            <Separator />
+            
+            <StackPanel x:Uid="StackPanel_6" Orientation="Horizontal" Margin="5,12,0,4">
+                <TextBlock x:Uid="TextBlock_2" FontWeight="Bold" Width="100" VerticalAlignment="Center"  TextAlignment="Right">Username</TextBlock>
+                <TextBox  Margin="5,0,6,0" Width="120" Height="25" FontSize="12" Name="txtUsername"  />
+                <!--<Button  IsEnabled="False">Change</Button>-->
+            </StackPanel>
+
+            <StackPanel x:Uid="StackPanel_7" Orientation="Horizontal" Margin="5,3,0,4">
+                <TextBlock x:Uid="TextBlock_3" FontWeight="Bold"  Width="100" VerticalAlignment="Center"  TextAlignment="Right">Password</TextBlock>
+                <PasswordBox  Margin="5,0,6,0" Width="120" Height="25" FontSize="12" Name="txtPassword" KeyDown="txtPassword_KeyDown" />
+                <!--<Button>Change</Button>-->
+            </StackPanel>
+
+            <StackPanel x:Uid="StackPanel_7" Orientation="Horizontal" Margin="5,13,0,0" HorizontalAlignment="Center">
+                
+                <Button  Name="btnCancel" Width="100" HorizontalAlignment="Right" Margin="0,0,6,0" Click="btnCancel_Click">Cancel</Button>
+                
+                <Button Height="30" FontWeight="Bold" Name="btnConfirm" Width="100" HorizontalAlignment="Right" Margin="0,0,0,0" Click="btnConfirm_Click">Confirm</Button>
+                
+            </StackPanel>
+        </StackPanel>
+    </Grid>
+</Window>

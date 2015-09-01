@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<hibernate-mapping xmlns="urn:nhibernate-mapping-2.2" namespace="Entities.Profile" assembly="Entities">
+  <class name="SysUser" table="Profile.SysUser">
+	<id name="UserID" type="Int32">
+		<generator class="native" />
+	</id>
+    
+	<property name="UserName" type="String" length="50"  unique="true" />
+	<property name="Password" type="String" length="50"   />
+	<property name="FirstName" type="String" length="50" not-null="true"  />
+	<property name="LastName" type="String" length="50"   />
+	<property name="Phone" type="String" length="50"   />
+	<property name="Email" type="String" length="50"  />
+	<property name="IsSuperUser" type="Boolean"  />
+	<property name="LastSession" type="String" length="50"   />
+	<property name="LastLogin" type="DateTime"    />
+	<property name="IsMultiCompany" type="Boolean"  />
+
+	  <bag fetch="subselect" name="UserRols" inverse="true" cascade="persist,save-update" lazy="false">
+		  <key column="UserID"/>
+		  <one-to-many class="UserByRol"/>
+	  </bag>
+	  
+
+	  <property name="CreatedBy" type="String" length="50" not-null="true"  />
+	  <property name="CreationDate" type="DateTime" not-null="true"   />
+	  <property name="CreTerminal" type="String" length="50"   />
+	  <property name="ModifiedBy" type="String" length="50"   />
+	  <property name="ModDate" type="DateTime"   />
+	  <property name="ModTerminal" type="String" length="50"   />
+  </class>
+</hibernate-mapping>

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<hibernate-mapping xmlns="urn:nhibernate-mapping-2.2" namespace="Entities.Report" assembly="Entities">
+  <class name="MessageRuleExtension" table="Report.MessageRuleExtension">
+	<id name="RowID" type="Int32">
+		<generator class="native" />
+	</id>
+	<property name="Custom1" type="String" length="4000"  />
+    <property name="Custom2" type="String" length="4000"   />
+	<property name="Custom3" type="String" length="4000"   />
+    <many-to-one lazy="false" name="Rule" class="MessageRuleByCompany" column="RuleID" not-null="true" unique="true" />
+  </class>
+</hibernate-mapping>

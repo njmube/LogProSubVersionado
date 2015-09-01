@@ -1,0 +1,51 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema xmlns:tns="http://schemas.datacontract.org/2004/07/Entities.Master" elementFormDefault="qualified" targetNamespace="http://schemas.datacontract.org/2004/07/Entities.Master" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:import namespace="Entities.Master" />
+  <xs:import namespace="Entities.Profile" />
+  <xs:import namespace="Entities.General" />
+  <xs:complexType name="Contract">
+    <xs:complexContent mixed="false">
+      <xs:extension xmlns:q1="Entities.Profile" base="q1:Auditing">
+        <xs:sequence>
+          <xs:element xmlns:q2="Entities.Master" minOccurs="0" name="Account" nillable="true" type="q2:Account" />
+          <xs:element minOccurs="0" name="ContractID" type="xs:int" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="Contract" nillable="true" type="tns:Contract" />
+  <xs:complexType name="ArrayOfKitAssemblyFormula">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="KitAssemblyFormula" nillable="true" type="tns:KitAssemblyFormula" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfKitAssemblyFormula" nillable="true" type="tns:ArrayOfKitAssemblyFormula" />
+  <xs:complexType name="KitAssemblyFormula">
+    <xs:complexContent mixed="false">
+      <xs:extension xmlns:q3="Entities.Profile" base="q3:Auditing">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="BalanceQty" type="xs:double" />
+          <xs:element xmlns:q4="Entities.Master" minOccurs="0" name="Component" nillable="true" type="q4:Product" />
+          <xs:element xmlns:q5="Entities.Master" minOccurs="0" name="DirectProduct" nillable="true" type="q5:Product" />
+          <xs:element minOccurs="0" name="EfectiveDate" nillable="true" type="xs:dateTime" />
+          <xs:element minOccurs="0" name="FormulaPercent" type="xs:double" />
+          <xs:element minOccurs="0" name="FormulaQty" type="xs:double" />
+          <xs:element xmlns:q6="Entities.Master" minOccurs="0" name="KitAssembly" nillable="true" type="q6:KitAssembly" />
+          <xs:element minOccurs="0" name="ObsoleteDate" nillable="true" type="xs:dateTime" />
+          <xs:element minOccurs="0" name="Ord" type="xs:int" />
+          <xs:element minOccurs="0" name="RowID" type="xs:int" />
+          <xs:element minOccurs="0" name="ScrapPercent" type="xs:double" />
+          <xs:element xmlns:q7="Entities.General" minOccurs="0" name="Status" nillable="true" type="q7:Status" />
+          <xs:element xmlns:q8="Entities.Master" minOccurs="0" name="Unit" nillable="true" type="q8:Unit" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="KitAssemblyFormula" nillable="true" type="tns:KitAssemblyFormula" />
+  <xs:complexType name="ArrayOfContract">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="Contract" nillable="true" type="tns:Contract" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfContract" nillable="true" type="tns:ArrayOfContract" />
+</xs:schema>

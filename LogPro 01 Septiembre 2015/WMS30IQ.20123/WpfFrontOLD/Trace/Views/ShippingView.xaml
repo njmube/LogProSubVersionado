@@ -1,0 +1,1075 @@
+﻿<WMCore:UserControlBase x:Uid="ShippingModule" x:Class="WpfFront.Views.ShippingView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:xcdg="http://schemas.xceed.com/wpf/xaml/datagrid"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:odc="http://schemas.odyssey.com/wpf"
+    HorizontalAlignment="Stretch" Margin="0"
+    VerticalAlignment="Stretch" Width="Auto" Height="Auto"
+    xmlns:WMCore="clr-namespace:Core.WPF;assembly=Core"  
+    xmlns:toolkit="http://schemas.microsoft.com/wpf/2008/toolkit"
+    xmlns:uc="clr-namespace:WpfFront.Common.UserControls"
+    x:Name="ShippingModule">
+        
+    <AdornerDecorator x:Uid="AdornerDecorator_1">
+        <AdornerDecorator.Resources>
+            <xcdg:DataGridCollectionViewSource x:Uid="xcdg:DataGridCollectionViewSource_1" x:Key="ListDoc" Source="{Binding DocumentList}" AutoFilterMode="And"  DefaultCalculateDistinctValues="True" />
+        </AdornerDecorator.Resources>
+
+        <DockPanel x:Uid="DockPanel_1" Background="{DynamicResource WBg}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+            
+            <DockPanel.Resources>
+                <WMCore:ForceReReadConverter x:Uid="WMCore:ForceReReadConverter_1" x:Key="forceReReadConverter" />
+                <WMCore:FormattingConverter x:Uid="WMCore:FormattingConverter_1" x:Key="formattingConverter" />
+                <WMCore:FormNotificationErrorMessageConverter x:Uid="WMCore:FormNotificationErrorMessageConverter_1" x:Key="formNotificationErrorMessageConverter" />
+                <WMCore:NullableIntegerFormatConverter x:Uid="WMCore:NullableIntegerFormatConverter_1" x:Key="nullableIntegerFormatConverter" />
+            </DockPanel.Resources>
+            
+            
+
+            <!-- COLUMN ONE -->
+            
+            <!-- PANEL DE LISTA DE DOCUMENTOS -->
+
+            <DockPanel x:Uid="DockPanel_2" Margin="0,0,0,0"  VerticalAlignment="Stretch" DockPanel.Dock="Left" HorizontalAlignment="Stretch" Height="Auto">
+
+                <StackPanel x:Uid="StackPanel_1" Orientation="Horizontal" HorizontalAlignment="Stretch" Margin="5,0,5,0" DockPanel.Dock="Top">
+                    <TextBlock x:Uid="txtTitle" Name="txtTitle" Margin="4,3,4,2" Width="300" FontSize="14" FontWeight="Bold" HorizontalAlignment="Center" TextAlignment="Center" Text="{StaticResource SHIPPING_PROCESS}" ></TextBlock>
+                    <TextBlock x:Uid="txtHide" Margin="6,0,0,0" Name="txtHide" FontWeight="Bold" VerticalAlignment="Center" HorizontalAlignment="Right" MouseDown="txtHide_MouseDown" Text="{StaticResource HIDE_LIST}" ><TextBlock.TextDecorations><TextDecoration x:Uid="TextDecoration_1" PenOffset="1" /></TextBlock.TextDecorations></TextBlock>
+                </StackPanel>
+
+                <DockPanel x:Uid="stpDocLis" Name="stpDocLis">
+
+                    <GroupBox x:Uid="gp1" Header="{StaticResource CRE_EMP_TICK_CUS}" Margin="5,2,8,0" DockPanel.Dock="Bottom" Name="gp1" Visibility="Collapsed" >
+
+                        <Grid x:Uid="Grid_1" Margin="3">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition x:Uid="ColumnDefinition_1"/>
+                                <ColumnDefinition x:Uid="ColumnDefinition_2"/>
+                            </Grid.ColumnDefinitions>
+
+                            <StackPanel x:Uid="StackPanel_2" Grid.Column="0" Orientation="Vertical" HorizontalAlignment="Left">
+                                <StackPanel x:Uid="StackPanel_3" Orientation="Vertical">
+                                    <TextBlock x:Uid="TextBlock_1" Margin="0,4,5,0" Text="{StaticResource SEARCH_CUSTOMER}"></TextBlock>
+                                    <uc:SearchAccount x:Uid="txtCustomer" AccType="1" HorizontalAlignment="Left" Margin="0,2,0,0" x:Name="txtCustomer" />
+                                </StackPanel>
+
+                            </StackPanel>
+
+                            <Button x:Uid="btnEmptyTask" MinHeight="40" Width="130" VerticalAlignment="Bottom" Margin="5,0,0,0" Grid.Column="1"  ToolTip="Create a blanket pick ticket document."
+                                       x:Name="btnEmptyTask"  Click="btnEmptyTask_Click" IsEnabled="true"  HorizontalAlignment="Left">
+                                <TextBlock x:Uid="TextBlock_2" TextWrapping="Wrap" HorizontalAlignment="Center" TextAlignment="Center" FontWeight="Bold" Text="{StaticResource CREA_PICK_TICK_WIT_SO}"></TextBlock>
+                            </Button>
+
+                        </Grid>
+                    </GroupBox>
+
+
+
+                    <Border x:Uid="Border_1" Style="{DynamicResource UserControlFormInnerBorder}" 
+                        HorizontalAlignment="Stretch"  VerticalAlignment="Stretch">
+
+                        <DockPanel x:Uid="dpList" HorizontalAlignment="Stretch" VerticalAlignment="Top"  Name="dpList" Height="Auto">
+
+
+                            <StackPanel x:Uid="StackPanel_4" Orientation="Horizontal" DockPanel.Dock="Top" >
+                                <TextBlock x:Uid="TextBlock_3" VerticalAlignment="Center" Text="{StaticResource SEARCH_DOCUMENT}"></TextBlock>
+                                <TextBox x:Uid="txtSearch" Width="100" x:Name="txtSearch" Margin="4,2,0,4" ToolTip="Enter keyword to search." TextChanged="txtSearch_TextChanged" />
+
+                                <CheckBox x:Uid="chkLate" HorizontalAlignment="Stretch" x:Name="chkLate" Margin="40,9,0,4" Width="Auto"  VerticalContentAlignment="Top" Checked="chkLate_Checked" Unchecked="chkLate_Checked" Content="{StaticResource LATE_DOCUMENTS}"></CheckBox>
+
+                                <CheckBox Visibility="Hidden"  HorizontalAlignment="Stretch" x:Name="chkMerged" Margin="20,9,0,4" Width="Auto"  VerticalContentAlignment="Top" Checked="chkMerged_Checked" Unchecked="chkMerged_Unchecked" IsChecked="True" Content="{StaticResource ONLY_MERGED}"></CheckBox>
+
+                                <Image x:Uid="Image_1" Margin="20,0,0,0" Width="17" HorizontalAlignment="Center" Source="/WpfFront;component/Images/refresh.png" MouseDown="Image_MouseDown" ToolTip="Refresh List" />
+
+
+                            </StackPanel>
+
+
+
+                            <Grid  x:Uid="Grid_2" VerticalAlignment="Stretch" Height="Auto">
+
+                                <xcdg:DataGridControl  x:Uid="dgDocument" x:Name="dgDocument"  Grid.Row="1" ItemsSource="{Binding Source={StaticResource ListDoc}}" 
+                          AutoCreateColumns="False" Width="Auto" ReadOnly="False" IsTextSearchEnabled="True" 
+                          Margin="0,0,0,0"  SelectionMode="Single" 
+                                                  ItemScrollingBehavior="Immediate" VerticalAlignment="Top"
+                                          NavigationBehavior="RowOnly" GotFocus="dgDocument_Click">
+
+                                    <xcdg:DataGridControl.Resources>
+
+                                        <Style x:Uid="Style_1" TargetType="{x:Type xcdg:DataRow}">
+                                            <Style.Triggers>
+                                                <DataTrigger x:Uid="DataTrigger_1" Binding="{Binding Path=DocStatus.Name}"  Value="Completed">
+                                                    <Setter x:Uid="Setter_1" Property="Background" Value="#FCA2A2"/>
+                                                </DataTrigger>
+
+                                                <DataTrigger x:Uid="DataTrigger_2" Binding="{Binding Path=DocStatus.Name}"  Value="In Process">
+                                                    <Setter x:Uid="Setter_2" Property="Background" Value="#FCFE70"/>
+                                                </DataTrigger>
+
+                                            </Style.Triggers>
+                                        </Style>
+
+                                        <Style x:Uid="Style_2" x:Key="{x:Type xcdg:ScrollTip}" TargetType="{x:Type xcdg:ScrollTip}">
+                                            <Setter x:Uid="Setter_3" Property="HorizontalAlignment" Value="Right" />
+                                            <Setter x:Uid="Setter_4" Property="VerticalAlignment" Value="Bottom" />
+                                        </Style>
+                                    </xcdg:DataGridControl.Resources>
+
+
+
+                                    <xcdg:DataGridControl.ContextMenu>
+                                        <ContextMenu x:Uid="ctnColsMenu" Name="ctnColsMenu">
+                                            <MenuItem x:Uid="MenuItem_1" Header="Show/Hide Columns" Tag="CustomizeColumns" MouseEnter="MenuItem_MouseEnter"/>
+                                        </ContextMenu>
+                                    </xcdg:DataGridControl.ContextMenu>
+
+
+                                    <xcdg:DataGridControl.Columns>
+                                        <!--<xcdg:Column x:Uid="xcdg:Column_1" FieldName="Priority" Title="Prio" Width="25"/>-->
+                                        <xcdg:Column x:Uid="xcdg:Column_2" FieldName="DocNumber" IsMainColumn="True" Title="{StaticResource DOCUMENT}" Width="80" />
+                                        <xcdg:Column x:Uid="xcdg:Column_3" FieldName="Customer.Name" Title="{StaticResource CUSTOMER}"  Width="120" TextWrapping="Wrap" />
+                                        <xcdg:Column x:Uid="xcdg:Column_4" FieldName="Date1" Title="{StaticResource ORDER_DATE}"  Width="65"/>
+                                        <!--<xcdg:Column FieldName="CrossDocking" Title="Cross"  Width="35" />-->
+                                        <xcdg:Column x:Uid="xcdg:Column_5" FieldName="DocStatus.Name" Title="{StaticResource STATUS}" Width="60" />
+                                        <xcdg:Column x:Uid="xcdg:Column_6" FieldName="ShippingMethod.Name" Title="{StaticResource SHIP_MTHD}" Width="70"  />
+                                        <xcdg:Column  x:Uid="xcdg:Column_36" FieldName="Notes" Title="{StaticResource NOTES}" Width="60"  ReadOnly="True" TextWrapping="Wrap" />
+                                        
+                                        <xcdg:Column x:Uid="xcdg:Column_7" FieldName="Date2" Title="Required On"  Width="65" Visible="False" />
+                                        <xcdg:Column x:Uid="xcdg:Column_8" FieldName="Date3" Title="Shipped On" Width="65" Visible="False"  ReadOnly="True" />
+                                        <xcdg:Column x:Uid="xcdg:Column_9" FieldName="DocType.Name" Title="Type" Width="60" Visible="False"  ReadOnly="True" />
+                                        <xcdg:Column x:Uid="xcdg:Column_10" FieldName="Reference" Title="Reference" Width="60" Visible="False"  ReadOnly="True" />
+                                        <xcdg:Column x:Uid="xcdg:Column_11" FieldName="CustPONumber" Title="Cust PO#" Width="60" Visible="False"  ReadOnly="True" />
+                                        <xcdg:Column x:Uid="xcdg:Column_12" FieldName="Comment" Title="Comment" Width="70" Visible="False"  ReadOnly="True" TextWrapping="Wrap" />
+                                        <xcdg:Column x:Uid="xcdg:Column_13" FieldName="AssignedUsers" Title="Pickers" Width="70" Visible="False"  TextWrapping="Wrap" ReadOnly="True" />
+
+
+
+
+                                    </xcdg:DataGridControl.Columns>
+                                    <xcdg:DataGridControl.View>
+                                        <xcdg:TableView x:Uid="xcdg:TableView_1" UseDefaultHeadersFooters="False" ShowScrollTip="True" VerticalGridLineBrush="LightGray" ShowRowSelectorPane="False" HorizontalGridLineThickness="1" HorizontalGridLineBrush="LightGray">
+                                            <xcdg:TableView.Theme>
+                                                <xcdg:Office2007SilverTheme x:Uid="xcdg:Office2007SilverTheme_1"/>
+                                            </xcdg:TableView.Theme>
+                                            <xcdg:TableView.FixedHeaders>
+                                                <DataTemplate x:Uid="DataTemplate_1">
+                                                    <xcdg:HierarchicalGroupByControl x:Uid="xcdg:HierarchicalGroupByControl_1" xcdg:TableView.CanScrollHorizontally="False" />
+                                                </DataTemplate>
+                                                <DataTemplate x:Uid="DataTemplate_2">
+                                                    <xcdg:ColumnManagerRow x:Uid="xcdg:ColumnManagerRow_6" AllowAutoFilter="True"  AllowColumnReorder="True" />
+                                                </DataTemplate>
+                                            </xcdg:TableView.FixedHeaders>
+                                        </xcdg:TableView>
+                                    </xcdg:DataGridControl.View>
+                                </xcdg:DataGridControl>
+                            </Grid>
+
+                            <!--</Grid>-->
+                            <!--</Border>-->
+                            <!--<Border  HorizontalAlignment="Stretch"
+                                Style="{DynamicResource UserControlFormInnerBorder}" >-->
+
+
+                            <!--</Border>-->
+
+
+                            <!--<StackPanel Visibility="Hidden" x:Name="pgrBar" DockPanel.Dock="Bottom" Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Bottom">
+                    <TextBlock Name="StatusText" Margin="10,0,5,0"  VerticalAlignment="Center">Processing</TextBlock> 
+                    <ProgressBar Name="Progress" IsIndeterminate="True" Width="100" Height="15" Minimum="0" Maximum="1" Margin="5" />                    
+                    </StackPanel>-->
+
+                        </DockPanel>
+
+                    </Border>
+                </DockPanel>
+
+                <!-- END PANEL DE LISTA DE DOCUMENTOS -->
+         </DockPanel>
+
+
+
+            <TabControl x:Uid="tabMenu" Margin="2,5,5,0" Name="tabMenu" DockPanel.Dock="Top" TabStripPlacement="Top" 
+                        Style="{DynamicResource TabControlStyle1}" Visibility="Hidden" HorizontalAlignment="Stretch"
+                        VerticalAlignment="Stretch" SelectionChanged="tabMenu_SelectionChanged">
+
+                <TabItem x:Uid="TabItem_1" Header="{StaticResource DOC_DET_SHIP_CREA}" >
+
+                    <StackPanel x:Uid="StackPanel_5" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="3">
+                                              
+
+                            <Border  x:Uid="Border_2" Style="{DynamicResource UserControlFormInnerBorder}" DockPanel.Dock="Bottom" 
+                    HorizontalAlignment="Stretch"  VerticalAlignment="Stretch">
+                            <StackPanel x:Uid="StackPanel_6" Orientation="Horizontal">
+                                <StackPanel x:Uid="StackPanel_7" Orientation="Vertical">
+
+
+                                    <StackPanel x:Uid="StackPanel_8" Orientation="Horizontal">
+                                        <TextBlock x:Uid="TextBlock_4" FontWeight="Bold" Text="{StaticResource CURRENT_DOCUMENT}" ></TextBlock>
+
+                                        <TextBlock x:Uid="TextBlock_5" FontWeight="Bold" Margin="5,0,0,0" Text="{Binding Path=Document.DocNumber}" Foreground="Brown"></TextBlock>
+                                    </StackPanel>
+
+
+                                    <ListView x:Uid="lvDocumentData" ItemsSource="{Binding Path=DocumentData}"  Name="lvDocumentData" MaxHeight="120" >
+                                        <ListView.View>
+                                            <GridView x:Uid="GridView_1" ColumnHeaderContainerStyle="{DynamicResource CustomHeaderStyle}">
+                                                <GridViewColumn x:Uid="GridViewColumn_1" Header="{StaticResource KEY}" DisplayMemberBinding="{Binding Path=DataKey}"></GridViewColumn>
+                                                
+                                                <GridViewColumn x:Uid="GridViewColumn_2" Header="{StaticResource VALUE}">
+
+                                                    <GridViewColumn.CellTemplate>
+                                                        <DataTemplate x:Uid="DataTemplate_3X">
+                                                            <TextBlock x:Uid="TextBlock_5X" Text="{Binding Path=DataValue}" TextWrapping="Wrap" Width="130" />
+                                                        </DataTemplate>
+                                                    </GridViewColumn.CellTemplate>
+
+                                                </GridViewColumn>
+
+
+
+                                            </GridView>
+                                        </ListView.View>
+                                    </ListView>
+                                </StackPanel>
+
+                                <StackPanel x:Uid="StackPanel_9" Margin="15,0,0,0">
+
+                                    <WrapPanel  x:Uid="WrapPanel_1" Width="380">
+                                        
+                                        <Image x:Uid="Image_1" Margin="0,0,4,0" Width="20" HorizontalAlignment="Center" 
+                                               Source="/WpfFront;component/Images/Icons/Cross.png" Name="xRefresh"
+                                               MouseDown="xRefresh_MouseDown" ToolTip="Refresh Document" />
+                                        
+                                    <Button x:Uid="btnPktTkt" HorizontalAlignment="Left" Name="btnPktTkt" MinHeight="30" Width="100" 
+                                            Margin="0,0,0,0" Click="btnPktTkt_Click">
+                                        <StackPanel x:Uid="StackPanel_10" Orientation="Horizontal">
+                                            <Image x:Uid="Image_2" Margin="5,0,0,0"  Width="18" Source="/WpfFront;component/Images/invoice.jpg"></Image>
+                                            <TextBlock x:Uid="TextBlock_6" Margin="5" Text="{StaticResource PICK_TICKET}" >
+                                            </TextBlock>
+                                        </StackPanel>
+                                    </Button>
+
+                                   <uc:DirectPrint x:Name="ucDirectPrint" />
+
+
+
+                                    </WrapPanel>
+                                    
+                                    <Separator x:Uid="Separator_1" />
+
+
+                                    <StackPanel x:Uid="StackPanel_11" Orientation="Vertical">
+
+                                        <TextBlock x:Uid="TextBlock_7" FontWeight="Bold" Text="{StaticResource NOTES_COMMENTS}" ></TextBlock>
+                                        <TextBox x:Uid="TextBox_1"  TextWrapping="Wrap" Height="40" Text="{Binding Path=Document.Comment}" HorizontalAlignment="Left" 
+                                         Width="345"></TextBox>
+
+                                        <Grid x:Uid="Grid_3" Margin="0,5,0,0">
+                                            <Grid.RowDefinitions>
+                                                <RowDefinition x:Uid="RowDefinition_1" Height="auto" />
+                                                <RowDefinition x:Uid="RowDefinition_2" Height="auto" />
+                                            </Grid.RowDefinitions>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition x:Uid="ColumnDefinition_3" Width="Auto" />
+                                                <ColumnDefinition x:Uid="ColumnDefinition_4" Width="Auto" />
+                                                <ColumnDefinition x:Uid="ColumnDefinition_5" Width="Auto" />
+                                            </Grid.ColumnDefinitions>
+
+
+                                            <TextBlock x:Uid="TextBlock_8" Grid.Column="0" Grid.Row="0" Margin="5,0,0,0" VerticalAlignment="Center" FontWeight="Bold" Text="{StaticResource STATUS}"></TextBlock>
+
+                                            <ComboBox x:Uid="cboStatus" Grid.Column="0"  Grid.Row="1" x:Name="cboStatus" ItemsSource="{Binding Path=DocStatus}" DisplayMemberPath="Name" Margin="5,0,0,0"
+                                                  SelectedValuePath="StatusID"  SelectedValue="{Binding Path=Document.DocStatus.StatusID}" Width="80" ToolTip="In Process: Partially Picked, Completed: Full Picked before send to ERP, Posted: Confirmed in ERP." />
+
+
+                                            <TextBlock x:Uid="TextBlock_9" Grid.Column="1" Grid.Row="0" Margin="8,0,0,0"  VerticalAlignment="Center" FontWeight="Bold" Text="{StaticResource PICKING_METHOD}" ></TextBlock>
+
+                                            <ComboBox x:Uid="cboPickM" Grid.Column="1" Grid.Row="1" x:Name="cboPickM"  ItemsSource="{Binding Path=PickMethods}" 
+                                                              DisplayMemberPath="Name" Margin="8,0,0,0"
+                                                              SelectedValuePath="MethodID" Width="100" SelectedValue="{Binding Path=Document.PickMethod.MethodID}" />
+
+                                            <Button x:Uid="btnChangeStatus" Grid.Column="2" Grid.RowSpan="2" Width="30" VerticalAlignment="Bottom"  x:Name="btnChangeStatus"  FontWeight="Bold" Click="btnChangeStatus_Click" Margin="8,0,0,0" Content="{StaticResource UPDATE}"></Button>
+                                        </Grid>
+
+                                        <!--
+                                        <StackPanel Orientation="Horizontal" Margin="0,5,0,0">
+
+                                            <StackPanel Orientation="Horizontal">
+                                                <TextBlock VerticalAlignment="Center" FontWeight="Bold">Status</TextBlock>
+                                                <ComboBox x:Name="cboStatus" ItemsSource="{Binding Path=DocStatus}" DisplayMemberPath="Name" Margin="5,0,0,0"
+                                                  SelectedValuePath="StatusID" Width="80" />
+                                            </StackPanel>
+
+                                            <Button x:Name="btnChangeStatus"  FontWeight="Bold" Click="btnChangeStatus_Click" Margin="5,0,0,0">Update!</Button>
+                                        </StackPanel>
+                                        -->
+
+                                    </StackPanel>
+                                </StackPanel>
+
+
+
+                            </StackPanel>
+                        </Border>
+
+
+                        <TextBlock Margin="5,0,8,4" Name="txtWarning" FontSize="12" FontWeight="Bold" Foreground="Brown"
+                                   Background="Yellow" />
+                                                    
+                        
+
+                        <odc:OdcExpander  x:Uid="expDocLines" Header="{StaticResource DOCUMENT_LINES}" Margin="5,0,8,0" Background="White"  
+                               IsMinimized="False"  IsExpanded="False"  ShowEllipse="False" x:Name="expDocLines" MouseDoubleClick="expDocLines_MouseDoubleClick" >
+
+
+
+                            <Grid x:Uid="Grid_4">
+                                
+                                <Grid.Resources>
+                                    <Style x:Uid="Style_3" TargetType="{x:Type xcdg:DataRow}">
+                                        <Style.Triggers>
+                                            <DataTrigger x:Uid="DataTrigger_3" Binding="{Binding Path=LineStatus.Name}"  Value="Cancelled">
+                                                <Setter x:Uid="Setter_5" Property="Background" Value="#FCA2A2"/>
+                                            </DataTrigger>
+
+                                            <DataTrigger x:Uid="DataTrigger_4" Binding="{Binding Path=Note}" Value="2">
+                                                <Setter x:Uid="Setter_6" Property="Background" Value="#FCFE70"/>
+                                            </DataTrigger>
+
+                                        </Style.Triggers>
+                                    </Style>
+                                </Grid.Resources>
+
+
+                                <StackPanel Orientation="Vertical">
+                                    
+                                    <xcdg:DataGridControl  x:Uid="dgLines" Margin="-3,-3,-3,0" x:Name="dgLines"  ItemsSource="{Binding Path=DocumentLines}" 
+                                        HorizontalAlignment="Stretch" AutoCreateColumns="False" ReadOnly="True" MaxHeight="180" VerticalAlignment="Top">
+                                        <xcdg:DataGridControl.Resources>
+                                            <Style x:Uid="Style_4" x:Key="{x:Type xcdg:ScrollTip}" TargetType="{x:Type xcdg:ScrollTip}">
+                                                <Setter x:Uid="Setter_7" Property="HorizontalAlignment" Value="Right" />
+                                                <Setter x:Uid="Setter_8" Property="VerticalAlignment" Value="Bottom" />
+                                            </Style>
+                                        </xcdg:DataGridControl.Resources>
+
+
+                                        <!--<xcdg:DataGridControl.ContextMenu>
+                                            <ContextMenu Name="ctnLine" >
+                                                <MenuItem Header="Line Options" Tag="LineOps" MouseEnter="MenuItem_MouseEnter_1"/>
+                                            </ContextMenu>
+                                        </xcdg:DataGridControl.ContextMenu>-->
+
+
+                                        <xcdg:DataGridControl.Columns>
+                                            <!--<xcdg:Column FieldName="LineNumber" IsMainColumn="True" Title="Line" Width="50" />-->
+                                            <xcdg:Column x:Uid="xcdg:Column_14" FieldName="LineStatus.Name" Title="Status" Width="50" />
+                                            <xcdg:Column x:Uid="xcdg:Column_15" FieldName="Product.ProductCode" Title="Product"  Width="110"/>
+                                            <xcdg:Column x:Uid="xcdg:Column_16" FieldName="Product.Description" Title="Description" Width="200" TextWrapping="Wrap" />
+                                            <xcdg:Column x:Uid="xcdg:Column_17" FieldName="Unit.Name" Title="UoM" Width="50" />
+                                            <xcdg:Column x:Uid="xcdg:Column_18" FieldName="Quantity" Title="Ordered" Width="50" />
+                                            <xcdg:Column x:Uid="xcdg:Column_19" FieldName="KitNote" Title="" Width="70" />
+                                        </xcdg:DataGridControl.Columns>
+                                        <xcdg:DataGridControl.View>
+                                            <xcdg:TableView x:Uid="xcdg:TableView_2" UseDefaultHeadersFooters="False" ShowScrollTip="False" VerticalGridLineBrush="Beige" ShowRowSelectorPane="False" ShowFixedColumnSplitter="False">
+                                                <xcdg:TableView.Theme>
+                                                    <xcdg:Office2007BlackTheme x:Uid="xcdg:Office2007BlackTheme_1"/>
+                                                </xcdg:TableView.Theme>
+                                                <xcdg:TableView.FixedHeaders>
+                                                    <!--<DataTemplate x:Uid="DataTemplate_3">
+                                                    <xcdg:HierarchicalGroupByControl x:Uid="xcdg:HierarchicalGroupByControl_2" xcdg:TableView.CanScrollHorizontally="False" />
+                                                </DataTemplate>-->
+                                                    <DataTemplate x:Uid="DataTemplate_4">
+                                                        <xcdg:ColumnManagerRow x:Uid="xcdg:ColumnManagerRow_2" />
+                                                    </DataTemplate>
+                                                </xcdg:TableView.FixedHeaders>
+                                            </xcdg:TableView>
+                                        </xcdg:DataGridControl.View>
+                                    </xcdg:DataGridControl>
+                                    
+                                    <StackPanel Margin="-3,6,-3,0" Orientation="Horizontal" HorizontalAlignment="Left" Name="stkUpdLines" >
+                                        <Button FontWeight="Bold" Width="100" Name="btnAdd" Click="btnAdd_Click">Add New Line</Button>
+                                        <Button Margin="10,0,0,0" Width="130" Name="btnRemove" Click="btnRemove_Click" >Remove Selected Line</Button>
+                                    </StackPanel>
+                                    
+                                    
+                                    
+                                </StackPanel>
+
+
+                            </Grid>
+
+                        </odc:OdcExpander>
+                        <!-- END CURRENT DOCUMENT LINE DETAILS  -->
+
+
+                        
+                        <StackPanel x:Uid="stkPosting" Orientation="Vertical" x:Name="stkPosting" Margin="0,5,0,5">
+                            
+
+                            <StackPanel x:Uid="StackPanel_12" Margin="5,0,8,0" Orientation="Horizontal">
+                                <TextBlock  x:Uid="TextBlock_10" FontWeight="Bold" Text="{StaticResource PEN_CON_SHIP_DOC}" ></TextBlock>
+                                <TextBlock x:Uid="TextBlock_11" Margin="30,0,0,0" Text="{StaticResource DOU_CLI_REC_REV}" ></TextBlock>
+                            </StackPanel>
+
+
+                            <xcdg:DataGridControl  x:Uid="dgPostingBalance" Margin="5,2,8,0" x:Name="dgPostingBalance"  ItemsSource="{Binding Path=PendingToPostList }" MouseDoubleClick="dgPostingBalance_MouseDoubleClick"
+                                     HorizontalAlignment="Stretch" MaxHeight="150"   AutoCreateColumns="False" ReadOnly="True"  Grid.Column="0" Grid.Row="0">
+                                <xcdg:DataGridControl.Resources>
+                                    <Style x:Uid="Style_5" x:Key="{x:Type xcdg:ScrollTip}" TargetType="{x:Type xcdg:ScrollTip}">
+                                        <Setter x:Uid="Setter_9" Property="HorizontalAlignment" Value="Right" />
+                                        <Setter x:Uid="Setter_10" Property="VerticalAlignment" Value="Bottom" />
+                                    </Style>
+                                </xcdg:DataGridControl.Resources>
+                                <xcdg:DataGridControl.Columns>
+                                    <!--<xcdg:Column FieldName="Node.Name" IsMainColumn="True" Title="Node" Width="60" />-->
+                                    <xcdg:Column x:Uid="xcdg:Column_20" FieldName="Product.ProductCode" Title="{StaticResource PRODUCT}" Width="100" />
+                                    <xcdg:Column x:Uid="xcdg:Column_21" FieldName="Product.Description" Title="{StaticResource DESCRIPTION}"  Width="180" TextWrapping="Wrap" />
+                                    <xcdg:Column x:Uid="xcdg:Column_22" FieldName="Unit.Name" Title="{StaticResource UOM}" Width="60" />
+                                    <xcdg:Column x:Uid="xcdg:Column_23" FieldName="Quantity" Title="{StaticResource PICKED}" Width="60" />
+                                    <xcdg:Column x:Uid="xcdg:Column_24" FieldName="QtyPending" Title="{StaticResource PENDING_SHIPMENT}" Width="110" />
+                                </xcdg:DataGridControl.Columns>
+                                <xcdg:DataGridControl.View>
+                                    <xcdg:TableView x:Uid="xcdg:TableView_3" UseDefaultHeadersFooters="False" ShowScrollTip="False" VerticalGridLineBrush="Beige" ShowRowSelectorPane="False" ShowFixedColumnSplitter="False">
+                                        <xcdg:TableView.Theme>
+                                            <xcdg:Office2007BlackTheme x:Uid="xcdg:Office2007BlackTheme_2"/>
+                                        </xcdg:TableView.Theme>
+                                        <xcdg:TableView.FixedHeaders>
+                                            <!--<DataTemplate>
+                                            <xcdg:HierarchicalGroupByControl xcdg:TableView.CanScrollHorizontally="False" />
+                                        </DataTemplate>-->
+                                            <DataTemplate x:Uid="DataTemplate_5">
+                                                <xcdg:ColumnManagerRow x:Uid="xcdg:ColumnManagerRow_3" />
+                                            </DataTemplate>
+                                        </xcdg:TableView.FixedHeaders>
+                                    </xcdg:TableView>
+                                </xcdg:DataGridControl.View>
+                            </xcdg:DataGridControl>
+
+                                                                                   
+                            
+
+                        </StackPanel>
+
+
+                        <Border x:Uid="pnPosting" HorizontalAlignment="Stretch" Style="{DynamicResource UserControlFormInnerBorder}" 
+                                    x:Name="pnPosting" Visibility="Collapsed" 
+                                    VerticalAlignment="Top">
+
+
+                            <StackPanel x:Uid="StackPanel_13" Orientation="Horizontal" >
+
+                                <Button x:Uid="btnConfirmPicking" HorizontalAlignment="Left" Grid.Column="3" MinHeight="30" Margin="2" Visibility="Collapsed"  
+                                     Width="110" VerticalAlignment="Bottom"  FontWeight="Bold"  x:Name="btnConfirmPicking" Click="btnConfirmPicking_Click">
+                                    <TextBlock x:Uid="TextBlock_conf" Margin="4" Text="{StaticResource CONFIRM_PICKING}"></TextBlock>
+                                </Button>
+                                
+                                <Button x:Uid="btnCreateShipment" HorizontalAlignment="Left" Grid.Column="3" MinHeight="30" Margin="2"  ToolTip="Create a Shipment Document for pendig quantities. Will send it to ERP when connection to ERP exists."
+                                     Width="180" Click="btnCreateShipment_Click" VerticalAlignment="Bottom"  FontWeight="Bold"  x:Name="btnCreateShipment">
+                                    <TextBlock x:Uid="TextBlock_12" Margin="4" Text="{StaticResource CRE_SHIP_DOC}" ></TextBlock>
+                                </Button>
+
+
+                                <TextBlock x:Uid="txtPostResult" x:Name="txtPostResult" Margin="0,5,0,0" Visibility="Collapsed"
+                                              FontWeight="Bold" FontSize="12" Foreground="Brown" HorizontalAlignment="Right" 
+                                               TextWrapping="Wrap" />
+                            </StackPanel>
+
+                        </Border>
+
+
+
+                    </StackPanel>
+
+                </TabItem>
+                
+                
+                <TabItem x:Uid="tbItemShip" Header="{StaticResource PICKING_PROCESS}" HorizontalAlignment="Stretch" x:Name="tbItemShip">
+
+                    <!-- RECEIVING BOX -->
+
+                        <StackPanel   x:Uid="stkBox" x:Name="stkBox"  Orientation="Vertical"  Margin="3">
+                            <!-- <TextBlock Text="User Validations" TextWrapping="Wrap" Foreground="{DynamicResource Brush_FormHeadingText}" FontWeight="Bold" FontSize="14" Margin="10,0,0,0" /> -->
+                            <WMCore:FormNotification x:Uid="frmNotification" IsTabStop="False" x:Name="frmNotification" Margin="0,0,0,0" Height="1"
+                                         Panel.ZIndex="99" AutoCollapseTimeout="2">
+                                <WMCore:FormNotification.ErrorMessage>
+                                    <MultiBinding x:Uid="MultiBinding_1" Converter="{StaticResource formNotificationErrorMessageConverter}">
+                                        <Binding x:Uid="Binding_1" Path="Error" />
+                                        <Binding x:Uid="Binding_2" Path="ValidationExceptionErrors" ElementName="ShippingModule" />
+                                    </MultiBinding>
+                                </WMCore:FormNotification.ErrorMessage>
+                            </WMCore:FormNotification>
+
+
+                            <!-- Bin Destination -->
+                            
+                            <Border  x:Uid="Border_3" Style="{DynamicResource UserControlFormInnerBorder}">
+                                <Grid x:Uid="Grid_5">
+                                <StackPanel x:Uid="StackPanel_14" Orientation="Horizontal" Margin="0,0,0,0" HorizontalAlignment="Left">
+                                <TextBlock  x:Uid="TextBlock_13" Margin="0,0,10,0" VerticalAlignment="Center"  HorizontalAlignment="Right" FontWeight="Bold" Text="{StaticResource ENT_BIN_LAB_SOU}"></TextBlock>
+                                <TextBox x:Uid="txtBinLabel" Width="120" ToolTip="{StaticResource SCA_WRI_BIN_LAB_LOC}"  LostFocus="txtBinLabel_LostFocus"
+                                 Margin="0,0,0,0" Height="22" Name="txtBinLabel" />
+
+                                                                             
+                                    <TextBlock x:Uid="txtProcessResult" x:Name="txtProcessResult" TextWrapping="Wrap" Margin="8,3,0,0" 
+                                               Style="{DynamicResource ProcessResult}"  />
+
+                                </StackPanel>
+                            </Grid>
+                            </Border>                           
+
+                        <!-- Ship  Manual -->
+                        <odc:OdcExpander x:Uid="expManual" x:Name="expManual" Header="{StaticResource PICKING_MANUAL}" Margin="5,0,8,0" Background="White"  
+                               ShowEllipse="False" Expanded="expLabel_Expanded" Collapsed="expLabel_Collapsed">
+
+                            
+                            <StackPanel x:Uid="StackPanel_15" Orientation="Horizontal" >
+                            <!-- Enter Manual -->
+                            <Grid  x:Uid="dgShip" HorizontalAlignment="Left" Width="Auto"
+                            VerticalAlignment="Top"  Margin="-3,-3, -3, 0" x:Name="dgShip" >
+
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition x:Uid="ColumnDefinition_6" Width="Auto" />
+                                    <ColumnDefinition x:Uid="ColumnDefinition_7" Width="Auto" />
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition x:Uid="RowDefinition_3" Height="auto" />
+                                    <RowDefinition x:Uid="RowDefinition_4" Height="auto" />
+                                    <RowDefinition x:Uid="RowDefinition_5" Height="auto" />
+                                    <RowDefinition x:Uid="RowDefinition_6" Height="auto" />
+                                    <RowDefinition x:Uid="RowDefinition_7" Height="auto" />
+                                    <RowDefinition x:Uid="RowDefinition_8" Height="auto" />
+                                    <RowDefinition x:Uid="RowDefinition_9" Height="auto" />
+                                </Grid.RowDefinitions>
+
+                                <TextBlock x:Uid="TextBlock_14" Grid.Column="0" Grid.Row="1" Margin="5,4,0,0" HorizontalAlignment="Right" Text="{StaticResource PRODUCT}" ></TextBlock>
+                                
+                                
+                                <StackPanel x:Uid="StackPanel_16" Grid.Column="1" Grid.Row="1" Margin="5,0,0,0" HorizontalAlignment="Left">
+
+                                        <uc:SearchProduct x:Uid="txtProduct" x:Name="txtProduct" OnLoadRecord="txtProduct_OnLoadRecord" />
+
+                                        <!--<TextBox  Name="txtProduct"  Margin="0,0,0,0" TextChanged="txtProduct_TextChanged" HorizontalAlignment="Left" Width="150" />
+
+                                    <ListView ItemsSource="{Binding Path=DocProducts}" SelectionChanged="cboProduct_SelectionChanged" 
+                                      Name="cboProduct" Height="Auto" MaxHeight="60" Margin="0">
+
+                                        <ListView.View>
+                                            <GridView  ColumnHeaderContainerStyle="{DynamicResource CustomHeaderStyle}">
+                                                <GridViewColumn Header="Product" Width="120" DisplayMemberBinding="{Binding Path=ProductCode}"></GridViewColumn>
+                                                <GridViewColumn Header="Name" Width="120" DisplayMemberBinding="{Binding Path=Name}"></GridViewColumn>
+                                            </GridView>
+                                        </ListView.View>
+                                    </ListView>-->
+
+                                </StackPanel>
+
+
+
+                                <TextBlock x:Uid="TextBlock_15" Grid.Column="0" Grid.Row="2" Margin="0,4,0,0" HorizontalAlignment="Right" Text="{StaticResource UOM}" ></TextBlock>
+                                <ListView x:Uid="cboUnit" Grid.Column="1" ItemsSource="{Binding Path=ProductUnits}" Grid.Row="2" Name="cboUnit" SelectionChanged="cboUnit_SelectionChanged"
+                                    Margin="5,4,0,0" VerticalAlignment="Top" Height="Auto" MaxHeight="200" Width="150" HorizontalAlignment="Left">
+                                    <ListView.View>
+                                        <GridView  x:Uid="GridView_2" ColumnHeaderContainerStyle="{DynamicResource CustomHeaderStyle}">
+                                            <GridViewColumn x:Uid="GridViewColumn_3" Width="60"  Header="{StaticResource UNIT}" DisplayMemberBinding="{Binding Path=ErpCode}"></GridViewColumn>
+                                            <GridViewColumn x:Uid="GridViewColumn_4" Width="80" Header="{StaticResource NAME}" DisplayMemberBinding="{Binding Path=Name}"></GridViewColumn>
+                                        </GridView>
+                                    </ListView.View>
+                                </ListView>
+
+                                <TextBlock x:Uid="TextBlock_16" Grid.Column="0" Grid.Row="3" Margin="0,4,0,0" HorizontalAlignment="Right" Text="{StaticResource QUANTITY}"  ></TextBlock>
+
+                                 <StackPanel x:Uid="StackPanel_17" Grid.Column="1" Grid.Row="3" Margin="5,4,0,0" Orientation="Horizontal">
+                                        <TextBox  x:Uid="txtQuantity" ToolTip="Quantity of Pack Unit to Ship."   Name="txtQuantity" LostFocus="txtQuantity_LostFocus"
+                                 Width="150" HorizontalAlignment="Left"  Text="{Binding Path=ShippingQuantity, Mode=TwoWay, UpdateSourceTrigger=LostFocus, NotifyOnValidationError=True, ValidatesOnDataErrors=True, ValidatesOnExceptions=True, Converter={StaticResource forceReReadConverter}}" />
+
+                                        <TextBlock x:Uid="TextBlock_17" Margin="8,0,0,0"  Text="{Binding Path=CurQtyPending}" VerticalAlignment="Center" FontWeight="Bold"></TextBlock>
+                                     <TextBlock x:Uid="TextBlock_18" Margin="5,0,0,0"  Text="{Binding ElementName=cboUnit, Path=SelectedItem.Name}" VerticalAlignment="Center" FontWeight="Bold"></TextBlock>
+                                        <TextBlock x:Uid="TextBlock_19" Margin="3,0,0,0" Text="{StaticResource PENDING}" VerticalAlignment="Center"></TextBlock>
+                                 </StackPanel>
+                                
+
+                                <TextBlock x:Uid="TextBlock_20" Grid.Column="0" Grid.Row="4" Margin="0,4,0,0" HorizontalAlignment="Right" Visibility="{Binding  Path=ShowMultiPack}" Text="{StaticResource PACKAGE}" ></TextBlock>
+                                <ComboBox x:Uid="cboPackage" Width="150" HorizontalAlignment="Left" Grid.Column="1" 
+                                          ItemsSource="{Binding Path=OpenPackages}"  Visibility="{Binding  
+                                    Path=ShowMultiPack}" Grid.Row="4" Name="cboPackage"                                      
+                              DisplayMemberPath="PackDesc" SelectedValuePath="PackLabel.LabelID"  Margin="5,4,0,0"  VerticalAlignment="Top" />
+                                
+
+                                <TextBlock x:Uid="TextBlock_21" Grid.Column="0" Grid.Row="5" Margin="0,4,0,0" />
+                                <WrapPanel x:Uid="WrapPanel_2" Grid.Column="1" Grid.Row="5" Width="270" Margin="0,3,0,0" HorizontalAlignment="Left">
+                                <TextBlock x:Uid="txtProductTrackMsg" Margin="2" x:Name="txtProductTrackMsg" Visibility="Collapsed" Text="{StaticResource ADI_TRAC_INF_SN_LOT_REQ}" >Aditional tracking information (S/N or Lot) is required.</TextBlock>
+                                <Button x:Uid="btnTrack" Height="30" Width="100" HorizontalAlignment="Right"  Visibility="Collapsed" Name="btnTrack" Margin="0,4,0,0" Click="btnTrack_Click" Content="{StaticResource ENTER_TRACK}" ></Button>
+                                <Button x:Uid="btnPick" Width="100" IsEnabled="{Binding Path=AllowReceive}" Height="30" HorizontalAlignment="Right" Name="btnPick" Margin="10,4,0,0" Click="btnShip_Click" FontWeight="Bold" Content="{StaticResource PICK}"></Button>
+                                </WrapPanel>
+                            </Grid>
+                                
+                            <!-- Stock List View -->
+                                <StackPanel x:Uid="lvBinStock" Orientation="Vertical" Name="lvBinStock" Margin="10,0,0,0"  Visibility="Collapsed">
+                                <TextBlock x:Uid="TextBlock_22" FontWeight="Bold" Foreground="Brown" Text="{StaticResource QTY_STO_BIN}" ></TextBlock>
+                                <ListView x:Uid="lsStock" ItemsSource="{Binding Path=ProductBinStock}" Margin="0,3,0,0" Name="lsStock"  MaxHeight="200" SelectionChanged="lsStock_SelectionChanged">
+                                    <ListView.View>
+                                        <GridView x:Uid="GridView_3">
+                                            <GridViewColumn x:Uid="GridViewColumn_5" Header="{StaticResource BIN}" DisplayMemberBinding="{Binding Path=Bin.BinCode}" Width="50"></GridViewColumn>
+                                            <GridViewColumn x:Uid="GridViewColumn_6" Header="{StaticResource UNIT}" DisplayMemberBinding="{Binding Path=Unit.Name}"></GridViewColumn>
+                                            <GridViewColumn x:Uid="GridViewColumn_7" Header="{StaticResource UNLABELED}" DisplayMemberBinding="{Binding Path=Stock}"></GridViewColumn>
+                                            <GridViewColumn x:Uid="GridViewColumn_8" Header="{StaticResource LABELED}" DisplayMemberBinding="{Binding Path=PackStock}"></GridViewColumn>
+                                        </GridView>
+                                    </ListView.View>
+                                </ListView>
+                                </StackPanel>
+                                <!-- Stock List View -->
+                                
+                            <!-- Fin Enter Manual -->
+                                
+                               
+                            </StackPanel>
+                                
+                        </odc:OdcExpander>
+                        <!-- End Ship Manual -->
+
+                        <!-- Ship by Label -->
+                            <odc:OdcExpander x:Uid="expLabel" Header="{StaticResource PICK_BY_BARCODE}" x:Name="expLabel" Margin="5,0,8,8" Background="WhiteSmoke" ShowEllipse="False" Expanded="expLabel_Expanded" Collapsed="expLabel_Collapsed">
+                            <!--<Expander x:Name="expLabel" ExpandDirection="Down" Header="Ship By Label" Expanded="expLabel_Expanded" Collapsed="expLabel_Collapsed">-->
+                      
+                                    <StackPanel x:Uid="StackPanel_18" Orientation="Vertical" HorizontalAlignment="Left" Margin="-3,-3,-3,0">
+
+                                <GroupBox x:Uid="GroupBox_1" Header="{StaticResource ENT_BAR_PICK}" Margin="3" Width="Auto" HorizontalAlignment="Left">
+
+                                    <TextBox x:Uid="txtScanLabel" Width="150" HorizontalAlignment="Left" ToolTip="{StaticResource SCA_WRI_LAB_BAR}" Height="22" Margin="0,5,0,5" Name="txtScanLabel" LostFocus="txtScanLabel_LostFocus" />
+
+                                </GroupBox>
+
+
+
+                                <!-- Pending Label List -->
+                                        <TextBlock x:Uid="TextBlock_23" Margin="0,3,0,0" Text="{StaticResource OR_SEL_LAB_AVA_DOC}" ></TextBlock>
+                                <StackPanel x:Uid="StackPanel_19" Orientation="Horizontal">
+                                    <ListView x:Uid="lvLabelsAvailable" x:Name="lvLabelsAvailable" ItemsSource="{Binding Path=LabelsAvailable}"
+                                       Height="Auto" MaxHeight="130" Margin="0,3,0,5" HorizontalAlignment="Left" Width="Auto"  GridViewColumnHeader.Click="lvLabelsAvailable_Click">
+                                            <ListView.View>
+                                                <GridView x:Uid="GridView_4">
+                                                    <GridViewColumn x:Uid="GridViewColumn_9" Header="{StaticResource LABEL}" Width="120" DisplayMemberBinding="{Binding Path=Barcode}"></GridViewColumn>
+                                                    <GridViewColumn x:Uid="GridViewColumn_10" Header="{StaticResource PRODUCT}" Width="100" DisplayMemberBinding="{Binding Path=Product.ProductCode}"></GridViewColumn>
+                                                    <GridViewColumn x:Uid="GridViewColumn_11" Header="{StaticResource UNIT}" Width="60" DisplayMemberBinding="{Binding Path=Unit.Name}"></GridViewColumn>
+                                                    <GridViewColumn x:Uid="GridViewColumn_12" Header="{StaticResource QTY}" Width="60" DisplayMemberBinding="{Binding Path=CurrQty}"></GridViewColumn>
+                                                    <GridViewColumn DisplayMemberBinding="{Binding Path=Label.LotCode}"></GridViewColumn>
+                                                    <GridViewColumn DisplayMemberBinding="{Binding Path=label.SerialNumber}"></GridViewColumn>
+                                                </GridView>
+                                            </ListView.View>
+                                        </ListView>
+                                        <Button x:Uid="btnShipLabel" Height="30" Margin="10,0,0,0" VerticalAlignment="Top" FontWeight="Bold" Width="120" HorizontalAlignment="Right" Click="btnShipLabel_Click" x:Name="btnShipLabel" Content="{StaticResource PICK_SELECTED}" ></Button>
+                                    </StackPanel>    
+                                    <!-- Pending Label List -->
+
+                                    </StackPanel>
+
+                        </odc:OdcExpander>
+
+
+
+                        <!-- CURRENT DOCUMENT BALANCE -->
+                        <StackPanel x:Uid="StackPanel_20" Orientation="Vertical">
+                            
+                            
+                            <StackPanel x:Uid="StackPanel_21">
+                            <TextBlock x:Uid="TextBlock_24" Margin="8,3,0,0" FontWeight="Bold" Text="{StaticResource PIC_BAL_SHO_QUA_PEN}" ></TextBlock>
+                        <xcdg:DataGridControl  x:Uid="dgDocumentBalance" Margin="5,2,8,8" x:Name="dgDocumentBalance"  ItemsSource="{Binding Path=DocumentBalance }" 
+                                     HorizontalAlignment="Stretch" MaxHeight="150"   AutoCreateColumns="False" ReadOnly="True"  Grid.Column="0" Grid.Row="0">
+                            <xcdg:DataGridControl.Resources>
+                                <Style x:Uid="Style_6" x:Key="{x:Type xcdg:ScrollTip}" TargetType="{x:Type xcdg:ScrollTip}">
+                                    <Setter x:Uid="Setter_11" Property="HorizontalAlignment" Value="Right" />
+                                    <Setter x:Uid="Setter_12" Property="VerticalAlignment" Value="Bottom" />
+                                </Style>
+                            </xcdg:DataGridControl.Resources>
+                            <xcdg:DataGridControl.Columns>
+                                <!--<xcdg:Column FieldName="Node.Name" IsMainColumn="True" Title="Node" Width="60" />-->
+                                <xcdg:Column x:Uid="xcdg:Column_25" FieldName="Product.ProductCode" Title="{StaticResource PRODUCT}" Width="100" />
+                                <xcdg:Column x:Uid="xcdg:Column_26" FieldName="Product.Description" Title="{StaticResource DESCRIPTION}"  Width="178" TextWrapping="Wrap" />
+                                <xcdg:Column x:Uid="xcdg:Column_27" FieldName="Unit.Name" Title="{StaticResource UOM}" Width="60" />
+                                <xcdg:Column x:Uid="xcdg:Column_28" FieldName="Quantity" Title="{StaticResource ORDERED}" Width="60" />
+                                <xcdg:Column x:Uid="xcdg:Column_29" FieldName="QtyProcessed" Title="{StaticResource PICKED}" Width="60" />
+                                <xcdg:Column x:Uid="xcdg:Column_30" FieldName="QtyPending" Title="{StaticResource PENDING}" Width="60" />
+                            </xcdg:DataGridControl.Columns>
+                            <xcdg:DataGridControl.View>
+                                <xcdg:TableView x:Uid="xcdg:TableView_4" UseDefaultHeadersFooters="False" ShowScrollTip="False" VerticalGridLineBrush="Beige" ShowRowSelectorPane="False" ShowFixedColumnSplitter="False">
+                                    <xcdg:TableView.Theme>
+                                        <xcdg:Office2007BlackTheme x:Uid="xcdg:Office2007BlackTheme_3"/>
+                                    </xcdg:TableView.Theme>
+                                    <xcdg:TableView.FixedHeaders>
+                                        <!--<DataTemplate>
+                                            <xcdg:HierarchicalGroupByControl xcdg:TableView.CanScrollHorizontally="False" />
+                                        </DataTemplate>-->
+                                        <DataTemplate x:Uid="DataTemplate_6">
+                                            <xcdg:ColumnManagerRow x:Uid="xcdg:ColumnManagerRow_4" />
+                                        </DataTemplate>
+                                    </xcdg:TableView.FixedHeaders>
+                                </xcdg:TableView>
+                            </xcdg:DataGridControl.View>
+                        </xcdg:DataGridControl>
+                    </StackPanel>
+
+                        <!-- END CURRENT DOCUMENT BALANCE  -->
+                            
+                            <Border  x:Uid="Border_4" HorizontalAlignment="Left"
+                                Style="{DynamicResource UserControlFormInnerBorder}" Visibility="Hidden" >
+                                <Grid x:Uid="Grid_6">
+                                    <Button x:Uid="btnShipmentAtOnce" Width="210"  FontWeight="Bold" Height="30" Margin="0,0,0,0"   ToolTip="{StaticResource PIC_ENT_PEN_DOC_BIN_LOC_ESP}"
+                                            x:Name="btnShipmentAtOnce"  Click="btnShipmentAtOnce_Click" IsEnabled="False" Content="{StaticResource PICK_ALL_PEN_CUR_BIN}" ></Button>
+                                </Grid>
+                            </Border>
+
+                            
+                  
+
+
+
+
+                        </StackPanel>   
+
+                    </StackPanel>
+
+                    <!-- END RECEIVING BOX  -->
+                    
+                    
+                    
+                </TabItem>
+                
+                <TabItem x:Uid="tbItemTracking" Header="{StaticResource PRODUCT_TRACKING}"  x:Name="tbItemTracking" Visibility="Hidden">
+
+                    <StackPanel x:Uid="StackPanel_22">
+
+                        <ItemsControl x:Uid="itmTrackOpts" Name="itmTrackOpts" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="5" />
+
+                        <!--<Button x:Uid="btnTrackShip" Height="30" FontWeight="Bold" Width="100" HorizontalAlignment="Left"
+                                    Margin="5,0,0,7" x:Name="btnTrackShip" Click="btnTrackShip_Click">Pick !</Button>-->
+                    </StackPanel>
+
+                </TabItem>
+
+
+                <!-- Posting -->
+                <TabItem x:Uid="tbPosting" Header="{StaticResource ORDER_SHIPMENTS}"  x:Name="tbPosting" Visibility="Collapsed">
+
+                    <Grid  x:Uid="Grid_7" HorizontalAlignment="Left" VerticalAlignment="Top" Width="Auto" Margin="2">
+
+
+
+                        <StackPanel x:Uid="StackPanel_23" Orientation="Horizontal" Margin="5,1,2,4">
+
+                            <StackPanel x:Uid="StackPanel_24" Margin="0,2,6,0">
+
+                                <StackPanel x:Uid="StackPanel_25" Orientation="Horizontal" HorizontalAlignment="Right">
+
+
+                                    <Image x:Uid="imgPack" Margin="4" HorizontalAlignment="Right" Name="imgPack" Width="21" Source="/WpfFront;component/Images/openbox.png"
+                                           ToolTip="View Packing Labels" MouseDown="imgPack_MouseDown" ></Image>
+
+                                    <Image x:Uid="imgTicket" Margin="4" HorizontalAlignment="Right" Name="imgTicket" Width="18" Source="/WpfFront;component/Images/invoice.jpg" ToolTip="View Packing List" 
+                                           MouseDown="imgTicket_MouseDown" ></Image>
+
+                                    <Image x:Uid="imgRefresh" Margin="4" HorizontalAlignment="Right" Width="17" Name="imgRefresh" MouseDown="imgRefresh_MouseDown"
+                       Source="/WpfFront;component/Images/refresh.png"  ToolTip="Refresh List" />
+
+
+                                </StackPanel>
+
+                                <ListView x:Uid="lvInvoice" ItemsSource="{Binding Path=Shipments}"  Name="lvInvoice" MaxHeight="120" SelectionChanged="lvInvoice_SelectionChanged" >
+                                    <ListView.View>
+                                        <GridView x:Uid="GridView_5">
+                                            <GridViewColumn x:Uid="GridViewColumn_13" Header="{StaticResource SHIPMENT}" DisplayMemberBinding="{Binding Path=DocNumber}" Width="70"></GridViewColumn>
+                                            <GridViewColumn x:Uid="GridViewColumn_14" Header="{StaticResource STATUS}" DisplayMemberBinding="{Binding Path=DocStatus.Name}" Width="70"></GridViewColumn>
+                                            <GridViewColumn x:Uid="GridViewColumn_15" Header="{StaticResource DATE}" DisplayMemberBinding="{Binding Path=Date1}" Width="72"></GridViewColumn>
+                                            <!--<GridViewColumn Header="User" DisplayMemberBinding="{Binding Path=CreatedBy}" Width="50"></GridViewColumn>-->
+                                        </GridView>
+                                    </ListView.View>
+                                </ListView>
+
+                                <Border x:Uid="stkShipmentData" Margin="0,6,0,0" Style="{DynamicResource UserControlFormInnerBorder}" DockPanel.Dock="Bottom" 
+                    HorizontalAlignment="Stretch"  VerticalAlignment="Stretch" Name="stkShipmentData" Visibility="Collapsed" >
+
+                                    <StackPanel x:Uid="StackPanel_26" Orientation="Vertical" >
+                                        <TextBlock x:Uid="TextBlock_25" FontWeight="Bold" Text="{StaticResource CURRENT_SHIPMENT}"></TextBlock>
+                                        <ListView x:Uid="ListView_1" ItemsSource="{Binding ShipmentData}" MaxHeight="220" MaxWidth="250" Width="Auto" 
+                                                  SelectionMode="Single" ScrollViewer.HorizontalScrollBarVisibility="Disabled" HorizontalAlignment="Left">
+                                            <ListView.View>
+                                                <GridView x:Uid="GridView_6" ColumnHeaderContainerStyle="{DynamicResource CustomHeaderStyle}">
+                                                    <GridViewColumn x:Uid="GridViewColumn_16" Header="{StaticResource KEY}" DisplayMemberBinding="{Binding Path=DataKey}"></GridViewColumn>
+                                                    <!--<GridViewColumn Header="Value" DisplayMemberBinding="{Binding Path=DataValue}" ></GridViewColumn>-->
+
+                                                    <GridViewColumn x:Uid="GridViewColumn_17" Header="{StaticResource VALUE}">
+                                                        <GridViewColumn.CellTemplate>
+                                                            <DataTemplate x:Uid="DataTemplate_7">
+                                                                <TextBlock x:Uid="TextBlock_26" Text="{Binding Path=DataValue}" TextWrapping="Wrap" />
+                                                            </DataTemplate>
+                                                        </GridViewColumn.CellTemplate>
+                                                    </GridViewColumn>
+
+                                                </GridView>
+                                            </ListView.View>
+
+                                            <!--<ListView.ItemTemplate>
+                                                <DataTemplate>
+                                                    <StackPanel Orientation="Horizontal">
+                                                        <TextBlock Text="{Binding Path=DataKey}" VerticalAlignment="Center" />
+                                                        <TextBlock Text="{Binding Path=DataValue}" TextWrapping="Wrap" VerticalAlignment="Center" />
+                                                    </StackPanel>
+                                                </DataTemplate>
+                                            </ListView.ItemTemplate>-->
+
+                                        </ListView>
+
+                                        
+                                        <StackPanel x:Uid="btnReversePosted" Margin="0,4,0,0" Name="btnReversePosted" Visibility="Collapsed">
+                                            <TextBlock x:Uid="TextBlock_27" HorizontalAlignment="Left" Foreground="Brown" FontWeight="Bold" Width="220" TextWrapping="Wrap" Text="{StaticResource CAN_SHIP_PLE_SEL_DEF_SYS}" >
+                                            </TextBlock>
+
+                                            <StackPanel x:Uid="StackPanel_27" Orientation="Vertical" Margin="0,4,0,0">
+                                                <uc:BinLocation  x:Uid="binRestock" x:Name="binRestock" />
+
+                                                <Button x:Uid="Button_1" HorizontalAlignment="Left" Width="130" Margin="0,5,0,0" FontWeight="Bold" MinHeight="30" 
+                                            Click="btnReversePosted_Click" Content="{StaticResource CANCEL_THIS_SHIP}" ></Button>
+
+                                            </StackPanel>
+                                        </StackPanel>
+                                        
+ 
+
+                                    </StackPanel>
+                                </Border>
+
+                            </StackPanel>
+
+                            <StackPanel x:Uid="dgShipmentLines" Margin="4,2,0,0" Visibility="Collapsed" x:Name="dgShipmentLines">
+
+                                <StackPanel Orientation="Horizontal" >
+                                    
+                                        <Button VerticalAlignment="Top" Height="30" Width="90" Margin="0,0,10,0" FontWeight="Bold" Name="btnFullfil" Click="btnFullfil_Click" Content="{StaticResource FULLFIL_ORDER}" ></Button>
+                                    
+                                    <StackPanel>
+                                        <TextBlock x:Uid="TextBlock_28" Text="{StaticResource COMM_THIS_SHIP}" FontWeight="Bold" TextWrapping="Wrap" MaxWidth="350" HorizontalAlignment="Left"></TextBlock>
+                                        <TextBlock x:Uid="TextBlock_29" Margin="3,0,0,0" Text="{Binding PostedShipment.Comment}" TextWrapping="Wrap" MaxWidth="350" MaxHeight="120"  FontSize="12" HorizontalAlignment="Left"></TextBlock>
+                                    </StackPanel>
+                                </StackPanel>
+                                    
+                                <Separator x:Uid="Separator_2"/>
+
+                                <StackPanel Orientation="Horizontal">
+                                <TextBlock x:Uid="TextBlock_30" FontWeight="Bold" Margin="0,5,0,4" Text="{StaticResource SHIPMENT_LINES}"></TextBlock>
+                                <TextBlock Margin="10,5,0,4" Text="{StaticResource DOU_CLI_REM_QUA_SHIP}"></TextBlock>
+                                </StackPanel>
+                                    
+                                    <xcdg:DataGridControl   x:Uid="xcdg:DataGridControl_1" ItemsSource="{Binding Path=ShipmentLines}"
+                                HorizontalAlignment="Stretch" MouseDoubleClick="DataGridControl_MouseDoubleClick" AutoCreateColumns="False" ReadOnly="True" MaxHeight="250">
+                                    <xcdg:DataGridControl.Resources>
+                                        <Style x:Uid="Style_7" x:Key="{x:Type xcdg:ScrollTip}" TargetType="{x:Type xcdg:ScrollTip}">
+                                            <Setter x:Uid="Setter_13" Property="HorizontalAlignment" Value="Right" />
+                                            <Setter x:Uid="Setter_14" Property="VerticalAlignment" Value="Bottom" />
+                                        </Style>
+
+                         
+                                            <Style x:Uid="Style_8" TargetType="{x:Type xcdg:DataRow}">
+                                                <Style.Triggers>
+                                                    <DataTrigger x:Uid="DataTrigger_5" Binding="{Binding Path=Note}" Value="2">
+                                                        <Setter x:Uid="Setter_15" Property="Background" Value="#FCFE70"/>
+                                                    </DataTrigger>
+
+                                                </Style.Triggers>
+                                            </Style>
+               
+
+
+                                    </xcdg:DataGridControl.Resources>
+                                    <xcdg:DataGridControl.Columns>
+                                        <!--<xcdg:Column FieldName="LineNumber" IsMainColumn="True" Title="Line" Width="30" />-->
+                                        <!--<xcdg:Column FieldName="LineStatus.Name" Title="Status" Width="60" />-->
+                                        <xcdg:Column x:Uid="xcdg:Column_31" FieldName="LineNumber" Title="{StaticResource LINE}"  Width="40"/>
+                                        <xcdg:Column x:Uid="xcdg:Column_31" FieldName="Product.ProductCode" Title="{StaticResource PRODUCT}"  Width="110"/>
+                                        <xcdg:Column x:Uid="xcdg:Column_32" FieldName="Product.Description" Title="{StaticResource DESCRIPTION}" Width="150" TextWrapping="Wrap" />
+                                        <xcdg:Column x:Uid="xcdg:Column_33" FieldName="Unit.Name" Title="{StaticResource UOM}" Width="50" />
+                                        <xcdg:Column x:Uid="xcdg:Column_34" FieldName="Sign" Title="" Width="15" />
+                                        <xcdg:Column x:Uid="xcdg:Column_34" FieldName="Quantity" Title="{StaticResource QUANTITY}" Width="50" />
+                                        <xcdg:Column x:Uid="xcdg:Column_35" FieldName="KitNote" Title="" Width="70" />
+                                    </xcdg:DataGridControl.Columns>
+                                    <xcdg:DataGridControl.View>
+                                        <xcdg:TableView x:Uid="xcdg:TableView_5" UseDefaultHeadersFooters="False" ShowScrollTip="False" VerticalGridLineBrush="Beige" ShowRowSelectorPane="False" ShowFixedColumnSplitter="False">
+                                            <xcdg:TableView.Theme>
+                                                <xcdg:Office2007BlackTheme x:Uid="xcdg:Office2007BlackTheme_4"/>
+                                            </xcdg:TableView.Theme>
+                                            <xcdg:TableView.FixedHeaders>
+                                                <!--<DataTemplate>
+                                                        <xcdg:HierarchicalGroupByControl xcdg:TableView.CanScrollHorizontally="False" />
+                                                    </DataTemplate>-->
+                                                <DataTemplate x:Uid="DataTemplate_8">
+                                                    <xcdg:ColumnManagerRow x:Uid="xcdg:ColumnManagerRow_5" />
+                                                </DataTemplate>
+                                            </xcdg:TableView.FixedHeaders>
+                                        </xcdg:TableView>
+                                    </xcdg:DataGridControl.View>
+                                </xcdg:DataGridControl>
+
+                                <TabControl Margin="0,8,0,0" SelectionChanged="TabControl_SelectionChanged" Name="tabPack" >
+                                    <TabItem Header="{StaticResource PACKAGES}" Selector.IsSelected="True">
+                                        <StackPanel Margin="3">
+                                            <StackPanel x:Uid="StackPanel_31" Orientation="Horizontal" Margin="0,0,0,4">
+                                                <TextBlock x:Uid="TextBlock_31" FontWeight="Bold" Text="{StaticResource PACKAGES_LIST}" ></TextBlock>
+                                                <Image x:Uid="imgPackL" Margin="5,0,0,0" VerticalAlignment="Center" HorizontalAlignment="Right" Width="17" Name="imgPackL" 
+                                       MouseDown="imgPackL_MouseDown" Source="/WpfFront;component/Images/refresh.png" ToolTip="Refresh Package List" />
+                                            </StackPanel>
+
+                                            <ListView  x:Uid="lvPacks" ItemsSource="{Binding Path=DocPackages}" MaxHeight="160" Name="lvPacks" >
+                                                <ListView.View>
+                                                    <GridView x:Uid="GridView_7">
+                                                        <!--<GridViewColumn x:Uid="GridViewColumn_18" Header="{StaticResource SEQ}" DisplayMemberBinding="{Binding Path=Sequence}" Width="35"></GridViewColumn>-->
+                                                        <GridViewColumn x:Uid="GridViewColumn_18" Header="{StaticResource TYPE}" DisplayMemberBinding="{Binding Path=PackageType}" Width="35"></GridViewColumn>
+                                                        <GridViewColumn x:Uid="GridViewColumn_19" Header="{StaticResource BARCODE}" DisplayMemberBinding="{Binding Path=PackLabel.LabelCode}" Width="60"></GridViewColumn>
+
+                                                        <GridViewColumn  x:Uid="GridViewColumn_20" Header="{StaticResource WEIGHT}" Width="68">
+                                                            <GridViewColumn.CellTemplate>
+                                                                <DataTemplate x:Uid="DataTemplate_9">
+                                                                    <Grid x:Uid="Grid_8" HorizontalAlignment="Center">
+                                                                        <TextBox x:Uid="TextBox_2" Width="55" Text="{Binding Path=Weight, Mode=TwoWay, UpdateSourceTrigger=LostFocus, NotifyOnValidationError=True, ValidatesOnDataErrors=True, ValidatesOnExceptions=True, Converter={StaticResource forceReReadConverter}}"/>
+                                                                    </Grid>
+                                                                </DataTemplate>
+                                                            </GridViewColumn.CellTemplate>
+                                                        </GridViewColumn>
+
+
+                                                        <GridViewColumn x:Uid="GridViewColumn_21" Header="{StaticResource DIMENSION}" Width="75">
+                                                            <GridViewColumn.CellTemplate>
+                                                                <DataTemplate x:Uid="DataTemplate_10">
+                                                                    <Grid x:Uid="Grid_9" HorizontalAlignment="Center">
+                                                                        <TextBox x:Uid="TextBox_3" Width="63" Text="{Binding Path=Dimension, Mode=TwoWay, UpdateSourceTrigger=LostFocus, NotifyOnValidationError=True, ValidatesOnDataErrors=True, ValidatesOnExceptions=True, Converter={StaticResource forceReReadConverter}}"/>
+                                                                    </Grid>
+                                                                </DataTemplate>
+                                                            </GridViewColumn.CellTemplate>
+                                                        </GridViewColumn>
+
+
+                                                        <GridViewColumn x:Uid="GridViewColumn_22" Header="{StaticResource PIECES}" Width="68">
+                                                            <GridViewColumn.CellTemplate>
+                                                                <DataTemplate x:Uid="DataTemplate_11" >
+                                                                    <Grid x:Uid="Grid_10" HorizontalAlignment="Center">
+                                                                        <TextBox x:Uid="TextBox_4" Width="55" Text="{Binding Path=Pieces, Mode=TwoWay, UpdateSourceTrigger=LostFocus, NotifyOnValidationError=True, ValidatesOnDataErrors=True, ValidatesOnExceptions=True, Converter={StaticResource forceReReadConverter}}"/>
+                                                                    </Grid>
+                                                                </DataTemplate>
+                                                            </GridViewColumn.CellTemplate>
+                                                        </GridViewColumn>
+
+
+                                                        <!--<GridViewColumn Header="# Pieces" DisplayMemberBinding="{Binding Path=Pieces}" Width="50"></GridViewColumn>-->
+                                                        <GridViewColumn x:Uid="GridViewColumn_23" Header="{StaticResource PICKER}" DisplayMemberBinding="{Binding Path=Picker.UserName}" Width="80"></GridViewColumn>
+                                                        <GridViewColumn x:Uid="GridViewColumn_24" Header="{StaticResource PACK_DATE}" DisplayMemberBinding="{Binding Path=EndTime}" Width="100"></GridViewColumn>
+                                                    </GridView>
+                                                </ListView.View>
+                                            </ListView>
+                                            
+
+
+                                            <TextBlock x:Uid="TextBlock_32" Margin="0,8,0,0" FontWeight="Bold" Foreground="Brown" Text="{StaticResource CHA_PACK_WEI_DIM_EDI_GRI}"></TextBlock>
+
+                                            <StackPanel x:Uid="StackPanel_28" Margin="0,3,0,0" Orientation="Vertical" >
+
+                                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
+
+                                                    <Button x:Uid="updPack" Content="{StaticResource UPDATE_CHANGES}" Width="110" FontWeight="Bold" Height="30" Name="updPack" Click="updPack_Click" />
+
+                                                    <Button x:Uid="prPreview" HorizontalAlignment="Left" Name="prPreview" MinHeight="30" 
+                                            Margin="5,0,0,0" Click="prPrint_Click">
+                                                        <StackPanel x:Uid="StackPanel_29" Orientation="Horizontal" >
+                                                            <Image x:Uid="Image_3" Margin="5,0,0,0"  Width="16" Source="/WpfFront;component/Images/label.jpg"></Image>
+                                                            <TextBlock x:Uid="TextBlock_33" Margin="5" Text="{StaticResource PRINT_LABELS}">
+                                                            </TextBlock>
+                                                        </StackPanel>
+                                                    </Button>
+
+
+                                                    <Button x:Uid="btnAdmPacks" HorizontalAlignment="Left" Name="btnAdmPacks" MinHeight="30" 
+                                            Margin="5,0,0,0" Click="btnAdmPacks_Click">
+                                                        <StackPanel x:Uid="StackPanel_30" Orientation="Horizontal" >
+                                                            <Image x:Uid="Image_4" Margin="5,0,0,0"  Width="23" Source="/WpfFront;component/Images/openbox.png"></Image>
+                                                            <TextBlock x:Uid="TextBlock_34" Margin="5" Text="{StaticResource REORDER_PACKAGES}" >
+                                                            </TextBlock>
+                                                        </StackPanel>
+                                                    </Button>
+
+                                                </StackPanel>
+
+
+                                                <StackPanel Orientation="Horizontal" Margin="0,8,0,0">
+
+                                                    <Button x:Uid="btnPS" HorizontalAlignment="Left" Name="btnPS" MinHeight="30" Width="118"
+                                            Margin="0,0,0,0" Click="btnPS_Click">
+                                                        <StackPanel x:Uid="StackPanel_32" Orientation="Horizontal">
+                                                            <Image x:Uid="Image_5" Margin="2,0,0,0"  Width="18" Source="/WpfFront;component/Images/invoice.jpg"></Image>
+                                                            <TextBlock x:Uid="TextBlock_35" Margin="5" Text="{StaticResource VIEW_PACKING_SLIP}">
+                                                            </TextBlock>
+
+                                                        </StackPanel>
+                                                    </Button>
+
+                                                    <uc:DirectPrint x:Name="ucDirectShip" Margin="5,0,0,0" Loaded="ucDirectShip_Loaded" />
+
+                                                </StackPanel>
+
+
+                                            </StackPanel>
+
+                                        </StackPanel>
+                                    </TabItem>
+                                    
+                                    <TabItem Header="{StaticResource SHIPMENT_DOCUMENTS}">
+                                        <uc:ShowProcessFile x:Name="ucShowFiles" Margin="5" />                                                                                
+                                    </TabItem>
+                                    
+                                </TabControl>
+                                
+                            </StackPanel>
+
+                        </StackPanel>
+
+
+
+                    </Grid>
+
+                </TabItem>
+                                              
+
+            </TabControl>
+
+
+            <!-- popup sales order details & packages -->
+            <Popup x:Uid="popup1" Name="popup1" Width="Auto" Height="Auto" AllowsTransparency="True"                    
+                   Placement="Center">
+                <uc:PopUpShell x:Uid="ucRecBalance" x:Name="ucRecBalance" />
+            </Popup>
+            <!-- popup -->
+
+
+            <!-- popup sales order details & packages V2 -->
+            <Popup x:Uid="popup2" Name="popup2" Width="Auto" Height="Auto" AllowsTransparency="True"                    
+                   Placement="Center">
+
+                <Border  x:Uid="Border_1" Style="{DynamicResource UserControlFormInnerBorder}" DockPanel.Dock="Bottom" 
+               Background="{DynamicResource WBg}"      
+                 HorizontalAlignment="Stretch"  VerticalAlignment="Stretch" >
+
+                    <StackPanel>
+                        <uc:AdminPackagesV2 x:Name="ucAdminPkg" />
+
+                        <Button HorizontalAlignment="Center" Click="Button_Click" Margin="5">Close</Button>
+                    </StackPanel>
+
+                </Border>
+            </Popup>
+            <!-- popup -->
+
+            <Popup x:Uid="popup3" Name="popup3" Width="Auto" Height="Auto" AllowsTransparency="True"                    
+                   Placement="Center">
+
+                <uc:AdminDocumentLine x:Name="ucDocLine"  VerticalAlignment="Top" />
+
+            </Popup>
+
+        </DockPanel>
+    </AdornerDecorator>
+</WMCore:UserControlBase>

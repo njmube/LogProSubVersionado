@@ -1,0 +1,512 @@
+﻿<WMCore:UserControlBase x:Uid="ShippingModule" x:Class="WpfFront.Views.ShipperMngrView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:xcdg="http://schemas.xceed.com/wpf/xaml/datagrid"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:odc="http://schemas.odyssey.com/wpf"
+    HorizontalAlignment="Stretch" Margin="0"
+    VerticalAlignment="Stretch" Height="Auto"
+    xmlns:WMCore="clr-namespace:Core.WPF;assembly=Core"  
+    xmlns:toolkit="http://schemas.microsoft.com/wpf/2008/toolkit"
+    xmlns:uc="clr-namespace:WpfFront.Common.UserControls"
+    xmlns:converters="clr-namespace:WpfFront.Common"                        
+    x:Name="ShippingModule">
+    
+    <WMCore:UserControlBase.Resources>
+        
+        <xcdg:DataGridCollectionViewSource x:Key="DocumentData" Source="{Binding Path=OrdersData}" />
+
+        <converters:ConverterObj2Visibility x:Key="Obj2Vis" />
+        
+        <xcdg:IndexToOddConverter x:Key="rowIndexConverter" />
+        <Style x:Key="alternatingDataRowStyle" TargetType="{x:Type xcdg:DataRow}">
+
+            <Style.Triggers>
+
+                <DataTrigger Binding="{Binding RelativeSource={RelativeSource Self}, 
+                    Path=(xcdg:DataGridVirtualizingPanel.ItemIndex),
+                    Converter={StaticResource rowIndexConverter}}" Value="True">
+                    <Setter Property="Background" Value="#fff5f5f5"/>
+                </DataTrigger>
+
+            </Style.Triggers>
+
+        </Style>
+
+        <DataTemplate x:Key="HeaderTemplateArrowUp">
+            <DockPanel x:Uid="DockPanel_1">
+                <TextBlock x:Uid="TextBlock_5" HorizontalAlignment="Center" Text="{Binding}"/>
+                <Path x:Uid="arrow" x:Name="arrow"
+           StrokeThickness = "1"					  
+           Fill            = "gray"
+           Data            = "M 5,10 L 15,10 L 10,5 L 5,10"/>
+            </DockPanel>
+        </DataTemplate>
+
+        <DataTemplate  x:Key="HeaderTemplateArrowDown">
+            <DockPanel x:Uid="DockPanel_2">
+                <TextBlock x:Uid="TextBlock_6" HorizontalAlignment="Center" Text="{Binding }"/>
+                <Path x:Uid="Path_1" x:Name="arrow"
+              StrokeThickness = "1"					  
+              Fill            = "gray"
+              Data            = "M 5,5 L 10,10 L 15,5 L 5,5"/>
+            </DockPanel>
+        </DataTemplate>
+
+
+            <!--<Style TargetType="{x:Type ListViewItem}">
+                <Style.Triggers>
+
+                    <DataTrigger Binding="{Binding Path=QtyInvoiced}"  Value="0">
+                        <Setter Property="Background" Value="#FCFE70"/>
+                    </DataTrigger>
+
+                </Style.Triggers>
+            </Style>-->
+
+
+    </WMCore:UserControlBase.Resources>
+    
+        
+    <AdornerDecorator x:Uid="AdornerDecorator_1">
+
+        <DockPanel x:Uid="DockPanel_1" Background="{DynamicResource WBg}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+            
+            <DockPanel.Resources>
+                <WMCore:ForceReReadConverter x:Uid="WMCore:ForceReReadConverter_1" x:Key="forceReReadConverter" />
+                <WMCore:FormattingConverter x:Uid="WMCore:FormattingConverter_1" x:Key="formattingConverter" />
+                <WMCore:FormNotificationErrorMessageConverter x:Uid="WMCore:FormNotificationErrorMessageConverter_1" x:Key="formNotificationErrorMessageConverter" />
+                <WMCore:NullableIntegerFormatConverter x:Uid="WMCore:NullableIntegerFormatConverter_1" x:Key="nullableIntegerFormatConverter" />
+                <converters:ConverterNegation x:Key="ObjNeg"/>
+            </DockPanel.Resources>
+
+
+
+            <StackPanel  DockPanel.Dock="Top" Orientation="Horizontal" HorizontalAlignment="Left">
+
+                <TextBlock x:Uid="txtTitle" VerticalAlignment="Center" Name="txtTitle" Margin="20,3,65,2" FontSize="14" FontWeight="Bold" HorizontalAlignment="Center" TextAlignment="Center">Sales Order Manager</TextBlock>
+
+
+                <StackPanel x:Uid="StackPanel_3" Orientation="Horizontal">
+                    
+                    <Image  Margin="0,4,0,0" VerticalAlignment="Center" Width="23" Name="imgDocs" MouseDown="imgDocs_MouseDown"
+                       Source="/WpfFront;component/Images/Icons/48x48/LastDocs.png"  ToolTip="View Lastest Merged Orders" />
+                        
+                        <TextBlock x:Uid="TextBlock_1" Margin="14,4,5,0" VerticalAlignment="Center">Select a Customer</TextBlock>
+                        
+                        <ComboBox  Margin="3,4,5,0" ItemsSource="{Binding Path=CustomerList}"  FontSize="12"
+                                                  DisplayMemberPath="DataValue" SelectionChanged="cboAccount_SelectionChanged" Width="250" Name="cboAccount" />
+
+
+                    <CheckBox VerticalAlignment="Center" Margin="5,0,0,0" FontWeight="Bold" Name="filter" Checked="filter_Checked" 
+                              Unchecked="filter_Unchecked">Show filtered by order</CheckBox>
+
+
+                    <Image  Margin="13,4,0,0" VerticalAlignment="Center" Width="23" Name="imgRfr" MouseDown="imgRfr_MouseDown"
+                       Source="/WpfFront;component/Images/Icons/Cross.png"  ToolTip="Refresh Records" />
+
+
+                </StackPanel>
+                                                
+            </StackPanel>                     
+
+            <Separator DockPanel.Dock="Top" Margin="0,4,0,0" />
+            
+
+            <StackPanel Orientation="Horizontal">
+                
+                <!-- UC LIST -->
+                <uc:DocumentList Margin="0,6,0,0" x:Uid="ucDocList" 
+                                 x:Name="ucDocList" VerticalAlignment="Top" AllowHide="True" />
+                <!-- UC List -->
+
+                <TabControl x:Uid="tabMenu" Margin="8,9,5,3" Name="tabStep" DockPanel.Dock="Top" TabStripPlacement="Top" 
+                        Style="{DynamicResource TabControlStyle1}"  HorizontalAlignment="Stretch" Visibility="Hidden"
+                        VerticalAlignment="Stretch" SelectionChanged="tabStep_SelectionChanged" >
+
+                    <TabItem x:Uid="TabItem_1" Header="STEP 1: Select Documents or Line Items" >
+
+                        <StackPanel Margin="5">
+
+                            <StackPanel Orientation="Horizontal" Margin="0,0,0,5">
+                                <ComboBox x:Uid="cboToDo" Margin="0,0,0,0" Width="350" HorizontalAlignment="Left" VerticalAlignment="Center" Name="cboToDo">
+                                    <ComboBoxItem x:Uid="ComboBoxItem_1" Selector.IsSelected="True">BACKORDER: By default send override quantities to Backorder</ComboBoxItem>
+                                    <ComboBoxItem x:Uid="ComboBoxItem_2">CANCEL: By default send override quantities to Cancel</ComboBoxItem>
+                                </ComboBox>
+
+                                <StackPanel Name="docName"  Margin="38,0,0,0" VerticalAlignment="Center" Orientation="Horizontal">
+                                    <TextBlock FontWeight="Bold" VerticalAlignment="Center"  Visibility="{Binding Path=DocNumber, Converter={StaticResource Obj2Vis}}">Current Document</TextBlock>
+                                    <TextBlock FontWeight="Bold" VerticalAlignment="Center" FontSize="13" Foreground="Brown" Margin="5,0,0,0" Text="{Binding Path=DocNumber}"></TextBlock>
+
+                                    <StackPanel Orientation="Horizontal" Margin="60,0,0,0">
+                                        <TextBlock VerticalAlignment="Center" FontWeight="Bold" Name="chkAll" MouseDown="chkAll_MouseDown">[x] Check All</TextBlock>
+                                        <TextBlock VerticalAlignment="Center" Margin="10,0,10,0">/</TextBlock>
+                                        <TextBlock VerticalAlignment="Center" FontWeight="Bold" Name="uncheckAll" MouseDown="uncheckAll_MouseDown" >[ ] Uncheck All</TextBlock>
+
+
+                                        <StackPanel Margin="90,0,0,0" Orientation="Horizontal" HorizontalAlignment="Left" Name="stkUpdLines" Visibility="Collapsed">
+                                            <Button FontWeight="Bold" Width="100" Name="btnAdd" Click="btnAdd_Click" Visibility="{Binding Path=DocNumber, Converter={StaticResource Obj2Vis}}">Add New Line</Button>
+                                            <Button Margin="10,0,0,0" Width="130" Name="btnRemove" Click="btnRemove_Click" >Remove Selected Line</Button>
+                                        </StackPanel>
+
+                                    </StackPanel>
+
+
+                                </StackPanel>
+
+                            </StackPanel>
+
+                            <StackPanel Orientation="Horizontal">
+                                <Grid>
+                                    <xcdg:DataGridControl Height="Auto" Name="dgDocument" Width="Auto" Visibility="Collapsed"
+                            ItemScrollingBehavior="Immediate" GotFocus="dgDocument_GotFocus"
+                            ItemsSource="{Binding Source={StaticResource DocumentData}}"
+                            VerticalAlignment="Top" FontSize="12" NavigationBehavior="RowOnly"
+                            AutoCreateDetailConfigurations="True" ItemContainerStyle="{StaticResource alternatingDataRowStyle}"
+                            SelectionMode="Single"                               
+                            AutoCreateColumns="False">
+
+
+                                        <xcdg:DataGridControl.Columns>
+
+                                            <xcdg:Column x:Uid="xcdg:Column_2" FieldName="DocNumber" IsMainColumn="True" Title="Order Number" Width="100"  ReadOnly="True"/>
+                                            <xcdg:Column x:Uid="xcdg:Column_4" FieldName="Date1" Title="Order Date"  Width="75" ReadOnly="True"/>
+                                            <xcdg:Column  FieldName="Date2" Title="Req. Ship"  Width="75"  ReadOnly="True" />
+                                            <xcdg:Column  FieldName="Hazmat" Title="Quality"  Width="60"  ReadOnly="True" />
+                                            <xcdg:Column  FieldName="LinkDocNumber" Title="PO Lnk"  Width="45"  ReadOnly="True" />
+
+                                            <xcdg:Column x:Uid="xcdg:Column_11" FieldName="CustPONumber" Title="Cust PO#" Width="90"  Visible="False" ReadOnly="True" />
+                                            <xcdg:Column x:Uid="xcdg:Column_10" FieldName="Reference" Title="Reference" Width="90"    ReadOnly="True" Visible="False"  />
+                                            <xcdg:Column x:Uid="xcdg:Column_6" FieldName="ShippingMethod.Name" Title="Ship Mthd" Width="90"  ReadOnly="True" Visible="False" />
+
+                                            <xcdg:Column x:Uid="xcdg:Column_9" FieldName="DocType.Name" Title="Type" Width="60" Visible="False"  ReadOnly="True" />
+                                            <xcdg:Column x:Uid="xcdg:Column_12" FieldName="Comment" Title="Comment" Width="70" Visible="False"  ReadOnly="True" TextWrapping="Wrap" />
+                                            <xcdg:Column FieldName="Document.Notes" Title="Notes" Width="100"  ReadOnly="True" TextWrapping="Wrap" Visible="False" />
+                                            <xcdg:Column x:Uid="xcdg:Column_13" FieldName="AssignedUsers" Title="Pickers" Width="70" Visible="False"  TextWrapping="Wrap" ReadOnly="True" />
+                                            <xcdg:Column FieldName="DocID" ReadOnly="True" Visible="False" />
+
+                                        </xcdg:DataGridControl.Columns>
+
+
+                                        <xcdg:DataGridControl.View>
+
+                                            <xcdg:TableView UseDefaultHeadersFooters="False" ShowRowSelectorPane="False">
+
+                                                <xcdg:TableView.FixedHeaders>
+
+                                                    <!--<DataTemplate>
+
+                                        <xcdg:HierarchicalGroupByControl xcdg:TableView.CanScrollHorizontally="False" AllowGroupingModification="False" />
+
+                                    </DataTemplate>-->
+
+                                                    <DataTemplate>
+
+                                                        <xcdg:ColumnManagerRow AllowColumnReorder="True" />
+
+                                                    </DataTemplate>
+
+                                                </xcdg:TableView.FixedHeaders>
+
+                                                <xcdg:TableView.Theme>
+
+                                                    <xcdg:Office2007BlueTheme />
+
+                                                </xcdg:TableView.Theme>
+
+                                            </xcdg:TableView>
+
+                                        </xcdg:DataGridControl.View>
+
+                                    </xcdg:DataGridControl>
+                                </Grid>
+
+
+                                <StackPanel Orientation="Vertical" Margin="6,0,0,0">
+
+                                    <ListView x:Uid="dgDetails"   Name="dgDetails" ItemsSource="{Binding Path=CurrentDetails}" 
+                                      ToolTip="Click over the column to Sort." MouseDoubleClick="dgDetails_MouseDoubleClick"  GridViewColumnHeader.Click="dgDetails_Click">
+
+
+                                        <ListView.View>
+                                            <GridView x:Uid="GridView_1" x:Name="gvLines">
+
+                                                <GridViewColumn  x:Uid="GridViewColumn_8" Header="" Width="25">
+                                                    <GridViewColumn.CellTemplate>
+                                                        <DataTemplate x:Uid="DataTemplate_4">
+                                                            <Grid x:Uid="Grid_3" HorizontalAlignment="Center">
+                                                                <CheckBox x:Uid="CheckBox_2" CommandParameter="{Binding Path=LineID}" IsChecked="{Binding Path=IsDebit}" Checked="CheckBox_Checked" Unchecked="CheckBox_Unchecked" />
+                                                            </Grid>
+                                                        </DataTemplate>
+                                                    </GridViewColumn.CellTemplate>
+                                                </GridViewColumn>
+
+                                                <GridViewColumn Header="Order No."  Width="110" DisplayMemberBinding="{Binding Path=Document.DocNumber}" />
+
+                                                <GridViewColumn x:Uid="GridViewColumn_1" Header="Product"  Width="90" DisplayMemberBinding="{Binding Path=Product.ProductCode}" />
+
+                                                <GridViewColumn  x:Uid="GridViewColumn_2" Header="LineDescription" Width="160">
+                                                    <GridViewColumn.CellTemplate>
+                                                        <DataTemplate x:Uid="DataTemplate_2">
+                                                            <Grid x:Uid="Grid_1" HorizontalAlignment="Center">
+                                                                <TextBlock x:Uid="TextBlock_4" TextWrapping="Wrap" Text="{Binding Path=LineDescription}"/>
+                                                            </Grid>
+                                                        </DataTemplate>
+                                                    </GridViewColumn.CellTemplate>
+                                                </GridViewColumn>
+
+
+                                                <GridViewColumn x:Uid="GridViewColumn_3" Header="UoM" Width="50" DisplayMemberBinding="{Binding Path=Unit.Name}" />
+                                                
+                                                <GridViewColumn x:Uid="GridViewColumn_4" Header="On Hand" Width="50" DisplayMemberBinding="{Binding Path=QtyOnHand}" />                                                
+                                                <GridViewColumn x:Uid="GridViewColumn_4" Header="Allocated" Width="50" DisplayMemberBinding="{Binding Path=QtyInvoiced}" />
+                                                
+                                                <GridViewColumn x:Uid="GridViewColumn_4" Header="Available" Width="50" DisplayMemberBinding="{Binding Path=QtyAvailable}" />                                                
+                                                <GridViewColumn x:Uid="GridViewColumn_5" Header="Order/Pend" Width="70" DisplayMemberBinding="{Binding Path=Quantity}" />
+
+                                                <GridViewColumn x:Uid="GridViewColumn_6" Header="To Allocate" Width="58" DisplayMemberBinding="{Binding Path=QtyAllocated}" />
+
+                                                <GridViewColumn  x:Uid="GridViewColumn_7" Header="*To Bckord" Width="65">
+                                                    <GridViewColumn.CellTemplate>
+                                                        <DataTemplate x:Uid="DataTemplate_3">
+                                                            <Grid  HorizontalAlignment="Center">
+                                                                <TextBox x:Name="qtyBO" Width="50" LostFocus="qtyBO_LostFocus" Tag="{Binding Path=LineID}"
+                                                                 Text="{Binding Path=QtyBackOrder, Mode=TwoWay, UpdateSourceTrigger=LostFocus, NotifyOnValidationError=True, ValidatesOnDataErrors=True, ValidatesOnExceptions=True, Converter={StaticResource forceReReadConverter}}"/>
+                                                            </Grid>
+                                                        </DataTemplate>
+                                                    </GridViewColumn.CellTemplate>
+                                                </GridViewColumn>
+
+
+                                                <GridViewColumn  x:Uid="GridViewColumn_7" Header="*To Cancel" Width="65">
+                                                    <GridViewColumn.CellTemplate>
+                                                        <DataTemplate x:Uid="DataTemplate_3">
+                                                            <Grid x:Uid="Grid_2" HorizontalAlignment="Center">
+                                                                <TextBox x:Name="qtyCan" Width="50" LostFocus="qtyCan_LostFocus"   Tag="{Binding Path=LineID}"
+                                                                 Text="{Binding Path=QtyCancel, Mode=TwoWay, UpdateSourceTrigger=LostFocus, NotifyOnValidationError=True, ValidatesOnDataErrors=True, ValidatesOnExceptions=True, Converter={StaticResource forceReReadConverter}}"/>
+                                                            </Grid>
+                                                        </DataTemplate>
+                                                    </GridViewColumn.CellTemplate>
+                                                </GridViewColumn>
+
+                                                <GridViewColumn x:Uid="GridViewColumn_9" Header="Diff" Width="30" DisplayMemberBinding="{Binding Path=Sequence}" />
+
+                                                <GridViewColumn x:Uid="GridViewColumn_9" Header="Req. Ship" Width="68" DisplayMemberBinding="{Binding Path=Date2}" />
+                                                <GridViewColumn x:Uid="GridViewColumn_9" Header=""  DisplayMemberBinding="{Binding Path=Product.Quality}" />
+                                                <GridViewColumn x:Uid="GridViewColumn_9" Header="PO Link" Width="90" DisplayMemberBinding="{Binding Path=LinkDocNumber}" />
+                                                <GridViewColumn  Header="" Width="90" DisplayMemberBinding="{Binding Path=BinAffected}" />
+
+                                            </GridView>
+                                        </ListView.View>
+                                    </ListView>
+
+                                </StackPanel>
+
+                            </StackPanel>
+
+
+                        </StackPanel>
+
+                    </TabItem>
+
+                    <TabItem  Header="STEP 2: Confirm Merge And Print Ticket" >
+
+                        <StackPanel Margin="7">
+
+                            <StackPanel Margin="0,0,0,7" Orientation="Horizontal">
+
+                                <StackPanel>
+                                    <TextBlock>DOB (Date of Board)</TextBlock>
+                                    <toolkit:DatePicker FirstDayOfWeek="Monday" Height="25" SelectedDateChanged="dtmDOB_SelectedDateChanged" 
+                                     Margin="0,3,0,0"  x:Name="dtmDOB" Width="160"  />
+                                </StackPanel>
+
+
+                                <StackPanel Orientation="Horizontal" Name="stkDOBData" Visibility="Collapsed" >
+
+                                    <StackPanel>
+                                        <TextBlock Margin="3,0,0,0">EXIT IPS >> Port >> Voyage</TextBlock>
+                                        <StackPanel Orientation="Vertical">
+
+                                            <ComboBox  Margin="3,3,0,0"  FontSize="12" ItemsSource="{Binding Path=Exit_IPS}"
+                                                  DisplayMemberPath="DataValue"  Name="cboExtIPS" SelectionChanged="cboExtIPS_SelectionChanged" />
+
+                                            
+                                            <StackPanel Orientation="Horizontal">
+                                            <toolkit:DatePicker FirstDayOfWeek="Monday" Height="25" 
+                                     Margin="3,3,0,0"  x:Name="dtmIPS" Width="170" HorizontalAlignment="Left" />
+                                            
+                                                
+                                                <TextBox Margin="-17,3,0,0" Width="110" Name="rPort" ></TextBox>
+                                                
+                                                <TextBox Margin="3,3,0,0" Width="70" Name="rVoyage" ></TextBox>
+
+                                            </StackPanel>
+
+
+                                        </StackPanel>
+                                    </StackPanel>
+
+
+                                    <StackPanel Margin="7,0,0,0" Visibility="Collapsed" >
+                                        <TextBlock>Delivery Port</TextBlock>
+                                        <uc:AutoComplete Margin="0,5,0,0"  x:Name="ucPort" />
+                                    </StackPanel>
+
+                                    <StackPanel Margin="7,0,0,0" Visibility="Collapsed">
+                                        <TextBlock>Voyage</TextBlock>
+                                        <ComboBox  Margin="0,3,0,0"  FontSize="12" ItemsSource="{Binding Path=Voyages}"
+                                                  DisplayMemberPath="DataValue"  Width="120" Name="cboVoyage" />
+                                    </StackPanel>
+
+                                </StackPanel>
+
+
+                                <StackPanel Margin="7,0,0,0">
+                                    <TextBlock>Ship to Address</TextBlock>
+                                    <ComboBox  Margin="0,3,0,0" ItemsSource="{Binding Path=CustomerAddress}"  FontSize="12"
+                                                  DisplayMemberPath="FullDesc"  Width="280" Name="cboShipTo" SelectionChanged="cboShipTo_SelectionChanged" />
+
+                                </StackPanel>
+
+                            </StackPanel>
+                            
+                            <StackPanel Margin="0,3,0,5">
+                                <TextBlock>Order Comments</TextBlock>
+                                <TextBox Name="txtComment" Width="790" Height="23" HorizontalAlignment="Left" ></TextBox>
+                            </StackPanel>
+                            
+
+                            <!-- GRID DE SELECTEDS -->
+
+                            <Grid >
+                                <xcdg:DataGridControl Height="Auto" Name="dgSelected" Width="Auto"
+                            ItemScrollingBehavior="Immediate"
+                            ItemsSource="{Binding Path=SelectedLines}"
+                            VerticalAlignment="Top" FontSize="12" ItemContainerStyle="{StaticResource alternatingDataRowStyle}"
+                            SelectionMode="Single"  AutoCreateColumns="False">
+
+                                    <xcdg:DataGridControl.Columns>
+
+                                        <xcdg:Column  FieldName="Document.DocNumber" Title="Document" Width="115" ReadOnly="True" />
+
+                                        <!-- <xcdg:Column  FieldName="LineNumber" Title="Line No." Width="60" ReadOnly="True" /> -->
+                                        <!-- <xcdg:Column  FieldName="LineStatus" Title="Status" Width="60" ReadOnly="True" /> -->
+
+                                        <xcdg:Column  FieldName="Product.ProductCode" Title="Product" Width="90"  ReadOnly="True"/>
+
+                                        <xcdg:Column  FieldName="LineDescription" Title="Description" Width="200" TextWrapping="Wrap"  ReadOnly="True"/>
+
+                                        <xcdg:Column  FieldName="Unit.Name" Title="UoM" Width="60"  ReadOnly="True"/>
+
+                                        <xcdg:Column  FieldName="QtyAvailable" Title="Available" Width="65"  ReadOnly="True"/>
+
+                                        <xcdg:Column  FieldName="Quantity" Title="Order/Pend" Width="72"  ReadOnly="True"/>
+
+                                        <xcdg:Column  FieldName="QtyAllocated" Title="Allocated" Width="65" ReadOnly="True" />
+
+                                        <xcdg:Column  FieldName="QtyBackOrder" Title="*To BkOrd" Width="65"  ReadOnly="True"/>
+
+                                        <xcdg:Column  FieldName="QtyCancel" Title="*To Cancel" Width="65"  ReadOnly="True"/>
+
+
+                                        <xcdg:Column  FieldName="Date2" Title="Line Req. Ship"  Width="95"  ReadOnly="True"/>
+
+                                        <xcdg:Column  FieldName="Hazmat" Title="Quality"  Width="60"  ReadOnly="True" />
+
+                                        <xcdg:Column  FieldName="LinkDocNumber" Title="PO Linked"  Width="100"  ReadOnly="True" />
+
+                                    </xcdg:DataGridControl.Columns>
+
+
+                                    <xcdg:DataGridControl.View>
+
+                                        <xcdg:TableView UseDefaultHeadersFooters="False" ShowRowSelectorPane="False">
+
+                                            <xcdg:TableView.FixedHeaders>
+
+                                                <DataTemplate>
+
+                                                    <xcdg:HierarchicalGroupByControl xcdg:TableView.CanScrollHorizontally="False" AllowGroupingModification="True" />
+
+                                                </DataTemplate>
+
+
+                                                <DataTemplate>
+
+                                                    <xcdg:ColumnManagerRow AllowColumnReorder="True" />
+
+                                                </DataTemplate>
+
+
+                                            </xcdg:TableView.FixedHeaders>
+
+                                            <xcdg:TableView.Theme>
+
+                                                <xcdg:Office2007BlueTheme />
+
+                                            </xcdg:TableView.Theme>
+
+                                        </xcdg:TableView>
+
+                                    </xcdg:DataGridControl.View>
+
+                                </xcdg:DataGridControl>
+                            </Grid>
+
+                            <!-- SELECTEDS -->
+                            <StackPanel Margin="0,10,0,0" Orientation="Horizontal">
+
+                                <!--
+                            <TextBlock VerticalAlignment="Center" Width="75" TextWrapping="Wrap">
+                                Select Picker(s) If apply</TextBlock>
+                            
+                            <ComboBox Height="30" Margin="5,0,0,0" ItemsSource="{Binding Path=Pickers}"  FontSize="12"
+                                                  DisplayMemberPath="FullDesc"  Width="200" Name="cboPicker" />
+                            -->
+
+                                <Button  Height="30" Margin="0,0,0,0" FontWeight="Bold"  
+                                    Width="160" HorizontalAlignment="Left" Click="Button_Click">
+                                    Create Merged Document</Button>
+
+
+                            </StackPanel>
+                        </StackPanel>
+
+                    </TabItem>
+
+
+
+
+                </TabControl>
+
+            </StackPanel>
+
+
+            <Popup x:Uid="popup3" Name="popup3" Width="Auto" Height="Auto" AllowsTransparency="True"                    
+                   Placement="Center">
+
+                <uc:AdminDocumentLine x:Name="ucDocLine"  VerticalAlignment="Top" />
+
+            </Popup>
+
+
+            <Popup x:Uid="popAddr" Name="popAddr" Width="Auto" Height="Auto" AllowsTransparency="True"                    
+                   Placement="Center">
+
+                <Border Style="{DynamicResource UserControlFormInnerBorder}" Margin="5,5,10,10" >
+
+                    <StackPanel Orientation="Vertical">
+                        <uc:UcAccountAddress x:Name="ucAccuntAddr"  VerticalAlignment="Top" />
+
+                        <TextBlock Margin="0,8,3,0" Name="txtHide" FontWeight="Bold" VerticalAlignment="Center" HorizontalAlignment="Right" 
+                       MouseDown="txtHide_MouseDown">[x] Close</TextBlock>
+
+                    </StackPanel>
+                </Border>
+
+            </Popup>
+
+
+        </DockPanel>
+    </AdornerDecorator>
+</WMCore:UserControlBase>

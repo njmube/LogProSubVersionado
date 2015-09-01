@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<hibernate-mapping xmlns="urn:nhibernate-mapping-2.2" namespace="Entities.Master" assembly="Entities">
+  <class name="UnitProductLogistic" table="Master.UnitProductLogistic">
+	<id name="RowID" type="Int32">
+		<generator class="native" />
+	</id>
+	<many-to-one lazy="false" name="LogisticUnit" class="UnitProductEquivalence" column="LogisticUnitID" not-null="true" unique-key="ukLogisticUnit" />
+	<many-to-one lazy="false" name="ContainedUnit" class="UnitProductEquivalence" column="ContainedUnitID" not-null="true" unique-key="ukLogisticUnit" />
+	<property name="AmountOfContained" type="Int32" not-null="true"  />
+
+	<property name="CreatedBy" type="String" length="50" not-null="true"  />
+	<property name="CreationDate" type="DateTime" not-null="true"   />
+	<property name="CreTerminal" type="String" length="50"   />
+	<property name="ModifiedBy" type="String" length="50"   />
+	<property name="ModDate" type="DateTime"   />
+	<property name="ModTerminal" type="String" length="50"   />
+  </class>
+</hibernate-mapping>
+

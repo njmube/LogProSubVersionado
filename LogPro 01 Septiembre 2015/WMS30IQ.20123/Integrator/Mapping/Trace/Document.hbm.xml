@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<hibernate-mapping xmlns="urn:nhibernate-mapping-2.2" namespace="Entities.Trace" assembly="Entities">
+  <class name="Document" table="Trace.Document">
+	<id name="DocID" type="Int32">
+		<generator class="native" />
+	</id>
+	  
+	  <many-to-one lazy="false" name="Company" class="Entities.Master.Company" column="CompanyID" not-null="true"  unique-key="idx_doc_number"/>
+	  <many-to-one lazy="false" name="Location" class="Entities.Master.Location" column="LocationID" not-found="ignore" />
+	<many-to-one lazy="false" name="DocType" class="Entities.General.DocumentType" column="DocTypeID" not-null="true" />
+	<many-to-one lazy="false" name="DocConcept" class="Entities.General.DocumentConcept" column="DocConceptID" not-found="ignore" />
+
+	  <property name="DocNumber" type="String" length="50" not-null="true"  unique-key="idx_doc_number" />
+		  
+	<property name="ErpMaster" type="Int32"   />
+	  <property name="IsFromErp" type="Boolean" not-null="true"  />
+	  <property name="UseAllocation" type="Boolean"  />
+	  <property name="DocWeight" type="Double"  />
+	  <property name="DocVolume" type="Double"  />
+	  
+	  <property name="Priority" type="Int16" not-null="true"  />
+	<property name="CrossDocking" type="Boolean" not-null="true"  />
+	<many-to-one lazy="false" name="Vendor" class="Entities.Master.Account" column="VendorID" not-null="true" />
+	<many-to-one lazy="false" name="Customer" class="Entities.Master.Account" column="CustomerID" not-null="true" />
+	<many-to-one lazy="false" name="DocStatus" class="Entities.General.Status" column="DocStatusID" not-null="true" />
+	<property name="SalesPersonName" type="String" length="100"   />
+	<property name="QuoteNumber" type="String" length="50"  />
+	<property name="CustPONumber" type="String" length="50"   />
+	<property name="Comment" type="String" length="4000"   />
+	  <property name="Notes" type="String" length="4000"   />
+	<property name="Reference" type="String" length="100"   />
+
+	<!--<property name="Date1" type="DateTime"   />-->
+	  <property name="Date1" type="DateTime" >
+		  <column name="Date1" not-null="true" length="50"  index="idx_DocDate1"/>
+	  </property>
+	  
+	  <property name="Date2" type="DateTime"   />
+	<property name="Date3" type="DateTime"   />
+	<property name="Date4" type="DateTime"   />
+	<property name="Date5" type="DateTime"   />
+
+	  <property name="UserDef1" type="String" length="100"   />
+	  <property name="UserDef2" type="String" length="100"   />
+	  <property name="UserDef3" type="String" length="100"   />
+	  
+	  <property name="LastChange" type="DateTime"   />  
+	<many-to-one lazy="false" name="PickMethod" class="Entities.General.PickMethod" column="PickMethodID" not-found="ignore" />
+
+	  <!-- 
+	  <many-to-one lazy="false" name="User" class="Entities.Profile.SysUser" column="UserID" /> -->
+
+
+	  <property name="PostingDocument" type="String" length="50"   />
+	  <property name="PostingUserName" type="String"  />
+	  <property name="PostingDate" type="DateTime"   />
+
+	  <many-to-one lazy="false" name="ShippingMethod" class="Entities.Master.ShippingMethod" column="ShpMethodID" not-found="ignore" />
+	  <property name="AllowPartial" type="Boolean" />
+
+	  <bag fetch="subselect" name="DocumentLines" inverse="true" cascade="persist,save-update,delete" lazy="true">
+		<key column="DocID"/>
+		<one-to-many class="DocumentLine"/>
+	</bag>
+
+
+	  <bag fetch="subselect" name="TaskUsers" inverse="true" cascade="persist,save-update,delete" lazy="false">
+		  <key column="TaskDocumentID"/>
+		  <one-to-many class="TaskByUser"/>
+	  </bag>
+  
+	  <bag fetch="subselect" name="TaskDocuments" inverse="true" cascade="persist,save-update,delete" lazy="true">
+		  <key column="TaskDocID"/>
+		  <one-to-many class="TaskDocumentRelation"/>
+	  </bag> 
+
+	  
+	  <bag fetch="subselect" name="DocumentAddresses" inverse="true" cascade="persist,save-update,delete" lazy="true">
+		  <key column="DocID"/>
+		  <one-to-many class="DocumentAddress"/>
+	  </bag>
+
+	  <property name="CreatedBy" type="String" length="50" not-null="true"  />
+	  <property name="CreationDate" type="DateTime" not-null="true"   />
+	  <property name="CreTerminal" type="String" length="50"   />
+	  <property name="ModifiedBy" type="String" length="50"   />
+	  <property name="ModDate" type="DateTime"   />
+	  <property name="ModTerminal" type="String" length="50"   />
+ </class>
+</hibernate-mapping>

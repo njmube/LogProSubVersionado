@@ -1,0 +1,317 @@
+﻿<WMCore:UserControlBase x:Class="WpfFront.Views.ShipRouteView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:xcdg="http://schemas.xceed.com/wpf/xaml/datagrid"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:odc="http://schemas.odyssey.com/wpf"
+    Height="Auto" Width="Auto" HorizontalAlignment="Stretch"
+    xmlns:WMCore="clr-namespace:Core.WPF;assembly=Core"
+    xmlns:dg="http://schemas.microsoft.com/wpf/2008/toolkit"
+    xmlns:toolkit="http://schemas.microsoft.com/wpf/2008/toolkit"
+    xmlns:uc="clr-namespace:WpfFront.Common.UserControls"
+    x:Name="ShipRoute">
+
+    <WMCore:UserControlBase.Resources>
+
+        <DataTemplate x:Key="HeaderTemplateArrowUp">
+            <DockPanel x:Uid="DockPanel_1">
+                <TextBlock x:Uid="TextBlock_5" HorizontalAlignment="Center" Text="{Binding}"/>
+                <Path x:Uid="arrow" x:Name="arrow"
+           StrokeThickness = "1"					  
+           Fill            = "gray"
+           Data            = "M 5,10 L 15,10 L 10,5 L 5,10"/>
+            </DockPanel>
+        </DataTemplate>
+
+        <DataTemplate  x:Key="HeaderTemplateArrowDown">
+            <DockPanel x:Uid="DockPanel_2">
+                <TextBlock x:Uid="TextBlock_6" HorizontalAlignment="Center" Text="{Binding }"/>
+                <Path x:Uid="Path_1" x:Name="arrow"
+              StrokeThickness = "1"					  
+              Fill            = "gray"
+              Data            = "M 5,5 L 10,10 L 15,5 L 5,5"/>
+            </DockPanel>
+        </DataTemplate>
+
+        <Style x:Key="myHeaderStyle" TargetType="{x:Type GridViewColumnHeader}">
+            <Setter Property="Visibility" Value="Collapsed" />
+        </Style>
+
+    </WMCore:UserControlBase.Resources>
+
+    <AdornerDecorator x:Uid="AdornerDecorator_1">
+
+        <DockPanel x:Uid="DockPanel_1" Margin="2,0,0,0" Background="{DynamicResource WBg}" HorizontalAlignment="Left" VerticalAlignment="Stretch">
+
+            <DockPanel.Resources>
+                <WMCore:ForceReReadConverter x:Uid="WMCore:ForceReReadConverter_1" x:Key="forceReReadConverter" />
+                <WMCore:FormattingConverter x:Uid="WMCore:FormattingConverter_1" x:Key="formattingConverter" />
+                <WMCore:FormNotificationErrorMessageConverter x:Uid="WMCore:FormNotificationErrorMessageConverter_1" x:Key="formNotificationErrorMessageConverter" />
+                <WMCore:NullableIntegerFormatConverter x:Uid="WMCore:NullableIntegerFormatConverter_1" x:Key="nullableIntegerFormatConverter" />
+            </DockPanel.Resources>
+
+            <StackPanel x:Uid="StackPanel_2" DockPanel.Dock="Top" Orientation="Horizontal" >
+                <TextBlock x:Uid="TextBlock_1"  Margin="5,4,4,4" FontSize="14" FontWeight="Bold" HorizontalAlignment="Left">Proceso de Alistamiento y Despacho de Documentos</TextBlock>
+            </StackPanel>
+
+            <StackPanel DockPanel.Dock="Top" Orientation="Horizontal">
+                
+                <Border Style="{DynamicResource UserControlFormInnerBorder}" HorizontalAlignment="Stretch"  VerticalAlignment="Stretch">
+
+                    <StackPanel Name="stkFilters"  Orientation="Horizontal">
+
+                        <StackPanel Margin="3" >
+                            <TextBlock FontWeight="Bold" VerticalAlignment="Center">Bodega</TextBlock>
+                            <ComboBox x:Uid="cboLocation" Width="100"  ItemsSource="{Binding Path=Locations}" SelectionChanged="cboLocation_SelectionChanged"
+                                      Name="cboLocation"   DisplayMemberPath="ErpCode"/>
+                        </StackPanel>
+
+
+                        <StackPanel Margin="3" >
+                            <TextBlock FontWeight="Bold" VerticalAlignment="Center">Buscar por Fecha</TextBlock>
+                            <ComboBox   ItemsSource="{Binding Path=DateList}"  FontSize="12"
+                                                  DisplayMemberPath="DataValue" SelectionChanged="cboDate_SelectionChanged" Width="140" Name="cboDate" />
+                        </StackPanel>
+
+                        <StackPanel Margin="3" >
+                            <TextBlock FontWeight="Bold" VerticalAlignment="Center">Por Ruta</TextBlock>
+                            <ComboBox   ItemsSource="{Binding Path=RouteList}"  FontSize="12"
+                                                  DisplayMemberPath="Name" Width="130" Name="cboRoute" />
+                        </StackPanel>
+
+
+                        <StackPanel Margin="3">
+                            <TextBlock FontWeight="Bold" VerticalAlignment="Center">Por Documento, Cliente</TextBlock>
+                            <TextBox x:Uid="txtSearchDocNumberlv" Width="150" Height="23" x:Name="txtSearchDoc"  ToolTip="Enter keyword to search."/>
+                        </StackPanel>
+
+                        <Image  Margin="5,0,10,3" VerticalAlignment="Bottom" Width="23" MouseDown="Image_MouseDown"
+                       Source="/WpfFront;component/Images/arrow.png"   ToolTip="Recargar Resultados." />
+
+
+
+
+
+                        <Button  Height="25" Margin="15,0,0,3"   Width="90" Name="bntReset"
+                                  VerticalAlignment="Bottom" >
+                            Borrar Filtros</Button>
+
+
+
+
+
+                    </StackPanel>
+
+                </Border>
+
+
+                <Border  Margin="20,0,0,0" Style="{DynamicResource GrayStyle}" HorizontalAlignment="Stretch"  VerticalAlignment="Stretch"> 
+
+                    <StackPanel Margin="3" >
+                        <TextBlock FontWeight="Bold" VerticalAlignment="Center">Planillas en Proceso</TextBlock>
+                        <ComboBox   ItemsSource="{Binding Path=OpenDocList}"  FontSize="12"
+                                                  DisplayMemberPath="FullDesc" Width="160" Name="cboCurOpen" SelectionChanged="cboCurOpen_SelectionChanged" />
+                    </StackPanel>
+
+                </Border>
+
+            </StackPanel>
+
+
+            <StackPanel x:Uid="StackPanel_2" Name="stkMain" DockPanel.Dock="Top" Orientation="Horizontal" Margin="5,10,0,0" Visibility="Collapsed">
+                
+                <DockPanel x:Uid="dpList1" HorizontalAlignment="Stretch" VerticalAlignment="Top"  Name="dpList1" Height="Auto">
+
+                            <StackPanel x:Uid="stkListViewDocuments" Orientation="Vertical" Margin="0,0,0,0" DockPanel.Dock="Top">
+                                
+                                <ListView x:Uid="lvDocuments" ItemsSource="{Binding Path=DocumentList}" Margin="0,0,0,0"  MaxHeight="450" Name="lvDocuments" 
+                                          ToolTip="Click over the column to Sort." MouseDoubleClick="lvDocuments_MouseDoubleClick"  GridViewColumnHeader.Click="dgDetails_Click">
+                                    <ListView.View>
+                                        <GridView x:Uid="GridView_1">
+
+                                            <GridViewColumn  x:Uid="GridViewColumn_8" Header="" Width="25">
+                                                <GridViewColumn.CellTemplate>
+                                                    <DataTemplate x:Uid="DataTemplate_4">
+                                                        <Grid x:Uid="Grid_3" HorizontalAlignment="Center">
+                                                            <CheckBox x:Uid="CheckBox_2" CommandParameter="{Binding Path=DocumentID}" IsChecked="{Binding Path=AllowPartial}" Checked="CheckBox_Checked" Unchecked="CheckBox_Checked" />
+                                                        </Grid>
+                                                    </DataTemplate>
+                                                </GridViewColumn.CellTemplate>
+                                            </GridViewColumn>
+
+                                            <GridViewColumn Header="Fecha Desp." Width="68" DisplayMemberBinding="{Binding Path=Date2}" ></GridViewColumn>
+                                            
+                                            <GridViewColumn x:Uid="GridViewColumn_1" Header="Cliente" Width="200" DisplayMemberBinding="{Binding Path=Customer.Name}" ></GridViewColumn>
+                                                                                        
+                                            <GridViewColumn x:Uid="GridViewColumn_2" Header="No. Documento" Width="100" DisplayMemberBinding="{Binding Path=DocNumber}" ></GridViewColumn>
+                                            <GridViewColumn Header="Fecha Doc." Width="68" DisplayMemberBinding="{Binding Path=Date1}" ></GridViewColumn>
+
+                                    <GridViewColumn  x:Uid="GridViewColumn_2" Header="Dirección Despacho" Width="190">
+                                        <GridViewColumn.CellTemplate>
+                                            <DataTemplate x:Uid="DataTemplate_2">
+                                                <Grid x:Uid="Grid_1" HorizontalAlignment="Center">
+                                                    <TextBlock x:Uid="TextBlock_4" TextWrapping="Wrap" Text="{Binding Path=ShipAddress}"/>
+                                                </Grid>
+                                            </DataTemplate>
+                                        </GridViewColumn.CellTemplate>
+                                    </GridViewColumn>
+
+                                    <GridViewColumn x:Uid="GridViewColumn_3" Header="Ruta" Width="50" DisplayMemberBinding="{Binding Path=ShippingMethod.Name}" ></GridViewColumn>
+                                            <GridViewColumn x:Uid="GridViewColumn_3" Header="Peso (KG)" Width="70" DisplayMemberBinding="{Binding Path=DocWeight}" ></GridViewColumn>
+                                            <!--<GridViewColumn x:Uid="GridViewColumn_3" Header="Volum (M3)" Width="70" DisplayMemberBinding="{Binding Path=DocVolume}" ></GridViewColumn>-->
+    
+                                    <GridViewColumn  x:Uid="GridViewColumn_2" Header="Observaciones" Width="180">
+                                        <GridViewColumn.CellTemplate>
+                                            <DataTemplate x:Uid="DataTemplate_2">
+                                                <Grid x:Uid="Grid_1" HorizontalAlignment="Center">
+                                                    <TextBlock x:Uid="TextBlock_4" TextWrapping="Wrap" Text="{Binding Path=Comment}"/>
+                                                </Grid>
+                                            </DataTemplate>
+                                        </GridViewColumn.CellTemplate>
+                                    </GridViewColumn>
+                                            
+
+                                    <GridViewColumn x:Uid="GridViewColumn_3" Header="Rep Ventas" Width="80" DisplayMemberBinding="{Binding Path=SalesPersonName}" ></GridViewColumn>
+                                            <!--<GridViewColumn x:Uid="GridViewColumn_3" Header="No. OC" Width="80" DisplayMemberBinding="{Binding Path=CustPONumber}" ></GridViewColumn>-->
+                                        </GridView>
+                                    </ListView.View>
+                                </ListView>
+
+                        <ListView  ItemsSource="{Binding Path=TotalList}" Margin="0,5,0,0"  MaxHeight="200" Name="lvTotal"  >
+                            <ListView.View>
+                                <GridView x:Uid="GridView_1">
+
+                                    <GridViewColumn x:Uid="GridViewColumn_3" Header="TOTAL" Width="703" DisplayMemberBinding="{Binding Path=Note}" ></GridViewColumn>
+                                    <GridViewColumn x:Uid="GridViewColumn_3" Header="Peso (KG)" Width="70" DisplayMemberBinding="{Binding Path=DocWeight}" ></GridViewColumn>
+                                    <!--<GridViewColumn x:Uid="GridViewColumn_3" Header="Volum (M3)" Width="70" DisplayMemberBinding="{Binding Path=DocVolume}" ></GridViewColumn>-->
+                                    <GridViewColumn x:Uid="GridViewColumn_3" Header="" Width="270" DisplayMemberBinding="{Binding Path=Note}" ></GridViewColumn>
+                                </GridView>
+                            </ListView.View>
+                        </ListView>
+
+                    </StackPanel>
+
+
+                    <StackPanel Orientation="Horizontal">
+                        <Border  Margin="3,15,3,3" DockPanel.Dock="Top" Style="{DynamicResource GrayStyle}" HorizontalAlignment="Stretch"  VerticalAlignment="Stretch">
+
+                            <StackPanel Orientation="Horizontal">
+                                
+                                <StackPanel Margin="0,0,15,0" Name="stkCreate" Orientation="Horizontal" HorizontalAlignment="Left">
+
+                                    <TextBlock VerticalAlignment="Center">Ruta</TextBlock>
+
+                                    <ComboBox Margin="5,0,10,0"  ItemsSource="{Binding Path=RouteList}"  FontSize="12" Width="150" VerticalAlignment="Center"
+                                            Height="25"  DisplayMemberPath="Name" Name="cboProcessRoute" />
+
+
+                                    <Button Height="30" Width="150" FontWeight="Bold" Name="btn_Process" Click="btn_Process_Click">
+
+                                        <StackPanel x:Uid="StackPanel_10" Orientation="Horizontal">
+                                            <!--<Image x:Uid="Image_2" Margin="5,0,0,0"  Width="18" Source="/WpfFront;component/Images/invoice.jpg"></Image>-->
+                                            <TextBlock x:Uid="TextBlock_6" Margin="5" Text="Crear Nueva Planilla" >
+                                            </TextBlock>
+                                        </StackPanel>
+
+                                    </Button>
+                                </StackPanel>
+
+                                <Button Name="btnRemove" Margin="0,0,0,0"  Height="30" Width="150" FontWeight="Bold" Visibility="Collapsed"  >Remover Marcados</Button>
+                                
+                            </StackPanel>
+
+
+                        </Border>
+
+                        
+
+                    </StackPanel>
+                    
+                </DockPanel>
+
+                <Border Name="brdDocs"  Style="{DynamicResource UserControlFormInnerBorder}" Margin="10,0,0,0" Visibility="Collapsed"  >
+
+                    <StackPanel x:Uid="dpControls" HorizontalAlignment="Stretch" VerticalAlignment="Top" >
+
+                        <!-- 
+                                Transportador, conductor, Documentos, Status, Peso y Volumen
+                                -->
+
+                        <TextBlock Foreground="Brown" FontWeight="Bold" Text="Alistamiento"></TextBlock>
+                        <Separator Margin="0,2,0,3" />
+
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Width="70" FontSize="12" TextAlignment="Right">Documento:</TextBlock>
+                            <TextBlock Width="80" FontSize="12" FontWeight="Bold" TextAlignment="Right" Text="{Binding Path=CurDoc.DocNumber}"></TextBlock>
+                        </StackPanel>
+
+                        <StackPanel Orientation="Horizontal" Margin="0,5,0,0">
+                            <TextBlock Width="70" FontSize="12" TextAlignment="Right">Ruta:</TextBlock>
+                            <TextBlock Width="80" FontSize="12" FontWeight="Bold" TextAlignment="Right" Text="{Binding Path=CurDoc.ShippingMethod.Name}"></TextBlock>
+                        </StackPanel>
+
+                        <StackPanel Orientation="Horizontal" Margin="0,5,0,0">
+                            <TextBlock Width="70" FontSize="12" TextAlignment="Right">Peso:</TextBlock>
+                            <TextBlock Width="80" FontSize="12" FontWeight="Bold" TextAlignment="Right">XXXXX</TextBlock>                           
+                        </StackPanel>
+
+                        <StackPanel Orientation="Horizontal" Margin="0,5,0,15">
+                            <TextBlock Width="70" FontSize="12" TextAlignment="Right">Volumen:</TextBlock>
+                            <TextBlock Width="80" FontSize="12" FontWeight="Bold" TextAlignment="Right">XXXXX</TextBlock>
+                        </StackPanel>
+
+
+                        
+                        <Button  HorizontalAlignment="Center" Name="btnPktTkt" MinHeight="30" Width="150" 
+                                            Margin="0,0,0,20" Click="btnPktTkt_Click">
+                            <StackPanel x:Uid="StackPanel_10" Orientation="Horizontal">
+                                <Image x:Uid="Image_2" Margin="5,0,0,0"  Width="18" Source="/WpfFront;component/Images/invoice.jpg"></Image>
+                                <TextBlock x:Uid="TextBlock_6" FontWeight="Bold" Margin="5" Text="Ver Planilla" >
+                                </TextBlock>
+                            </StackPanel>
+                        </Button>
+
+                        
+                        <TextBlock Foreground="Brown" FontWeight="Bold" Text="Transporte"></TextBlock>
+                        <Separator Margin="0,2,0,3" />
+
+                        <StackPanel>
+                            <TextBlock>Conductor</TextBlock>                            
+                                <uc:AutoComplete Margin="0,5,0,6"  x:Name="ucDriver" />    
+                            <Button HorizontalAlignment="Right"  Width="100" FontWeight="Bold" Click="Button_Click">Actualizar</Button>
+                        </StackPanel>
+
+                        <TextBlock Margin="0,20,0,0"  Foreground="Brown" FontWeight="Bold" Text="Despacho"></TextBlock>
+                        <Separator Margin="0,2,0,3" />
+
+                        <Button  Height="30" Width="150" FontWeight="Bold" Name="btnShipment" Click="btnShipment_Click"  >Confirmar Despacho</Button>
+
+
+                        <Button  HorizontalAlignment="Center" Name="btnTktShip" MinHeight="30" Width="150" 
+                                            Margin="0,0,0,20" Click="btnTktShip_Click">
+                            <StackPanel x:Uid="StackPanel_10" Orientation="Horizontal">
+                                <Image x:Uid="Image_2" Margin="5,0,0,0"  Width="18" Source="/WpfFront;component/Images/invoice.jpg"></Image>
+                                <TextBlock x:Uid="TextBlock_6" FontWeight="Bold" Margin="5" Text="Ver Despacho" >
+                                </TextBlock>
+                            </StackPanel>
+                        </Button>
+
+
+                    </StackPanel>
+
+                </Border>
+                                    
+            </StackPanel>
+
+
+            <!-- popup sales order details -->
+            <Popup x:Uid="popup1" Name="popup1" Width="Auto" Height="Auto" AllowsTransparency="True"                    
+                   Placement="Center">
+                <!--<uc:PopUpDocumentDetail x:Uid="ucDocDetail" x:Name="ucDocDetail" CurDocument="{Binding ElementName=lvDocuments, Path=SelectedItem}" />-->
+            </Popup>
+            <!-- popup -->
+
+        </DockPanel>
+
+    </AdornerDecorator>
+    
+</WMCore:UserControlBase>

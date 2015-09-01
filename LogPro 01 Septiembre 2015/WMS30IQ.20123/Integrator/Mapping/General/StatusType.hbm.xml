@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<hibernate-mapping xmlns="urn:nhibernate-mapping-2.2" namespace="Entities.General" assembly="Entities">
+  <class name="StatusType" table="General.StatusType">
+	<id name="StatusTypeID" type="Int16">
+		<generator class="assigned" />
+	</id>
+		<property name="Name" type="String" length="50" not-null="true" unique="true" />
+<!--	<bag fetch="subselect" name="Status" inverse="true" cascade="persist,save-update" lazy="true">
+		<key column="StatusTypeID"/>
+		<one-to-many class="Status"/>
+	</bag> -->
+
+  </class>
+</hibernate-mapping>

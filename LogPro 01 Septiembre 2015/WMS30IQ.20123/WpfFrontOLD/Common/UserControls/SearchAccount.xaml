@@ -1,0 +1,21 @@
+﻿<UserControl x:Uid="SearchAccountName" x:Class="WpfFront.Common.UserControls.SearchAccount"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    Height="auto" Width="auto" x:Name="SearchAccountName">
+    <StackPanel x:Uid="StackPanel_1" Orientation="Horizontal">
+        <TextBox x:Uid="txtData" Width="110" ToolTip="Scan or write a account code." Height="23" 
+                                 Margin="0,0,3,0" Name="txtData" TextChanged="txtData_TextChanged" />
+        <!-- Listado de Bines to select -->
+        <ComboBox x:Uid="cboData" Width="140" Height="22" IsEditable="True" StaysOpenOnEdit="True" Name="cboData" DisplayMemberPath="Name"
+                                         ItemsSource="{Binding Path=DataList}" Visibility="Collapsed" SelectionChanged="cboData_SelectionChanged" />
+        <!---->
+        <Button x:Uid="imgLoad" Height="22" MinWidth="22" Name="imgLoad" Margin="4,0,0,0" Click="imgLoad_FocusHandler" GotFocus="imgLoad_FocusHandler" >
+            <Image x:Uid="Image_1" HorizontalAlignment="Center" Margin="-2" Focusable="True" Source="/WpfFront;component/Images/arrow.png"   />
+        </Button>
+        
+        <Button x:Uid="imgLook" Height="22" MinWidth="22" Name="imgLook" Margin="4,0,0,0" Click="imgLook_Click" >
+            <Image x:Uid="Image_2" Margin="-2" HorizontalAlignment="Center" Focusable="True" Source="/WpfFront;component/Images/look.png" />
+        </Button>
+        
+    </StackPanel>
+</UserControl>

@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<hibernate-mapping xmlns="urn:nhibernate-mapping-2.2" namespace="Entities.Master" assembly="Entities">
+  <class name="Account" table="Master.Account">
+	<id name="AccountID" type="Int32">
+		<generator class="native" />
+	</id>
+	<many-to-one lazy="false" name="Company" class="Entities.Master.Company" column="CompanyID" not-null="true" unique-key="ukAccountID" />
+
+	  <many-to-one lazy="false" name="FatherContract" class="Contract" column="ContractID" not-found="ignore"  />  
+	  
+	  <property name="AccountCode" type="String" length="15" not-null="true" unique-key="ukAccountID"  />
+	<many-to-one lazy="false" name="BaseType" class="Entities.General.AccountType" column="AccountTypeID" not-null="true" unique-key="ukAccountID" />
+	<property name="Name" type="String" length="80" not-null="true"  />
+	<property name="Phone" type="String" length="50"   />
+	<property name="ContactPerson" type="String" length="50"   />
+	<property name="Email" type="String" length="80"   />
+	<property name="WebSite" type="String" length="100"   />
+	<property name="UserDefine1" type="String" length="100"   />
+	<property name="UserDefine2" type="String" length="100"   />
+	<property name="UserDefine3" type="String" length="100"   />
+	<property name="IsFromErp" type="Boolean" not-null="true"  />
+    
+	<bag fetch="subselect" name="AccountAddresses" inverse="true" cascade="persist,save-update,delete" lazy="true">
+		<key column="AccountID"/>
+		<one-to-many class="AccountAddress"/>
+	</bag>	
+	 
+	<bag fetch="subselect" name="AccountTypes" inverse="true" cascade="persist,save-update,delete" lazy="true">
+		<key column="AccountID"/>
+		<one-to-many class="AccountTypeRelation"/>
+	</bag>
+	<!--	
+	<bag fetch="subselect" name="Vehicles" inverse="true" cascade="persist,save-update" lazy="true">
+		<key column="AccountID"/><one-to-many class="Vehicle"/>
+	</bag>
+-->
+	<property name="CreatedBy" type="String" length="50" not-null="true"  />
+	<property name="CreationDate" type="DateTime" not-null="true"   />
+	<property name="CreTerminal" type="String" length="50"   />
+	<property name="ModifiedBy" type="String" length="50"   />
+	<property name="ModDate" type="DateTime"   />
+	<property name="ModTerminal" type="String" length="50"   />
+  </class>
+</hibernate-mapping>

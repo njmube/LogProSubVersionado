@@ -1,0 +1,225 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema xmlns:ser="http://schemas.microsoft.com/2003/10/Serialization/" xmlns:tns="Entities.Profile" elementFormDefault="qualified" targetNamespace="Entities.Profile" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:import namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
+  <xs:import namespace="http://schemas.datacontract.org/2004/07/Entities.Master" />
+  <xs:import namespace="Entities.Master" />
+  <xs:import namespace="Entities.General" />
+  <xs:complexType name="Auditing">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="CreTerminal" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="CreatedBy" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="CreationDate" nillable="true" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="ModDate" nillable="true" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="ModifiedBy" nillable="true" type="xs:string" />
+    </xs:sequence>
+    <xs:attribute ref="ser:Id" />
+    <xs:attribute ref="ser:Ref" />
+  </xs:complexType>
+  <xs:element name="Auditing" nillable="true" type="tns:Auditing" />
+  <xs:complexType name="SysUser">
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:Auditing">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="DecryptPass" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="Domain" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="Email" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="FirstName" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="FullDesc" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="IsMultiCompany" nillable="true" type="xs:boolean" />
+          <xs:element minOccurs="0" name="IsSuperUser" nillable="true" type="xs:boolean" />
+          <xs:element minOccurs="0" name="LastLogin" nillable="true" type="xs:dateTime" />
+          <xs:element minOccurs="0" name="LastName" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="LastSession" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="Password" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="Phone" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="UserID" type="xs:int" />
+          <xs:element minOccurs="0" name="UserName" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="UserRols" nillable="true" type="tns:ArrayOfUserByRol" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="SysUser" nillable="true" type="tns:SysUser" />
+  <xs:complexType name="ArrayOfUserByRol">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="UserByRol" nillable="true" type="tns:UserByRol" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfUserByRol" nillable="true" type="tns:ArrayOfUserByRol" />
+  <xs:complexType name="UserByRol">
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:Auditing">
+        <xs:sequence>
+          <xs:element xmlns:q1="http://schemas.datacontract.org/2004/07/Entities.Master" minOccurs="0" name="Contract" nillable="true" type="q1:Contract" />
+          <xs:element minOccurs="0" name="IsDefault" nillable="true" type="xs:boolean" />
+          <xs:element xmlns:q2="Entities.Master" minOccurs="0" name="Location" nillable="true" type="q2:Location" />
+          <xs:element minOccurs="0" name="Rol" nillable="true" type="tns:Rol" />
+          <xs:element minOccurs="0" name="RowID" type="xs:int" />
+          <xs:element minOccurs="0" name="User" nillable="true" type="tns:SysUser" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="UserByRol" nillable="true" type="tns:UserByRol" />
+  <xs:complexType name="Rol">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="IsMultiLocation" nillable="true" type="xs:boolean" />
+      <xs:element minOccurs="0" name="Name" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="RolCode" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="RolID" type="xs:short" />
+    </xs:sequence>
+    <xs:attribute ref="ser:Id" />
+    <xs:attribute ref="ser:Ref" />
+  </xs:complexType>
+  <xs:element name="Rol" nillable="true" type="tns:Rol" />
+  <xs:complexType name="MenuOption">
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:Auditing">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="Active" nillable="true" type="xs:boolean" />
+          <xs:element minOccurs="0" name="Icon" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="MenuOptionID" type="xs:int" />
+          <xs:element minOccurs="0" name="MenuOptionType" nillable="true" type="tns:MenuOptionType" />
+          <xs:element minOccurs="0" name="Name" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="NumOrder" type="xs:short" />
+          <xs:element xmlns:q3="Entities.General" minOccurs="0" name="OptionType" nillable="true" type="q3:OptionType" />
+          <xs:element minOccurs="0" name="Url" nillable="true" type="xs:string" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="MenuOption" nillable="true" type="tns:MenuOption" />
+  <xs:complexType name="MenuOptionType">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="MenuOptionTypeID" type="xs:int" />
+      <xs:element minOccurs="0" name="MenuOptions" nillable="true" type="tns:ArrayOfMenuOption" />
+      <xs:element minOccurs="0" name="Name" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Url" nillable="true" type="xs:string" />
+    </xs:sequence>
+    <xs:attribute ref="ser:Id" />
+    <xs:attribute ref="ser:Ref" />
+  </xs:complexType>
+  <xs:element name="MenuOptionType" nillable="true" type="tns:MenuOptionType" />
+  <xs:complexType name="ArrayOfMenuOption">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="MenuOption" nillable="true" type="tns:MenuOption" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfMenuOption" nillable="true" type="tns:ArrayOfMenuOption" />
+  <xs:complexType name="MenuOptionExtension">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="Custom1" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Custom2" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Custom3" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="MenuOption" nillable="true" type="tns:MenuOption" />
+      <xs:element minOccurs="0" name="RowID" type="xs:int" />
+    </xs:sequence>
+    <xs:attribute ref="ser:Id" />
+    <xs:attribute ref="ser:Ref" />
+  </xs:complexType>
+  <xs:element name="MenuOptionExtension" nillable="true" type="tns:MenuOptionExtension" />
+  <xs:complexType name="ArrayOfMenuOptionExtension">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="MenuOptionExtension" nillable="true" type="tns:MenuOptionExtension" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfMenuOptionExtension" nillable="true" type="tns:ArrayOfMenuOptionExtension" />
+  <xs:complexType name="ArrayOfSysUser">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="SysUser" nillable="true" type="tns:SysUser" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfSysUser" nillable="true" type="tns:ArrayOfSysUser" />
+  <xs:complexType name="ConfigOptionByCompany">
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:Auditing">
+        <xs:sequence>
+          <xs:element xmlns:q4="Entities.Master" minOccurs="0" name="Company" nillable="true" type="q4:Company" />
+          <xs:element minOccurs="0" name="ConfigOption" nillable="true" type="tns:ConfigOption" />
+          <xs:element minOccurs="0" name="RowID" type="xs:int" />
+          <xs:element minOccurs="0" name="Value" nillable="true" type="xs:string" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="ConfigOptionByCompany" nillable="true" type="tns:ConfigOptionByCompany" />
+  <xs:complexType name="ConfigOption">
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:Auditing">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="Code" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="ConfigOptionID" type="xs:int" />
+          <xs:element minOccurs="0" name="ConfigType" nillable="true" type="tns:ConfigType" />
+          <xs:element xmlns:q5="Entities.General" minOccurs="0" name="DataType" nillable="true" type="q5:DataType" />
+          <xs:element minOccurs="0" name="DefValue" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="Description" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="IsAdmin" nillable="true" type="xs:boolean" />
+          <xs:element minOccurs="0" name="IsDevice" nillable="true" type="xs:boolean" />
+          <xs:element minOccurs="0" name="Length" type="xs:int" />
+          <xs:element minOccurs="0" name="Name" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="NumOrder" type="xs:short" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="ConfigOption" nillable="true" type="tns:ConfigOption" />
+  <xs:complexType name="ConfigType">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="ConfigTypeID" type="xs:short" />
+      <xs:element minOccurs="0" name="Name" nillable="true" type="xs:string" />
+    </xs:sequence>
+    <xs:attribute ref="ser:Id" />
+    <xs:attribute ref="ser:Ref" />
+  </xs:complexType>
+  <xs:element name="ConfigType" nillable="true" type="tns:ConfigType" />
+  <xs:complexType name="ArrayOfConfigOptionByCompany">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="ConfigOptionByCompany" nillable="true" type="tns:ConfigOptionByCompany" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfConfigOptionByCompany" nillable="true" type="tns:ArrayOfConfigOptionByCompany" />
+  <xs:complexType name="ArrayOfConfigOption">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="ConfigOption" nillable="true" type="tns:ConfigOption" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfConfigOption" nillable="true" type="tns:ArrayOfConfigOption" />
+  <xs:complexType name="ArrayOfConfigType">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="ConfigType" nillable="true" type="tns:ConfigType" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfConfigType" nillable="true" type="tns:ArrayOfConfigType" />
+  <xs:complexType name="MenuOptionByRol">
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:Auditing">
+        <xs:sequence>
+          <xs:element xmlns:q6="Entities.Master" minOccurs="0" name="Company" nillable="true" type="q6:Company" />
+          <xs:element minOccurs="0" name="MenuOption" nillable="true" type="tns:MenuOption" />
+          <xs:element minOccurs="0" name="Rol" nillable="true" type="tns:Rol" />
+          <xs:element minOccurs="0" name="RowID" type="xs:int" />
+          <xs:element xmlns:q7="Entities.General" minOccurs="0" name="Status" nillable="true" type="q7:Status" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="MenuOptionByRol" nillable="true" type="tns:MenuOptionByRol" />
+  <xs:complexType name="ArrayOfMenuOptionByRol">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="MenuOptionByRol" nillable="true" type="tns:MenuOptionByRol" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfMenuOptionByRol" nillable="true" type="tns:ArrayOfMenuOptionByRol" />
+  <xs:complexType name="ArrayOfMenuOptionType">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="MenuOptionType" nillable="true" type="tns:MenuOptionType" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfMenuOptionType" nillable="true" type="tns:ArrayOfMenuOptionType" />
+  <xs:complexType name="ArrayOfRol">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="Rol" nillable="true" type="tns:Rol" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfRol" nillable="true" type="tns:ArrayOfRol" />
+</xs:schema>

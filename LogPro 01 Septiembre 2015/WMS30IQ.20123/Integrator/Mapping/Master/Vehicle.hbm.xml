@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<hibernate-mapping xmlns="urn:nhibernate-mapping-2.2" namespace="Entities.Master" assembly="Entities">
+  <class name="Vehicle" table="Master.Vehicle">
+	<id name="VehicleID" type="Int16">
+		<generator class="native" />
+	</id>
+	<many-to-one lazy="false" name="Account" class="Account" column="AccountID" not-null="true" />
+	<property name="ErpCode" type="String" length="50"  />
+  <property name="Name" type="String" length="50" not-null="true"  />
+	<property name="Plate1" type="String" length="50" not-null="true"  />
+	<property name="Plate2" type="String" length="50"   />
+	<property name="Capacity" type="String" length="50"   />
+	<property name="ContainerNumber" type="String" length="50"   />
+	<property name="ContainerCapacity" type="String" length="50"   />
+	<many-to-one lazy="false" name="Status" class="Entities.General.Status" column="StatusID" not-null="true" />
+
+	<property name="CreatedBy" type="String" length="50" not-null="true"  />
+	<property name="CreationDate" type="DateTime" not-null="true"   />
+	<property name="CreTerminal" type="String" length="50"   />
+	<property name="ModifiedBy" type="String" length="50"   />
+	<property name="ModDate" type="DateTime"   />
+	<property name="ModTerminal" type="String" length="50"   />
+  </class>
+</hibernate-mapping>

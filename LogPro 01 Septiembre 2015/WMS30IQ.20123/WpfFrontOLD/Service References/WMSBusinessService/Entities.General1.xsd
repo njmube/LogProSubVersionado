@@ -1,0 +1,23 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema xmlns:tns="http://schemas.datacontract.org/2004/07/Entities.General" elementFormDefault="qualified" targetNamespace="http://schemas.datacontract.org/2004/07/Entities.General" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:import namespace="Entities.Profile" />
+  <xs:complexType name="LogError">
+    <xs:complexContent mixed="false">
+      <xs:extension xmlns:q1="Entities.Profile" base="q1:Auditing">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="Category" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="LogErrorID" type="xs:long" />
+          <xs:element minOccurs="0" name="TechError" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="UserError" nillable="true" type="xs:string" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="LogError" nillable="true" type="tns:LogError" />
+  <xs:complexType name="ArrayOfLogError">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="LogError" nillable="true" type="tns:LogError" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfLogError" nillable="true" type="tns:ArrayOfLogError" />
+</xs:schema>
