@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<hibernate-mapping xmlns="urn:nhibernate-mapping-2.2" namespace="Entities.General" assembly="Entities">
+  <class name="LabelMapping" table="General.LabelMapping">
+	<id name="RowID" type="Int32">
+		<generator class="native" />
+	</id>
+  <many-to-one lazy="false" name="LabelType" class="Entities.General.DocumentType" column="LabelTypeID" not-null="true" unique-key="ULabelKey" />
+  <many-to-one lazy="false" name="Account" class="Entities.Master.Account" column="AccountID"  unique-key="ULabelKey" not-found="ignore"/>
+  <property name="DataKey" type="String" length="50" not-null="true" unique-key="ULabelKey" />
+  <property name="DataValue" type="String" length="50" not-null="true" />
+	<property name="Description" type="String" length="100"  />
+    
+	<property name="CreatedBy" type="String" length="50" not-null="true"  />
+	<property name="CreationDate" type="DateTime" not-null="true"   />
+	<property name="CreTerminal" type="String" length="50"   />
+	<property name="ModifiedBy" type="String" length="50"   />
+	<property name="ModDate" type="DateTime"   />
+	<property name="ModTerminal" type="String" length="50"   />
+  </class>
+</hibernate-mapping>

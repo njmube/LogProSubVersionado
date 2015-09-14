@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<hibernate-mapping xmlns="urn:nhibernate-mapping-2.2" namespace="Entities.Report" assembly="Entities">
+  <class name="IqReport" table="Report.IqReport">
+	<id name="ReportId" type="Int32">
+		<generator class="native" />
+	</id>
+		<property name="Name" type="String" length="100" not-null="false" />
+	    <property name="IsForSystem" type="Boolean" />
+	    <many-to-one lazy="false" name="Status" class="Entities.General.Status" column="StatusID" not-null="true" />
+
+	  <property name="Process" type="String" length="255" not-null="false" />
+	  <property name="PermitCode" type="String" length="255"   />
+	  <property name="ProcessControl" type="String" length="255"   />
+	  <property name="ProcessParams" type="String" length="255"   />
+	  
+	  <property name="CreatedBy" type="String" length="50" not-null="true"  />
+	  <property name="CreationDate" type="DateTime" not-null="true"   />
+	  <property name="CreTerminal" type="String" length="50"   />
+	  <property name="ModifiedBy" type="String" length="50"   />
+	  <property name="ModDate" type="DateTime"   />
+	  <property name="ModTerminal" type="String" length="50"   />
+	  
+	  <property name="Settings" type="String" length="4000"   />
+
+	  <bag fetch="subselect" name="ReportTables" inverse="true" cascade="persist,save-update" lazy="false">
+		<key column="ReportId"/>
+		  <one-to-many class="IqReportTable"/>
+	</bag>	
+	  
+
+  </class>
+</hibernate-mapping>

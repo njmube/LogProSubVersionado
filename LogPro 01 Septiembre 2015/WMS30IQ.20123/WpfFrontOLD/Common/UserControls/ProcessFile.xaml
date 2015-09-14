@@ -1,0 +1,97 @@
+﻿<UserControl x:Class="WpfFront.Common.UserControls.ProcessFile"
+    xmlns:uc="clr-namespace:WpfFront.Common.UserControls"               
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"            
+    Height="auto" Width="auto" x:Name="UcProcessFile">
+
+    <StackPanel x:Uid="StackPanel_9" Orientation="Vertical" Margin="7" >
+
+
+
+        <TextBlock x:Uid="TextBlock_28" Margin="0,6,0,3" FontWeight="Bold" Text="{StaticResource UPLOAD_FILE_PRINT_SPECIFIC_PROCESS}"></TextBlock>
+
+
+        <Grid x:Uid="Grid_3">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition x:Uid="ColumnDefinition_14" />
+                <ColumnDefinition x:Uid="ColumnDefinition_15" />
+                <ColumnDefinition x:Uid="ColumnDefinition_16" />
+                <ColumnDefinition  />
+                <ColumnDefinition   />
+            </Grid.ColumnDefinitions>
+
+            <Grid.RowDefinitions>
+                <RowDefinition x:Uid="RowDefinition_28" />
+                <RowDefinition x:Uid="RowDefinition_29" />
+                <RowDefinition x:Uid="RowDefinition_30" />
+            </Grid.RowDefinitions>
+
+
+
+            <TextBlock x:Uid="TextBlock_29" Grid.Column="0" Grid.Row="0" Text="{StaticResource FILE_TO_UPLOAD}" ></TextBlock>
+            <uc:UploadFile  x:Name="upFile" Grid.Column="0" Grid.Row="1" />
+            
+            
+            <TextBlock   Grid.Column="1" Grid.Row="0" Margin="5,0,0,0" Text="{StaticResource FILE_TYPE}"></TextBlock>
+            <ComboBox x:Uid="cboFType" Grid.Column="1" Grid.Row="1" Width="60" Margin="3,0,0,0"  Name="cboFtype" DisplayMemberPath="Name"
+                                     Height="26" VerticalAlignment="Bottom"  ItemsSource="{Binding Path=FTypeList}" SelectedValuePath="ConnectionID" />
+                      
+            
+            <TextBlock  Grid.Column="2" Grid.Row="0" Margin="5,0,0,0" Text="{StaticResource PROCESS_ASIGNED}"></TextBlock>
+            <ComboBox x:Uid="cboProcess" Grid.Column="2" Grid.Row="1" Width="90" Margin="3,0,0,0"  Name="cboProcess" DisplayMemberPath="Name"
+                                     Height="26" VerticalAlignment="Bottom"     ItemsSource="{Binding Path=ProcessList}" SelectedValuePath="ProcessID" />
+
+
+            <TextBlock  Grid.Column="3" Grid.Row="0" Margin="5,0,0,0" Text="{StaticResource PRINTER}"></TextBlock>
+            <ComboBox   Grid.Column="3"  Grid.Row="1" Width="90" Margin="3,0,0,0"  Name="cboPrinter" DisplayMemberPath="Name"
+                                     Height="26" VerticalAlignment="Bottom"     ItemsSource="{Binding Path=PrinterList}" SelectedValuePath="ConnectionID" />
+
+            <Button x:Uid="btnAssign" Grid.RowSpan="2" Grid.Column="4" Margin="5,5,0,0"  HorizontalAlignment="Right" 
+                     Grid.Row="1" Width="52" Name="btnAdd" Click="btnAdd_Click" VerticalAlignment="Bottom" Content="{StaticResource ADD}"></Button>
+
+
+        </Grid>
+
+
+
+
+
+
+        <StackPanel Name="stkFiles" Visibility="Collapsed" Margin="0,13,0,0">
+
+            <StackPanel Orientation="Horizontal" Margin="0,6,0,0" HorizontalAlignment="Right">
+
+                <CheckBox x:Uid="chkSelectAllLines" Name="chkSelectAllLines" HorizontalAlignment="Stretch" Width="Auto" VerticalAlignment="Bottom"
+                                  Margin="0,0,0,0" Checked="chkSelectAllLines_Checked" Unchecked="chkSelectAllLines_Unchecked" Content="{StaticResource SELECT_ALL}"></CheckBox>
+
+                <Button x:Uid="btnRemBin" x:Name="btnRemBin" Width="105"
+                           Margin="15,3,0,0" HorizontalAlignment="Right" Click="btnRemBin_Click" Content="{StaticResource REMOVE_SELECTED}" ></Button>
+
+
+            </StackPanel>
+
+            <ListView ItemsSource="{Binding Path=RecordList}" Margin="0,5,0,0"  MaxHeight="200" Name="lvFileProcess"  >
+                <ListView.View>
+                    <GridView x:Uid="GridView_5">
+ 
+                        <GridViewColumn Header="{StaticResource FILE}" Width="200" DisplayMemberBinding="{Binding Path=File.FullDesc}"></GridViewColumn>
+                        
+                        <!--<GridViewColumn Header="Template" DisplayMemberBinding="{Binding Path=Template.Name}"></GridViewColumn>-->
+                        
+                        <GridViewColumn Header="{StaticResource PROCESS}" Width="90" DisplayMemberBinding="{Binding Path=Process.Name}"></GridViewColumn>
+                        <GridViewColumn Header="{StaticResource PRINTER}"  DisplayMemberBinding="{Binding Path=Printer.Name}" />
+
+                    </GridView>
+                </ListView.View>
+            </ListView>
+
+
+            <!--<Button x:Uid="btnUpdate" HorizontalAlignment="Right" Margin="0,5,0,0" Width="100" Name="btnUpdate">Update Selected</Button>-->
+
+        </StackPanel>
+
+
+    </StackPanel>
+
+
+</UserControl>

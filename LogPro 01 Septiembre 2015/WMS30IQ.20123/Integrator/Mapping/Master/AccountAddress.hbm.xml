@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<hibernate-mapping xmlns="urn:nhibernate-mapping-2.2" namespace="Entities.Master" assembly="Entities">
+  <class name="AccountAddress" table="Master.AccountAddress">
+	<id name="AddressID" type="Int32">
+		<generator class="native" />
+	</id>
+	<many-to-one lazy="false" name="Account" class="Entities.Master.Account" column="AccountID" unique-key="ukAccountAddress" not-null="true" />
+	<property name="Name" type="String" length="100" not-null="true"  unique-key="ukAccountAddress" />
+	<property name="ErpCode" type="String" length="50"  unique-key="ukAccountAddress"  />
+	<property name="IsMain" type="Boolean" not-null="true"  />
+	<property name="AddressLine1" type="String" length="100" not-null="true"  />
+	<property name="AddressLine2" type="String" length="100"   />
+	<property name="AddressLine3" type="String" length="100"   />
+	<property name="City" type="String" length="50" not-null="true"  />
+	<property name="State" type="String" length="50" not-null="true"  />
+	<property name="ZipCode" type="String" length="50" not-null="true"  />
+	<property name="Country" type="String" length="50" not-null="true"  />
+	  <property name="ContactPerson" type="String" length="80"   />
+	<property name="Phone1" type="String" length="50" not-null="true"  />
+	<property name="Phone2" type="String" length="50"   />
+	<property name="Phone3" type="String" length="50"   />
+	<property name="Email" type="String" length="50"   />
+	<property name="IsFromErp" type="Boolean" not-null="true"  />
+	<many-to-one lazy="false" name="ShpMethod" class="Entities.Master.ShippingMethod" column="ShpMethodID" not-found="ignore" />
+
+
+	  <many-to-one lazy="false" name="Status" class="Entities.General.Status" column="StatusID" not-null="true" />
+	<property name="CreatedBy" type="String" length="50" not-null="true"  />
+	<property name="CreationDate" type="DateTime" not-null="true"   />
+	<property name="CreTerminal" type="String" length="50"   />
+	<property name="ModifiedBy" type="String" length="50"   />
+	<property name="ModDate" type="DateTime"   />
+	<property name="ModTerminal" type="String" length="50"   />
+  </class>
+</hibernate-mapping>

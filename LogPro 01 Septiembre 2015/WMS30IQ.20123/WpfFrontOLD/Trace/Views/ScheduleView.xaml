@@ -1,0 +1,200 @@
+﻿    <WMCore:UserControlBase x:Uid="Unit" x:Class="WpfFront.Views.ScheduleView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:xcdg="http://schemas.xceed.com/wpf/xaml/datagrid"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:toolkit="http://schemas.microsoft.com/wpf/2008/toolkit"             
+    Height="Auto" Width="Auto" HorizontalAlignment="Stretch"
+    xmlns:WMCore="clr-namespace:Core.WPF;assembly=Core"    
+    x:Name="Unit">
+        <AdornerDecorator x:Uid="AdornerDecorator_1">
+
+            <DockPanel x:Uid="DockPanel_1" Background="{DynamicResource WBg}" HorizontalAlignment="Left" VerticalAlignment="Stretch">
+
+                <DockPanel.Resources>
+                    <WMCore:ForceReReadConverter x:Uid="WMCore:ForceReReadConverter_1" x:Key="forceReReadConverter" />
+                    <WMCore:FormattingConverter x:Uid="WMCore:FormattingConverter_1" x:Key="formattingConverter" />
+                    <WMCore:FormNotificationErrorMessageConverter x:Uid="WMCore:FormNotificationErrorMessageConverter_1" x:Key="formNotificationErrorMessageConverter" />
+                    <WMCore:NullableIntegerFormatConverter x:Uid="WMCore:NullableIntegerFormatConverter_1" x:Key="nullableIntegerFormatConverter" />
+                </DockPanel.Resources>
+
+                <!-- list of Group Criterias -->
+
+                <TextBlock x:Uid="TextBlock_1" DockPanel.Dock="Top" Margin="15,4,4,4" FontSize="14" FontWeight="Bold" HorizontalAlignment="Left">Admin Scheduled Counts</TextBlock>
+
+
+                <StackPanel x:Uid="stkSearchForm" DockPanel.Dock="Left" Margin="0" Grid.Column="1" Grid.Row="0" x:Name="stkSearchForm">
+
+                    <Border x:Uid="Border_1" Style="{DynamicResource UserControlFormInnerBorder}" Margin="7,0,7,0" >
+
+
+
+                        <Grid  x:Uid="dgSearch" HorizontalAlignment="Center"
+                            VerticalAlignment="Top" Width="Auto" Margin="0,5,0,0" x:Name="dgSearch" >
+
+
+
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition x:Uid="ColumnDefinition_1" Width="Auto" />
+                                <ColumnDefinition x:Uid="ColumnDefinition_2" Width="Auto" />
+                                <ColumnDefinition x:Uid="ColumnDefinition_3" Width="100" />
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition x:Uid="RowDefinition_1" Height="auto" />
+                                <RowDefinition x:Uid="RowDefinition_2" Height="auto" />
+                                <RowDefinition x:Uid="RowDefinition_3" Height="auto" />
+                            </Grid.RowDefinitions>
+
+                            <StackPanel x:Uid="StackPanel_1" Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="3" Margin="0,5,0,0">
+
+                                <xcdg:DataGridControl  x:Uid="dgList" x:Name="dgList"  Grid.Row="1" ItemsSource="{Binding Path=EntityList}"                           
+                          AutoCreateColumns="False" Width="Auto" ReadOnly="True" IsTextSearchEnabled="True" 
+                          MaxHeight="400" Margin="0,0,0,0" VerticalAlignment="Stretch" SelectionMode="Single" 
+                                          NavigationBehavior="RowOnly" GotFocus="dgList_GotFocus">
+                                    <xcdg:DataGridControl.Resources>
+                                        <Style x:Uid="Style_1" x:Key="{x:Type xcdg:ScrollTip}" TargetType="{x:Type xcdg:ScrollTip}">
+                                            <Setter x:Uid="Setter_1" Property="HorizontalAlignment" Value="Right" />
+                                            <Setter x:Uid="Setter_2" Property="VerticalAlignment" Value="Bottom" />
+                                        </Style>
+                                    </xcdg:DataGridControl.Resources>
+                                    <xcdg:DataGridControl.Columns>
+                                        <!--  <xcdg:Column FieldName="ID" Title="ID" TextWrapping="Wrap" /> -->
+                                        <xcdg:Column x:Uid="xcdg:Column_0" FieldName="Title" Title="Cycle Count Name" TextWrapping="Wrap" Width="150"  />
+                                        <xcdg:Column x:Uid="xcdg:Column_1" FieldName="Start" Title="Begin" TextWrapping="Wrap" Width="90" />
+                                        <xcdg:Column x:Uid="xcdg:Column_2" FieldName="Finish" Title="End" TextWrapping="Wrap" Width="90" />
+                                        <xcdg:Column x:Uid="xcdg:Column_3" FieldName="NextDateRun" Title="Next Date" TextWrapping="Wrap" Width="90" />
+                                        <xcdg:Column x:Uid="xcdg:Column_3" FieldName="RepeatEach" Title="Every (d)" Width="60" />
+                                    </xcdg:DataGridControl.Columns>
+                                    <xcdg:DataGridControl.View>
+                                        <xcdg:TableView x:Uid="xcdg:TableView_1" UseDefaultHeadersFooters="False" ShowScrollTip="True" VerticalGridLineBrush="LightGray" 
+														ShowRowSelectorPane="False" HorizontalGridLineThickness="1" HorizontalGridLineBrush="LightGray">
+                                            <xcdg:TableView.Theme>
+                                                <xcdg:Office2007BlackTheme x:Uid="xcdg:Office2007BlackTheme_1"/>
+                                            </xcdg:TableView.Theme>
+                                            <xcdg:TableView.FixedHeaders>
+                                                <DataTemplate x:Uid="DataTemplate_1">
+                                                    <xcdg:ColumnManagerRow x:Uid="xcdg:ColumnManagerRow_1" AllowColumnReorder="True" />
+                                                </DataTemplate>
+                                            </xcdg:TableView.FixedHeaders>
+                                        </xcdg:TableView>
+                                    </xcdg:DataGridControl.View>
+                                </xcdg:DataGridControl>
+
+                            </StackPanel>
+
+                        </Grid>
+
+                    </Border>
+
+                </StackPanel>
+
+
+                <!-- End Setp Two -->
+
+
+
+                <!-- Edit Group Data -->
+
+                <Grid x:Uid="Grid_1" DockPanel.Dock="Left"  HorizontalAlignment="Left" VerticalAlignment="Stretch">
+                    <StackPanel x:Uid="stkEdit" Visibility="Hidden" x:Name="stkEdit" >
+
+
+                        <WMCore:FormNotification x:Uid="frmNotification" IsTabStop="False" x:Name="frmNotification" Margin="3,0,3,0" WatermarkMessage="" Height="5" Panel.ZIndex="99" AutoCollapseTimeout="2">
+                            <WMCore:FormNotification.ErrorMessage>
+                                <MultiBinding x:Uid="MultiBinding_1" Converter="{StaticResource formNotificationErrorMessageConverter}">
+                                    <Binding x:Uid="Binding_1" Path="Error" />
+                                    <Binding x:Uid="Binding_2" Path="ValidationExceptionErrors" ElementName="Unit" />
+                                </MultiBinding>
+                            </WMCore:FormNotification.ErrorMessage>
+                        </WMCore:FormNotification>
+
+
+                        <Border x:Uid="Border_2" Style="{DynamicResource GrayStyle}" Margin="7,-5,10,10" >
+
+
+
+                            <StackPanel x:Uid="StackPanel_2" >
+
+                                <Grid  x:Uid="dgEdit" HorizontalAlignment="Left"  VerticalAlignment="Top" Margin="5" x:Name="dgEdit" >
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition x:Uid="ColumnDefinition_4" Width="Auto" />
+                                        <ColumnDefinition x:Uid="ColumnDefinition_5" Width="Auto" />
+                                    </Grid.ColumnDefinitions>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition x:Uid="RowDefinition_4" Height="auto" />
+                                        <RowDefinition x:Uid="RowDefinition_5" Height="auto" />
+                                        <RowDefinition x:Uid="RowDefinition_6" Height="auto" />
+                                        <RowDefinition x:Uid="RowDefinition_7" Height="auto" />
+                                        <RowDefinition x:Uid="RowDefinition_8" Height="auto" />
+                                        <RowDefinition x:Uid="RowDefinition_9" Height="auto" />
+                                        <RowDefinition x:Uid="RowDefinition_10" Height="auto" />
+                                        <RowDefinition x:Uid="RowDefinition_11" Height="auto" />
+
+                                    </Grid.RowDefinitions>
+
+                                <TextBlock x:Uid="TextBlock_9" Grid.Column="0" Grid.Row="1" Margin="0,4,4,0" HorizontalAlignment="Right" >Cycle Name</TextBlock>
+                                <TextBox x:Uid="txtTitle" x:Name="txtTitle" Grid.Column="1" Grid.Row="1" Height="26"  Width="230" Text="{Binding Path=Record.Title}" />
+
+                                <TextBlock x:Uid="TextBlock_7" Grid.Column="0" Grid.Row="2" Margin="0,4,4,0" HorizontalAlignment="Right" >Start Date</TextBlock>
+                                    <toolkit:DatePicker x:Uid="txtSchDateFrom" FirstDayOfWeek="Monday" Width="180" Height="26" HorizontalAlignment="Left" FontSize="12" SelectedDate="{Binding Path=Record.Start}"
+                                            Margin="0,4,0,0"  x:Name="txtSchDateFrom" Grid.Column="1" Grid.Row="2" />
+
+                                    <TextBlock x:Uid="TextBlock_8" Grid.Column="0" Grid.Row="3" Margin="0,4,4,0" HorizontalAlignment="Right" >End Date</TextBlock>
+                                    <toolkit:DatePicker x:Uid="txtSchDateTo" FirstDayOfWeek="Monday" Width="180" Height="26" HorizontalAlignment="Left" FontSize="12" SelectedDate="{Binding Path=Record.Finish}"
+                                            Margin="0,4,0,0"  x:Name="txtSchDateTo" Grid.Column="1" Grid.Row="3" />                                    
+
+                                    <TextBlock x:Uid="TextBlock_9" Grid.Column="0" Grid.Row="4" Margin="0,4,4,0" HorizontalAlignment="Right" >Next Date</TextBlock>
+                                    <toolkit:DatePicker x:Uid="txtSchNextDate" FirstDayOfWeek="Monday" Width="180" Height="26" HorizontalAlignment="Left" FontSize="12" SelectedDate="{Binding Path=Record.NextDateRun}" Text="{Binding Path=Record.NextDateRun}"
+                                            Margin="0,4,0,0"  x:Name="txtSchNextDate" Grid.Column="1" Grid.Row="4" />
+
+                                    <TextBlock x:Uid="TextBlock_9" Grid.Column="0" Grid.Row="5" Margin="0,4,4,0" HorizontalAlignment="Right" >Run every</TextBlock>
+                                    <StackPanel x:Uid="stkrun" Orientation="Horizontal" Grid.Column="1" Grid.Row="5" Margin="0,4,0,0" > 
+                                      <TextBox x:Uid="txtFrecuency" x:Name="txtFrecuency" Height="23" Width="50" HorizontalAlignment="Left" Text="{Binding Path=Record.RepeatEach}" />
+                                      <TextBlock x:Uid="TextBlock_9" Margin="4,0,0,0" HorizontalAlignment="Right" VerticalAlignment="Center" > days</TextBlock>
+                                    </StackPanel>
+
+                                   <TextBlock x:Uid="TextBlock_4" Grid.Column="0" Grid.Row="6" Margin="0,4,4,4" HorizontalAlignment="Right" FontWeight="Bold">Conditions</TextBlock>
+                                   <TextBlock x:Uid="TextBlock_5" Grid.Column="1" Grid.Row="6" Margin="0,4,0,4" FontWeight="Bold" HorizontalAlignment="Left" Text="{Binding Path=Conditions}" Foreground="Brown"></TextBlock>
+                                    
+                            </Grid>
+
+
+
+
+
+                            <StackPanel  x:Uid="stkButtons" Margin="5,5,0,0" HorizontalAlignment="Right" Name="stkButtons" Orientation="Horizontal">
+                                
+                                <Button x:Uid="btnSave" Name="btnSave" Margin="0,0,5,0" Click="btnSave_Click">
+                                    <WrapPanel x:Uid="WrapPanel_2" >
+                                        <Image x:Uid="Image_2" Source="/WpfFront;component/Images/Save.png" Margin="5,0,0,0"></Image>
+                                        <TextBlock x:Uid="TextBlock_10" Margin="5" >
+                                            Save Record
+                                        </TextBlock>
+                                    </WrapPanel>
+                                </Button>
+                                
+                                <Button x:Uid="btnDelete" Name="btnDelete" Margin="0,0,0,0" Click="btnDelete_Click">
+                                    <WrapPanel x:Uid="WrapPanel_3">
+                                        <Image x:Uid="Image_3" Margin="5,0,0,0" Source="/WpfFront;component/Images/Delete.png"></Image>
+                                        <TextBlock x:Uid="TextBlock_11" Margin="5">
+                                            Delete Record
+                                        </TextBlock>
+
+                                    </WrapPanel>
+                                </Button>
+                            </StackPanel>
+
+
+                        </StackPanel>
+
+
+                        </Border>
+
+                    </StackPanel>
+
+                </Grid>
+
+                <!-- End Setp Three -->
+
+        </DockPanel>
+        </AdornerDecorator>
+    </WMCore:UserControlBase>

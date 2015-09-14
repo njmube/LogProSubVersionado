@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<hibernate-mapping xmlns="urn:nhibernate-mapping-2.2" namespace="Entities.Workflow" assembly="Entities">
+  <class name="WFDataType" table="Workflow.WFDataType">
+	<id name="DataTypeID" type="Int16">
+		<generator class="assigned" />
+	</id>
+		<property name="Name" type="String" length="50" not-null="true" unique="true" />
+	  <property name="Description" type="String" length="255" />
+	  <property name="IsBasic" type="Boolean" not-null="true" />
+	  <property name="UIControl" type="String" length="255" />
+	  <property name="BaseType" type="String" length="255" />
+    <property name="UIListControl" type="String" length="255" />
+  </class>
+</hibernate-mapping>

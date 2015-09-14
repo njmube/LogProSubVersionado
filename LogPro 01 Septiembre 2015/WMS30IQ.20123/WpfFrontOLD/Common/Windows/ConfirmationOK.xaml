@@ -1,0 +1,33 @@
+﻿<Window x:Uid="Window_1" x:Class="WpfFront.Common.ConfirmationOK"
+	xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+	xmlns:aw="clr-namespace:Assergs.Windows;assembly=Assergs.Windows"
+	xmlns:awc="clr-namespace:Assergs.Windows.Controls;assembly=Assergs.Windows"
+    Icon="/WpfFront;component/Images/Icons/Confirm.png"
+    WindowStartupLocation="CenterScreen"
+    Title="Process Confirmation"
+	Width="365" Height="222">
+
+    <Grid x:Uid="Grid_1" Background="WhiteSmoke" >
+
+        <Grid.RowDefinitions>
+            <RowDefinition x:Uid="RowDefinition_1" Height="Auto"/>
+            <RowDefinition x:Uid="RowDefinition_2" Height="*"/>
+            <RowDefinition x:Uid="RowDefinition_3" Height="Auto"/>
+            <RowDefinition x:Uid="RowDefinition_4" Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <awc:HeaderedPanel x:Uid="hdrWindow" Grid.Row="1"  Margin="4,2,4,4" Name="hdrWindow" FontSize="12">
+            <!-- Header debe tener el texto de la ventana -->
+            <TextBlock x:Uid="MessageBoxText" TextWrapping="Wrap" Margin="2" Name="MessageBoxText" TextAlignment="Center" VerticalAlignment="Center" />
+        </awc:HeaderedPanel>
+
+        <StackPanel x:Uid="StackPanel_1" Margin="4,10,4,10" Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Center">
+            
+            <Button  x:Uid="btnConfirm" HorizontalAlignment="Right" Width="90" Height="30" Name="btnConfirm" Content="OK" FontSize="11" FontWeight="Bold" Click="btnConfirm_Click" ></Button>
+            
+            <Button x:Uid="btnCancel" HorizontalAlignment="Right" Width="90" Height="30" Margin="20,0,0,0" Name="btnCancel" Content="Cancel" FontSize="11" Click="btnCancel_Click"></Button>
+            
+        </StackPanel>
+    </Grid>
+</Window>

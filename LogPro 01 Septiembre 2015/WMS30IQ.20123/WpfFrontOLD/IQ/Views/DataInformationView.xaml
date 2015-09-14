@@ -1,0 +1,357 @@
+﻿<WMCore:UserControlBase x:Uid="EntradaAlmacen" x:Class="WpfFront.Views.DataInformationView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:xcdg="http://schemas.xceed.com/wpf/xaml/datagrid"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    Height="Auto" Width="Auto" HorizontalAlignment="Stretch"
+    xmlns:WMCore="clr-namespace:Core.WPF;assembly=Core"   
+    xmlns:dg="http://schemas.microsoft.com/wpf/2008/toolkit"
+    xmlns:toolkit="http://schemas.microsoft.com/wpf/2008/toolkit"
+    xmlns:uc="clr-namespace:WpfFront.Common.UserControls"
+    x:Name="DataInformation">
+       
+   
+    <AdornerDecorator x:Uid="AdornerDecorator_1">
+        
+        <DockPanel x:Uid="DockPanel_1" Background="AliceBlue" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+
+            <StackPanel x:Uid="StackPanel_1" Orientation="Vertical" HorizontalAlignment="Left" >
+                <StackPanel x:Uid="Stack_Panel1" Orientation="Vertical" Margin="3" HorizontalAlignment="Left" Width="auto" Height="auto"> 
+                    <Border x:Uid="Border_1" Style="{DynamicResource UserControlFormInnerBorder}" Margin="3" HorizontalAlignment="Center">
+                        <Grid  HorizontalAlignment="Center"
+                            VerticalAlignment="Top" Width="Auto" Margin="0,5,0,0" x:Name="dgSearch" >
+
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="100" />
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="auto" />
+                                <RowDefinition Height="auto" />
+                            </Grid.RowDefinitions>
+
+                            <TextBlock Grid.Column="0" Grid.Row="0" VerticalAlignment="Center" Margin="0,0,5,0">Cliente</TextBlock>
+                            <ComboBox x:Uid="ls_Location" Grid.Row="0" Grid.Column="1"  Width="150" Margin="5,0,0,0"  Name="ls_Location" DisplayMemberPath="Name"
+                                      Height="23" VerticalAlignment="Top" HorizontalAlignment="Left" SelectedValue="LocationID" SelectedValuePath="LocationID" 
+                                      ItemsSource="{Binding Path=LocationList}" SelectionChanged="ls_Location_SelectionChanged"  />
+                        </Grid>
+                    </Border>
+                </StackPanel>
+                <StackPanel x:Uid="Stack_Panel" Name="Stack_Menu" Orientation="Vertical" Margin="3" HorizontalAlignment="Center" Width="auto" Height="auto" Visibility="Hidden" >
+                    <TabControl x:Uid="tabMenu" Margin="6,10,0,0" Name="tabMenu" TabStripPlacement="Top"  Style="{DynamicResource TabControlStyle}" >
+                        <TabItem x:Uid="TabItem_1" Header="Definicion"  VerticalAlignment="Stretch">
+                            <StackPanel x:Uid="Stack_Panel1" Orientation="Horizontal" Margin="3" HorizontalAlignment="Center" Width="auto" Height="auto">
+                                <StackPanel x:Uid="Stack_Panel1" Orientation="Vertical" Margin="3" HorizontalAlignment="Center" Width="auto" Height="auto">
+                                    <Border x:Uid="Border_1" Style="{DynamicResource UserControlFormInnerBorder}" Margin="3" HorizontalAlignment="Center">
+                                        <Grid  HorizontalAlignment="Center"
+                                               VerticalAlignment="Top" Width="Auto" Margin="0,5,0,0" x:Name="dgDataDefinition" >
+
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="Auto" />
+                                                <ColumnDefinition Width="Auto" />
+                                                <ColumnDefinition Width="100" />
+                                            </Grid.ColumnDefinitions>
+                                            <Grid.RowDefinitions>
+                                                <RowDefinition Height="auto" />
+                                                <RowDefinition Height="auto" />
+                                            </Grid.RowDefinitions>
+
+                                            <TextBlock Grid.Column="0" Grid.Row="0" VerticalAlignment="Center" Margin="0,0,5,0">Buscar Registro</TextBlock>
+                                            <TextBox Grid.Column="1" Grid.Row="0" Width="100" Height="22" ToolTip="Write a keyword to search." Margin="0,0,0,0" 
+                                                     Name="txtSearchDataDefinition" TextChanged="txtSearchDataDefinition_TextChanged" />
+
+                                            <Button Grid.Column="2" Grid.Row="0" Name="btnNewDataDefinition" Margin="0,0,0,0" HorizontalAlignment="Right" Click="btnNewDataDefinition_Click" >
+                                                <WrapPanel>
+                                                    <TextBlock Margin="5"  VerticalAlignment="Center" Text="Nuevo Reg." />
+                                                    <Image VerticalAlignment="Center" Source="/WpfFront;component/Images/New.png" Stretch="None" Margin="0,0,5,0" />
+                                                </WrapPanel>
+                                            </Button>
+
+                                            <StackPanel Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="3" Margin="0,5,0,0">
+
+                                                <xcdg:DataGridControl x:Name="dgListDataDefinition"  Grid.Row="1" ItemsSource="{Binding Path=DataDefinitionList}"                           
+                                                          AutoCreateColumns="False" Width="Auto" ReadOnly="True" IsTextSearchEnabled="True" 
+                                                          MaxHeight="400" Margin="0,0,0,0" VerticalAlignment="Stretch" SelectionMode="Single" 
+                                                          NavigationBehavior="RowOnly" GotFocus="dgListDataDefinition_GotFocus">
+                                                    <xcdg:DataGridControl.Resources>
+                                                        <Style x:Key="{x:Type xcdg:ScrollTip}" TargetType="{x:Type xcdg:ScrollTip}">
+                                                            <Setter Property="HorizontalAlignment" Value="Right" />
+                                                            <Setter Property="VerticalAlignment" Value="Bottom" />
+                                                        </Style>
+                                                    </xcdg:DataGridControl.Resources>
+                                                    <xcdg:DataGridControl.Columns>
+                                                        <xcdg:Column FieldName="DisplayName" Title="Nombre Campo" TextWrapping="Wrap" Width="180"  />
+                                                        <xcdg:Column FieldName="DataType.Name" Title="Tipo Campo" TextWrapping="Wrap" Width="80"  />
+                                                        <xcdg:Column FieldName="IsHeader" Title="Cabecera" TextWrapping="Wrap" Width="60"  />
+                                                        <xcdg:Column FieldName="IsSerial" Title="Serial" TextWrapping="Wrap" Width="60" />
+                                                        <xcdg:Column FieldName="IsRequired" Title="Oblig." TextWrapping="Wrap" Width="60" />
+                                                    </xcdg:DataGridControl.Columns>
+                                                    <xcdg:DataGridControl.View>
+                                                        <xcdg:TableView UseDefaultHeadersFooters="False" ShowScrollTip="True" VerticalGridLineBrush="LightGray" 
+														    ShowRowSelectorPane="False" HorizontalGridLineThickness="1" HorizontalGridLineBrush="LightGray">
+
+                                                            <xcdg:TableView.Theme>
+                                                                <xcdg:Office2007BlackTheme x:Uid="xcdg:Office2007BlackTheme_1"/>
+                                                            </xcdg:TableView.Theme>
+
+                                                            <xcdg:TableView.FixedHeaders>
+
+                                                                <DataTemplate>
+                                                                    <xcdg:ColumnManagerRow AllowColumnReorder="True" />
+                                                                </DataTemplate>
+                                                            </xcdg:TableView.FixedHeaders>
+                                                        </xcdg:TableView>
+                                                    </xcdg:DataGridControl.View>
+                                                </xcdg:DataGridControl>
+
+                                            </StackPanel>
+
+                                        </Grid>
+                                    </Border>
+                                </StackPanel>
+                                <StackPanel x:Uid="Stack_FieldsDataDefinition" Name="Stack_FieldsDataDefinition"  Orientation="Vertical" Margin="3" HorizontalAlignment="Center" Width="auto" Height="auto">
+                                    <Border x:Uid="Border_1" Name="Border_FieldsDataDefinition" Style="{DynamicResource UserControlFormInnerBorder}" Margin="3" HorizontalAlignment="Center" Visibility="Collapsed">
+                                        <StackPanel x:Uid="Stack_Panel1" Margin="5" Width="auto" HorizontalAlignment="Center" Orientation="Vertical">
+                                            <StackPanel x:Uid="Stack_Panel1" Name="Stack_Panel1" Width="auto" Orientation="Horizontal" Margin="4,3,4,3">
+                                                <TextBlock x:Uid="Text_block1" Name="Text_block1" Width="100" Text="Cliente" VerticalAlignment="Center"  />
+                                                <TextBlock x:Uid="txt_DataDefinitionCliente" Name="txt_DataDefinitionCliente" Width="140" VerticalAlignment="Center" Text="{Binding Path=RecordDataDefinition.Location.Name}" />  
+                                            </StackPanel>
+                                            <StackPanel x:Uid="Stack_Panel4" Name="Stack_Panel4" Width="auto" Orientation="Horizontal" Margin="4,3,4,3">
+                                                <TextBlock x:Uid="Text_block4" Name="Text_block4" Width="100" Text="Nombre Campo" VerticalAlignment="Center"  />
+                                                <TextBox x:Uid="txt_NombreCampoDataDefinition" Name="txt_NombreCampoDataDefinition" Width="140" Text="{Binding Path=RecordDataDefinition.DisplayName}" />
+                                            </StackPanel>
+                                            <StackPanel x:Uid="Stack_Code" Name="Stack_Code" Width="auto" Orientation="Horizontal" Margin="4,3,4,3">
+                                                <TextBlock x:Uid="Text_block9" Name="Text_block9" Width="100" Text="Codigo" VerticalAlignment="Center"  />
+                                                <TextBox x:Uid="txt_Code" Name="txt_Code" Width="140" Text="{Binding Path=RecordDataDefinition.Code}" />
+                                            </StackPanel>
+                                            <StackPanel x:Uid="Stack_Panel3" Name="Stack_Panel3" Width="auto" Orientation="Horizontal" Margin="4,3,4,3">
+                                                <TextBlock x:Uid="Text_block3" Name="Text_block3" Width="100" Text="Tipo Campo" VerticalAlignment="Center" />
+                                                <ComboBox x:Uid="ls_WFDataType" Width="140" Margin="0,0,0,0"  Name="ls_WFDataType" DisplayMemberPath="Name"
+                                                          Height="23" VerticalAlignment="Top" HorizontalAlignment="Left" SelectedValue="{Binding Path=RecordDataDefinition.DataType.DataTypeID}" 
+                                                          SelectedValuePath="DataTypeID" ItemsSource="{Binding Path=WFDataTypeList}" SelectionChanged="ls_WFDataType_SelectionChanged" />
+                                            </StackPanel>
+                                            <StackPanel x:Uid="Stack_MetaType" Name="Stack_MetaType" Width="auto" Orientation="Horizontal" Margin="4,3,4,3" Visibility="Collapsed" >
+                                                <TextBlock x:Uid="txt_MetaTipo" Name="txt_MetaTipo" Width="100" Text="MetaType" VerticalAlignment="Center" />
+                                                <ComboBox x:Uid="ls_MetaType" Width="140" Margin="0,0,0,0"  Name="ls_MetaType" DisplayMemberPath="Name"
+                                                          Height="23" VerticalAlignment="Top" HorizontalAlignment="Left" SelectedValuePath="MetaTypeID"
+                                                          ItemsSource="{Binding Path=MetaTypeList}" SelectedValue="{Binding Path=RecordDataDefinition.MetaType.MetaTypeID}" />
+                                            </StackPanel>
+                                            <!--<StackPanel x:Uid="Stack_Panel3" Name="Stack_Panel3" Width="auto" Orientation="Horizontal" Margin="4,3,4,3">
+                                                <TextBlock x:Uid="Text_block3" Name="Text_block3" Width="100" Text="Fecha" VerticalAlignment="Center" />
+                                                <toolkit:DatePicker x:Uid="toolkit:DatePicker_1" FirstDayOfWeek="Monday" Width="140" />
+                                            </StackPanel>-->
+                                            <StackPanel x:Uid="Stack_Panel5" Name="Stack_Panel5" Width="auto" Orientation="Horizontal" Margin="4,3,4,3">
+                                                <TextBlock x:Uid="txt_Cabezera" Name="txt_Cabezera" Width="100" Text="Cabecera" VerticalAlignment="Center"  />
+                                                <CheckBox x:Uid="chk_Cabezera" Name="chk_Cabezera" Margin="0,0,0,0" HorizontalAlignment="Center" IsChecked="{Binding Path=RecordDataDefinition.IsHeader}" />
+                                            </StackPanel>
+                                            <StackPanel x:Uid="Stack_Panel6" Name="Stack_Panel6" Width="auto" Orientation="Horizontal" Margin="4,3,4,3">
+                                                <TextBlock x:Uid="txt_Serial" Name="txt_Serial" Width="100" Text="Serial" VerticalAlignment="Center"  />
+                                                <CheckBox x:Uid="chk_Serial" Name="chk_Serial" Margin="0,0,0,0" HorizontalAlignment="Center" IsChecked="{Binding Path=RecordDataDefinition.IsSerial}" />
+                                            </StackPanel>
+                                            <StackPanel x:Uid="Stack_Panel7" Name="Stack_Panel7" Width="auto" Orientation="Horizontal" Margin="4,3,4,3">
+                                                <TextBlock x:Uid="txt_TamanoSerial" Name="txt_TamanoSerial" Width="100" Text="Tamano" VerticalAlignment="Center"  />
+                                                <TextBox x:Uid="tb_TamanoSerial" Name="tb_TamanoSerial" Width="140" Text="{Binding Path=RecordDataDefinition.Size}" />
+                                            </StackPanel>
+                                            <StackPanel x:Uid="Stack_Panel20" Name="Stack_Panel20" Width="auto" Orientation="Horizontal" Margin="4,3,4,3">
+                                                <TextBlock x:Uid="txt_Requerido" Name="txt_Requerido" Width="100" Text="Obligatorio" VerticalAlignment="Center"  />
+                                                <CheckBox x:Uid="chk_Requerido" Name="chk_Requerido" Margin="0,0,0,0" HorizontalAlignment="Center" IsChecked="{Binding Path=RecordDataDefinition.IsRequired}" />
+                                            </StackPanel>
+                                            <StackPanel x:Uid="Stack_Panel8" Name="Stack_Panel8" Width="auto" Orientation="Horizontal" Margin="4,3,4,3">
+                                                <TextBlock x:Uid="txt_DefaultValue" Name="txt_DefaultValue" Width="100" Text="Valor por Defecto" VerticalAlignment="Center"  />
+                                                <TextBox x:Uid="tb_DefaultValue" Name="tb_DefaultValue" Width="140" Text="{Binding Path=RecordDataDefinition.DefaultValue}" />
+                                            </StackPanel>
+                                            <StackPanel x:Uid="Stack_Panel10" Name="Stack_Panel10" Width="auto" Orientation="Horizontal" Margin="4,3,4,3">
+                                                <TextBlock x:Uid="txt_NumOrder" Name="txt_NumOrder" Width="100" Text="Posicion Listado" VerticalAlignment="Center"  />
+                                                <TextBox x:Uid="tb_NumOrder" Name="tb_NumOrder" Width="140" Text="{Binding Path=RecordDataDefinition.NumOrder}" />
+                                            </StackPanel>
+                                            <StackPanel x:Uid="Stack_Panel9" Name="Stack_Panel9" Width="auto" Orientation="Horizontal" Margin="4,3,4,3" HorizontalAlignment="Right" >
+                                                <Button Name="btn_SaveDataDefinition" Margin="0,0,5,0" HorizontalAlignment="Right" Click="btn_SaveDataDefinition_Click">
+                                                    <WrapPanel>
+                                                        <TextBlock Margin="5"  VerticalAlignment="Center" Text="Guardar" />
+                                                        <Image VerticalAlignment="Center" Source="/WpfFront;component/Images/Save.png" Stretch="None" Margin="0,0,5,0" />
+                                                    </WrapPanel>
+                                                </Button>
+                                                <Button Name="btn_DeleteDataDefinition" Margin="5,0,0,0" HorizontalAlignment="Right" Click="btn_DeleteDataDefinition_Click" >
+                                                    <WrapPanel>
+                                                        <TextBlock Margin="5"  VerticalAlignment="Center" Text="Eliminar" />
+                                                        <Image VerticalAlignment="Center" Source="/WpfFront;component/Images/Delete.png" Stretch="None" Margin="0,0,5,0" />
+                                                    </WrapPanel>
+                                                </Button>
+                                            </StackPanel>
+                                        </StackPanel>
+                                    </Border>
+                                </StackPanel>
+                            </StackPanel>
+                        </TabItem>
+                        <TabItem x:Uid="TabItem_1" Header="DefinicionXBin"  VerticalAlignment="Stretch">
+                            <StackPanel x:Uid="Stack_Panel1" Orientation="Horizontal" Margin="3" HorizontalAlignment="Center" Width="auto" Height="auto">
+                                <Border x:Uid="Border_1" Style="{DynamicResource UserControlFormInnerBorder}" Margin="3" HorizontalAlignment="Center">
+                                    <StackPanel x:Uid="Stack_Panel" Orientation="Vertical" Margin="3" HorizontalAlignment="Left" Width="auto" Height="auto">
+                                        <StackPanel x:Uid="Stack_Panel" Orientation="Horizontal" Margin="3" HorizontalAlignment="Left" Width="auto" Height="auto">
+                                            <TextBlock Grid.Column="0" Grid.Row="0" VerticalAlignment="Center" Margin="5,0,5,0">Ubicaciones</TextBlock>
+                                            <ComboBox x:Uid="ls_Bin" Grid.Row="0" Grid.Column="1"  Width="150" Margin="5,0,0,0"  Name="ls_Bin" DisplayMemberPath="BinCode"
+                                                      Height="23" VerticalAlignment="Top" HorizontalAlignment="Left" ItemsSource="{Binding Path=BinList}" 
+                                                      SelectionChanged="ls_Bin_SelectionChanged" />
+                                        </StackPanel>
+                                        <StackPanel x:Uid="Stack_Panel" Orientation="Horizontal" Margin="3" HorizontalAlignment="Center" Width="auto" Height="auto">
+                                            <StackPanel x:Uid="Stack_Panel1" Orientation="Vertical" Margin="3" HorizontalAlignment="Center" Width="auto" Height="auto">
+                                                <Grid  HorizontalAlignment="Center"
+                                                   VerticalAlignment="Top" Width="Auto" Margin="0,5,0,0" x:Name="dgDataDefinitionNotUse" >
+
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition Width="Auto" />
+                                                        <ColumnDefinition Width="Auto" />
+                                                        <ColumnDefinition Width="100" />
+                                                    </Grid.ColumnDefinitions>
+                                                    <Grid.RowDefinitions>
+                                                        <RowDefinition Height="auto" />
+                                                        <RowDefinition Height="auto" />
+                                                    </Grid.RowDefinitions>
+
+                                                    <TextBlock Grid.Column="0" Grid.Row="0" VerticalAlignment="Center" Margin="0,0,5,0" FontWeight="Bold">Definiciones Disponibles</TextBlock>
+
+                                                    <StackPanel Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="3" Margin="0,5,0,0">
+
+                                                        <ListView x:Uid="lvListDataDefinitionNotUse" MaxHeight="400" ItemsSource="{Binding Path=DataDefinitionListNotUse}" VerticalAlignment="Stretch" 
+                                                                  Margin="0,5,0,0" Name="lvListDataDefinitionNotUse" >
+                                                            <ListView.View>
+                                                                <GridView x:Uid="GridView_1">
+                                                                    <GridViewColumn x:Uid="GridViewColumn_1" Header="Nombre Campo" Width="180" DisplayMemberBinding="{Binding Path=DisplayName}" ></GridViewColumn>
+                                                                    <GridViewColumn x:Uid="GridViewColumn_2" Header="Tipo Campo" Width="auto" DisplayMemberBinding="{Binding Path=DataType.Name}" ></GridViewColumn>
+                                                                    <GridViewColumn x:Uid="GridViewColumn_3" Header="Cabecera" Width="auto" DisplayMemberBinding="{Binding Path=IsHeader}" ></GridViewColumn>
+                                                                    <GridViewColumn x:Uid="GridViewColumn_4" Header="Serial" Width="auto" DisplayMemberBinding="{Binding Path=IsSerial}" ></GridViewColumn>
+                                                                    <GridViewColumn x:Uid="GridViewColumn_5" Header="Obligatorio" Width="auto" DisplayMemberBinding="{Binding Path=IsRequired}" ></GridViewColumn>
+                                                                </GridView>
+                                                            </ListView.View>
+                                                        </ListView>
+
+                                                    </StackPanel>
+
+                                                </Grid>
+                                            </StackPanel>
+                                            <StackPanel x:Uid="Stack_Panel2" Orientation="Vertical" Margin="3" HorizontalAlignment="Center" Width="auto" Height="auto">
+                                                <Button Name="btn_AddDataDefinitionByBin" Margin="0,70,0,10" HorizontalAlignment="Center" Content="Adicionar" Click="btn_AddDataDefinitionByBin_Click" />
+                                                <Button Name="btn_DelDataDefinitionByBin" Margin="0,5,0,10" HorizontalAlignment="Center" Content="Remover" Click="btn_DelDataDefinitionByBin_Click" />
+                                            </StackPanel>
+                                            <StackPanel x:Uid="Stack_Panel3" Orientation="Vertical" Margin="3" HorizontalAlignment="Center" Width="auto" Height="auto">
+                                                <Grid  HorizontalAlignment="Center"
+                                                   VerticalAlignment="Top" Width="Auto" Margin="0,5,0,0" x:Name="dgDataDefinitionUsed" >
+
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition Width="Auto" />
+                                                        <ColumnDefinition Width="Auto" />
+                                                        <ColumnDefinition Width="100" />
+                                                    </Grid.ColumnDefinitions>
+                                                    <Grid.RowDefinitions>
+                                                        <RowDefinition Height="auto" />
+                                                        <RowDefinition Height="auto" />
+                                                    </Grid.RowDefinitions>
+
+                                                    <TextBlock Grid.Column="0" Grid.Row="0" VerticalAlignment="Center" Margin="0,0,5,0" FontWeight="Bold">Definiciones Asignadas</TextBlock>
+
+                                                    <StackPanel Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="3" Margin="0,5,0,0">
+                                                        
+                                                        <ListView x:Uid="lvListDataDefinitionUsed" MaxHeight="400" ItemsSource="{Binding Path=DataDefinitionByBinListUsed}" VerticalAlignment="Stretch" 
+                                                                  Margin="0,5,0,0" Name="lvListDataDefinitionUsed" >
+                                                            <ListView.View>
+                                                                <GridView x:Uid="GridView_1">
+                                                                    <GridViewColumn x:Uid="GridViewColumn_1" Header="Nombre Campo" Width="180" DisplayMemberBinding="{Binding Path=DataDefinition.DisplayName}" ></GridViewColumn>
+                                                                    <GridViewColumn x:Uid="GridViewColumn_2" Header="Tipo Campo" Width="auto" DisplayMemberBinding="{Binding Path=DataDefinition.DataType.Name}" ></GridViewColumn>
+                                                                    <GridViewColumn x:Uid="GridViewColumn_3" Header="Cabecera" Width="auto" DisplayMemberBinding="{Binding Path=DataDefinition.IsHeader}" ></GridViewColumn>
+                                                                    <GridViewColumn x:Uid="GridViewColumn_4" Header="Serial" Width="auto" DisplayMemberBinding="{Binding Path=DataDefinition.IsSerial}" ></GridViewColumn>
+                                                                    <GridViewColumn x:Uid="GridViewColumn_5" Header="Obligatorio" Width="auto" DisplayMemberBinding="{Binding Path=DataDefinition.IsRequired}" ></GridViewColumn>
+                                                                </GridView>
+                                                            </ListView.View>
+                                                        </ListView>
+
+                                                    </StackPanel>
+
+                                                </Grid>
+                                            </StackPanel>
+                                        </StackPanel>
+                                    </StackPanel>
+                                </Border>
+                            </StackPanel>
+                        </TabItem>
+                        <TabItem x:Uid="TabItem_1" Header="Rutas Bin"  VerticalAlignment="Stretch">
+                            <StackPanel x:Uid="Stack_Panel1" Orientation="Horizontal" Margin="3" HorizontalAlignment="Center" Width="auto" Height="auto">
+                                <Border x:Uid="Border_1" Style="{DynamicResource UserControlFormInnerBorder}" Margin="3" HorizontalAlignment="Center">
+                                    <StackPanel x:Uid="Stack_Panel" Orientation="Vertical" Margin="3" HorizontalAlignment="Left" Width="auto" Height="auto">
+                                        <StackPanel x:Uid="Stack_Panel" Orientation="Vertical" Margin="3" HorizontalAlignment="Right" Width="auto" Height="auto">
+                                            <TextBlock Grid.Column="0" Grid.Row="0" VerticalAlignment="Center" Margin="5,0,5,0">Cliente Destino</TextBlock>
+                                            <ComboBox x:Uid="ls_LocationTo" Grid.Row="0" Grid.Column="1"  Width="150" Margin="5,0,0,0"  Name="ls_LocationTo" 
+                                                      DisplayMemberPath="Name" Height="23" VerticalAlignment="Top" HorizontalAlignment="Left" ItemsSource="{Binding Path=LocationList}" 
+                                                      SelectionChanged="ls_LocationTo_SelectionChanged" />
+                                        </StackPanel>
+                                        <Separator Width="auto" Margin="0,5,0,5" />
+                                        <StackPanel x:Uid="Stack_Panel" Orientation="Horizontal" Margin="3" HorizontalAlignment="Right" Width="auto" Height="auto">
+                                            <StackPanel x:Uid="Stack_Panel" Orientation="Vertical" Margin="3" HorizontalAlignment="Left" Width="auto" Height="auto">
+                                                <TextBlock Grid.Column="0" Grid.Row="0" VerticalAlignment="Center" Margin="5,0,5,0">Bodega Origen</TextBlock>
+                                                <ComboBox x:Uid="ls_BinFrom" Grid.Row="0" Grid.Column="1"  Width="150" Margin="5,0,0,0"  Name="ls_BinFrom" DisplayMemberPath="BinCode"
+                                                          Height="23" VerticalAlignment="Top" HorizontalAlignment="Left" ItemsSource="{Binding Path=BinList}" SelectedValuePath="BinID" 
+                                                          SelectedValue="{Binding Path=RecordBinRoute.BinFrom.BinID}"/>
+                                            </StackPanel>
+                                            <StackPanel x:Uid="Stack_Panel" Orientation="Vertical" Margin="3" HorizontalAlignment="Left" Width="auto" Height="auto">
+                                                <TextBlock Grid.Column="0" Grid.Row="0" VerticalAlignment="Center" Margin="5,0,5,0">Bodega Destino</TextBlock>
+                                                <ComboBox x:Uid="ls_BinTo" Grid.Row="0" Grid.Column="1"  Width="150" Margin="5,0,0,0"  Name="ls_BinTo" DisplayMemberPath="BinCode"
+                                                          Height="23" VerticalAlignment="Top" HorizontalAlignment="Left" ItemsSource="{Binding Path=BinToList}" SelectedValuePath="BinID" 
+                                                          SelectedValue="{Binding Path=RecordBinRoute.BinTo.BinID}"/>
+                                            </StackPanel>
+                                            <StackPanel x:Uid="Stack_Panel" Orientation="Vertical" Margin="3" HorizontalAlignment="Left" Width="auto" Height="auto">
+                                                <TextBlock Grid.Column="0" Grid.Row="0" VerticalAlignment="Center" Margin="5,0,5,0">Requiere Dato</TextBlock>
+                                                <CheckBox Grid.Row="0" Grid.Column="1" x:Uid="chkBox_RequiredData" Name="chkBox_RequiredData" Margin="0,5,0,0" HorizontalAlignment="Center" IsChecked="{Binding Path=RecordBinRoute.RequireData}" />
+                                            </StackPanel>
+                                            <StackPanel x:Uid="Stack_Panel" Orientation="Vertical" Margin="3" HorizontalAlignment="Left" Width="auto" Height="auto">
+                                                <TextBlock Grid.Column="0" Grid.Row="0" VerticalAlignment="Center" Margin="5,0,5,0"></TextBlock>
+                                                <Button Name="btn_AddBinRoute" Margin="0,0,0,0" HorizontalAlignment="Center" Content="Guardar" Click="btn_AddBinRoute_Click" />
+                                            </StackPanel>
+                                        </StackPanel>
+                                        <StackPanel x:Uid="Stack_Panel" Orientation="Vertical" Margin="3" HorizontalAlignment="Center" Width="auto" Height="auto">
+                                            <StackPanel x:Uid="Stack_Panel3" Orientation="Vertical" Margin="3" HorizontalAlignment="Center" Width="auto" Height="auto">
+                                                <Grid  HorizontalAlignment="Center" VerticalAlignment="Top" Width="Auto" Margin="0,5,0,0" x:Name="dgBinRoute" >
+
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition Width="Auto" />
+                                                        <ColumnDefinition Width="Auto" />
+                                                        <ColumnDefinition Width="100" />
+                                                    </Grid.ColumnDefinitions>
+                                                    <Grid.RowDefinitions>
+                                                        <RowDefinition Height="auto" />
+                                                        <RowDefinition Height="auto" />
+                                                    </Grid.RowDefinitions>
+
+                                                    <TextBlock Grid.Column="0" Grid.Row="0" VerticalAlignment="Center" Margin="0,0,5,0" FontWeight="Bold">Rutas Asignadas</TextBlock>
+
+                                                    <StackPanel Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="3" Margin="0,5,0,0">
+
+                                                        <ListView x:Uid="lvListBinRouteAsigned" MaxHeight="400" ItemsSource="{Binding Path=BinRouteList}" VerticalAlignment="Stretch" 
+                                                                  Margin="0,5,0,0" Name="lvListBinRouteAsigned" >
+                                                            <ListView.View>
+                                                                <GridView x:Uid="GridView_1">
+                                                                    <GridViewColumn x:Uid="GridViewColumn_1" Header="Cliente Origen" Width="150" DisplayMemberBinding="{Binding Path=LocationFrom.Name}" ></GridViewColumn>
+                                                                    <GridViewColumn x:Uid="GridViewColumn_2" Header="Bodega Origen" Width="150" DisplayMemberBinding="{Binding Path=BinFrom.BinCode}" ></GridViewColumn>
+                                                                    <GridViewColumn x:Uid="GridViewColumn_1" Header="Cliente Destino" Width="150" DisplayMemberBinding="{Binding Path=LocationTo.Name}" ></GridViewColumn>
+                                                                    <GridViewColumn x:Uid="GridViewColumn_2" Header="Bodega Destino" Width="150" DisplayMemberBinding="{Binding Path=BinTo.BinCode}" ></GridViewColumn>
+                                                                    <GridViewColumn x:Uid="GridViewColumn_2" Header="Req. Dato" Width="70" DisplayMemberBinding="{Binding Path=RequireData}" ></GridViewColumn>
+                                                                </GridView>
+                                                            </ListView.View>
+                                                        </ListView>
+
+                                                    </StackPanel>
+
+                                                </Grid>
+                                            </StackPanel>
+                                            <StackPanel x:Uid="Stack_Panel2" Orientation="Horizontal" Margin="3" HorizontalAlignment="Right" Width="auto" Height="auto">
+                                                <Button Name="btn_DelBinRoute" Margin="0,5,0,0" HorizontalAlignment="Right" Content="Remover" Click="btn_DelBinRoute_Click" />
+                                            </StackPanel>
+                                        </StackPanel>
+                                    </StackPanel>
+                                </Border>
+                            </StackPanel>
+                        </TabItem>
+                    </TabControl>
+                </StackPanel>
+            </StackPanel>
+        </DockPanel>
+    </AdornerDecorator>
+</WMCore:UserControlBase>

@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<hibernate-mapping xmlns="urn:nhibernate-mapping-2.2" namespace="Entities.Trace" assembly="Entities">
+  <class name="DocumentLine" table="Trace.DocumentLine">
+	<id name="LineID" type="Int64">
+		<generator class="native" />
+	</id>
+	<many-to-one lazy="false" name="Document" class="Document" column="DocID" not-null="true" unique-key="ukDocLine" />
+	<property name="LineNumber" type="Int32" not-null="true"  unique-key="ukDocLine" />
+	<many-to-one lazy="false" name="LineStatus" class="Entities.General.Status" column="LineStatusID" not-null="true" />
+	<many-to-one lazy="false" name="Product" class="Entities.Master.Product" column="ProductID" not-null="true" />
+
+
+	  <property name="AccountItem" type="String" length="50"   />
+	  <property name="LineDescription" type="String" length="2000"   />
+	  
+	<property name="Quantity" type="Double" not-null="true" />
+	<property name="IsDebit" type="Boolean" not-null="true" />
+	<property name="QtyCancel" type="Double" not-null="true" />	  
+	<property name="QtyInvoiced" type="Double" not-null="true"  />
+	<property name="QtyAllocated" type="Double" not-null="true"  />
+	<property name="QtyPending" type="Double" not-null="true"  />
+	<property name="QtyBackOrder" type="Double" not-null="true"  />
+	<property name="QtyShipped" type="Double" not-null="true"  /> 
+	  
+	<many-to-one lazy="false" name="Unit" class="Entities.Master.Unit" column="UnitID" not-null="true" />
+	<property name="UnitBaseFactor" type="Double"   />	
+	<property name="Date1" type="DateTime"   />
+	<property name="Date2" type="DateTime"   />
+	<property name="Date3" type="DateTime"   />
+	<property name="Date4" type="DateTime"   />
+	<property name="Date5" type="DateTime"   />
+	<many-to-one lazy="false" name="Location" class="Entities.Master.Location" column="LocationID" not-null="true"  />
+	<many-to-one lazy="false" name="Location2" class="Entities.Master.Location" column="Location2ID" not-found="ignore"   />	  
+	<property name="Note" type="String" length="255"   />
+	<property name="LinkDocNumber" type="String" length="50"   />
+	<property name="LinkDocLineNumber" type="Int32"  />
+
+	  <property name="PostingDocument" type="String" length="50"   />
+	  <property name="PostingUserName" type="String" length="50"  />
+	  <property name="PostingDate" type="DateTime"   />
+	  <property name="BinAffected" type="String" length="50"   />
+	  <property name="Sequence" type="Int32"  not-null="true" />
+
+	  <property name="UnitPrice" type="Double" not-null="true"  />
+	  <property name="ExtendedPrice" type="Double" not-null="true"  />
+
+	  <property name="UnitCost" type="Double" not-null="true"  />
+	  <property name="ExtendedCost" type="Double" not-null="true"  />
+
+	  <bag fetch="subselect" name="DocumentLineAddresses" inverse="true" cascade="persist,save-update,delete" lazy="true">
+		  <key column="DocLineID"/>
+		  <one-to-many class="DocumentAddress"/>
+	  </bag>
+    
+	<property name="CreatedBy" type="String" length="50" not-null="true"  />
+	<property name="CreationDate" type="DateTime" not-null="true"   />
+	<property name="CreTerminal" type="String" length="50"   />
+	<property name="ModifiedBy" type="String" length="50"   />
+	<property name="ModDate" type="DateTime"   />
+	<property name="ModTerminal" type="String" length="50"   />
+  </class>
+</hibernate-mapping>

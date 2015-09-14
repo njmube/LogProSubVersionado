@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<hibernate-mapping xmlns="urn:nhibernate-mapping-2.2" namespace="Entities.Master" assembly="Entities">
+  <class name="Contact" table="Master.Contact">
+	<id name="ContactID" type="Int32">
+		<generator class="native" />
+	</id>
+	<many-to-one lazy="false" name="Account" class="Account" column="CompanyID" not-null="true" unique-key="ukContact" />
+	<property name="Name" type="String" length="50" not-null="true" unique-key="ukContact" />
+	<property name="IdNumber" type="String" length="50" not-null="true"  />
+	<property name="ErpCode" type="String" length="50" not-null="true"  />
+	<property name="Phone1" type="String" length="50" not-null="true"  />
+	<property name="Phone2" type="String" length="50"   />
+	<property name="Phone3" type="String" length="50"   />
+	<property name="Fax" type="String" length="50"   />
+	<property name="Email" type="String" length="50"   />
+
+	<property name="CreatedBy" type="String" length="50" not-null="true"  />
+	<property name="CreationDate" type="DateTime" not-null="true"   />
+	<property name="CreTerminal" type="String" length="50"   />
+	<property name="ModifiedBy" type="String" length="50"   />
+	<property name="ModDate" type="DateTime"   />
+	<property name="ModTerminal" type="String" length="50"   />
+  </class>
+</hibernate-mapping>

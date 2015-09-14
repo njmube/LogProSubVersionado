@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<hibernate-mapping xmlns="urn:nhibernate-mapping-2.2" namespace="Entities.Master" assembly="Entities">
+  <class name="UnitProductRelation" table="Master.UnitProductRelation">
+	<id name="RowID" type="Int32">
+		<generator class="native" />
+	</id>
+	<many-to-one lazy="false" name="Product" class="Product" column="ProductID" not-null="true" unique-key="ukUnitProductRelation"/>
+	<many-to-one lazy="false" name="Unit" class="Unit" column="UnitID" not-null="true" unique-key="ukUnitProductRelation"/>
+    <property name="UnitErpCode" type="String">
+      <column name="UnitErpCode" not-null="true" length="50"  index="idx_UnitProduct"/>
+    </property>
+	<property name="BaseAmount" type="Double" not-null="true" />
+    <property name="IsBasic" type="Boolean"  />
+
+	  <many-to-one lazy="false" name="WeightUnit" class="Entities.General.MeasureUnit" column="WeightUnitID"   not-found="ignore"/>
+    <property name="Weight" type="Double"  />
+    
+    <many-to-one lazy="false" name="VolumeUnit" class="Entities.General.MeasureUnit" column="VolumeUnitID"  not-found="ignore"/>
+    <property name="Volume" type="Double"  />
+	
+    <many-to-one lazy="false" name="Status" class="Entities.General.Status" column="StatusID" not-null="true"/>
+
+	<property name="CreatedBy" type="String" length="50" not-null="true"  />
+	<property name="CreationDate" type="DateTime" not-null="true"   />
+	<property name="CreTerminal" type="String" length="50"   />
+	<property name="ModifiedBy" type="String" length="50"   />
+	<property name="ModDate" type="DateTime"   />
+	<property name="ModTerminal" type="String" length="50"   />
+  </class>
+</hibernate-mapping>
+

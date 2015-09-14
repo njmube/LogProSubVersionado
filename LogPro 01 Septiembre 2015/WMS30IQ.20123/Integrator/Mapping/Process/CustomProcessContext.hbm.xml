@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<hibernate-mapping xmlns="urn:nhibernate-mapping-2.2" namespace="Entities.Process" assembly="Entities">
+  <class name="CustomProcessContext" table="Process.CustomProcessContext">
+	<id name="RowID" type="Int32">
+		<generator class="native" />
+	</id>
+	  
+	  <!--<many-to-one lazy="false" name="Process" class="CustomProcess" column="ProcessID" not-null="true" unique-key="ukProcessKeyID" />-->
+	  <many-to-one name="ProcessType" class="Entities.General.DocumentType" column="ProcessTypeID" not-null="true" lazy="false"/>
+	  <property name="ContextKey" type="String" length="50" not-null="true" unique-key="ukProcessKeyID" />
+	  <property name="Description" type="String" length="255" />
+	  <many-to-one name="Status" class="Entities.General.Status" column="StatusID" not-null="true" lazy="false"/>
+	  <property name="ContextDataType" type="String" length="50" />
+	  <property name="ContextBasicValue" type="String" length="4000"/>
+	  
+	  <property name="IsInternal" type="Boolean" />
+
+	  <property name="CreatedBy" type="String" length="50" not-null="true"  />
+	  <property name="CreationDate" type="DateTime" not-null="true"   />
+	  <property name="CreTerminal" type="String" length="50"   />
+	  <property name="ModifiedBy" type="String" length="50"   />
+	  <property name="ModDate" type="DateTime"   />
+	  <property name="ModTerminal" type="String" length="50"   />
+
+ </class>
+</hibernate-mapping>
+

@@ -1,0 +1,115 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema xmlns:ser="http://schemas.microsoft.com/2003/10/Serialization/" xmlns:tns="Entities.Workflow" elementFormDefault="qualified" targetNamespace="Entities.Workflow" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:import namespace="Entities.Master" />
+  <xs:import namespace="Entities.Profile" />
+  <xs:import namespace="Entities.General" />
+  <xs:import namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
+  <xs:complexType name="BinRoute">
+    <xs:complexContent mixed="false">
+      <xs:extension xmlns:q1="Entities.Profile" base="q1:Auditing">
+        <xs:sequence>
+          <xs:element xmlns:q2="Entities.Master" minOccurs="0" name="BinFrom" nillable="true" type="q2:Bin" />
+          <xs:element xmlns:q3="Entities.Master" minOccurs="0" name="BinTo" nillable="true" type="q3:Bin" />
+          <xs:element xmlns:q4="Entities.Master" minOccurs="0" name="LocationFrom" nillable="true" type="q4:Location" />
+          <xs:element xmlns:q5="Entities.Master" minOccurs="0" name="LocationTo" nillable="true" type="q5:Location" />
+          <xs:element minOccurs="0" name="RequireData" nillable="true" type="xs:boolean" />
+          <xs:element minOccurs="0" name="RowID" type="xs:int" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="BinRoute" nillable="true" type="tns:BinRoute" />
+  <xs:complexType name="ArrayOfBinRoute">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="BinRoute" nillable="true" type="tns:BinRoute" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfBinRoute" nillable="true" type="tns:ArrayOfBinRoute" />
+  <xs:complexType name="DataDefinition">
+    <xs:complexContent mixed="false">
+      <xs:extension xmlns:q6="Entities.Profile" base="q6:Auditing">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="Code" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="DataType" nillable="true" type="tns:WFDataType" />
+          <xs:element minOccurs="0" name="DefaultValue" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="DisplayName" nillable="true" type="xs:string" />
+          <xs:element xmlns:q7="Entities.General" minOccurs="0" name="Entity" nillable="true" type="q7:ClassEntity" />
+          <xs:element minOccurs="0" name="IsHeader" nillable="true" type="xs:boolean" />
+          <xs:element minOccurs="0" name="IsRequired" nillable="true" type="xs:boolean" />
+          <xs:element minOccurs="0" name="IsSerial" nillable="true" type="xs:boolean" />
+          <xs:element xmlns:q8="Entities.Master" minOccurs="0" name="Location" nillable="true" type="q8:Location" />
+          <xs:element xmlns:q9="Entities.Master" minOccurs="0" name="MetaType" nillable="true" type="q9:MType" />
+          <xs:element minOccurs="0" name="NumOrder" type="xs:short" />
+          <xs:element minOccurs="0" name="ReadOnly" nillable="true" type="xs:boolean" />
+          <xs:element minOccurs="0" name="RowID" type="ser:guid" />
+          <xs:element minOccurs="0" name="Size" type="xs:int" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="DataDefinition" nillable="true" type="tns:DataDefinition" />
+  <xs:complexType name="WFDataType">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="BaseType" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="DataTypeID" type="xs:short" />
+      <xs:element minOccurs="0" name="Description" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="IsBasic" nillable="true" type="xs:boolean" />
+      <xs:element minOccurs="0" name="Name" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="UIControl" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="UIListControl" nillable="true" type="xs:string" />
+    </xs:sequence>
+    <xs:attribute ref="ser:Id" />
+    <xs:attribute ref="ser:Ref" />
+  </xs:complexType>
+  <xs:element name="WFDataType" nillable="true" type="tns:WFDataType" />
+  <xs:complexType name="ArrayOfDataDefinition">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="DataDefinition" nillable="true" type="tns:DataDefinition" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfDataDefinition" nillable="true" type="tns:ArrayOfDataDefinition" />
+  <xs:complexType name="DataInformation">
+    <xs:complexContent mixed="false">
+      <xs:extension xmlns:q10="Entities.Profile" base="q10:Auditing">
+        <xs:sequence>
+          <xs:element xmlns:q11="Entities.General" minOccurs="0" name="Entity" nillable="true" type="q11:ClassEntity" />
+          <xs:element minOccurs="0" name="EntityRowID" type="xs:int" />
+          <xs:element minOccurs="0" name="RowID" type="xs:int" />
+          <xs:element minOccurs="0" name="XmlData" nillable="true" type="xs:string" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="DataInformation" nillable="true" type="tns:DataInformation" />
+  <xs:complexType name="ArrayOfDataInformation">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="DataInformation" nillable="true" type="tns:DataInformation" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfDataInformation" nillable="true" type="tns:ArrayOfDataInformation" />
+  <xs:complexType name="DataDefinitionByBin">
+    <xs:complexContent mixed="false">
+      <xs:extension xmlns:q12="Entities.Profile" base="q12:Auditing">
+        <xs:sequence>
+          <xs:element xmlns:q13="Entities.Master" minOccurs="0" name="Bin" nillable="true" type="q13:Bin" />
+          <xs:element minOccurs="0" name="DataDefinition" nillable="true" type="tns:DataDefinition" />
+          <xs:element minOccurs="0" name="EsEditable" nillable="true" type="xs:boolean" />
+          <xs:element minOccurs="0" name="RowID" type="xs:int" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="DataDefinitionByBin" nillable="true" type="tns:DataDefinitionByBin" />
+  <xs:complexType name="ArrayOfDataDefinitionByBin">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="DataDefinitionByBin" nillable="true" type="tns:DataDefinitionByBin" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfDataDefinitionByBin" nillable="true" type="tns:ArrayOfDataDefinitionByBin" />
+  <xs:complexType name="ArrayOfWFDataType">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="WFDataType" nillable="true" type="tns:WFDataType" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfWFDataType" nillable="true" type="tns:ArrayOfWFDataType" />
+</xs:schema>

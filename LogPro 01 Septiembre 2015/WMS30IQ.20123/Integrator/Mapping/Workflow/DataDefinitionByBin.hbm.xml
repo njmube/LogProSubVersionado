@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<hibernate-mapping xmlns="urn:nhibernate-mapping-2.2" namespace="Entities.Workflow" assembly="Entities">
+  <class name="DataDefinitionByBin" table="Workflow.DataDefinitionByBin">
+	<id name="RowID" type="Int32">
+		<generator class="native" />
+	</id>
+	  
+	<many-to-one name="Bin" class="Entities.Master.Bin" column="BinID" not-null="true" lazy="false" />
+	<many-to-one name="DataDefinition" class="DataDefinition" column="DataDefinitionID" not-null="true" lazy="false" />
+    
+  <property name="EsEditable" type="Boolean" />
+  <property name="CreatedBy" type="String" length="50" not-null="true"  />
+  <property name="CreationDate" type="DateTime" not-null="true"   />
+  <property name="CreTerminal" type="String" length="50"   />
+  <property name="ModifiedBy" type="String" length="50"   />
+  <property name="ModDate" type="DateTime"   />
+  <property name="ModTerminal" type="String" length="50"   />
+	  
+	  
+  </class>
+</hibernate-mapping>

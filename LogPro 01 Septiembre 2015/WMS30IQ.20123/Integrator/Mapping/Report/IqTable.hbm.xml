@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<hibernate-mapping xmlns="urn:nhibernate-mapping-2.2" namespace="Entities.Report" assembly="Entities">
+  <class name="IqTable" table="Report.IqTable">
+	<id name="TableId" type="Int32">
+		<generator class="native" />
+	</id>
+		<property name="Name" type="String" length="50" not-null="true" unique="true" />
+
+
+	  <property name="CreatedBy" type="String" length="50" not-null="true"  />
+	  <property name="CreationDate" type="DateTime" not-null="true"   />
+	  <property name="CreTerminal" type="String" length="50"   />
+	  <property name="ModifiedBy" type="String" length="50"   />
+	  <property name="ModDate" type="DateTime"   />
+	  <property name="ModTerminal" type="String" length="50"   />	  
+	  
+	  
+	<bag fetch="subselect" name="Columns" inverse="true" cascade="persist,save-update,delete" lazy="false">
+		<key column="TableId"/>
+	<one-to-many class="IqColumn"/>		
+	</bag>	
+	  
+	 <bag fetch="subselect" name="ReportTables" inverse="true" cascade="persist,save-update" lazy="false">
+		 <key column="TableId"/>
+		 <one-to-many class="IqReportTable"/>
+	</bag>	
+	  
+  </class>
+</hibernate-mapping>
