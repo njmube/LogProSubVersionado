@@ -71,10 +71,13 @@ namespace WpfFront.Presenters
             View.ConfirmarRecibo += this.OnConfirmarRecibo;
             View.FilaSeleccionada += this.OnFilaSeleccionada;
             View.DeleteDetails += new EventHandler<EventArgs>(this.OnDeleteDetails);
-            View.FiltrarPorTecnico += new EventHandler<SelectionChangedEventArgs>(this.OnFiltrarPorTecnico);
+            View.BuscarEquipos += new EventHandler<EventArgs>(this.OnBuscarEquipos);
             View.AddToList += new EventHandler<EventArgs>(this.OnAddToList);
             View.RemoveSelection += new EventHandler<EventArgs>(this.OnRemoveSelection);
-            
+            View.ExportPalletSeleccion += new EventHandler<EventArgs>(this.OnExportPalletSeleccion);
+            View.ExportSerialesSeleccion += new EventHandler<EventArgs>(this.OnExportSerialesSeleccion);
+            View.ConsultarTecnicos += new EventHandler<EventArgs>(this.OnGetListTecnicos);
+            //ConfirmarMovimiento
             #endregion
 
             #region Datos
@@ -86,7 +89,7 @@ namespace WpfFront.Presenters
             try { Local = service.GetConnection(new Connection { Name = "LOCAL" }).First(); }
             catch { }
 
-            GetListTecnicos();  
+            //GetListTecnicos();  
             View.Model.ListUbicacionesDestino = service.DirectSQLQuery("EXEC sp_GetProcesos 'UBICACIONESDESTINO', 'DIAGNOSTICO', 'CLARO'", "", "dbo.Ubicaciones", Local);
 
             CargarDatosDetails();
@@ -101,8 +104,7 @@ namespace WpfFront.Presenters
             #endregion
         }
 
-        
-
+       
         #region Metodos
 
         private void OnHabilitarUbicacion(object sender, SelectionChangedEventArgs e)
@@ -137,9 +139,15 @@ namespace WpfFront.Presenters
             String destino = "";
 
             //Evaluo que haya sido seleccionado un registro
-            if (View.ListadoItems.SelectedIndex == -1)
+            //if (View.ListadoItems.SelectedIndex == -1)
+            //{
+            //    Util.ShowMessage("Debe seleccionar al menos un registro");
+            //    return;
+            //}
+
+            if (View.Model.ListRecordsAddToPallet.Rows.Count == 0 )
             {
-                Util.ShowMessage("Debe seleccionar al menos un registro");
+                Util.ShowMessage("No hay registros para empacar.");
                 return;
             }
 
@@ -164,7 +172,7 @@ namespace WpfFront.Presenters
             ConsultaSQL = "SELECT idPallet,Posicion,serial,Mac,Codigo_SAP,ProductoID,Estado,Fecha_Ingreso FROM dbo.EquiposCLARO WHERE serial IN (''";
 
             //Recorro el listado de registros seleccionados para obtener los seriales e imprimirlos
-            foreach (DataRowView Registros in View.ListadoItems.SelectedItems)
+            foreach (DataRowView Registros in View.ListadoItemsAgregados.Items)
             {
                 //Util.ShowMessage(Registros.Row["Serial"].ToString());
                 //Creo la consulta para cambiar la ubicacion de la estiba
@@ -194,7 +202,7 @@ namespace WpfFront.Presenters
                 }
 
                 //Imprimo los registros
-                PrinterControl.PrintMovimientosBodega(SerialesImprimir, unidad_almacenamiento, codigoEmp, "REPARACIÓN", "CLARO", "DIAGNÓSTICO - " + destino, "", "");
+                PrinterControl.PrintMovimientosBodega(this.userName,SerialesImprimir, unidad_almacenamiento, codigoEmp, "REPARACIÓN", "CLARO", "DIAGNÓSTICO - " + destino, "", "");
             }
             catch (Exception ex)
             {
@@ -204,20 +212,7 @@ namespace WpfFront.Presenters
 
         private void OnConfirmBasicData(object sender, EventArgs e)
         {
-            //foreach (DataRowView item in View.ListadoItems.SelectedItems)
-            //{
-            //    if (item.Row["Estado"] == "MAL ESTADO")
-            //    {
-            //        View.Model.ListUbicacionesDestino = service.DirectSQLQuery("EXEC sp_GetProcesos 'UBICACIONESDIAGNOSTICO', 'DIAGNOSTICO', 'CLARO'", "REPARACION", "dbo.Ubicaciones", Local);
-            //    }
-            //    else
-            //    {
-            //        View.Model.ListUbicacionesDestino = service.DirectSQLQuery("EXEC sp_GetProcesos 'UBICACIONESDIAGNOSTICO', 'DIAGNOSTICO', 'CLARO'", "VERIFICACION", "dbo.Ubicaciones", Local);
-            //    }
-            //}
-
-            //ListarDatos();
-            FiltrarDatosEntrega();
+            OnBuscarEquipos(sender, e);
         }
 
         private void OnGenerarCodigo(object sender, EventArgs e)
@@ -282,26 +277,6 @@ namespace WpfFront.Presenters
 
         }
 
-        private void FiltrarDatosEntrega()
-        {
-            //Variables Auxiliares
-            String ConsultaSQL;
-
-            //Creo la consulta para buscar los registros
-            ConsultaSQL = "EXEC sp_GetProcesos 'BUSCARMERCANCIAFILTRADA', '" + ((ComboBoxItem)View.GetListaEstado.SelectedItem).Content.ToString() + "', 'DIAGNOSTICO','" + this.user + "'";
-
-            //Ejecuto la consulta
-            View.Model.ListRecords_1 = service.DirectSQLQuery(ConsultaSQL, "", "dbo.EquiposCLARO", Local);
-
-            //Valido el estado por el cual se filtro para filtrar el destino al que pueden ir los items
-            if (((ComboBoxItem)View.GetListaEstado.SelectedItem).Content.ToString() == "MAL ESTADO")
-            {
-                View.Model.ListUbicacionesDestino = service.DirectSQLQuery("EXEC sp_GetProcesos 'UBICACIONFILTRADA', 'DIAGNOSTICO', 'CLARO', 'REPARACION','ALMACENAMIENTO'", "", "dbo.Ubicaciones", Local);
-            }
-
-            GetListTecnicos();
-
-        }
 
         private void OnAddLine(object sender, EventArgs e)
         {
@@ -510,8 +485,6 @@ namespace WpfFront.Presenters
                                 ConsultaGuardar += "exec sp_InsertarNuevo_MovimientoDiagnostico 'DIAGNOSTICO TERMINADO, BUEN ESTADO','DIAGNOSTICO','ETIQUETADO','Sin pallet','" + DataRow["RowID"].ToString() + "','" + DataRow["Falla_Diagnostico"].ToString() + "','" +
                                 DataRow["Estatus_Diagnostico"].ToString() + "','" + DataRow["Diagnosticador"].ToString() + "','" + DataRow["Observaciones_Diagnosticador"].ToString() + "','" + this.user + "';";
 
-                                Console.WriteLine("###### " + ConsultaGuardar);
-
                                 ConsultaGuardarTrack += "UPDATE dbo.TrackEquiposCLARO SET ESTADO_DIAGNOSTICO = '" + DataRow["Estatus_Diagnostico"].ToString() + "', FECHA_DIAGNOSTICADO = CONVERT(VARCHAR(10),GETDATE(), 103)  WHERE ID_SERIAL='" + DataRow["RowID"].ToString() + "';";
                             }
                         }
@@ -532,44 +505,10 @@ namespace WpfFront.Presenters
                                 ConsultaGuardar += "exec sp_InsertarNuevo_MovimientoDiagnostico 'DIAGNOSTICO TERMINADO, MAL ESTADO','DIAGNOSTICO','DIAGNOSTICO EMPAQUE','Sin pallet','" + DataRow["RowID"].ToString() + "','" + DataRow["Falla_Diagnostico"].ToString() + "','" +
                                 DataRow["Estatus_Diagnostico"].ToString() + "','" + DataRow["Diagnosticador"].ToString() + "','" + DataRow["Observaciones_Diagnosticador"].ToString() + "','" + this.user + "';";
 
-                                Console.WriteLine("###### " + ConsultaGuardar);
-
                                 ConsultaGuardarTrack += "UPDATE dbo.TrackEquiposCLARO SET ESTADO_DIAGNOSTICO = '" + DataRow["Estatus_Diagnostico"].ToString() + "', FECHA_DIAGNOSTICADO = CONVERT(VARCHAR(10),GETDATE(), 103) WHERE ID_SERIAL='" + DataRow["RowID"].ToString() + "';";
                             }
                         }
-                    //}
-                    //else
-                    //{
-                    //    //Construyo la consulta para guardar los datos
-                    //    ConsultaGuardar += " UPDATE dbo.EquiposCLARO SET Ubicacion = 'DIAGNOSTICO', Estado = 'DIAGNOSTICO'";
-                    //    ConsultaGuardar += ", ESTATUS_DIAGNOSTICO = '" + DataRow["Estatus_Diagnostico"].ToString() + "', FALLA_DIAGNOSTICO = '" + DataRow["Falla_Diagnostico"].ToString() + "', DIAGNOSTICADOR = '" + App.curUser.UserName.ToString() + "', TECNICO_ASIGNADO_DIAG = '" + DataRow["Diagnosticador"].ToString() + "', OBSERVACIONES_DIAGNOSTICADOR = '" + DataRow["Observaciones_Diagnosticador"].ToString() + "'";
-                    //    ConsultaGuardar += " WHERE RowID = '" + DataRow["RowID"].ToString() + "';";
-
-                    //    ConsultaGuardarTrack += "UPDATE dbo.TrackEquiposCLARO SET ESTADO_DIAGNOSTICO = '" + DataRow["Estatus_Diagnostico"].ToString() + "', FECHA_DIAGNOSTICADO = CONVERT(VARCHAR(10),GETDATE(), 103) WHERE ID_SERIAL='" + DataRow["RowID"].ToString() + "'";
-
-                    //    if (DataRow["Estatus_Diagnostico"].ToString() == "BUEN ESTADO")
-                    //    {
-                    //        ConsultaGuardar += "exec sp_InsertarNuevo_MovimientoDiagnostico 'DIAGNOSTICO TERMINADO, BUEN ESTADO','DIAGNOSTICO','ETIQUETADO','Sin pallet','" + DataRow["RowID"].ToString() + "','" + DataRow["Falla_Diagnostico"].ToString() + "','" +
-                    //        DataRow["Estatus_Diagnostico"].ToString() + "','" + DataRow["Diagnosticador"].ToString() + "','" + DataRow["Observaciones_Diagnosticador"].ToString() + "','" + this.user + "';";
-
-                    //        Console.WriteLine("###### " + ConsultaGuardar);
-                    //    }
-                    //    else
-                    //    {
-                    //        ConsultaGuardar += "exec sp_InsertarNuevo_MovimientoDiagnostico 'DIAGNOSTICO TERMINADO, MAL ESTADO','DIAGNOSTICO','DIAGNOSTICO EMPAQUE','Sin pallet','" + DataRow["RowID"].ToString() + "','" + DataRow["Falla_Diagnostico"].ToString() + "','" +
-                    //        DataRow["Estatus_Diagnostico"].ToString() + "','" + DataRow["Diagnosticador"].ToString() + "','" + DataRow["Observaciones_Diagnosticador"].ToString() + "','" + this.user + "';";
-
-                    //        Console.WriteLine("###### " + ConsultaGuardar);
-                    //    }
-
-                    //    //Ejecuto la consulta
-                    //    service.DirectSQLNonQuery(ConsultaGuardar, Local);
-                    //    service.DirectSQLNonQuery(ConsultaGuardarTrack, Local);
-
-                    //    //Limpio la consulta para volver a generar la nueva
-                    //    ConsultaGuardar = "";
-                    //    ConsultaGuardarTrack = "";
-                    //}
+                   
                 }
 
                 //Evaluo si la consulta no envio los ultimos registros para forzar a enviarlos
@@ -599,6 +538,8 @@ namespace WpfFront.Presenters
         {
             String ConsultaSQL = "", NuevaUbicacion, NuevoEstado;
 
+            
+
             //Evaluo que haya sido seleccionado un registro
             //if (View.ListadoItems.SelectedItems.Count == 0)
             //{
@@ -610,6 +551,12 @@ namespace WpfFront.Presenters
             if (View.Ubicacion.SelectedIndex == -1)
             {
                 Util.ShowError("Por favor seleccionar la nueva clasificacion.");
+                return;
+            }
+
+            if (View.Model.ListRecordsAddToPallet.Rows.Count == 0)
+            {
+                Util.ShowMessage("No hay registros para empacar.");
                 return;
             }
 
@@ -899,7 +846,6 @@ namespace WpfFront.Presenters
 
                 //Guardo en la tabla de movimientos el cambio de ubicacion del equipo
                 ConsultaSQL += "EXEC sp_InsertarNuevo_Movimiento 'RECIBO DE MERCANCIA DIAGNOSTICO','','DIAGNOSTICO','" + Registros.Row["Estiba"].ToString() + "','','DIAGNOSTICO','UBICACIONALMACEN','" + this.user + "','';";
-                Console.WriteLine("###### " + ConsultaSQL);
 
                 //Ejecuto la consulta
                 service.DirectSQLNonQuery(ConsultaSQL, Local);
@@ -929,6 +875,12 @@ namespace WpfFront.Presenters
 
             View.TotalSeriales.Text = total.ToString();
             View.Estibas_Seleccionadas.Text = num_estibas.ToString();
+
+            string consultaSQL = "";
+            string pallet = ((DataRowView)View.ListadoBusquedaRecibo.SelectedItem).Row["Estiba"].ToString();
+
+            consultaSQL = "EXEC sp_GetProcesos 'BUSCARSERIALESESTIBARECIBODIAG', '" + pallet + "'";
+            View.Model.Listado_PalletSerial = service.DirectSQLQuery(consultaSQL, "", "dbo.EquiposClaro", Local);
         }
 
         private void OnReplicateDetailsBy_Column(object sender, RoutedEventArgs e)
@@ -1039,6 +991,7 @@ namespace WpfFront.Presenters
             {
                 View.Model.ListRecords_1.Rows.RemoveAt(View.ListadoItems.Items.IndexOf(View.ListadoItems.SelectedItem));
             }
+            OnBuscarEquipos(sender, e);
         }
 
         private void OnRemoveSelection(object sender, EventArgs e)
@@ -1058,13 +1011,17 @@ namespace WpfFront.Presenters
                 service.DirectSQLNonQuery(ConsultaAgregar, Local);
                 ConsultaAgregar = "";
             }
-
-            FiltrarDatosEntrega();
             // Elimino el registro de la lista
             while (View.ListadoItemsAgregados.SelectedItems.Count > 0)
             {
                 View.Model.ListRecordsAddToPallet.Rows.RemoveAt(View.ListadoItemsAgregados.Items.IndexOf(View.ListadoItemsAgregados.SelectedItem));
             }
+            OnBuscarEquipos(sender, e);
+        }
+
+        private void OnGetListTecnicos(object sender, EventArgs e)
+        {
+            GetListTecnicos();
         }
 
         private void GetListTecnicos()
@@ -1072,7 +1029,7 @@ namespace WpfFront.Presenters
             string consultaSQL = "";
             DataTable listTecnicos = null;
 
-            consultaSQL = "SELECT TECNICO_ASIGNADO_DIAG AS Tecnico FROM dbo.EquiposCLARO WHERE Estado = 'DIAGNOSTICO' AND TECNICO_ASIGNADO_DIAG NOT LIKE '%Admin%' GROUP BY TECNICO_ASIGNADO_DIAG";
+            consultaSQL = "SELECT TECNICO_ASIGNADO_DIAG AS Tecnico FROM dbo.EquiposCLARO WHERE Estado = 'DIAGNOSTICO' GROUP BY TECNICO_ASIGNADO_DIAG";
             listTecnicos = service.DirectSQLQuery(consultaSQL, "", "dbo.EquiposCLARO", Local);
 
             View.Model.ListadoTecnicoReparacion = new DataTable("ListadoTecnicoReparacion");
@@ -1103,17 +1060,149 @@ namespace WpfFront.Presenters
             }
         }
 
-        public void OnFiltrarPorTecnico(object sender, SelectionChangedEventArgs e)
+        public void OnBuscarEquipos(object sender, EventArgs e)
         {
             string filtroTecnico = ((DataRowView)View.cbo_FilterByWorker.SelectedItem).Row["Tecnico"].ToString();
-            string consultaSQL;
             string selectedItem = ((ComboBoxItem)View.GetListaEstado.SelectedItem).Content.ToString();
-            consultaSQL = "EXEC sp_GetProcesos 'BUSCARMERCANCIAFILTRADA_DIAG_BYTecnico', '" + selectedItem + "', '" + filtroTecnico + "';";
+            string consultaSQL = "EXEC sp_GetProcesos 'BUSCARMERCANCIAFILTRADADIAG', '" + selectedItem + "', '" + filtroTecnico + "';";
 
-            // Ejecuto la consulta 
-            View.Model.ListRecords_1 = service.DirectSQLQuery(consultaSQL, "", "dbo.EquiposCLARO", Local);
+            try
+            {
+                // Ejecuto la consulta 
+                View.Model.ListRecords_1 = service.DirectSQLQuery(consultaSQL, "", "dbo.EquiposCLARO", Local);
+            }
+            catch (Exception ex)
+            {
+                Util.ShowError("Ocurrio un error, ERROR: " + ex.Message);
+            }
+            //Valido el estado por el cual se filtro para filtrar el destino al que pueden ir los items
+            if (((ComboBoxItem)View.GetListaEstado.SelectedItem).Content.ToString() == "MAL ESTADO")
+            {
+                View.Model.ListUbicacionesDestino = service.DirectSQLQuery("EXEC sp_GetProcesos 'UBICACIONFILTRADA', 'DIAGNOSTICO', 'CLARO', 'REPARACION','ALMACENAMIENTO'", "", "dbo.Ubicaciones", Local);
+            }
+
+            int equiposCargados = View.Model.ListRecords_1.Rows.Count;
+            if (equiposCargados < 1)
+            {
+                View.TXT_filterResults.Text = "No se encontraron equipos reparados por el usuario " + filtroTecnico.ToUpper();
+            }
+            else if (equiposCargados == 1)
+            {
+                View.TXT_filterResults.Text = equiposCargados.ToString() + " equipo fue reparado por el usuario " + filtroTecnico.ToUpper();
+            }
+            else
+            {
+                View.TXT_filterResults.Text = equiposCargados + " equipos reparados por el usuario " + filtroTecnico.ToUpper();
+            }
+
+            View.TXT_filterResults.Visibility = Visibility.Visible;
+            View.ListadoItems.Visibility = Visibility.Visible;
+            View.StackListaEquiposEntrega.Visibility = Visibility.Visible;
         }
-        
+
+        private void OnExportPalletSeleccion(object sender, EventArgs e)
+        {
+            Microsoft.Office.Interop.Excel.Application excel = null;
+            Microsoft.Office.Interop.Excel.Workbook wb = null;
+
+            object missing = Type.Missing;
+            Microsoft.Office.Interop.Excel.Worksheet ws = null;
+            Microsoft.Office.Interop.Excel.Range rng = null;
+
+            try
+            {
+                int filas_seleccion = View.ListadoBusquedaRecibo.SelectedItems.Count;
+
+                if (filas_seleccion > 0)
+                {
+                    excel = new Microsoft.Office.Interop.Excel.Application();
+
+                    wb = excel.Workbooks.Add();
+                    ws = (Microsoft.Office.Interop.Excel.Worksheet)wb.ActiveSheet;
+
+                    for (int Idx = 0; Idx < View.GridViewListaClasificacion.Columns.Count; Idx++)
+                    {
+                        ws.Range["A1"].Offset[0, Idx].Value = View.GridViewListaClasificacion.Columns[Idx].Header.ToString();
+                        ws.Range["A1"].Offset[0, Idx].Interior.Color = System.Drawing.ColorTranslator.ToOle(System.Drawing.Color.Orange);
+                    }
+                    int cont = 0;
+
+                    foreach (DataRowView Registros in View.ListadoBusquedaRecibo.SelectedItems)
+                    {
+                        ws.get_Range("A1", "H" + cont + 1).EntireColumn.NumberFormat = "@";
+
+                        ws.Range["A2"].Offset[cont].Resize[1, View.GridViewListaClasificacion.Columns.Count].Value =
+                                Registros.Row.ItemArray;
+                        cont++;
+                    }
+
+                    rng = ws.get_Range("A1", "H" + cont + 1);
+                    rng.Cells.HorizontalAlignment = Microsoft.Office.Interop.Excel.XlHAlign.xlHAlignCenter;
+                    rng.Columns.AutoFit();
+
+                    excel.Visible = true;
+                    wb.Activate();
+                }
+                else
+                {
+                    Util.ShowMessage("Debe seleccionar uno o varios pallets para la generación del archivo");
+                }
+            }
+            catch (Exception ex)
+            {
+                Util.ShowMessage("Error creando el archivo Excel: " + ex.ToString());
+            }
+        }
+
+        private void OnExportSerialesSeleccion(object sender, EventArgs e)
+        {
+
+            Microsoft.Office.Interop.Excel.Application excel = null;
+            Microsoft.Office.Interop.Excel.Workbook wb = null;
+
+            object missing = Type.Missing;
+            Microsoft.Office.Interop.Excel.Worksheet ws = null;
+            Microsoft.Office.Interop.Excel.Range rng = null;
+
+            try
+            {
+
+                excel = new Microsoft.Office.Interop.Excel.Application();
+
+                wb = excel.Workbooks.Add();
+                ws = (Microsoft.Office.Interop.Excel.Worksheet)wb.ActiveSheet;
+
+                for (int Idx = 0; Idx < View.GridViewListaSerialesClasificacion.Columns.Count; Idx++)
+                {
+                    ws.Range["A1"].Offset[0, Idx].Value = View.GridViewListaSerialesClasificacion.Columns[Idx].Header.ToString();
+                    ws.Range["A1"].Offset[0, Idx].Interior.Color = System.Drawing.ColorTranslator.ToOle(System.Drawing.Color.Orange);
+                }
+
+
+                int cont = 0;
+                foreach (DataRowView Registros in View.ListadoSerialesCambioClasificacion.Items)
+                {
+                    ws.get_Range("A1", "H" + cont + 1).EntireColumn.NumberFormat = "@";
+
+                    ws.Range["A2"].Offset[cont].Resize[1, View.GridViewListaSerialesClasificacion.Columns.Count].Value =
+                            Registros.Row.ItemArray;
+                    cont++;
+                }
+
+
+                rng = ws.get_Range("A1", "H" + cont + 1);
+                rng.Cells.HorizontalAlignment = Microsoft.Office.Interop.Excel.XlHAlign.xlHAlignCenter;
+                rng.Columns.AutoFit();
+
+                excel.Visible = true;
+                wb.Activate();
+            }
+            catch (Exception ex)
+            {
+                Util.ShowMessage("Error creando el archivo Excel: " + ex.ToString());
+            }
+        }
+
         #endregion
     }
 }

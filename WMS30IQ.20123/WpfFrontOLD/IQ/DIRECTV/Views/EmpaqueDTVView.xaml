@@ -261,6 +261,121 @@
                     </StackPanel>
                 </TabItem>
 
+                <TabItem x:Uid="TabItem_1" Header="Calidad">
+                    <!--#LG:MAKE_ADJUSTMENT:Make Adjustment:Relizar Ajuste-->
+                    <StackPanel x:Uid="StackPanel_1" Orientation="Horizontal" >
+
+                        <StackPanel x:Uid="Stack_Panel" Orientation="Vertical" Margin="3" HorizontalAlignment="Center" Width="auto" Height="auto" >
+                            <Border x:Uid="Border_1" x:Name="Border_Detail_22" Style="{DynamicResource UserControlFormInnerBorder}" Margin="3" HorizontalAlignment="Center" Visibility="Visible" >
+                                <StackPanel x:Name="Stack_DetailSerial_22" Orientation="Vertical" Margin="3" HorizontalAlignment="Center" >
+                                    
+                                    <StackPanel x:Uid="Stack_NumeroDoc" Name="Stack_NumeroDoc11" Orientation="Horizontal" Margin="0,0,0,0" >
+                                        <TextBlock Text="Módulo de Calidad" HorizontalAlignment="Left" FontWeight="bold" />
+                                    </StackPanel>
+                                    <!--<Separator Margin="0,0,0,10"/>-->
+                                    <Separator Margin="0,4,0,0"/>
+
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Text="Actualizar" HorizontalAlignment="Left" FontWeight="bold" Margin="760,1,5,0"/>
+                                        <Image x:Uid="ImageRefresh" Name="ImageRefresh2"  Margin="0,1,5,0" Width="17" HorizontalAlignment="Center" Source="/WpfFront;component/Images/refresh.png" ToolTip="Refresh List" MouseDown="ImageRefresh_MouseDownCalidad" />
+                                    </StackPanel>
+                                    
+                                    <StackPanel x:Uid="Stack_Adicionales_2" x:Name="Stack_Adicionales_22" Orientation="Vertical" Margin="0,6,0,0">
+
+                                        <ListView x:Uid="lvDocumentMaster" ItemsSource="{Binding Path=ListadoCalidad}" Margin="0,4,0,0"  MaxHeight="400" Name="lvDocumentMaster_22" SelectionChanged="lv_ListadoCalidadEmpaque_SelectionChanged_1">
+                                            <ListView.View>
+                                                <GridView x:Uid="GridViewDetails" x:Name="GridViewDetails_22">
+                                                    <GridViewColumn x:Uid="GridViewColumn_2" Width="0" DisplayMemberBinding="{Binding Path=idPallet}" />
+                                                    <GridViewColumn x:Uid="GridViewColumn_2" Header="Pallet" Width="auto" DisplayMemberBinding="{Binding Path=Pallet}" />
+
+                                                    <GridViewColumn x:Uid="GridViewColumn_2" Header="Producto" Width="auto" DisplayMemberBinding="{Binding Path=Modelo}" />
+                                                    <GridViewColumn x:Uid="GridViewColumn_2" Header="# Cajas" Width="auto" DisplayMemberBinding="{Binding Path=Nro_Cajas}" />
+                                                    <GridViewColumn x:Uid="GridViewColumn_2" Header="# Equipos" Width="auto" DisplayMemberBinding="{Binding Path=Nro_Seriales}" />
+                                                    <GridViewColumn x:Uid="GridViewColumn_2" Header="Estado" Width="auto" DisplayMemberBinding="{Binding Path=Estado}" />
+                                                    <GridViewColumn x:Uid="GridViewColumn_2" Header="Fecha Ingreso" Width="auto" DisplayMemberBinding="{Binding Path=FechaIngreso}" />
+                                                </GridView>
+                                            </ListView.View>
+                                        </ListView>
+
+
+                                    </StackPanel>
+                                    <Expander Margin="-5,10,0,0" VerticalAlignment="Bottom" Cursor="Hand" Width="848">
+                                        <Expander.Header>
+                                            <Border Background="WhiteSmoke">
+                                                <TextBlock><Run Text="Listado de equipos X estiba"/></TextBlock>
+                                            </Border>
+                                        </Expander.Header>
+
+                                        <Border Margin="0,0,0,0" Background="AliceBlue">
+                                            <StackPanel x:Name="stackpanel1111">
+                                                <ListView x:Uid="lv_PalletSeriales" ItemsSource="{Binding Listado_PalletSerialCalidad}" Margin="0,0,0,0"  MaxHeight="280" x:Name="lv_PalletSerialesCalidad">
+
+                                                    <ListView.View>
+                                                        <GridView x:Uid="GridViewDetails" x:Name="GridViewDetails1111">
+
+                                                            <GridViewColumn x:Uid="GridViewColumn_1" Header="Pallet" Width="auto" DisplayMemberBinding="{Binding Pallet}" />
+
+                                                            <GridViewColumn Header="Serial" x:Uid="GridViewColumn_2" Width="auto" DisplayMemberBinding="{Binding Serial}"/>
+
+                                                            <GridViewColumn Header="Receiver" x:Uid="GridViewColumn_2" Width="auto" DisplayMemberBinding="{Binding Receiver }"/>
+
+                                                            <GridViewColumn Header="Smart Card" x:Uid="GridViewColumn_2" Width="auto" DisplayMemberBinding="{Binding SmartCard}"/>
+
+                                                            <GridViewColumn Header="Modelo" x:Uid="GridViewColumn_2" Width="auto" DisplayMemberBinding="{Binding Modelo}"/>
+
+                                                            <!--<GridViewColumn Header="# Caja" x:Uid="GridViewColumn_2" Width="auto" DisplayMemberBinding="{Binding NroCaja}"/>-->
+
+                                                            <GridViewColumn Header="Fecha registro" x:Uid="GridViewColumn_2" Width="auto" DisplayMemberBinding="{Binding FRegistro}"/>
+
+                                                        </GridView>
+                                                    </ListView.View>
+                                                </ListView>
+                                                <StackPanel Orientation="Horizontal">
+                                                    <TextBlock x:Uid="textblock_recuento" Text="Total de equipos: " FontWeight="Bold" Margin="0,6,8,4" />
+                                                    <TextBlock x:Uid="textblock_recuento1" x:Name="textblock_recuento4" Text="{Binding Listado_PalletSerialCalidad.Count}" FontWeight="Bold" Margin="0,6,8,4" />
+                                                </StackPanel>
+                                            </StackPanel>
+                                        </Border>
+                                    </Expander>
+
+                                    <!--<StackPanel Orientation="Horizontal" Margin="0,10,0,0" Width="206" HorizontalAlignment="Right" VerticalAlignment="Top" Cursor="Hand">
+
+                                        <Image x:Uid="ImageRefresh" x:Name="ImageRefresh66"  Margin="100,-6,5,0"  HorizontalAlignment="Center" Source="/WpfFront;component/Images/excel2.png" ToolTip="Exportar lista de seriales a un archivo de excel" MouseDown="Btn_ExportarSerialesSeleccionCalidad_Click_1"/>
+                                        <TextBlock Text="Exportar&#10; Seriales"  HorizontalAlignment="Left" FontWeight="bold" Height="31" Width="61" />
+                                    </StackPanel>-->
+
+                                </StackPanel>
+
+                            </Border>
+                            <StackPanel Margin="15,0,0,0" Width="200" Height="10">
+                                <!--<TextBlock Text="aaa"/> AQUI-->
+                            </StackPanel>
+                        </StackPanel>
+
+                        <StackPanel x:Uid="Stack_Panel1" Orientation="Vertical" Margin="3" HorizontalAlignment="Center" Width="auto" Height="auto" Visibility="Visible">
+                            <TextBlock x:Uid="Text_ShowHid" Name="Text_ShowHid2" HorizontalAlignment="Left" Margin="15,0,0,0" Text="Mostrar >>" Visibility="Collapsed" />
+                            <Border x:Uid="Border_Head" Name="Border_Head22" Style="{DynamicResource UserControlFormInnerBorder}" Margin="3" HorizontalAlignment="Center">
+                                <StackPanel x:Uid="Stack_Panel12" Margin="5" Width="auto" HorizontalAlignment="Left" Orientation="Vertical">
+                                    <StackPanel x:Uid="Stack_NumeroDoc" Name="Stack_NumeroDoc22" Orientation="Horizontal" Margin="10,0,0,0" >
+                                        <TextBlock Text="Cambio de Estado" HorizontalAlignment="Left" FontWeight="bold" />
+                                    </StackPanel>
+                                    <Separator Margin="5,0,0,10"/>
+
+
+                                    <StackPanel x:Uid="Stack_Panel2" Width="auto" Orientation="Horizontal" Margin="4,3,4,3">
+                                        <TextBlock x:Uid="Text_block2" Width="50" Text="Destino" VerticalAlignment="Center" Margin="4,0,6,0" />
+                                        <ComboBox x:Uid="cb_Estado" Name="cb_Estado" Width="180" Height="23" ItemsSource="{Binding Path=ListCambioEstado}" SelectedValue="Name" DisplayMemberPath="Name" />
+                                    </StackPanel>
+                                    <StackPanel x:Uid="Stack_Panel_2" Name="Stack_Panel_22" Width="auto" Orientation="Horizontal" Margin="4,8,4,3" HorizontalAlignment="Right" >
+                                        <!--<Button x:Uid="btn_imprimir" Name="btn_imprimir2" Content="Imprimir" Click="btn_imprimirHabladorCalidad_Click_2" Margin="0,0,5,0" />-->
+                                        <Button x:Uid="btn_confirmar_2" Name="btn_confirm2" Content="Entregar" Click="btn_confirmarCalidad_Click_1" />
+                                    </StackPanel>
+                                </StackPanel>
+                            </Border>
+                        </StackPanel>
+                    </StackPanel>
+                </TabItem>
+                
                 <!--NUEVO TAB-->
 
                 <TabItem x:Uid="TabItem_1" Header="Entrega">
@@ -278,7 +393,7 @@
                                     
                                     <StackPanel x:Uid="Stack_Adicionales_2" x:Name="Stack_Adicionales_2" Orientation="Vertical" Margin="0,6,0,0">
 
-                                        <ListView x:Uid="lvDocumentMaster" ItemsSource="{Binding Path=ListadoRecibo}" Margin="0,4,0,0"  MaxHeight="400" Name="lvDocumentMaster_2">
+                                        <ListView x:Uid="lvDocumentMaster" ItemsSource="{Binding Path=ListadoRecibo}" Margin="0,4,0,0"  MaxHeight="400" Name="lvDocumentMaster_2" SelectionChanged="lv_ListadoEntregaEmpaque_SelectionChanged_1">
                                             <ListView.View>
                                                 <GridView x:Uid="GridViewDetails" x:Name="GridViewDetails_2">
                                                     <GridViewColumn x:Uid="GridViewColumn_2" Width="0" DisplayMemberBinding="{Binding Path=idPallet}" />
@@ -292,8 +407,56 @@
                                                 </GridView>
                                             </ListView.View>
                                         </ListView>
+
+                                        
                                     </StackPanel>
+                                    <Expander Margin="-5,10,0,0" VerticalAlignment="Bottom" Cursor="Hand" Width="848">
+                                        <Expander.Header>
+                                            <Border Background="WhiteSmoke">
+                                                <TextBlock><Run Text="Listado de equipos X estiba"/></TextBlock>
+                                            </Border>
+                                        </Expander.Header>
+
+                                        <Border Margin="0,0,0,0" Background="AliceBlue">
+                                            <StackPanel x:Name="stackpanel111">
+                                                <ListView x:Uid="lv_PalletSeriales" ItemsSource="{Binding Listado_PalletSerial}" Margin="0,0,0,0"  MaxHeight="280" x:Name="lv_PalletSeriales">
+                                                    
+                                                    <ListView.View>
+                                                        <GridView x:Uid="GridViewDetails" x:Name="GridViewDetails111">
+
+                                                            <GridViewColumn x:Uid="GridViewColumn_1" Header="Pallet" Width="auto" DisplayMemberBinding="{Binding Pallet}" />
+
+                                                            <GridViewColumn Header="Serial" x:Uid="GridViewColumn_2" Width="auto" DisplayMemberBinding="{Binding Serial}"/>
+
+                                                            <GridViewColumn Header="Receiver" x:Uid="GridViewColumn_2" Width="auto" DisplayMemberBinding="{Binding Receiver }"/>
+
+                                                            <GridViewColumn Header="Smart Card" x:Uid="GridViewColumn_2" Width="auto" DisplayMemberBinding="{Binding SmartCard}"/>
+
+                                                            <GridViewColumn Header="Modelo" x:Uid="GridViewColumn_2" Width="auto" DisplayMemberBinding="{Binding Modelo}"/>
+
+                                                            <!--<GridViewColumn Header="# Caja" x:Uid="GridViewColumn_2" Width="auto" DisplayMemberBinding="{Binding NroCaja}"/>-->
+
+                                                            <GridViewColumn Header="Fecha registro" x:Uid="GridViewColumn_2" Width="auto" DisplayMemberBinding="{Binding FRegistro}"/>
+
+                                                        </GridView>
+                                                    </ListView.View>
+                                                </ListView>
+                                                <StackPanel Orientation="Horizontal">
+                                                    <TextBlock x:Uid="textblock_recuento" Text="Total de equipos: " FontWeight="Bold" Margin="0,6,8,4" />
+                                                    <TextBlock x:Uid="textblock_recuento1" x:Name="textblock_recuento3" Text="{Binding Listado_PalletSerial.Count}" FontWeight="Bold" Margin="0,6,8,4" />
+                                                </StackPanel>
+                                            </StackPanel>
+                                        </Border>
+                                    </Expander>
+
+                                    <StackPanel Orientation="Horizontal" Margin="0,10,0,0" Width="206" HorizontalAlignment="Right" VerticalAlignment="Top" Cursor="Hand">
+
+                                        <Image x:Uid="ImageRefresh" x:Name="ImageRefresh6"  Margin="100,-6,5,0"  HorizontalAlignment="Center" Source="/WpfFront;component/Images/excel2.png" ToolTip="Exportar lista de seriales a un archivo de excel" MouseDown="Btn_ExportarSerialesSeleccion_Click_1"/>
+                                        <TextBlock Text="Exportar&#10; Seriales"  HorizontalAlignment="Left" FontWeight="bold" Height="31" Width="61" />
+                                    </StackPanel>
+
                                 </StackPanel>
+                                
                             </Border>
                             <StackPanel Margin="15,0,0,0" Width="200" Height="10">
                                 <!--<TextBlock Text="aaa"/> AQUI-->
@@ -323,6 +486,8 @@
                         </StackPanel>
                     </StackPanel>
                 </TabItem>
+
+                
 
             </TabControl>
         </DockPanel>

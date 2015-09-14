@@ -314,7 +314,7 @@
                                     <StackPanel x:Uid="Stack_Adicionales" Name="Stack_Adicionales_2" Orientation="Vertical" Margin="0,6,0,0">
 
                                         <StackPanel x:Uid="Stack_Producto" Width="auto" Orientation="Horizontal" Margin="4,3,4,3">
-                                            <TextBlock x:Uid="Text_block" Width="100" Text="Equipo" VerticalAlignment="Center" Margin="4,0,6,0" />
+                                            <TextBlock x:Uid="Text_block" Width="120" Text="Equipo" VerticalAlignment="Center" Margin="4,0,6,0" />
                                             <TextBox x:Uid="txt_Producto" x:Name="txt_Producto" Width="180" Height="23" VerticalAlignment="Center" IsEnabled="False"/>
                                             <StackPanel x:Uid="Stack_FallaDiagnostico" Width="auto" Orientation="Horizontal" Margin="4,3,4,3">
                                                 <TextBlock x:Uid="Text_block" Width="100" Text="Falla Diagnostico" VerticalAlignment="Center" Margin="4,0,6,0" />
@@ -322,15 +322,25 @@
                                             </StackPanel>
                                         </StackPanel>
                                         <StackPanel x:Uid="Stack_FallaReparacion" Width="auto" Orientation="Horizontal" Margin="4,3,4,3">
-                                            <TextBlock x:Uid="Text_block" Width="100" Text="Falla Reparacion" VerticalAlignment="Center" Margin="4,0,6,0" />
+                                            <TextBlock x:Uid="Text_block" Width="120" Text="Falla Reparacion" VerticalAlignment="Center" Margin="4,0,6,0" />
                                             <ComboBox x:Uid="cb_FallaRep" Name="cb_FallaRep" Width="180" Height="23" ItemsSource="{Binding Path=ListadoFallaDiagnostico}" SelectedValue="Falla_Diagnostico" DisplayMemberPath="Name" />
                                             <StackPanel x:Uid="Stack_ObservacionesRep" Width="auto" Orientation="Horizontal" Margin="4,3,4,3">
                                                 <TextBlock x:Uid="Text_block" Width="100" Text="Observaciones" VerticalAlignment="Center" Margin="4,0,6,0" />
                                                 <TextBox x:Uid="txt_ObservacionesRep" x:Name="txt_ObservacionesRep" Width="180" Height="23" VerticalAlignment="Center"/>
                                             </StackPanel>
                                         </StackPanel>
+
+                                        <StackPanel x:Uid="Stack_SubFalla" Width="auto" Orientation="Horizontal" Margin="4,3,4,3">
+                                            <TextBlock x:Uid="Text_block" Width="120" Text="Sub-Falla Reparacion" VerticalAlignment="Center" Margin="4,0,6,0" />
+                                            <ComboBox x:Uid="cb_SubFallaRep" Name="cb_SubFallaRep" Width="180" Height="23" ItemsSource="{Binding Path=ListadoSubFalla}" SelectedValue="Code" DisplayMemberPath="Code" />
+                                            <StackPanel x:Uid="Stack_ObservacionesRep" Width="auto" Orientation="Horizontal" Margin="4,3,4,3">
+                                                <TextBlock x:Uid="Text_block" Width="100" Text="Observaciones" VerticalAlignment="Center" Margin="4,0,6,0" />
+                                                <TextBox x:Uid="txt_ObservacionesSubRep" x:Name="txt_ObservacionesSubRep" Width="180" Height="23" VerticalAlignment="Center"/>
+                                            </StackPanel>
+                                        </StackPanel>
+
                                         <StackPanel x:Uid="Stack_FallaAdicional" Width="auto" Orientation="Horizontal" Margin="4,3,4,3">
-                                            <TextBlock x:Uid="Text_block" Width="100" Text="Falla Adicional" VerticalAlignment="Center" Margin="4,0,6,0" />
+                                            <TextBlock x:Uid="Text_block" Width="120" Text="Falla Adicional" VerticalAlignment="Center" Margin="4,0,6,0" />
                                             <ComboBox x:Uid="cb_FallaAdic" Name="cb_FallaAdic" Width="180" Height="23" ItemsSource="{Binding Path=ListadoFallaDiagnostico}" SelectedValue="Falla_Diagnostico" DisplayMemberPath="Name" />
                                             <StackPanel x:Uid="Stack_ObservacionesAdic" Width="auto" Orientation="Horizontal" Margin="4,3,4,3">
                                                 <TextBlock x:Uid="Text_block" Width="100" Text="Observaciones" VerticalAlignment="Center" Margin="4,0,6,0" />
@@ -338,7 +348,7 @@
                                             </StackPanel>
                                         </StackPanel>
                                         <StackPanel x:Uid="Stack_FallaAdicional" Width="auto" Orientation="Horizontal" Margin="4,3,4,3">
-                                            <TextBlock x:Uid="Text_block" Width="100" Text="Falla Adicional " VerticalAlignment="Center" Margin="4,0,6,0" />
+                                            <TextBlock x:Uid="Text_block" Width="120" Text="Falla Adicional " VerticalAlignment="Center" Margin="4,0,6,0" />
                                             <ComboBox x:Uid="cb_FallaAdic2" Name="cb_FallaAdic2" Width="180" Height="23" ItemsSource="{Binding Path=ListadoFallaDiagnostico}" SelectedValue="Falla_Diagnostico" DisplayMemberPath="Name" />
                                             <StackPanel x:Uid="Stack_ObservacionesAdic2" Width="auto" Orientation="Horizontal" Margin="4,3,4,3">
                                                 <TextBlock x:Uid="Text_block" Width="100" Text="Observaciones" VerticalAlignment="Center" Margin="4,0,6,0" />
@@ -346,7 +356,7 @@
                                             </StackPanel>
                                         </StackPanel>
                                         <StackPanel x:Uid="Stack_FallaAdicional" Width="auto" Orientation="Horizontal" Margin="4,3,4,3">
-                                            <TextBlock x:Uid="Text_block" Width="100" Text="Falla Adicional" VerticalAlignment="Center" Margin="4,0,6,0" />
+                                            <TextBlock x:Uid="Text_block" Width="120" Text="Falla Adicional" VerticalAlignment="Center" Margin="4,0,6,0" />
                                             <ComboBox x:Uid="cb_FallaAdic3" Name="cb_FallaAdic3" Width="180" Height="23" ItemsSource="{Binding Path=ListadoFallaDiagnostico}" SelectedValue="Falla_Diagnostico" DisplayMemberPath="Name" />
                                             <StackPanel x:Uid="Stack_ObservacionesAdic3" Width="auto" Orientation="Horizontal" Margin="4,3,4,3">
                                                 <TextBlock x:Uid="Text_block" Width="100" Text="Observaciones" VerticalAlignment="Center" Margin="4,0,6,0" />
@@ -354,7 +364,7 @@
                                             </StackPanel>
                                         </StackPanel>
                                         <StackPanel x:Uid="Stack_FallaAdicional" Width="auto" Orientation="Horizontal" Margin="4,3,4,3">
-                                            <TextBlock x:Uid="Text_block" Width="100" Text="Falla Adicional" VerticalAlignment="Center" Margin="4,0,6,0" />
+                                            <TextBlock x:Uid="Text_block" Width="120" Text="Falla Adicional" VerticalAlignment="Center" Margin="4,0,6,0" />
                                             <ComboBox x:Uid="cb_FallaAdic4" Name="cb_FallaAdic4" Width="180" Height="23" ItemsSource="{Binding Path=ListadoFallaDiagnostico}" SelectedValue="Falla_Diagnostico" DisplayMemberPath="Name" />
                                             <StackPanel x:Uid="Stack_ObservacionesAdic4" Width="auto" Orientation="Horizontal" Margin="4,3,4,3">
                                                 <TextBlock x:Uid="Text_block" Width="100" Text="Observaciones" VerticalAlignment="Center" Margin="4,0,6,0" />
@@ -362,7 +372,7 @@
                                             </StackPanel>
                                         </StackPanel>
                                         <StackPanel x:Uid="Stack_FallaAdicional" Width="auto" Orientation="Horizontal" Margin="4,3,4,3">
-                                            <TextBlock x:Uid="Text_block" Width="100" Text="ESTADO FINAL" VerticalAlignment="Center" Margin="4,0,6,0" />
+                                            <TextBlock x:Uid="Text_block" Width="120" Text="ESTADO FINAL" VerticalAlignment="Center" Margin="4,0,6,0" />
                                             <ComboBox x:Uid="cb_FallaAdic5" Name="cb_FallaAdic5" Width="180" Height="23" SelectionChanged="cb_HabilitarMotivo_SelectionChanged">
                                                 <ComboBoxItem Content="REPARADO"/>
                                                 <ComboBoxItem Content="SCRAP"/>
@@ -540,7 +550,7 @@
                                         <!--</StackPanel>-->
                                         <!--</StackPanel>-->
 
-                                        <ListView x:Uid="lvDocumentMaster" ItemsSource="{Binding Path=ListRecords_1}" Margin="0,4,0,0"  MaxHeight="400" Name="lvDocumentMaster2_2" Visibility="Collapsed">
+                                        <ListView x:Uid="lvDocumentMaster" ItemsSource="{Binding Path=ListRecords_1}" Margin="0,4,0,0"  MaxHeight="400" Name="lvDocumentMaster2_2" Visibility="Visible">
                                             <ListView.View>
                                                 <GridView x:Uid="GridViewDetails" x:Name="GridViewDetails2_2">
                                                     <GridViewColumn x:Uid="GridViewColumn_2" Header="Modelo" Width="100" DisplayMemberBinding="{Binding Path=Producto}" />

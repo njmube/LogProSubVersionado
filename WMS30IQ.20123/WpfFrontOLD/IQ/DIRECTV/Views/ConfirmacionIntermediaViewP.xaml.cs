@@ -54,23 +54,23 @@ namespace WpfFront.Views
             set { this.DataContext = value; }
         }
 
-        public ComboBox Ubicacion
-        {
-            get { return this.cb_Ubicacion; }
-            set { this.cb_Ubicacion = value; }
-        }
+        //public ComboBox Ubicacion
+        //{
+        //    get { return this.cb_Ubicacion; }
+        //    set { this.cb_Ubicacion = value; }
+        //}
 
-        public ComboBox UnidadAlmacenamiento
-        {
-            get { return this.cb_UA; }
-            set { this.cb_UA = value; }
-        }
+        //public ComboBox UnidadAlmacenamiento
+        //{
+        //    get { return this.cb_UA; }
+        //    set { this.cb_UA = value; }
+        //}
 
-        public TextBox CodigoEmpaque
-        {
-            get { return this.txt_CodEmpaque; }
-            set { this.txt_CodEmpaque = value; }
-        }
+        //public TextBox CodigoEmpaque
+        //{
+        //    get { return this.txt_CodEmpaque; }
+        //    set { this.txt_CodEmpaque = value; }
+        //}
 
         public ListView ListadoItems
         {
@@ -82,6 +82,18 @@ namespace WpfFront.Views
         {
             get { return this.GridViewDetails_2; }
             set { this.GridViewDetails_2 = value; }
+        }
+
+        public TextBox GetSerial1
+        {
+            get { return this.tb_Serial1; }
+            set { this.tb_Serial1 = value; }
+        }
+
+        public TextBox GetSerial2
+        {
+            get { return this.tb_Serial2; }
+            set { this.tb_Serial2 = value; }
         }
 
         #endregion
@@ -119,17 +131,21 @@ namespace WpfFront.Views
         {
             if (e.Key == Key.Enter)
             {
-                //GetSerial2.Focus();
+                GetSerial2.Focus();
             }
         }
 
         private void tb_Serial2_KeyDown_1(object sender, KeyEventArgs e)
         {
-
-            if (e.Key == Key.Enter)
-            {
-                AddLine(sender, e);
+            try { 
+                if (e.Key == Key.Enter)
+                {
+                    AddLine(sender, e);
+                }
+            }catch(Exception ex){
+                Util.ShowError(ex.Message);
             }
+            
         }
 
         private void btn_ActualizarCambioClasificacion_Click_1(object sender, RoutedEventArgs e)
@@ -247,6 +263,7 @@ namespace WpfFront.Views
             FilaSeleccionada(sender, e);
         }
 
+
     }
 
     public interface IConfirmacionIntermediaViewP
@@ -256,15 +273,17 @@ namespace WpfFront.Views
 
         #region Variables
 
-        ComboBox Ubicacion { get; set; }
-        ComboBox UnidadAlmacenamiento { get; set; }
-        TextBox CodigoEmpaque { get; set; }
+        //ComboBox Ubicacion { get; set; }
+        //ComboBox UnidadAlmacenamiento { get; set; }
+        //TextBox CodigoEmpaque { get; set; }
         //ComboBox SmartCardEstado { get; set; }
         // TextBox GetSmartCard1 { get; set; }
         //GridView ListadoEquipos { get; set; }
         GridView ListadoEquipos1 { get; set; }
         ListView ListadoItems { get; set; }
 
+        TextBox GetSerial1 { get; set; }
+        TextBox GetSerial2 { get; set; }
         //Recibo
         //ComboBox BuscarPosicionRecibo { get; set; }
 

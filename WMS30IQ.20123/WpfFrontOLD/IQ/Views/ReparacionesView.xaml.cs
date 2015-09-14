@@ -54,6 +54,8 @@ namespace WpfFront.Views
         public event EventHandler<EventArgs> HabilitarMotivo;
         public event EventHandler<EventArgs> CargarHistorico;
         public event EventHandler<MouseButtonEventArgs> BuscarEquiposPorTecnico;
+        public event EventHandler<EventArgs> BuscarEquiposPorTecnicoEntrega;
+        public event EventHandler<EventArgs> ConsultarTecnicos;
 
         #endregion
 
@@ -65,6 +67,37 @@ namespace WpfFront.Views
         }
 
         #region Variables
+
+
+        public TabItem GetTabEntrega
+        {
+            get { return this.TabEntrega; }
+            set { this.TabEntrega = value; }
+        }
+
+        public ComboBox NuevaUbicacion
+        {
+            get { return this.cb_NuevaUbicacion; }
+            set { this.cb_NuevaUbicacion = value; }
+        }
+
+        public StackPanel StackUbicacion
+        {
+            get { return this.stack_nuevaUbicacion; }
+            set { this.stack_nuevaUbicacion = value; }
+        }
+
+        public Button BTN_BuscarEquipos
+        {
+            get { return this.btn_BuscarEquipos; }
+            set { this.btn_BuscarEquipos = value; }
+        }
+
+        public TextBlock TXT_filterResults
+        {
+            get { return this.txt_filterResults; }
+            set {this.txt_filterResults = value;}
+        }
 
         public TextBlock txt_User
         {
@@ -430,6 +463,11 @@ namespace WpfFront.Views
 
         #region Metodos
 
+        private void btn_BuscarEquipos_Click(object sender, RoutedEventArgs e)
+        {
+            BuscarEquiposPorTecnicoEntrega(sender, e);
+        }
+
         private void btn_confirmar_Click_1(object sender, RoutedEventArgs e)
         {
             ConfirmarMovimiento(sender, e);
@@ -443,24 +481,6 @@ namespace WpfFront.Views
         private void btn_ActualizarListadoEstibaRecibo_Click_1(object sender, RoutedEventArgs e)
         {
             ActualizarRegistrosRecibo(sender, e);
-        }
-
-        public StackPanel StackUbicacion
-        {
-            get { return this.stack_nuevaUbicacion; }
-            set { this.stack_nuevaUbicacion = value; }
-        }
-
-        public TabItem GetTabEntrega
-        {
-            get { return this.TabEntrega; }
-            set { this.TabEntrega = value; }
-        }
-
-        public ComboBox NuevaUbicacion
-        {
-            get { return this.cb_NuevaUbicacion; }
-            set { this.cb_NuevaUbicacion = value; }
         }
 
         private void NumberValidationTextBox(object sender, TextCompositionEventArgs e)
@@ -486,12 +506,10 @@ namespace WpfFront.Views
 
         private void cb_BuscarItem_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            ListadoItems.Visibility = Visibility.Visible;
-            TextBlockTecnico.Visibility = Visibility.Visible;
-            TecnicosReparacion.Visibility = Visibility.Visible;
-            StackListaEquipos.Visibility = Visibility.Visible;
-            FiltrarDatosEntrega(sender, e);
-            //TecnicosReparacion.SelectedIndex = -1;
+            if (this.cb_FiltroTecnico.SelectedIndex == -1)
+                return;
+
+            this.BTN_BuscarEquipos.IsEnabled = true;
         }
 
         private void tb_Serial1_KeyDown_1(object sender, KeyEventArgs e)
@@ -567,22 +585,10 @@ namespace WpfFront.Views
             for (int i = 0; i < Model.ListRecords.Rows.Count; i++)
                 Model.ListRecords.Rows[i]["Checkm"] = false;
         }
-
-        //private void fUpload_OnFileUpload_1(object sender, EventArgs e)
-        //{
-        //    //Mostrar ventana de Cargando...
-        //    ProcessWindow pw = new ProcessWindow("Cargando registros...por favor espere...");
-        //    //Procesar el Archivo Cargado
-        //    if (fUpload.StreamFile != null)
-        //    {
-        //        string dataFile = Util.GetPlainTextString(fUpload.StreamFile);
-
-        //        ProcessFile1(sender, e, dataFile);
-        //    }
-        //    //Cierro ventana de Cargando...
-        //    pw.Visibility = Visibility.Collapsed;
-        //    pw.Close();
-        //}
+        private void refreshListadoTecnicos_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            ConsultarTecnicos(sender, e);
+        }
 
         private void ProcessFile(object sender, EventArgs e, string dataFile)
         {
@@ -704,7 +710,10 @@ namespace WpfFront.Views
 
         private void cbFilter(object sender, SelectionChangedEventArgs e)
         {
-            FiltraPorTecnico(sender, e);
+            if (this.cb_BuscarItems.SelectedIndex == -1)
+                return;
+
+            this.BTN_BuscarEquipos.IsEnabled = true;
         }
 
         private void btn_AddToList_Click_1(object sender, RoutedEventArgs e)
@@ -743,7 +752,8 @@ namespace WpfFront.Views
         ReparacionesModel Model { get; set; }
 
         #region Variables
-
+        TextBlock TXT_filterResults { get; set; }
+        Button BTN_BuscarEquipos { get; set; }
         ComboBox GetListBinInicio { get; set; }
         TabItem GetTabEntrega { get; set; }
         ComboBox Ubicacion { get; set; }
@@ -838,6 +848,8 @@ namespace WpfFront.Views
         event EventHandler<EventArgs> HabilitarMotivo;
         event EventHandler<EventArgs> CargarHistorico;
         event EventHandler<MouseButtonEventArgs> BuscarEquiposPorTecnico;
+        event EventHandler<EventArgs> BuscarEquiposPorTecnicoEntrega;
+        event EventHandler<EventArgs> ConsultarTecnicos;
 
         #endregion
 

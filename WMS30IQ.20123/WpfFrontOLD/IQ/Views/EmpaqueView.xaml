@@ -60,7 +60,7 @@
                                     </StackPanel>
 
                                     <StackPanel x:Uid="Stack_Pallets" Name="Stack_Pallets" Orientation="Vertical" Margin="10,8,0,0">
-                                        <ListView x:Uid="lvPalletsEmpaque" ItemsSource="{Binding Path=ListPallets_Empaque}" Margin="0,4,0,0"  MaxHeight="400" Name="lvPalletsEmpaque" SelectionChanged="lv_ListadoPallets_SelectionChanged" Width="345">
+                                        <ListView x:Uid="lvPalletsEmpaque" ItemsSource="{Binding Path=ListPallets_Empaque}" SelectionMode="Single" Margin="0,4,0,0"  MaxHeight="400" Name="lvPalletsEmpaque" SelectionChanged="lv_ListadoPallets_SelectionChanged" Width="345">
                                             <ListView.View>
                                                 <GridView x:Uid="GridViewDetails" x:Name="GridViewDetails11">
                                                     <GridViewColumn x:Uid="GridViewColumn_2" Width="0" DisplayMemberBinding="{Binding Path=idPallet}"/>
@@ -69,13 +69,6 @@
                                                             <TextBlock Text="Pallet" ToolTip="Número unico de pallet."/>
                                                         </GridViewColumn.Header>
                                                     </GridViewColumn>
-
-                                                    <!--<GridViewColumn x:Uid="GridViewColumn_2" Width="57" DisplayMemberBinding="{Binding Path=Posicion}">
-                                                        <GridViewColumn.Header>
-                                                            <TextBlock Text="Posición" ToolTip="Ubicacion del pallet." />
-                                                        </GridViewColumn.Header>
-                                                    </GridViewColumn>-->
-
                                                     <GridViewColumn x:Uid="GridViewColumn_2" Width="45" DisplayMemberBinding="{Binding Path=Nro_Cajas}">
                                                         <GridViewColumn.Header>
                                                             <TextBlock Text="Cajas" ToolTip="Cantidad total de cajas registrados en la pallet seleccionada." />
@@ -90,7 +83,7 @@
 
                                                     <GridViewColumn x:Uid="GridViewColumn_2" Width="auto" DisplayMemberBinding="{Binding Path=FechaIngreso}">
                                                         <GridViewColumn.Header>
-                                                            <TextBlock Text="Fecha Ingreso" ToolTip="Fecha de creaciòn del pallet." />
+                                                            <TextBlock Text="Fecha Ingreso" ToolTip="Fecha de creación del pallet." />
                                                         </GridViewColumn.Header>
                                                     </GridViewColumn>
                                                 </GridView>
@@ -203,52 +196,41 @@
                                             <TextBlock x:Uid="txt_Serial2" Name="txt_Serial2" Text="Mac" />
                                             <TextBox x:Uid="tb_Serial2" Name="tb_Serial2" Width="150" KeyDown="tb_Serial2_KeyDown_1" />
                                         </StackPanel>
-
                                     </StackPanel>
-
                                     <StackPanel x:Uid="Stack_Seriales" Name="Stack_Seriales" Orientation="Vertical" Margin="10,8,0,0">
-                                        <!--<TextBlock x:Uid="txt_Serial22" Name="txt_Serial22" Text="* Seleccione los registros que desea empacar"/>-->
-
                                         <ListView x:Uid="lvSerialesEmpaque" ItemsSource="{Binding Path=ListSeriales_Empaque}" Margin="0,4,0,0"  MaxHeight="400" Name="lvSerialesEmpaque" >
                                             <ListView.View>
                                                 <GridView x:Uid="GridViewDetails" x:Name="GridViewDetails13">
-
                                                     <GridViewColumn x:Uid="GridViewColumn_2" Width="100" DisplayMemberBinding="{Binding Path=Serial}">
                                                         <GridViewColumn.Header>
                                                             <TextBlock Text="Serial" ToolTip="Serial del equipo."/>
                                                         </GridViewColumn.Header>
                                                     </GridViewColumn>
-
                                                     <GridViewColumn x:Uid="GridViewColumn_2" Width="100" DisplayMemberBinding="{Binding Path=Mac}">
                                                         <GridViewColumn.Header>
                                                             <TextBlock Text="Mac" ToolTip="Mac del equipo." />
                                                         </GridViewColumn.Header>
                                                     </GridViewColumn>
-
                                                     <GridViewColumn x:Uid="GridViewColumn_2" Width="200" DisplayMemberBinding="{Binding Path=Producto}">
                                                         <GridViewColumn.Header>
                                                             <TextBlock Text="Producto" ToolTip="Nombre del producto." />
                                                         </GridViewColumn.Header>
                                                     </GridViewColumn>
-
                                                     <GridViewColumn x:Uid="GridViewColumn_2" Width="auto" DisplayMemberBinding="{Binding Path=Lote}">
                                                         <GridViewColumn.Header>
                                                             <TextBlock Text="Lote" ToolTip="Informacion de lote." />
                                                         </GridViewColumn.Header>
                                                     </GridViewColumn>
-
                                                     <GridViewColumn x:Uid="GridViewColumn_4" Width="0" DisplayMemberBinding="{Binding Path=FAMILIA}">
                                                         <GridViewColumn.Header>
                                                             <TextBlock Text="Familia" ToolTip="Familia." />
                                                         </GridViewColumn.Header>
                                                     </GridViewColumn>
-
                                                     <GridViewColumn x:Uid="GridViewColumn_5" Width="0" DisplayMemberBinding="{Binding Path=CODIGO_SAP}">
                                                         <GridViewColumn.Header>
                                                             <TextBlock Text="Cod. SAP" ToolTip="Código SAP." />
                                                         </GridViewColumn.Header>
                                                     </GridViewColumn>
-
                                                 </GridView>
                                             </ListView.View>
                                         </ListView>
@@ -264,13 +246,8 @@
                                 </StackPanel>
                             </Border>
                         </StackPanel>
-
-
                     </StackPanel>
                 </TabItem>
-
-                <!--NUEVO TAB-->
-
                 <TabItem x:Uid="TabItem_1" Header="Entrega">
                     <!--#LG:MAKE_ADJUSTMENT:Make Adjustment:Relizar Ajuste-->
                     <StackPanel x:Uid="StackPanel_1" Orientation="Horizontal" >
@@ -283,68 +260,15 @@
                                         <Image x:Uid="ImageRefresh" Name="ImageRefresh"  Margin="10,1,5,0" Width="17" HorizontalAlignment="Center" Source="/WpfFront;component/Images/refresh.png" ToolTip="Refresh List" MouseDown="ImageRefresh_MouseDown" />
                                     </StackPanel>
                                     <Separator Margin="5,4,0,0"/>
-                                    <!--<StackPanel x:Uid="Stack_Panel2" Width="auto" Orientation="Horizontal" Margin="4,3,4,3">-->
-                                    <!--<TextBox x:Uid="tb_Serial2" Name="tb_Ser" Width="110" Height="23"  Margin="0,0,10,0" />
-                                        <ComboBox x:Uid="cb_BodDestino" Name="cb_Buscar" Width="100" Height="23" ItemsSource="{Binding Path=ListUbicacionesDestino}" SelectedValue="UbicacionDestino" DisplayMemberPath="UbicacionDestino" />-->
-
-                                    <!--<StackPanel x:Uid="Stack_Panel9_2" Name="Stack_Panel" Width="auto" Orientation="Horizontal" Margin="4,3,4,3" HorizontalAlignment="Right" >
-                                            <Button x:Uid="btn_confirmar_2" Name="btn_confirma" Content="Buscar" Click="btn_confirmar_Click_1" />
-                                        </StackPanel>
-                                        <StackPanel x:Uid="Stack_Panel9_2" Name="Stack" Width="auto" Orientation="Horizontal" Margin="4,3,4,3" HorizontalAlignment="Right" >
-                                            <Button x:Uid="btn_confirmar_2" Name="btn_" Content="Actualizar" Click="btn_confirmar_Click_1" />
-                                        </StackPanel>-->
-                                    <!--</StackPanel>-->
-
                                     <StackPanel x:Uid="Stack_SerialGroup_2" x:Name="Stack_SerialGroup_2" Orientation="Horizontal" Margin="0,6,0,0">
-                                        <!--<StackPanel x:Uid="Stack_Product_2" Name="Stack_Product_2" Orientation="Vertical" Margin="0,0,4,0" >-->
-                                        <!--<TextBlock x:Uid="txt_Product_2" Name="txt_Product_2" Text="Producto"  />-->
-                                        <!--<ComboBox x:Uid="cb_Product" Name="cb_Product" Width="150" Height="22" ItemsSource="{Binding Path=ProductosLocation}" SelectedValue="ProductID" DisplayMemberPath="Name" SelectionChanged="cb_Product_SelectionChanged"  />-->
-                                        <!--<uc:SearchProduct x:Uid="sp_Product_2" x:Name="sp_Product_2" OnLoadRecord="sp_Product_OnLoadRecord_1" />-->
-                                        <!--</StackPanel>-->
-                                        <!--<StackPanel x:Uid="Stack_Cantidad_2" Name="Stack_Cantidad_2" Orientation="Vertical" Margin="4,0,4,0" >
-                                            <TextBlock x:Uid="txt_Cantidad_2" Name="txt_Cantidad_2" Text="Cantidad"  />
-                                            <TextBox x:Uid="tb_Cantidad_2" Name="tb_Cantidad_2" Width="80" />
-                                        </StackPanel>-->
-                                        <!--<StackPanel x:Uid="Stack_Serial1_2" Name="Stack_Serial1_2" Orientation="Vertical" Margin="4,0,4,0" >
-                                            <TextBlock x:Uid="txt_Serial1_2" Name="txt_Serial1_2" Text="Serial" />
-                                            <TextBox x:Uid="tb_Serial1_2" Name="tb_Serial1_2" Width="110" KeyDown="tb_Serial1_KeyDown_1" />
-                                        </StackPanel>-->
-                                        <!--<StackPanel x:Uid="Stack_Serial2_2" Name="Stack_Serial2_2" Orientation="Vertical" Margin="4,0,4,0" >
-                                            <TextBlock x:Uid="txt_Serial2_2" Name="txt_Serial2_2" Text="Mac" />
-                                            <TextBox x:Uid="tb_Serial2_2" Name="tb_Serial2_2" Width="110" KeyDown="tb_Serial2_KeyDown_1" />
-                                        </StackPanel>-->
-                                        <!--<StackPanel x:Uid="Stack_Serial3" Name="Stack_Serial3" Orientation="Vertical" Margin="4,0,4,0" Visibility="Collapsed" >
-                                    <TextBlock x:Uid="txt_Serial3" Name="txt_Serial3" />
-                                    <TextBox x:Uid="tb_Serial3" Name="tb_Serial3" Width="110" KeyDown="tb_Serial3_KeyDown" />
-                                </StackPanel>-->
-                                        <!--<StackPanel x:Uid="Stack_UploadFile_2" Name="Stack_UploadFile_2" Orientation="Vertical" Margin="4,-3,4,0" >
-                                            <TextBlock x:Uid="txt_UploadFile_2" Name="txt_UploadFile_2" Text="Cargar Archivo"  />
-                                            <uc:UploadFile x:Uid="fUpload_2" Margin="0,0,0,0" x:Name="fUpload_2" OnFileUpload="fUpload_OnFileUpload_1" />
-                                        </StackPanel>-->
                                     </StackPanel>
                                     <StackPanel x:Uid="Stack_Adicionales_2" x:Name="Stack_Adicionales_2" Orientation="Vertical" Margin="0,6,0,0">
-
-
-                                        <!--<TextBlock Margin="0,0,8,4" Name="txtWarning" FontSize="12" FontWeight="Bold" Foreground="Brown" TextWrapping="Wrap" Width="650" 
-                                           HorizontalAlignment="Left"
-                                   Background="White">Los equipos/partes solo quedaran disponibles 
-                                    despúes de oprimir [Confirmar Proceso]. Si cancela la transacción debera 
-                                    remover los equipos/partes usando la pantalla de documentos recibidos.</TextBlock>-->
-                                        <!--<CheckBox Checked="chkRep_Checked_1" Name="chkRep_2">Replicar información de la primera línea.</CheckBox>-->
-                                        <!--<StackPanel Orientation="Horizontal">-->
-                                        <!--<TextBlock x:Uid="textblock_recuento" Text="Registros Cargados: " FontWeight="Bold" Margin="0,0,8,4" />
-                                            <TextBlock x:Uid="textblock_recuento" x:Name="textblock_recuento_2" Text="{Binding Path=ListRecords.Count}" FontWeight="Bold" Margin="0,0,8,4" />-->
-                                        <!--<TextBlock x:Uid="textblock_recuento" Text="Registros No Cargados: " FontWeight="Bold" Margin="0,0,8,4" Visibility="Collapsed" />
-                                    <TextBlock x:Uid="txt_RegistrosNoCargados" x:Name="txt_RegistrosNoCargados" FontWeight="Bold" Margin="0,0,8,4" Visibility="Collapsed" />-->
-                                        <!--</StackPanel>-->
-                                        <!--</StackPanel>-->
 
                                         <ListView x:Uid="lvDocumentMaster" ItemsSource="{Binding Path=ListadoRecibo}" Margin="0,4,0,0"  MaxHeight="400" Name="lvDocumentMaster_2">
                                             <ListView.View>
                                                 <GridView x:Uid="GridViewDetails" x:Name="GridViewDetails_2">
                                                     <GridViewColumn x:Uid="GridViewColumn_2" Width="0" DisplayMemberBinding="{Binding Path=idPallet}" />
                                                     <GridViewColumn x:Uid="GridViewColumn_2" Header="Pallet" Width="100" DisplayMemberBinding="{Binding Path=Pallet}" />
-                                                    <!--<GridViewColumn x:Uid="GridViewColumn_2" Header="Posicion" Width="70" DisplayMemberBinding="{Binding Path=Posicion}" />-->
                                                     <GridViewColumn x:Uid="GridViewColumn_2" Header="Producto" Width="270" DisplayMemberBinding="{Binding Path=Modelo}" />
                                                     <GridViewColumn x:Uid="GridViewColumn_2" Header="# Cajas" Width="80" DisplayMemberBinding="{Binding Path=Nro_Cajas}" />
                                                     <GridViewColumn x:Uid="GridViewColumn_2" Header="# Equipos" Width="80" DisplayMemberBinding="{Binding Path=Nro_Seriales}" />
@@ -357,7 +281,6 @@
                                 </StackPanel>
                             </Border>
                             <StackPanel Margin="15,0,0,0" Width="200" Height="10">
-                                <!--<TextBlock Text="aaa"/> AQUI-->
                             </StackPanel>
                         </StackPanel>
 
@@ -369,18 +292,6 @@
                                         <TextBlock Text="Cambio de Ubicacion" HorizontalAlignment="Left" FontWeight="bold" />
                                     </StackPanel>
                                     <Separator Margin="5,0,0,10"/>
-
-                                    <!--<StackPanel x:Uid="Stack_Panel2" Width="auto" Orientation="Horizontal" Margin="4,3,4,3">
-                                        <TextBlock x:Uid="Text_block2" Width="150" Text="Unidad Empaque" VerticalAlignment="Center" Margin="4,0,6,0" />
-                                        <ComboBox x:Uid="cb_UA" Name="cb_UA" Width="180" Height="23" >
-                                            <ComboBoxItem Content="ESTIBA"/>
-                                        </ComboBox>
-                                    </StackPanel>
-                                    <StackPanel x:Uid="Stack_Panel2" Width="auto" Orientation="Horizontal" Margin="4,3,4,3">
-                                        <TextBlock x:Uid="Text_block2" Width="150" Text="Codigo Empaque" VerticalAlignment="Center" Margin="4,0,6,0" />
-                                        <TextBox x:Uid="txt_CodEmpaque" x:Name="txt_CodEmpaque" IsReadOnly="True" Width="160" Height="23" VerticalAlignment="Center"/>
-                                        <Image x:Uid="ImageRefresh2" Cursor="Hand" Name="ImageRefresh2"  Margin="3,1,5,0" Width="17"  HorizontalAlignment="Center" Source="/WpfFront;component/Images/refresh.png" ToolTip="Refresh List" MouseDown="ImageGenerateEntrega_MouseDown"/>
-                                    </StackPanel>-->
                                     <StackPanel x:Uid="Stack_Panel2" Width="auto" Orientation="Horizontal" Margin="4,3,4,3">
                                         <TextBlock x:Uid="Text_block2" Width="50" Text="Destino" VerticalAlignment="Center" Margin="4,0,6,0" />
                                         <ComboBox x:Uid="cb_Ubicacion" Name="cb_Ubicacion" Width="180" Height="23" ItemsSource="{Binding Path=ListUbicacionesDestino}" SelectedValue="UbicacionDestino" DisplayMemberPath="UbicacionDestino" />
@@ -394,7 +305,6 @@
                         </StackPanel>
                     </StackPanel>
                 </TabItem>
-
             </TabControl>
         </DockPanel>
     </AdornerDecorator>

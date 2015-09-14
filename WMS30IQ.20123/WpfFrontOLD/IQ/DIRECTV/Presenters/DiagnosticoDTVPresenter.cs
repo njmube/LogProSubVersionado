@@ -103,7 +103,7 @@ namespace WpfFront.Presenters
             //    }
             //    else
             //    {
-            //        View.Model.ListUbicacionesDestino = service.DirectSQLQuery("EXEC sp_GetProcesosDIRECTV 'UBICACIONESDiagnosticoDTV', 'DiagnosticoDTV', 'CLARO'", "VERIFICACION", "dbo.Ubicaciones", Local);
+            //        View.Model.ListUbicacionesDestino = service.DirectSQLQuery("EXEC sp_GetProcesosDIRECTV 'UBICACIONESDiagnosticoDTV', 'DiagnosticoDTV', 'CLARO'", "ALMACENAMIENTO", "dbo.Ubicaciones", Local);
             //    }
             //}
 
@@ -151,7 +151,7 @@ namespace WpfFront.Presenters
             //Valido el estado por el cual se filtro para filtrar el destino al que pueden ir los items
             if (((ComboBoxItem)View.GetListaEstado.SelectedItem).Content.ToString() == "MAL ESTADO")
             {
-                View.Model.ListUbicacionesDestino = service.DirectSQLQuery("EXEC sp_GetProcesosDIRECTVC 'UBICACIONFILTRADA', 'DIAGNOSTICO', 'CLARO', 'REPARACION'", "", "dbo.Ubicaciones", Local);
+                View.Model.ListUbicacionesDestino = service.DirectSQLQuery("EXEC sp_GetProcesosDIRECTVC 'UBICACIONFILTRADA', 'DIAGNOSTICO', 'CLARO', 'REPARACION', 'ALMACENAMIENTO'", "", "dbo.Ubicaciones", Local);
             }
 
         }
@@ -222,6 +222,7 @@ namespace WpfFront.Presenters
                         dr["Serial"] = RegistroValidado.Rows[0]["Serial"].ToString();
                         dr["Receiver"] = RegistroValidado.Rows[0]["Receiver"].ToString();
                         dr["Estado"] = RegistroValidado.Rows[0]["Estado"].ToString();
+                        dr["NIVEL_CANDIDATO"] = RegistroValidado.Rows[0]["NIVEL_MATERIAL"].ToString();
 
                         //Agrego el registro al listado
                         View.Model.ListRecords.Rows.Add(dr);
@@ -331,9 +332,9 @@ namespace WpfFront.Presenters
                     ContadorFilas++;
 
 
-                    
 
-                        if (DataRow["ESTATUS_DIAGNOSTICO"].ToString() == "BUEN ESTADO")
+
+                    if (DataRow["ESTATUS_DIAGNOSTICO"].ToString() == "BUEN ESTADO" && DataRow["NIVEL_CANDIDATO"].ToString() == "NIVEL 1")
                         {
                             if (String.IsNullOrEmpty(DataRow["ESTATUS_DIAGNOSTICO"].ToString()))
                             {
@@ -344,7 +345,10 @@ namespace WpfFront.Presenters
                             {
                                 //Construyo la consulta para guardar los datos
                                 ConsultaGuardar += " UPDATE dbo.EquiposDIRECTVC SET Ubicacion = 'ETIQUETADO', Estado = 'P-ETIQUETADO'";
-                                ConsultaGuardar += ", TIPO_DIAGNOSTICO = '" + DataRow["TIPO_DIAGNOSTICO"].ToString() + "', FALLA_DIAGNOSTICO = '" + DataRow["FALLA_DIAGNOSTICO"].ToString() + "', TECNICO_DIAG = '" + App.curUser.UserName.ToString() + "', TECNICO_ASIGNADO_DIAG = '" + DataRow["TECNICO_DIAG"].ToString() + "', ESTATUS_DIAGNOSTICO = '" + DataRow["ESTATUS_DIAGNOSTICO"].ToString() + "'";
+                                ConsultaGuardar += ", TIPO_DIAGNOSTICO = '" + DataRow["TIPO_DIAGNOSTICO"].ToString() + "', FALLA_DIAGNOSTICO = '" 
+                                                + DataRow["FALLA_DIAGNOSTICO"].ToString() + "', TECNICO_DIAG = '" + App.curUser.UserName.ToString() 
+                                                + "', TECNICO_ASIGNADO_DIAG = '" + DataRow["TECNICO_DIAG"].ToString() + "', ESTATUS_DIAGNOSTICO = '"
+                                                + DataRow["ESTATUS_DIAGNOSTICO"].ToString() + "', NIVEL_FINAL = 'NIVEL 1', SUBFALLA_DIAGNOSTICO = '" + DataRow["SUBFALLA"].ToString() + "'";
                                 ConsultaGuardar += " WHERE RowID = '" + DataRow["RowID"].ToString() + "';";
 
                                 ConsultaGuardar += "exec sp_InsertarNuevo_MovimientoDiagnosticoDIRECTV 'DIAGNOSTICO TERMINADO, BUEN ESTADO','DIAGNOSTICO','ETIQUETADO','Sin pallet','" + DataRow["RowID"].ToString() + "','" + DataRow["Falla_Diagnostico"].ToString() + "','" +
@@ -368,7 +372,10 @@ namespace WpfFront.Presenters
                             {
                                 //Construyo la consulta para guardar los datos
                                 ConsultaGuardar += " UPDATE dbo.EquiposDIRECTVC SET Ubicacion = 'DIAGNOSTICO', Estado = 'DIAGNOSTICO'";
-                                ConsultaGuardar += ", TIPO_DIAGNOSTICO = '" + DataRow["TIPO_DIAGNOSTICO"].ToString() + "', FALLA_DIAGNOSTICO = '" + DataRow["FALLA_DIAGNOSTICO"].ToString() + "', TECNICO_DIAG = '" + App.curUser.UserName.ToString() + "', TECNICO_ASIGNADO_DIAG = '" + DataRow["TECNICO_DIAG"].ToString() + "', ESTATUS_DIAGNOSTICO = '" + DataRow["ESTATUS_DIAGNOSTICO"].ToString() + "'";
+                                ConsultaGuardar += ", TIPO_DIAGNOSTICO = '" + DataRow["TIPO_DIAGNOSTICO"].ToString() + "', FALLA_DIAGNOSTICO = '" 
+                                                + DataRow["FALLA_DIAGNOSTICO"].ToString() + "', TECNICO_DIAG = '" + App.curUser.UserName.ToString() 
+                                                + "', TECNICO_ASIGNADO_DIAG = '" + DataRow["TECNICO_DIAG"].ToString() + "', ESTATUS_DIAGNOSTICO = '"
+                                                + DataRow["ESTATUS_DIAGNOSTICO"].ToString() + "', NIVEL_FINAL = 'NIVEL 3', SUBFALLA_DIAGNOSTICO = '" + DataRow["SUBFALLA"].ToString() + "'";
                                 ConsultaGuardar += " WHERE RowID = '" + DataRow["RowID"].ToString() + "';";
 
                                 ConsultaGuardar += "exec sp_InsertarNuevo_MovimientoDiagnosticoDIRECTV 'DIAGNOSTICO TERMINADO, MAL ESTADO','DIAGNOSTICO','DIAGNOSTICO EMPAQUE','Sin pallet','" + DataRow["RowID"].ToString() + "','" + DataRow["Falla_Diagnostico"].ToString() + "','" +
@@ -440,7 +447,7 @@ namespace WpfFront.Presenters
             }
             else
             {
-                NuevoEstado = "ALMACENAMIENTO";
+                NuevoEstado = "PARA ALMACENAMIENTO";
             }
 
             if (NuevoEstado == "PARA ALMACENAMIENTO")
@@ -745,6 +752,28 @@ namespace WpfFront.Presenters
 
             #endregion
 
+            #region Columna SubFalla Equipo
+
+            IList<MMaster> ListadosSubFallaEquipoDiagnostico = service.GetMMaster(new MMaster { MetaType = new MType { Code = "SUBFALLA" } });
+            Columna = new GridViewColumn();
+            assembly = Assembly.GetAssembly(Type.GetType("System.Windows.Controls.ComboBox, PresentationFramework, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35"));
+            TipoDato = "System.Windows.Controls.ComboBox";
+            Columna.Header = "Sub-Falla Equipo";
+            Txt = new FrameworkElementFactory(assembly.GetType(TipoDato));
+            Txt.SetValue(ComboBox.ItemsSourceProperty, ListadosSubFallaEquipoDiagnostico);
+            Txt.SetValue(ComboBox.DisplayMemberPathProperty, "Name");
+            Txt.SetValue(ComboBox.SelectedValuePathProperty, "Name");
+            Txt.SetBinding(ComboBox.SelectedValueProperty, new System.Windows.Data.Binding("SUBFALLA"));
+            Txt.SetValue(ComboBox.WidthProperty, (double)110);
+
+            // add textbox template
+            Columna.CellTemplate = new DataTemplate();
+            Columna.CellTemplate.VisualTree = Txt;
+            View.ListadoEquipos.Columns.Add(Columna); //Creacion de la columna en el GridView
+            View.Model.ListRecords.Columns.Add("SUBFALLA", typeof(String)); //Creacion de la columna en el DataTable
+
+            #endregion
+
             #region Columna Tecnico Diagnosticador
 
             //IList<Rol> ObtRol1 = service.GetRol(new Rol { RolCode = "DTVDIAG" });
@@ -768,6 +797,24 @@ namespace WpfFront.Presenters
             Columna.CellTemplate.VisualTree = Txt;
             View.ListadoEquipos.Columns.Add(Columna); //Creacion de la columna en el GridView
             View.Model.ListRecords.Columns.Add("TECNICO_DIAG", typeof(String)); //Creacion de la columna en el DataTable
+
+            #endregion
+
+            #region Columna Nivel Candidato
+
+            Columna = new GridViewColumn();
+            assembly = Assembly.GetAssembly(Type.GetType("System.Windows.Controls.TextBlock, PresentationFramework, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35"));
+            TipoDato = "System.Windows.Controls.TextBlock";
+            Columna.Header = "Nivel Candidato";
+            Txt = new FrameworkElementFactory(assembly.GetType(TipoDato));
+            Txt.SetValue(TextBlock.MinWidthProperty, (double)100);
+            Txt.SetBinding(TextBlock.TextProperty, new System.Windows.Data.Binding("NIVEL_CANDIDATO"));
+
+            // add textbox template
+            Columna.CellTemplate = new DataTemplate();
+            Columna.CellTemplate.VisualTree = Txt;
+            View.ListadoEquipos.Columns.Add(Columna); //Creacion de la columna en el GridView
+            View.Model.ListRecords.Columns.Add("NIVEL_CANDIDATO", typeof(String)); //Creacion de la columna en el DataTable
 
             #endregion
         }
@@ -931,7 +978,7 @@ namespace WpfFront.Presenters
             + "TIPO_ORIGEN as PTRecibo, "
             + "convert(VARCHAR,FECHA_INGRESO,120) as PFRegistro,  "
             + "DATEDIFF(day, FECHA_INGRESO,GETDATE()) as NumeroDias,dbo.TIMELAPSELEO(FECHA_INGRESO) as horas "
-            + "from dbo.EquiposDIRECTVC WHERE ((IdPallet IS NOT NULL) AND (Posicion IS NOT NULL) AND (ESTADO = 'PARA DIAGNOSTICO')) "
+            + "from dbo.EquiposDIRECTVC WHERE ((IdPallet IS NOT NULL) AND (ESTADO = 'PARA DIAGNOSTICO')) "
             + " AND IdPallet = '" + aux_idPallet + "'";
 
             Console.WriteLine(Consulta);

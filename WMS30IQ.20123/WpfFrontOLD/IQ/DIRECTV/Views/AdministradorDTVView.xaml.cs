@@ -106,6 +106,12 @@ namespace WpfFront.Views
 
         //Administrador
 
+        public TextBox Serial
+        {
+            get { return this.txt_Serial; }
+            set { this.txt_Serial = value; }
+        }
+
         public TextBox IdReceiver
         {
             get { return this.txt_IDReceiver; }
@@ -603,6 +609,8 @@ namespace WpfFront.Views
         Chart chart1 { get; set; }
         TextBox GetMac_Track { get; set; }
         TextBox GetSerialTrack { get; set; }
+
+        TextBox Serial { get; set; }
 
         //Button GetReiniciar { get; set; }
 

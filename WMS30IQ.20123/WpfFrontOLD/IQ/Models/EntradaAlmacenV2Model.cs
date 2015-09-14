@@ -17,9 +17,9 @@ namespace WpfFront.Models
 
         DataTable List_NocargueAlert { get; set; }
 
-        DataTable ListRecords_Alertas { get; set; }
+        //DataTable ListRecords_Alertas { get; set; }
         IList<Product> ListadoProductos { get; set; }
-
+        //DataTable ListadoProductos { get; set; }
         //ComboBox Detalles
         IList<MMaster> ListadoOrigen { get; set; }
         IList<MMaster> ListadoCiudades { get; set; }
@@ -90,6 +90,17 @@ namespace WpfFront.Models
                 OnPropertyChanged("ListadoProductos");
             }
         }
+
+        //private DataTable _ListadoProductos;
+        //public DataTable ListadoProductos
+        //{
+        //    get { return _ListadoProductos; }
+        //    set
+        //    {
+        //        _ListadoProductos = value;
+        //        OnPropertyChanged("ListadoProductos");
+        //    }
+        //}
 
         //ComboBox Detalles
         private IList<MMaster> _ListadoOrigen;

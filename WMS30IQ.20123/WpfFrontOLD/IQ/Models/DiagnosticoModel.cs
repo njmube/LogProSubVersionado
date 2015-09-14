@@ -24,7 +24,8 @@ namespace WpfFront.Models
         IList<MMaster> ListadoPosiciones { get; set; }
         DataTable ListRecordsAddToPallet { get; set; }
         DataTable ListadoRecibo { get; set; }
-        DataTable ListadoTecnicoReparacion { get; set; }    
+        DataTable ListadoTecnicoReparacion { get; set; }
+        DataTable Listado_PalletSerial { get; set; }
     }
 
     public class DiagnosticoModel : BusinessEntityBase, IDiagnosticoModel
@@ -59,6 +60,17 @@ namespace WpfFront.Models
             {
                 _ListRecordsAddToPallet = value;
                 OnPropertyChanged("ListRecordsAddToPallet");
+            }
+        }
+
+        private DataTable _Listado_PalletSerial;
+        public DataTable Listado_PalletSerial
+        {
+            get { return _Listado_PalletSerial; }
+            set
+            {
+                _Listado_PalletSerial = value;
+                OnPropertyChanged("Listado_PalletSerial");
             }
         }
 

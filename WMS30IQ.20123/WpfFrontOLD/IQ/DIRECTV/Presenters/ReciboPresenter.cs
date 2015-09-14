@@ -21,6 +21,7 @@ using System.Threading;
 using System.Data.OleDb;
 using System.Diagnostics;
 using System.Text.RegularExpressions;
+using System.Windows.Media;
 
 namespace WpfFront.Presenters
 {
@@ -120,6 +121,8 @@ namespace WpfFront.Presenters
             //Cargo los datos del listado
             CargarDatosDetails();
 
+            ActualizarVacios();
+
             #endregion
         }
 
@@ -152,13 +155,14 @@ namespace WpfFront.Presenters
             String serial = View.GetSerial1.Text.ToString();
             String validar = serial.Substring(serial.Length - 9);
 
+
             //cruzar los ultimos 9 digitos
             consultaCruzar = "SELECT TOP 1 * FROM dbo.preAlerta_EQUIPOSDIRECTV WHERE upper(aleEquip_serial) = upper('" + validar + "')";
             DataTable ResultadoCruce = service.DirectSQLQuery(consultaCruzar, "", "dbo.preAlerta_EQUIPOSDIRECTV", Local);
 
             if (ResultadoCruce.Rows.Count == 0)
             {
-                //Util.ShowError("NOVEDAD: El equipo no ingreso en ninguna prealerta!");
+                Util.ShowError("NOVEDAD: El equipo no ingreso en ninguna prealerta!");
             }
             
             //Validacion existe o no el equipo en DB
@@ -173,6 +177,10 @@ namespace WpfFront.Presenters
                     if (View.GetSerial1.Text.ToUpper() == item["Serial"].ToString().ToUpper())
                     {
                         Util.ShowError("El serial " + View.GetSerial1.Text + " ya esta en el listado.");
+                        View.GetSerial1.Text = "";
+                        View.GetSerial2.Text = "";
+                        View.GetSerial3.Text = "";
+                        View.GetSerial1.Focus();
                         return;
                     }
                 }
@@ -187,6 +195,12 @@ namespace WpfFront.Presenters
                     dr["Novedad"] = "SI";
                 else
                     dr["Novedad"] = "NO";
+
+                if (View.GetSerial1.Text.ToString().ToUpper().StartsWith("90022") || View.GetSerial1.Text.ToString().ToUpper().StartsWith("BA293"))
+                    dr["MODELO"] = "L11-100";
+
+                if (View.GetSerial1.Text.ToString().ToUpper().StartsWith("T10JA") || View.GetSerial1.Text.ToString().ToUpper().StartsWith("T10JA"))
+                    dr["MODELO"] = "L12-100";
 
                 //Agrego el registro al listado
                 View.Model.ListRecords.Rows.Add(dr);
@@ -262,6 +276,75 @@ namespace WpfFront.Presenters
                     dr["Novedad"] = "SI";
                 else
                     dr["Novedad"] = "NO";
+
+                if (View.GetSerial1.Text.ToString().ToUpper().StartsWith("90022") || View.GetSerial1.Text.ToString().ToUpper().StartsWith("BA293"))
+                    dr["MODELO"] = "L11-100";
+
+                if (View.GetSerial1.Text.ToString().ToUpper().StartsWith("T10JA") || View.GetSerial1.Text.ToString().ToUpper().StartsWith("B0028") ||
+                    View.GetSerial1.Text.ToString().ToUpper().StartsWith("90024") || View.GetSerial1.Text.ToString().ToUpper().StartsWith("90028") ||
+                    View.GetSerial1.Text.ToString().ToUpper().StartsWith("9002B")
+                    )
+                    dr["MODELO"] = "L12-100";
+
+                if (View.GetSerial1.Text.ToString().ToUpper().StartsWith("G12LC") || View.GetSerial1.Text.ToString().ToUpper().StartsWith("P10GD") ||
+                    View.GetSerial1.Text.ToString().ToUpper().StartsWith("P10GE") || View.GetSerial1.Text.ToString().ToUpper().StartsWith("G12LA") ||
+                    View.GetSerial1.Text.ToString().ToUpper().StartsWith("G12LB") || View.GetSerial1.Text.ToString().ToUpper().StartsWith("P10GC")
+                    )
+                    dr["MODELO"] = "L12-700";
+
+                if (View.GetSerial1.Text.ToString().ToUpper().StartsWith("P24GA") || View.GetSerial1.Text.ToString().ToUpper().StartsWith("P24GB") ||
+                    View.GetSerial1.Text.ToString().ToUpper().StartsWith("P24GC") || View.GetSerial1.Text.ToString().ToUpper().StartsWith("P24GD") ||
+                    View.GetSerial1.Text.ToString().ToUpper().StartsWith("P12GB") || View.GetSerial1.Text.ToString().ToUpper().StartsWith("P24GE")
+                    )
+                    dr["MODELO"] = "L12-L700";
+
+                if (View.GetSerial1.Text.ToString().ToUpper().StartsWith("T26LA") || View.GetSerial1.Text.ToString().ToUpper().StartsWith("T26XA") ||
+                    View.GetSerial1.Text.ToString().ToUpper().StartsWith("T16LA") || View.GetSerial1.Text.ToString().ToUpper().StartsWith("T28LA") ||
+                    View.GetSerial1.Text.ToString().ToUpper().StartsWith("S76XA") || View.GetSerial1.Text.ToString().ToUpper().StartsWith("T27LA") ||
+                    View.GetSerial1.Text.ToString().ToUpper().StartsWith("T26XB")
+                    )
+                    dr["MODELO"] = "L14-100";
+
+                if (View.GetSerial1.Text.ToString().ToUpper().StartsWith("P26GA") || View.GetSerial1.Text.ToString().ToUpper().StartsWith("P26XA") ||
+                    View.GetSerial1.Text.ToString().ToUpper().StartsWith("T26GA") || View.GetSerial1.Text.ToString().ToUpper().StartsWith("Q26XA") 
+                    )
+                    dr["MODELO"] = "L14-700";
+
+                if (View.GetSerial1.Text.ToString().ToUpper().StartsWith("T25XA"))
+                    dr["MODELO"] = "LH26-100";
+
+                if (View.GetSerial1.Text.ToString().ToUpper().StartsWith("H25GB"))
+                    dr["MODELO"] = "LH26-500";
+
+                if (View.GetSerial1.Text.ToString().ToUpper().StartsWith("T29XA"))
+                    dr["MODELO"] = "LH27-100";
+
+                if (View.GetSerial1.Text.ToString().ToUpper().StartsWith("H29GA") || View.GetSerial1.Text.ToString().ToUpper().StartsWith("H29GB") ||
+                    View.GetSerial1.Text.ToString().ToUpper().StartsWith("H29GC")
+                    )
+                    dr["MODELO"] = "LH27-500";
+
+                if (View.GetSerial1.Text.ToString().ToUpper().StartsWith("LB001") || View.GetSerial1.Text.ToString().ToUpper().StartsWith("T20MB") ||
+                    View.GetSerial1.Text.ToString().ToUpper().StartsWith("EB004") || View.GetSerial1.Text.ToString().ToUpper().StartsWith("LB004") ||
+                    View.GetSerial1.Text.ToString().ToUpper().StartsWith("T20JB") || View.GetSerial1.Text.ToString().ToUpper().StartsWith("T20MA") ||
+                    View.GetSerial1.Text.ToString().ToUpper().StartsWith("T20LB") || View.GetSerial1.Text.ToString().ToUpper().StartsWith("T20XB") ||
+                    View.GetSerial1.Text.ToString().ToUpper().StartsWith("EB006") || View.GetSerial1.Text.ToString().ToUpper().StartsWith("LB006") 
+                    )
+                    dr["MODELO"] = "LHR22-100";
+
+                if (View.GetSerial1.Text.ToString().ToUpper().StartsWith("T29XA"))
+                    dr["MODELO"] = "LHR-26";
+
+                if (View.GetSerial1.Text.ToString().ToUpper().StartsWith("B16LA") || View.GetSerial1.Text.ToString().ToUpper().StartsWith("P12GC") ||
+                    View.GetSerial1.Text.ToString().ToUpper().StartsWith("P12GD") || View.GetSerial1.Text.ToString().ToUpper().StartsWith("B16LC") ||
+                    View.GetSerial1.Text.ToString().ToUpper().StartsWith("B16LB") || View.GetSerial1.Text.ToString().ToUpper().StartsWith("P12LC") ||
+                    View.GetSerial1.Text.ToString().ToUpper().StartsWith("B26LB")
+                    )
+                    dr["MODELO"] = "LR16-700";
+
+                var border = (Border)VisualTreeHelper.GetChild(View.ListadoEquiposAProcesar, 0);
+                var scrollViewer = (ScrollViewer)VisualTreeHelper.GetChild(border, 0);
+                scrollViewer.ScrollToBottom();
 
                 //Agrego el registro al listado
                 View.Model.ListRecords.Rows.Add(dr);
@@ -577,7 +660,7 @@ namespace WpfFront.Presenters
                         {
                             View.GetEstado_Cargue.Text = "Carga de archivo terminada.";
                             View.Progress_Cargue.Value = 100D;
-                            t1.Dispose();
+                            //t1.Dispose();
                         }));
                     }
                 }));
@@ -815,11 +898,12 @@ namespace WpfFront.Presenters
                     RegistroGuardar["TIPO_ORIGEN"] = dr[5].ToString();
                     //RegistroGuardar["FECHA_INGRESO"] = dr[5].ToString();
                     RegistroGuardar["TIPOS_DEVOLUCIONES"] = dr[6].ToString();
-                    RegistroGuardar["DOA"] = dr[7].ToString();
+                    //RegistroGuardar["Remision"] = dr[7].ToString();
+                    RegistroGuardar["DOA"] = dr[8].ToString();
                     //RegistroGuardar["FECHA_DOC"] = dr[7].ToString();
-                    RegistroGuardar["Ciudad"] = dr[8].ToString();
+                    RegistroGuardar["Ciudad"] = dr[9].ToString();
                     //RegistroGuardar["DOC_INGRESO"] = dr[10].ToString();
-                    RegistroGuardar["ESTADO_MATERIAL"] = dr[9].ToString();
+                    RegistroGuardar["ESTADO_MATERIAL"] = dr[10].ToString();
                     //Agrego el registro al listado
                     View.Model.ListRecords.Rows.Add(RegistroGuardar);
 
@@ -882,7 +966,6 @@ namespace WpfFront.Presenters
         {
             //Inicializo el DataTable
             View.Model.ListRecords = new DataTable("ListadoRegistros");
-
             //Asigno las columnas restantes            
             View.Model.ListRecords.Columns.Add("Serial", typeof(String));
             View.Model.ListRecords.Columns.Add("Receiver", typeof(String));
@@ -917,6 +1000,16 @@ namespace WpfFront.Presenters
             View.Model.List_NocarguePrea.Columns.Add("SerialVinculado", typeof(String));
             View.Model.List_NocarguePrea.Columns.Add("Estado", typeof(String));
             View.Model.List_NocarguePrea.Columns.Add("Motivo", typeof(String));
+
+            //View.Model.ListRecordsPreDiag = new DataTable("ListRecordsPreDiag");
+            ////Asigno las columnas restantes            
+            //View.Model.ListRecordsPreDiag.Columns.Add("Serial", typeof(String));
+            //View.Model.ListRecordsPreDiag.Columns.Add("Receiver", typeof(String));
+            //View.Model.ListRecordsPreDiag.Columns.Add("SmartCard", typeof(String));
+            //View.Model.ListRecordsPreDiag.Columns.Add("Modelo", typeof(String));
+            //View.Model.ListRecordsPreDiag.Columns.Add("Estado", typeof(String));
+            //View.Model.ListRecordsPreDiag.Columns.Add("Nivel", typeof(String));
+            //View.Model.ListRecordsPreDiag.Columns.Add("Remision", typeof(String));
 
             //Genero las columnas dinamicas
             GenerarColumnasDinamicas();
@@ -1033,6 +1126,7 @@ namespace WpfFront.Presenters
             //Variables Auxiliares
             String ConsultaGuardar = "";
             String ConsultaGuardar1 = "";
+            
             String ConsultaGuardarMovimiento = "";
             Int32 ContadorCampos, ContadorFilas = 0;
             String Estado = "";
@@ -1071,7 +1165,7 @@ namespace WpfFront.Presenters
                     { 
                         /*** Andres Leonardo Arevalo - 09 feb 2015 ***/
                         ConsultaGuardar1 += "INSERT INTO dbo.SmartCardEquiposDIRECTV(SMART_SERIAL,SMART_FECHAASIG) VALUES(";
-                        ConsultaGuardar1 = ConsultaGuardar1 + "'" + DataRow["SmartCard"].ToString() + "', CONVERT(nvarchar(100), GETDATE(), 120))";
+                        ConsultaGuardar1 = ConsultaGuardar1 + "'" + DataRow["SmartCard"].ToString() + "', CONVERT(nvarchar(100), GETDATE(), 120));";
                         /*** Andres Leonardo Arevalo - 09 feb 2015 ***/
                     }
                     
@@ -1080,13 +1174,20 @@ namespace WpfFront.Presenters
                         ContadorCampos = this.serialesSave_Aux.Columns.Count;
 
                         //Construyo la consulta para guardar los datos
-                        ConsultaGuardar += " INSERT INTO dbo.EquiposDIRECTVC(Serial,Receiver,SMART_CARD_ENTRADA,GABETAS_DIAG,MODELO,DESCRIPCION,TIPO_ORIGEN,TIPOS_DEVOLUCIONES,DOA,Ciudad,ESTADO_MATERIAL,FECHA_INGRESO, ESTADO) VALUES(";
+                        ConsultaGuardar += " INSERT INTO dbo.EquiposDIRECTVC(Serial,Receiver,SMART_CARD_ENTRADA,GABETAS_DIAG,MODELO,DESCRIPCION,TIPO_ORIGEN,TIPOS_DEVOLUCIONES,Remision,DOA,Ciudad,ESTADO_MATERIAL, NIVEL_CANDIDATO,FECHA_INGRESO, ESTADO) VALUES(";
                         
                         //Obtengo los datos de cada campo con su nombre
                         foreach (DataColumn c in this.serialesSave_Aux.Columns)
                         {
-                            //Adiciono cada dato a la consulta
-                            ConsultaGuardar = ConsultaGuardar + "'" + DataRow[c.ColumnName].ToString() + "'";
+                            if (DataRow[c.ColumnName].ToString() == "" || DataRow[c.ColumnName].ToString() == null 
+                                || String.IsNullOrEmpty(DataRow[c.ColumnName].ToString()) || String.IsNullOrWhiteSpace(DataRow[c.ColumnName].ToString()))
+                            {
+                                ConsultaGuardar = ConsultaGuardar + "NULL";
+                            }
+                            else
+                            { 
+                                ConsultaGuardar = ConsultaGuardar + "'" + DataRow[c.ColumnName].ToString() + "'";
+                            }
 
                             //Evaluo el contador de columnas para saber si adiciono la coma
                             ConsultaGuardar += (ContadorCampos != 1) ? "," : "";
@@ -1109,23 +1210,27 @@ namespace WpfFront.Presenters
                    
                 }
 
-                //Evaluo si la consulta no envio los ultimos registros para forzar a enviarlos
-                if (!String.IsNullOrEmpty(ConsultaGuardar) && !String.IsNullOrEmpty(ConsultaGuardar1))
-                {
-                    
+                ////Evaluo si la consulta no envio los ultimos registros para forzar a enviarlos
+                //if (!String.IsNullOrEmpty(ConsultaGuardar) && !String.IsNullOrEmpty(ConsultaGuardar1))
+                //{
                     //Ejecuto la consulta
                     Console.WriteLine(ConsultaGuardar);
                     Console.WriteLine(ConsultaGuardar1);
                     service.DirectSQLNonQuery(ConsultaGuardar, Local);
                     service.DirectSQLNonQuery(ConsultaGuardar1, Local);
+
                     
+
                     //Limpio la consulta para volver a generar la nueva
                     ConsultaGuardar = "";
                     ConsultaGuardar1 = "";
-                }
+                    
+                //}
                 estado_almacenamiento = true;
                 //Muestro el mensaje de confirmacion
                 Util.ShowMessage("Registros guardados satisfactoriamente.");
+
+                ActualizarVacios();
 
                 //Reinicio los campos
                 View.Dispatcher_Cargue.Invoke(new System.Action(() =>
@@ -1137,7 +1242,13 @@ namespace WpfFront.Presenters
                 
             }
             catch (Exception Ex) { Util.ShowError("Hubo un error al momento de guardar los registros. Error: " + Ex.Message); }
-        }    
+        }
+
+        public void ActualizarVacios()
+        {
+            String ConsultaLimpiarVacios = "update dbo.EquiposDIRECTVC set SMART_CARD_ENTRADA = NULL where SMART_CARD_ENTRADA like '';";
+            service.DirectSQLNonQuery(ConsultaLimpiarVacios, Local);
+        }
 
         public void LimpiarDatosIngresoSeriales()
         {
@@ -1231,6 +1342,7 @@ namespace WpfFront.Presenters
             //Columna.Header = "Fecha Ingreso";
             //Txt = new FrameworkElementFactory(assembly.GetType(TipoDato));
             //Txt.SetValue(Microsoft.Windows.Controls.DatePicker.MinWidthProperty, (double)130);
+            //Txt.SetValue(Microsoft.Windows.Controls.DatePicker.SelectedDateFormatProperty., "dd/mm/yyyy");
             //Txt.SetBinding(Microsoft.Windows.Controls.DatePicker.SelectedDateProperty, new System.Windows.Data.Binding("FECHA_INGRESO"));
 
             //// add textbox template
@@ -1239,12 +1351,12 @@ namespace WpfFront.Presenters
             //View.ListadoEquipos.Columns.Add(Columna); //Creacion de la columna en el GridView
             //View.Model.ListRecords.Columns.Add("FECHA_INGRESO", typeof(String)); //Creacion de la columna en el DataTable
 
-            ////Columna = new GridViewColumn();
-            ////assembly = Assembly.GetAssembly(Type.GetType("System.Windows.Controls.TextBlock, PresentationFramework, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35"));
-            ////TipoDato = "System.Windows.Controls.TextBlock";
-            ////Columna.Header = "Fecha Ingreso";
-            ////Txt = new FrameworkElementFactory(assembly.GetType(TipoDato));
-            ////Txt.SetBinding(TextBlock.TextProperty, new System.Windows.Data.Binding(DateTime.Now.ToString()));
+            //Columna = new GridViewColumn();
+            //assembly = Assembly.GetAssembly(Type.GetType("System.Windows.Controls.TextBlock, PresentationFramework, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35"));
+            //TipoDato = "System.Windows.Controls.TextBlock";
+            //Columna.Header = "Fecha Ingreso";
+            //Txt = new FrameworkElementFactory(assembly.GetType(TipoDato));
+            //Txt.SetBinding(TextBlock.TextProperty, new System.Windows.Data.Binding(DateTime.Now.ToString()));
 
 
             ////// add textbox template
@@ -1276,6 +1388,28 @@ namespace WpfFront.Presenters
             Columna.CellTemplate.VisualTree = Txt;
             View.ListadoEquipos.Columns.Add(Columna); //Creacion de la columna en el GridView
             View.Model.ListRecords.Columns.Add("TIPOS_DEVOLUCIONES", typeof(String)); //Creacion de la columna en el DataTable
+
+            #endregion
+
+            #region Columna Remision
+
+            Columna = new GridViewColumn();
+            assembly = Assembly.GetAssembly(Type.GetType("System.Windows.Controls.TextBox, PresentationFramework, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35"));
+            TipoDato = "System.Windows.Controls.TextBox";
+            Columna.Header = "Remision";
+            Txt = new FrameworkElementFactory(assembly.GetType(TipoDato));
+            Txt.SetValue(TextBox.MinWidthProperty, (double)65);
+            Txt.SetBinding(TextBox.TextProperty, new System.Windows.Data.Binding("Remision"));
+            Txt.SetValue(TextBox.TabIndexProperty, (int)0);//Interruption Point
+            Txt.SetValue(TextBox.IsTabStopProperty, true);
+            Txt.SetValue(TextBox.MarginProperty, new Thickness(0, 0, 0, 0));
+
+            // add textbox template
+            //Columna.Width = (double)80;
+            Columna.CellTemplate = new DataTemplate();
+            Columna.CellTemplate.VisualTree = Txt;
+            View.ListadoEquipos.Columns.Add(Columna); //Creacion de la columna en el GridView
+            View.Model.ListRecords.Columns.Add("Remision", typeof(String)); //Creacion de la columna en el DataTable
 
             #endregion
 
@@ -1340,7 +1474,49 @@ namespace WpfFront.Presenters
 
             #endregion
 
+            #region Columna Nivel.
 
+            IList<MMaster> ListadoNivel = service.GetMMaster(new MMaster { MetaType = new MType { Code = "NIVELMAT" } });
+            Columna = new GridViewColumn();
+            assembly = Assembly.GetAssembly(Type.GetType("System.Windows.Controls.ComboBox, PresentationFramework, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35"));
+            TipoDato = "System.Windows.Controls.ComboBox";
+            Columna.Header = "Nivel";
+            Txt = new FrameworkElementFactory(assembly.GetType(TipoDato));
+            Txt.SetValue(ComboBox.ItemsSourceProperty, ListadoNivel);
+            Txt.SetValue(ComboBox.DisplayMemberPathProperty, "Name");
+            Txt.SetValue(ComboBox.SelectedValuePathProperty, "Code");
+            Txt.SetBinding(ComboBox.SelectedValueProperty, new System.Windows.Data.Binding("NIVEL_MATERIAL"));
+            Txt.SetValue(ComboBox.WidthProperty, (double)110);
+
+            // add textbox template
+            Columna.CellTemplate = new DataTemplate();
+            Columna.CellTemplate.VisualTree = Txt;
+            View.ListadoEquipos.Columns.Add(Columna); //Creacion de la columna en el GridView
+            View.Model.ListRecords.Columns.Add("NIVEL_MATERIAL", typeof(String)); //Creacion de la columna en el DataTable
+
+            #endregion
+
+            #region Columna Estado PreDiag.
+
+            //IList<MMaster> ListadoEstado = service.GetMMaster(new MMaster { MetaType = new MType { Code = "ESTADOS" } });
+            //Columna = new GridViewColumn();
+            //assembly = Assembly.GetAssembly(Type.GetType("System.Windows.Controls.ComboBox, PresentationFramework, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35"));
+            //TipoDato = "System.Windows.Controls.ComboBox";
+            //Columna.Header = "Pre-Diagnostico";
+            //Txt = new FrameworkElementFactory(assembly.GetType(TipoDato));
+            //Txt.SetValue(ComboBox.ItemsSourceProperty, ListadoEstado);
+            //Txt.SetValue(ComboBox.DisplayMemberPathProperty, "Name");
+            //Txt.SetValue(ComboBox.SelectedValuePathProperty, "Code");
+            //Txt.SetBinding(ComboBox.SelectedValueProperty, new System.Windows.Data.Binding("ESTADO_PREDIAG"));
+            //Txt.SetValue(ComboBox.WidthProperty, (double)110);
+
+            //// add textbox template
+            //Columna.CellTemplate = new DataTemplate();
+            //Columna.CellTemplate.VisualTree = Txt;
+            //View.ListadoEquiposPreDiag.Columns.Add(Columna); //Creacion de la columna en el GridView
+            //View.Model.ListRecordsPreDiag.Columns.Add("ESTADO_PREDIAG", typeof(String)); //Creacion de la columna en el DataTable
+
+            #endregion
         }
 
         public DataTable ValidarSerialesIngresados(DataTable ListadoSeriales)
@@ -1390,12 +1566,12 @@ namespace WpfFront.Presenters
                 {
                     if (dr[7].ToString() == "MANTENIMIENTO")
                     {
-                        dr[8] = "SI";
+                        dr[9] = "SI";
                         break;
                     }
                     else
                     {
-                        dr[8] = "NO";
+                        dr[9] = "NO";
                         break;
                     }
                 }
@@ -1687,7 +1863,7 @@ namespace WpfFront.Presenters
                         {
                             View.GetEstado_CarguePrealerta.Text = "Carga de archivo terminada.";
                             View.Progress_CarguePrealerta.Value = 100D;
-                            tcargueprea.Dispose();
+                            //tcargueprea.Dispose();
                         }));
                     }
                 }));
@@ -1926,13 +2102,32 @@ namespace WpfFront.Presenters
                     String Cadena = View.GetUpLoadFilePrea.FileName.ToString();
                     string[] split = Cadena.Split(new Char[] { '\\' });
                     Cadena = split.Last();
-                    
+
+                    String FechaEmitido = "";
+                    DateTime aux_fechaEmitido;
+                    string dateFormat = "dd/MM/yyyy";
+
+                    View.Dispatcher_PreAlertas.Invoke(new System.Action(() =>
+                    {
+                        FechaEmitido = View.GetPreFecha_Emision.Text;
+
+
+                        if (!String.IsNullOrEmpty(FechaEmitido))
+                        {
+                            aux_fechaEmitido = DateTime.Parse(View.GetPreFecha_Emision.Text);
+                            FechaEmitido = aux_fechaEmitido.ToString(dateFormat);
+                        }
+                    }), null);
+
                     String ConsultaLiberar = "update dbo.EquiposDIRECTVC set ESTADO = 'PARA PROCESO' where SERIAL in(";
                     String ConsultaGuardar = "Declare @prea_id int, @aleEquip_id int; ";
-
-                    ConsultaGuardar = ConsultaGuardar + "INSERT INTO dbo.preAlertaDIRECTV(prea_archivo)" +
-                    "VALUES('" + Cadena.ToUpper() + "'); ";
+                    View.Dispatcher_PreAlertas.Invoke(new System.Action(() =>
+                    {
+                    ConsultaGuardar = ConsultaGuardar + "INSERT INTO dbo.preAlertaDIRECTV(prea_archivo,prea_consecutivo,prea_origen,prea_nombreOrigen,prea_direccion,prea_Contacto,prea_contactMovil,prea_nroPedido,prea_tipoRecoleccion,prea_fechaEmitido)" +
+                    "VALUES('" + Cadena.ToUpper() + "','" + View.GetPreaConsecutivo.Text + "','" + View.GetPreaTipo_Origen.Text + "','" + View.GetPreaOrigen.Text + "','" + View.GetPreaDireccion.Text + "','" + View.GetPreaNombre_contacto.Text +
+                    "','" + View.GetPreaCelular_contacto.Text + "','" + View.GetPreaNro_Pedido.Text + "','" + View.GetPreaTipo_Recoleccion.Text + "','" + FechaEmitido + "'); ";
                     ConsultaGuardar = ConsultaGuardar + "SET @prea_id = SCOPE_IDENTITY();";
+                    }), null);
 
                     int contcoma = 1;
                     int contador = 1;
@@ -1986,7 +2181,7 @@ namespace WpfFront.Presenters
                     //Evaluo si la consulta no envio los ultimos registros para forzar a enviarlos
                     if (!String.IsNullOrEmpty(ConsultaGuardar))
                     {
-                        Console.WriteLine(ConsultaLiberar);
+                        Console.WriteLine(ConsultaGuardar);
 
                         service.DirectSQLNonQuery(ConsultaLiberar, Local);
                         service.DirectSQLNonQuery(ConsultaGuardar, Local);
@@ -2055,6 +2250,7 @@ namespace WpfFront.Presenters
                 Util.ShowMessage("Error creando el archivo Excel: " + ex.ToString());
             }
         }
+        
 
         #endregion
     }

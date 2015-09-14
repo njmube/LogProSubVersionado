@@ -590,24 +590,17 @@ namespace WpfFront.Presenters
             else
                 NuevoEstado = "DESPACHADO";
 
-            Console.WriteLine(this.userName + ": " + this.user);
+            string estiba = ((DataRowView)View.ListadoItems.SelectedItem).Row["Estiba"].ToString();
+            //Creo la consulta para cambiar la ubicacion de la estiba
+            ConsultaSQL = " UPDATE dbo.EquiposClaro SET Ubicacion = '" + NuevaUbicacion + "', Estado = '" + NuevoEstado + "', FECHA_DESPACHO = GETDATE() WHERE CodigoEmpaque2 = '" + estiba + "';";
+            ConsultaSQL += "exec sp_InsertarNuevo_Movimiento 'PALLET DESPACHADO','ESPERANDO PARA SER DESPACHADO','DESPACHADO','" + estiba + "','','DESPACHO','UBICACIONALMACEN_SALIDAS','" + this.user +"','';";
 
-            foreach (DataRowView item in View.ListadoItems.SelectedItems)
-            {
-                
+            ConsultaDespacho = "EXEC sp_SetDespachoEquiposCLARO 'UPDATE_TABLEDESPACHO', 'DESPACHADO','" + estiba  + "';";
 
-                //Creo la consulta para cambiar la ubicacion de la estiba
-                ConsultaSQL = " UPDATE dbo.EquiposClaro SET Ubicacion = '" + NuevaUbicacion + "', Estado = '" + NuevoEstado + "', FECHA_DESPACHO = GETDATE() WHERE CodigoEmpaque2 = '" + item.Row["Estiba"] + "';";
-                ConsultaSQL += "exec sp_InsertarNuevo_Movimiento 'PALLET DESPACHADO','ESPERANDO PARA SER DESPACHADO','DESPACHADO','" + item.Row["Estiba"] + "','','DESPACHO','UBICACIONALMACEN_SALIDAS','" + this.user +"','';";
-
-                Console.WriteLine("#### "+ConsultaSQL);
-
-                ConsultaDespacho = "EXEC sp_SetDespachoEquiposCLARO 'UPDATE_TABLEDESPACHO', 'DESPACHADO','" + item.Row["Estiba"] + "';";
-
-                //Ejecuto la consulta
-                service.DirectSQLNonQuery(ConsultaSQL, Local);
-                service.DirectSQLNonQuery(ConsultaDespacho, Local);
-            }
+            //Ejecuto la consulta
+            service.DirectSQLNonQuery(ConsultaSQL, Local);
+            service.DirectSQLNonQuery(ConsultaDespacho, Local);
+           
 
             //Muestro el mensaje de confirmacion
             Util.ShowMessage("Cambio de ubicacion realizado satisfactoriamente.");
@@ -669,7 +662,7 @@ namespace WpfFront.Presenters
             }
 
             //Imprimo los registros
-            PrinterControl.PrintMovimientosBodega(SerialesImprimir, "PALLET", pallet, destino, "CLARO", "ALMACENAMIENTO - DESPACHO", "", "CLARO");
+            PrinterControl.PrintMovimientosBodega(this.userName, SerialesImprimir, "PALLET", pallet, destino, "CLARO", "ALMACENAMIENTO - DESPACHO", "", "CLARO");
         }
 
         public void LimpiarDatosIngresoSeriales()

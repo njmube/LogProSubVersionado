@@ -208,7 +208,8 @@ namespace WpfFront.Common
             fv.Show();
         }
 
-        public static void PrintMovimientosBodega(DataTable SerialesImprimir, String unidad_almacenamiento, String codigoEmp, String destino, String repoEmpresa, String titulo, String estadoReparacion, String aux2)
+        /* Hablador en el modulo de ALMACENAMIENTO*/
+        public static void PrintMovimientosBodega(string USERNAME, DataTable SerialesImprimir, String unidad_almacenamiento, String codigoEmp, String destino, String repoEmpresa, String titulo, String estadoReparacion, String aux2)
         {
             //Variables Auxiliares
             DataTable dtHeader = new DataTable("Header");
@@ -228,6 +229,7 @@ namespace WpfFront.Common
                 dtDetails.Columns.Add("TIEMPOBODEGA");
                 dtDetails.Columns.Add("TIEMPOBODEGAH");
                 dtDetails.Columns.Add("TRANSITO");
+                dtDetails.Columns.Add("USERNAME");
                 dtDetails.Columns.Add("UNIDADALMACENAMIENTO");
                 dtDetails.Columns.Add("SERIAL");
                 dtDetails.Columns.Add("SAP");
@@ -248,6 +250,7 @@ namespace WpfFront.Common
                     dtDetails.Rows[control]["FECHAINGRESO"] = Detalle["Fecha_Ingreso"].ToString();
                     dtDetails.Rows[control]["NROPALLET"] = codigoEmp;
                     dtDetails.Rows[control]["TRANSITO"] = titulo;
+                    dtDetails.Rows[control]["USERNAME"] = USERNAME.ToUpper() ;
                     dtDetails.Rows[control]["TIEMPOBODEGA"] = "";
                     dtDetails.Rows[control]["TIEMPOBODEGAH"] = "";
 
@@ -265,6 +268,7 @@ namespace WpfFront.Common
 
                 //Muestro en pantalla el comprobante para luego imprimirlo
                 ViewDocument fv = new ViewDocument(dsReporte, "MovMercanciaHablador.rdl");
+                fv.Title = "Sistema Integrado de Logística y Producción LOGPRO";
                 fv.Show();
             }
             else
@@ -428,7 +432,7 @@ namespace WpfFront.Common
         }
 
         //Imprime hablador para pallet
-        public static void PrintMovimientosMercancia(String transito, String ubicacion, String cantidad, String fechaIngreso, String idpallet, String dias, String tiempo, System.Windows.Controls.ListView SerialesImprimir)
+        public static void PrintMovimientosMercancia(string UserName, String transito, String ubicacion, String cantidad, String fechaIngreso, String idpallet, String dias, String tiempo, System.Windows.Controls.ListView SerialesImprimir)
         {
             //Variables Auxiliares
             DataTable dtHeader = new DataTable("Header");
@@ -451,6 +455,7 @@ namespace WpfFront.Common
             dtDetails.Columns.Add("UNIDADALMACENAMIENTO");
             dtDetails.Columns.Add("SERIAL");
             dtDetails.Columns.Add("SAP");
+            dtDetails.Columns.Add("USERNAME");
 
             dtHeader.Rows.Add(dtHeader.NewRow());
 
@@ -469,6 +474,7 @@ namespace WpfFront.Common
                 dtDetails.Rows[Control]["TIEMPOBODEGA"] = dias;
                 dtDetails.Rows[Control]["TIEMPOBODEGAH"] = tiempo;
                 dtDetails.Rows[Control]["TRANSITO"] = transito;
+                dtDetails.Rows[Control]["USERNAME"] = UserName.ToUpper();
 
                 dtDetails.Rows[Control]["SERIAL"] = Detalle["PSerial"].ToString();
                 dtDetails.Rows[Control]["SAP"] = Detalle["SAP"].ToString();
@@ -477,7 +483,7 @@ namespace WpfFront.Common
                 Console.WriteLine(Detalle["PSerial"].ToString() + " " + Detalle["SAP"].ToString() + " " + Detalle["Modelo"].ToString());
                 Control++;
             }
-
+            
             dsReporte.Tables.Add(dtHeader);
             dsReporte.Tables.Add(dtDetails);
 
@@ -487,6 +493,7 @@ namespace WpfFront.Common
             //Muestro en pantalla el comprobante para luego imprimirlo
             //ViewDocument fv = new ViewDocument(dsReporte, "MovMercancia.rdl");
             ViewDocument fv = new ViewDocument(dsReporte, "MovMercanciaHablador.rdl");
+            fv.Title = "Sistema Integrado de Logística y Producción LOGPRO";
             fv.Show();
         }
 
@@ -623,7 +630,7 @@ namespace WpfFront.Common
             //throw new NotImplementedException();
         }
 
-        public static void PrintMovimientosEmpaque(DataTable seriales, String transito, String estado, String NroCajas, String NroSeriales, String fechaIngreso, String pallet, String modelo)
+        public static void PrintMovimientosEmpaque(string USERNAME, DataTable seriales, String transito, String estado, String NroCajas, String NroSeriales, String fechaIngreso, String pallet, String modelo)
         {
             //Variables Auxiliares
             DataTable dtHeader = new DataTable("Header");
@@ -638,6 +645,7 @@ namespace WpfFront.Common
             dtDetails.Columns.Add("CANTIDADCAJAS");
             dtDetails.Columns.Add("FECHAINGRESO");
             dtDetails.Columns.Add("MODELO");
+            dtDetails.Columns.Add("USERNAME");
             dtDetails.Columns.Add("NROPALLET");
             dtDetails.Columns.Add("TIEMPOBODEGA");
             dtDetails.Columns.Add("TIEMPOBODEGAH");
@@ -658,6 +666,7 @@ namespace WpfFront.Common
                 dtDetails.Rows[control]["UNIDADALMACENAMIENTO"] = "Pallet";
                 dtDetails.Rows[control]["CANTIDAD"] = NroSeriales;
                 dtDetails.Rows[control]["CANTIDADCAJAS"] = NroCajas;
+                dtDetails.Rows[control]["USERNAME"] = USERNAME.ToUpper();
                 dtDetails.Rows[control]["FECHAINGRESO"] = fechaIngreso;
                 dtDetails.Rows[control]["NROPALLET"] = pallet;
                 dtDetails.Rows[control]["TRANSITO"] = transito;
@@ -676,6 +685,7 @@ namespace WpfFront.Common
 
             //Muestro en pantalla el comprobante para luego imprimirlo
             ViewDocument fv = new ViewDocument(dsReporte, "MovMercanciaHabladorEmpaque.rdl");
+            fv.Title = "Sistema Integrado de Logística y Producción LOGPRO";
             fv.Show();
         }
 
@@ -774,6 +784,7 @@ namespace WpfFront.Common
 
                 //Muestro en pantalla el comprobante para luego imprimirlo
                 ViewDocument fv = new ViewDocument(dsReporte, "MovMercanciaHabladorDIRECTV.rdl");
+                fv.Title = "Sistema Integrado de Logística y Producción LOGPRO";
                 fv.Show();
             }
             else
@@ -824,6 +835,7 @@ namespace WpfFront.Common
 
                 //Muestro en pantalla el comprobante para luego imprimirlo
                 ViewDocument fv = new ViewDocument(dsReporte, "MovMercanciaHabladorDIRECTV.rdl");
+                fv.Title = "Sistema Integrado de Logística y Producción LOGPRO";
                 fv.Show();
             }
         }
@@ -881,6 +893,7 @@ namespace WpfFront.Common
 
             //Muestro en pantalla el comprobante para luego imprimirlo
             ViewDocument fv = new ViewDocument(dsReporte, "MovMercanciaHabladorEmpaqueDIRECTV.rdl");
+            fv.Title = "Sistema Integrado de Logística y Producción LOGPRO";
             fv.Show();
         }
 
@@ -943,6 +956,7 @@ namespace WpfFront.Common
             //Muestro en pantalla el comprobante para luego imprimirlo
             //ViewDocument fv = new ViewDocument(dsReporte, "MovMercancia.rdl");
             ViewDocument fv = new ViewDocument(dsReporte, "MovMercanciaHabladorDIRECTV.rdl");
+            fv.Title = "Sistema Integrado de Logística y Producción LOGPRO";
             fv.Show();
         }
 

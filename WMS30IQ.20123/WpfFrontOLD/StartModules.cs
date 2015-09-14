@@ -305,6 +305,12 @@ namespace WpfFront
             container.RegisterType<ISmartCardProdDTVModel, SmartCardProdDTVModel>();
             //////30 JULIO 2015 ERWIN PARDO////////////
 
+            //////31 AGOSTO 2015 ERWIN PARDO////////////
+            container.RegisterType<IPreDiagnosticoDTVView, PreDiagnosticoDTVView>();
+            container.RegisterType<IPreDiagnosticoDTVPresenter, PreDiagnosticoDTVPresenter>();
+            container.RegisterType<IPreDiagnosticoDTVModel, PreDiagnosticoDTVModel>();
+            //////31 AGOSTO 2015 ERWIN PARDO////////////
+
             container.RegisterType<IDespachoDTVView, DespachoDTVView>();
             container.RegisterType<IDespachoDTVPresenter, DespachoDTVPresenter>();
             container.RegisterType<IDespachoDTVModel, DespachoDTVModel>();
@@ -868,6 +874,13 @@ namespace WpfFront
                     NovedadesDTVPresenterP.Window = window;
                     return NovedadesDTVPresenterP.View;
                 ////////// 30 DE JULIO DE 2015 /////////////
+
+                ////////// 31 DE AGOSTO DE 2015 /////////////
+                case "PreDiagnosticoDTVPresenter":
+                    PreDiagnosticoDTVPresenter PreDiagnosticoDTVPresenterP = container.Resolve<PreDiagnosticoDTVPresenter>();
+                    PreDiagnosticoDTVPresenterP.Window = window;
+                    return PreDiagnosticoDTVPresenterP.View;
+                ////////// 31 DE AGOSTO DE 2015 /////////////
 
                 case "GeneradorEstibasPresenter":
                     GeneradorEstibasPresenter GeneradorEstibas = container.Resolve<GeneradorEstibasPresenter>();

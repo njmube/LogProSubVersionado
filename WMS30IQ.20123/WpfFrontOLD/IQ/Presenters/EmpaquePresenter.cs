@@ -68,7 +68,6 @@ namespace WpfFront.Presenters
             View.ConfirmarMovimientoProcesamiento += new EventHandler<EventArgs>(this.OnConfirmarMovimientoProcesamiento);
             View.GenerarCodigo += new EventHandler<EventArgs>(this.OnGenerarCodigo);
             View.GenerarCodigoEmpaque += new EventHandler<EventArgs>(this.OnGenerarCodigoEmpaque);
-            View.ConfirmarImpresion += new EventHandler<EventArgs>(this.OnConfirmarImpresion);
             View.ConfirmarImpresionHablador += new EventHandler<EventArgs>(this.OnConfirmarImpresionHablador);
             View.SeleccionPallet_Consulta += new EventHandler<EventArgs>(this.OnSeleccionPallet_Consulta);
             View.SeleccionCaja_Consulta += new EventHandler<EventArgs>(this.OnSeleccionCaja_Consulta);
@@ -152,6 +151,7 @@ namespace WpfFront.Presenters
         }
 
         private void OnConfirmBasicData(object sender, EventArgs e)
+        
         {
             //Variables Auxiliares
             String ConsultaSQL;
@@ -164,69 +164,11 @@ namespace WpfFront.Presenters
             ActualizarListPallet();
         }
 
-        private void OnConfirmarImpresion(object sender, EventArgs e)
-        {
-            ////Variables Auxiliares
-            //String ConsultaSQL = "";
-            //DataTable SerialesImprimir;
-            //String unidad_almacenamiento = "";
-            //String codigoEmp = View.CodigoEmpaqueProcesamiento.Text.ToString();
-            //String destino = "EMPAQUE";
-
-            ////Evaluo que haya sido seleccionado un registro
-            //if (View.ListadoSeriales.SelectedIndex == -1)
-            //{
-            //    Util.ShowMessage("Debe seleccionar al menos un registro");
-            //    return;
-            //}
-
-            //if (String.Compare("", codigoEmp) == 0)
-            //{
-            //    Util.ShowError("Por favor generar un código de empaque");
-            //    return;
-            //}
-
-            ////Creo la base de la consulta para traer los seriales respectivos
-            //ConsultaSQL = "SELECT idPallet,Posicion,serial,Mac,Codigo_SAP,ProductoID FROM dbo.EquiposCLARO WHERE serial IN (''";
-
-            ////Recorro el listado de registros seleccionados para obtener los seriales e imprimirlos
-            //foreach (DataRowView Registros in View.ListadoSeriales.SelectedItems)
-            //{
-            //    //Util.ShowMessage(Registros.Row["Serial"].ToString());
-            //    //Creo la consulta para cambiar la ubicacion de la estiba
-
-            //    ConsultaSQL += ",'" + Registros.Row["Serial"] + "'";
-            //}
-
-            ////Completo la consulta
-            //ConsultaSQL += ")";
-
-            ////Elimino la basura en la cadena
-            //ConsultaSQL = ConsultaSQL.Replace("'',", "");
-
-            ////Ejecuto la consulta
-            //SerialesImprimir = service.DirectSQLQuery(ConsultaSQL, "", "dbo.EquiposCLARO", Local);
-
-            //if (View.UnidadAlmacenamientoProcesamiento.SelectedIndex != -1)
-            //{
-            //    unidad_almacenamiento = ((ComboBoxItem)View.UnidadAlmacenamientoProcesamiento.SelectedItem).Content.ToString();
-            //}
-            //else
-            //{
-            //    Util.ShowError("Selecciona una unidad de empaque");
-            //    return;
-            //}
-
-            ////Imprimo los registros
-            //PrinterControl.PrintMovimientosBodega(SerialesImprimir, unidad_almacenamiento, codigoEmp, destino, "CLARO", "EMPAQUE - PROCESAMIENTO", "", "");
-        }
-
         private void OnConfirmarImpresionHablador(object sender, EventArgs e)
         {
             //Variables Auxiliares
             String ConsultaSQL = "";
             DataTable SerialesImprimir;
-            String unidad_almacenamiento = "";
             String destino = "";
 
             //Evaluo que haya sido seleccionado un registro
@@ -295,7 +237,7 @@ namespace WpfFront.Presenters
             SerialesImprimir = service.DirectSQLQuery(ConsultaSQL, "", "dbo.EquiposCLARO", Local);
 
             //Imprimo los registros
-            PrinterControl.PrintMovimientosEmpaque(SerialesImprimir, transito, estado, NroCajas, NroSeriales, fechaIngreso, pallet, modelo);
+            PrinterControl.PrintMovimientosEmpaque(this.userName, SerialesImprimir, transito, estado, NroCajas, NroSeriales, fechaIngreso, pallet, modelo);
         }
 
         public void CargarDatosDetails()
@@ -803,9 +745,13 @@ namespace WpfFront.Presenters
 
         private void OnSeleccionPallet_Consulta(object sender, EventArgs e)
         {
+           
             //Evaluo que haya sido seleccionado un registro
             if (View.ListadoPalletsBusqueda.SelectedIndex == -1)
+            {
+                View.Model.ListCajas_Empaque.Clear();
                 return;
+            }
 
             //evaluo si hay seriales en la lista y los limpio para la nueva consulta
             if (View.ListadoSerialesBusqueda.Items.Count > 0)
@@ -853,7 +799,10 @@ namespace WpfFront.Presenters
         {
             //Evaluo que haya sido seleccionado un registro
             if (View.ListadoCajasBusqueda.SelectedIndex == -1)
+            {
+                View.Model.ListSeriales_Empaque.Clear();
                 return;
+            }
 
             //evaluo el estado de la caja y habilito opciones
             if (((DataRowView)View.ListadoCajasBusqueda.SelectedItem).Row["Estado"].ToString().Equals("COMPLETADA"))
@@ -881,8 +830,6 @@ namespace WpfFront.Presenters
             String aux_nrocaja = ((DataRowView)View.ListadoCajasBusqueda.SelectedItem).Row["idCaja"].ToString();
 
             String ConsultaSQL = "EXEC sp_GetProcesos 'BUSCARSERIALEMPAQUE','" + aux_idpallet + "','" + aux_nrocaja + "','',''";
-
-            Console.WriteLine("consulta caja: " + ConsultaSQL);
 
             View.Model.ListSeriales_Empaque = service.DirectSQLQuery(ConsultaSQL, "", "dbo.EquiposCLARO", Local);
         }
@@ -1129,7 +1076,7 @@ namespace WpfFront.Presenters
 
             if (resultado.Rows.Count > 0)
             {
-                Util.ShowError("Ya existe el pallet. Por favor genere uno nuevo");
+                Util.ShowMessage("Ya existe el pallet. Por favor genere uno nuevo");
                 return;
             }
             else

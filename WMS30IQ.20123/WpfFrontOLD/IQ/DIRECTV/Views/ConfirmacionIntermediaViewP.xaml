@@ -17,23 +17,38 @@
                     <Border x:Uid="Border_1" x:Name="Border_Detail_2" Style="{DynamicResource UserControlFormInnerBorder}" Margin="3" HorizontalAlignment="Center" Visibility="Visible" Width="650" >
 
                         <StackPanel x:Name="Stack_DetailSerial_2" Orientation="Vertical" Margin="3" HorizontalAlignment="Center" >
-
-                            <StackPanel Orientation="Horizontal">
+                            <StackPanel>
+                                <TextBlock Text="MODULO DAÑO FISICO" HorizontalAlignment="Left" FontWeight="bold" />
+                            </StackPanel>
+                            <Separator Margin="5,0,0,0"/>
+                            <!--<StackPanel Orientation="Horizontal">
                                 <TextBlock Text="Seleccion de Items" HorizontalAlignment="Left" FontWeight="bold" />
                                 <Image x:Uid="ImageRefresh" Name="ImageRefresh"  Margin="10,1,5,0" Width="17"  HorizontalAlignment="Center" Source="/WpfFront;component/Images/refresh.png" ToolTip="Refresh List" MouseDown="ImageRefresh_MouseDown"  />
+                            </StackPanel>-->
+                            <StackPanel x:Uid="Stack_SerialGroup" x:Name="Stack_SerialGroup" Orientation="Horizontal" Margin="0,6,0,0">
+                                <StackPanel x:Uid="Stack_Serial1" x:Name="Stack_Serial1" Orientation="Vertical" Margin="4,0,4,0" >
+                                <TextBlock x:Uid="txt_Serial1" x:Name="txt_Serial1" Text="Serial" />
+                                <TextBox x:Uid="tb_Serial1" x:Name="tb_Serial1" Width="110" KeyDown="tb_Serial1_KeyDown_1" />
+                            </StackPanel>
+                            <StackPanel x:Uid="Stack_Serial2" x:Name="Stack_Serial2" Orientation="Vertical" Margin="4,0,4,0" >
+                                <TextBlock x:Uid="txt_Serial2" x:Name="txt_Serial2" Text="ID Receiver" />
+                                <TextBox x:Uid="tb_Serial2" x:Name="tb_Serial2" Width="110" KeyDown="tb_Serial2_KeyDown_1" />
+                            </StackPanel>
+                            
                             </StackPanel>
 
-                            <Separator Margin="5,4,0,0"/>
+                            <!--<Separator Margin="5,4,0,0"/>-->
 
                             <StackPanel x:Uid="Stack_Adicionales_2" x:Name="Stack_Adicionales_2" Orientation="Vertical" Margin="0,6,0,0">
                                 <ListView x:Uid="lvDocumentMaster" ItemsSource="{Binding ListRecords_1}" Margin="0,4,0,0"  MaxHeight="400" x:Name="lvDocumentMaster_2" SelectionChanged="MySelectionChanged" Width="600">
                                     <ListView.View>
                                         <GridView x:Uid="GridViewDetails" x:Name="GridViewDetails_2">
-                                            <GridViewColumn x:Uid="GridViewColumn_2" Header="Modelo" Width="185" DisplayMemberBinding="{Binding prod_nombre}" />
-                                            <GridViewColumn x:Uid="GridViewColumn_2" Header="Serial" Width="100" DisplayMemberBinding="{Binding prod_serial}" />
-                                            <GridViewColumn x:Uid="GridViewColumn_2" Header="Receiver" Width="100" DisplayMemberBinding="{Binding prod_receiver}" />
-                                            <GridViewColumn x:Uid="GridViewColumn_2" Header="Diagnóstico" Width="90" DisplayMemberBinding="{Binding prod_status}" />
-                                            <GridViewColumn x:Uid="GridViewColumn_2" Header="Falla Diagnóstico" Width="120" DisplayMemberBinding="{Binding prod_falla}" />
+                                            <GridViewColumn x:Uid="GridViewColumn_2" Header="RowId" Width="0" DisplayMemberBinding="{Binding RowId}" />
+                                            <GridViewColumn x:Uid="GridViewColumn_2" Header="Modelo" Width="auto" DisplayMemberBinding="{Binding prod_nombre}" />
+                                            <GridViewColumn x:Uid="GridViewColumn_2" Header="Serial" Width="auto" DisplayMemberBinding="{Binding prod_serial}" />
+                                            <GridViewColumn x:Uid="GridViewColumn_2" Header="Receiver" Width="auto" DisplayMemberBinding="{Binding prod_receiver}" />
+                                            <GridViewColumn x:Uid="GridViewColumn_2" Header="Diagnóstico" Width="auto" DisplayMemberBinding="{Binding prod_status}" />
+                                            <GridViewColumn x:Uid="GridViewColumn_2" Header="Falla Diagnóstico" Width="auto" DisplayMemberBinding="{Binding prod_falla}" />
                                         </GridView>
                                     </ListView.View>
                                 </ListView>
@@ -44,6 +59,9 @@
                                 <TextBlock x:Uid="textblock_recuento" x:Name="textblock_recuento" Text="{Binding Path=ListRecords_1.Count}" FontWeight="Bold" Margin="0,0,8,4" />
                             </StackPanel>
 
+                            <StackPanel x:Uid="Stack_Panel_2" Name="Stack_Panel_2" Width="auto" Orientation="Horizontal" Margin="4,3,4,3" HorizontalAlignment="Right" >
+                                <Button x:Uid="btn_confirmar_2" Name="btn_confirm" Content="Confirmar" Click="btn_confirmar_Click_1" />
+                            </StackPanel>
                         </StackPanel>
                     </Border>
                     <StackPanel Margin="15,0,0,0" Width="200" Height="10">
@@ -51,7 +69,7 @@
                     </StackPanel>
                 </StackPanel>
 
-                <StackPanel x:Uid="Stack_Panel1" Orientation="Vertical" Margin="3" HorizontalAlignment="Center" Width="auto" Height="auto" Visibility="Visible">
+                <!--<StackPanel x:Uid="Stack_Panel1" Orientation="Vertical" Margin="3" HorizontalAlignment="Center" Width="auto" Height="auto" Visibility="Visible">
                     <TextBlock x:Uid="Text_ShowHid" Name="Text_ShowHid" HorizontalAlignment="Left" Margin="15,0,0,0" Text="Mostrar >>" Visibility="Collapsed" />
                     <Border x:Uid="Border_Head" Name="Border_Head" Style="{DynamicResource UserControlFormInnerBorder}" Margin="3" HorizontalAlignment="Center">
                         <StackPanel x:Uid="Stack_Panel12" Margin="5" Width="auto" HorizontalAlignment="Left" Orientation="Vertical">
@@ -84,14 +102,14 @@
                                 <ComboBox x:Uid="cb_Ubicacion" Name="cb_Ubicacion" Width="180" Height="23" ItemsSource="{Binding Path=ListUbicacionesDestino}" SelectedValue="UbicacionDestino" DisplayMemberPath="UbicacionDestino" />
                             </StackPanel>
                             <Separator Margin="5,4,0,10"/>
-                            <StackPanel x:Uid="Stack_Panel_2" Name="Stack_Panel_2" Width="auto" Orientation="Horizontal" Margin="4,3,4,3" HorizontalAlignment="Right" >
+                            --><!--<StackPanel x:Uid="Stack_Panel_2" Name="Stack_Panel_2" Width="auto" Orientation="Horizontal" Margin="4,3,4,3" HorizontalAlignment="Right" >
                                 <Button x:Uid="btn_imprimir" Name="btn_imprimir" Content="Imprimir" Click="btn_imprimir_Click_1" Margin="0,0,5,0" />
                                 <Button x:Uid="btn_confirmar_2" Name="btn_confirm" Content="Empacar" Click="btn_confirmar_Click_1" />
-                            </StackPanel>
+                            </StackPanel>--><!--
 
                         </StackPanel>
                     </Border>
-                </StackPanel>
+                </StackPanel>-->
             </StackPanel>
         </DockPanel>
     </AdornerDecorator>

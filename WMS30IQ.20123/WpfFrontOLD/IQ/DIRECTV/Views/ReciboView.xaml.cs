@@ -158,6 +158,66 @@ namespace WpfFront.Views
             set { this.lv_NoCarguePrea = value; }
         }
 
+        public TextBox GetPreaConsecutivo
+        {
+            get { return this.tb_consecutivo; }
+            set { this.tb_consecutivo = value; }
+        }
+
+        public ComboBox GetPreaTipo_Origen
+        {
+            get { return this.tb_tipoOrigenPreale; }
+            set { this.tb_tipoOrigenPreale = value; }
+        }
+
+        public TextBox GetPreaOrigen
+        {
+            get { return this.tb_alerOrigen; }
+            set { this.tb_alerOrigen = value; }
+        }
+
+        public TextBox GetPreaDireccion
+        {
+            get { return this.tb_AlerDireccion; }
+            set { this.tb_AlerDireccion = value; }
+        }
+
+        public TextBox GetPreaNombre_contacto
+        {
+            get { return this.tb_AlerNombreContacto; }
+            set { this.tb_AlerNombreContacto = value; }
+        }
+
+        public TextBox GetPreaCelular_contacto
+        {
+            get { return this.tb_AlerCelular; }
+            set { this.tb_AlerCelular = value; }
+        }
+
+        public ComboBox GetPreaTipo_Recoleccion
+        {
+            get { return this.tb_tipoRecoleccion; }
+            set { this.tb_tipoRecoleccion = value; }
+        }
+
+        public TextBox GetPreaNro_Pedido
+        {
+            get { return this.tb_nroPedido; }
+            set { this.tb_nroPedido = value; }
+        }
+
+        public System.Windows.Controls.DatePicker GetPreFecha_Emision
+        {
+            get { return this.datePicker1; }
+            set { this.datePicker1 = value; }
+        }
+
+        public Dispatcher Dispatcher_PreAlertas
+        {
+            get { return this.Dispatcher; }
+        }
+
+
         #endregion
 
         #region Metodos
@@ -193,6 +253,15 @@ namespace WpfFront.Views
             //Evaluo si la tecla es un Enter
             if (e.Key == Key.Enter)
             {
+                if (tb_Serial2.Text.StartsWith("00") == false)
+                {
+                    Util.ShowError("La estructura del ID Receiver es incorrecta!");
+                    tb_Serial1.Text = "";
+                    tb_Serial2.Text = "";
+                    GetSerial1.Focus();
+                    return;
+                }
+
                 if (tb_Serial2.Text.Length < 12 || tb_Serial2.Text.Length > 12)
                 {
                     Util.ShowError("El serial debe contener 12 digitos!");
@@ -212,8 +281,11 @@ namespace WpfFront.Views
                 }
                 else
                 {
+                    if(tb_Serial3.IsEnabled)
                     //Paso el focus al siguiente campo de serial
-                    GetSerial3.Focus();
+                        GetSerial3.Focus();
+                    else
+                        AddLine(sender, e);
                 }   
             }
         }
@@ -224,6 +296,16 @@ namespace WpfFront.Views
             //Evaluo si la tecla es un Enter
             if (e.Key == Key.Enter)
             {
+                if (!tb_Serial3.Text.StartsWith("000") || tb_Serial3.Text.StartsWith("0000") == true)
+                {
+                    Util.ShowError("La Smart Card no cuenta con la estructura correcta!");
+                    tb_Serial1.Text = "";
+                    tb_Serial2.Text = "";
+                    tb_Serial3.Text = "";
+                    GetSerial1.Focus();
+                    return;
+                }
+
                 if (tb_Serial3.Text != "" && tb_Serial3.Text != null)
                 {
                     if (tb_Serial3.Text.Length < 12 || tb_Serial3.Text.Length > 12)
@@ -354,6 +436,16 @@ namespace WpfFront.Views
             chkRep.IsChecked = false;
         }
 
+        private void chkDisableSmart_Checked_1(object sender, RoutedEventArgs e)
+        {
+            tb_Serial3.IsEnabled = false;
+        }
+
+        private void UnchkDisableSmart_Checked_1(object sender, RoutedEventArgs e)
+        {  
+            tb_Serial3.IsEnabled = true;
+        }
+
         private void GridViewColumnHeaderClickedHandler(object sender, RoutedEventArgs e)
         {
             ReplicateDetailsBy_Column(sender, e);
@@ -422,7 +514,84 @@ namespace WpfFront.Views
 
         #endregion
 
-        
+        #region Eventos formulario registro - PREALERTA
+
+        /*Metodos utilizados para los eventos del formulario de registro de nuevas prealertas*/
+
+        private void tb_nroPedido_KeyDown_1(object sender, KeyEventArgs e)
+        {
+            //Evaluo si la tecla es un Enter
+            if (e.Key == Key.Enter)
+            {
+                Util.ShowError("Enter");
+            }
+        }
+
+        private void tb_tipoRecoleccion_KeyDown_1(object sender, KeyEventArgs e)
+        {
+            //Evaluo si la tecla es un Enter
+            if (e.Key == Key.Enter)
+            {
+                Util.ShowError("Enter");
+            }
+        }
+
+        private void tb_AlerCelular_KeyDown_1(object sender, KeyEventArgs e)
+        {
+            //Evaluo si la tecla es un Enter
+            if (e.Key == Key.Enter)
+            {
+                Util.ShowError("Enter");
+            }
+        }
+
+        private void tb_AlerNombreContacto_KeyDown_1(object sender, KeyEventArgs e)
+        {
+            //Evaluo si la tecla es un Enter
+            if (e.Key == Key.Enter)
+            {
+                Util.ShowError("Enter");
+            }
+        }
+
+        private void tb_AlerDireccion_KeyDown_1(object sender, KeyEventArgs e)
+        {
+            //Evaluo si la tecla es un Enter
+            if (e.Key == Key.Enter)
+            {
+                //datePicker1.Focus();
+            }
+        }
+
+        private void tb_alerOrigen_KeyDown_1(object sender, KeyEventArgs e)
+        {
+            //Evaluo si la tecla es un Enter
+            if (e.Key == Key.Enter)
+            {
+                Util.ShowError("Enter");
+            }
+        }
+
+        private void tb_tipoOrigen_KeyDown_1(object sender, KeyEventArgs e)
+        {
+            //Evaluo si la tecla es un Enter
+            if (e.Key == Key.Enter)
+            {
+                Util.ShowError("Enter");
+            }
+        }
+
+        private void tb_consecutivo_KeyDown_1(object sender, KeyEventArgs e)
+        {
+            //Evaluo si la tecla es un Enter
+            if (e.Key == Key.Enter)
+            {
+                Util.ShowError("Enter");
+            }
+        }
+
+
+        #endregion
 
     }
 
@@ -439,6 +608,7 @@ namespace WpfFront.Views
         TextBox GetSerial3 { get; set; }
         UploadFile GetUpLoadFile { get; set; }
         GridView ListadoEquipos { get; set; }
+        
         ListView ListadoEquiposAProcesar { get; set; }
 
         TextBlock GetEstado_Cargue { get; set; }
@@ -452,6 +622,17 @@ namespace WpfFront.Views
         Dispatcher Dispatcher_CarguePrealerta { get; }
         ProgressBar Progress_CarguePrealerta { get; set; }
         ListView ListadoNo_CarguePrea { get; set; }
+
+        TextBox GetPreaNro_Pedido { get; set; }
+        ComboBox GetPreaTipo_Recoleccion { get; set; }
+        TextBox GetPreaCelular_contacto { get; set; }
+        TextBox GetPreaNombre_contacto { get; set; }
+        TextBox GetPreaDireccion { get; set; }
+        TextBox GetPreaOrigen { get; set; }
+        ComboBox GetPreaTipo_Origen { get; set; }
+        TextBox GetPreaConsecutivo { get; set; }
+        System.Windows.Controls.DatePicker GetPreFecha_Emision { get; set; }
+        Dispatcher Dispatcher_PreAlertas { get; }
 
         #endregion
 

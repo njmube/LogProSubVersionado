@@ -378,6 +378,7 @@ namespace WpfFront.Views
 
         private void lv_ListadoCajas_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+
             SeleccionCaja_Consulta(sender, e);
         }
 

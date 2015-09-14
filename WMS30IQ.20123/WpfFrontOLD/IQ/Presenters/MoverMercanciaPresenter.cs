@@ -135,7 +135,7 @@ namespace WpfFront.Presenters
                 //Cargo todas las ubicaciones
                 View.Model.ListadoPosiciones = service.GetMMaster(new MMaster { MetaType = new MType { Code = "CLAROPOSIC" } });
 
-                DataTable dt_auxiliar = service.DirectSQLQuery("select posicion from dbo.EquiposCLARO where posicion is not null AND (estado LIKE 'ALMACENAMIENTO' OR Estado LIKE 'DESPACHO') group by posicion ", "", "dbo.EquiposCLARO", Local);
+                DataTable dt_auxiliar = service.DirectSQLQuery("SELECT posicion FROM dbo.EquiposCLARO WHERE posicion IS NOT NULL AND (estado LIKE 'ALMACENAMIENTO' OR Estado LIKE 'DESPACHO') GROUP BY posicion ", "", "dbo.EquiposCLARO", Local);
 
                 List<String> list = dt_auxiliar.AsEnumerable()
                            .Select(r => r.Field<String>("posicion"))
@@ -482,7 +482,7 @@ namespace WpfFront.Presenters
             String tiempoTranscurrido = ((DataRowView)View.ListadoBusquedaCambioClasificacion.SelectedItem).Row["Horas"].ToString();
 
             //Imprimo los registros
-            PrinterControl.PrintMovimientosMercancia(transito, ubicacion, cantidad, fechaIngreso, idpallet, dias, tiempoTranscurrido, SerialesImprimir);
+            PrinterControl.PrintMovimientosMercancia(this.userName, transito, ubicacion, cantidad, fechaIngreso, idpallet, dias, tiempoTranscurrido, SerialesImprimir);
         }
 
         private void OnExportPalletSeleccion(object sender, EventArgs e)
@@ -828,7 +828,7 @@ namespace WpfFront.Presenters
                     SerialesImprimir = service.DirectSQLQuery(ConsultaSQL, "", "dbo.EquiposCLARO", Local);
 
                     //Imprimo los registros
-                    PrinterControl.PrintMovimientosBodega(SerialesImprimir, "PALLET", pallet, estado, "CLARO", "POSICIONAR EN ALMACEN", "", "aux");
+                    PrinterControl.PrintMovimientosBodega(this.userName, SerialesImprimir, "PALLET", pallet, estado, "CLARO", "POSICIONAR EN ALMACEN", "", "aux");
                 }
                 else
                 {
@@ -847,7 +847,7 @@ namespace WpfFront.Presenters
                     SerialesImprimir = service.DirectSQLQuery(ConsultaSQL, "", "dbo.EquiposCLARO", Local);
 
                     //Imprimo los registros
-                    PrinterControl.PrintMovimientosBodega(SerialesImprimir, "PALLET", pallet, destino, "CLARO", "ALMACENAMIENTO - " + destino, "", "");
+                    PrinterControl.PrintMovimientosBodega (this.userName, SerialesImprimir, "PALLET", pallet, destino, "CLARO", "ALMACENAMIENTO - " + destino, "", "");
                 }
 
                 else if (estado == "PARA SCRAP")
@@ -926,7 +926,7 @@ namespace WpfFront.Presenters
             }
             catch (Exception ex)
             {
-                Util.ShowError("No es posible actualizar el listado de ubicaciones disponibles " + ex.ToString());
+                Util.ShowError("No es posible actualizar el listado de ubicaciones disponibles " + ex.Message.ToString());
             }
         }
 
@@ -958,7 +958,7 @@ namespace WpfFront.Presenters
                 else
                 {
                     //Asigno los campos
-                    View.TXT_palletGeneratedUnionEstibas.Text = "RES-D" + Resultado.Rows[0]["idpallet"].ToString();
+                    View.TXT_palletGeneratedUnionEstibas.Text = "RES-A" + Resultado.Rows[0]["idpallet"].ToString();
                     if (View.CBO_UbicacionUnionEstibas.SelectedIndex > 0)
                     {
                         View.TXT_seleccionarUbicacion.Visibility = Visibility.Hidden;
@@ -982,17 +982,21 @@ namespace WpfFront.Presenters
             }
             string nuevaEstiba = View.TXT_palletGeneratedUnionEstibas.Text.ToString();
             string nuevaUbicacion = View.CBO_UbicacionUnionEstibas.Text.ToString();
-            string updateQuery = "UPDATE dbo.EquiposClaro SET idPallet = '" + nuevaEstiba + "', Posicion = '" + nuevaUbicacion + "' WHERE idPallet IN (''";
-            string idPalletCurrent = "";
-            foreach (DataRowView item in View.ListadoBusquedaCambioClasificacion.SelectedItems)
-            {
-                idPalletCurrent += "," + "'" + item[0].ToString() + "'";
-            }
-            updateQuery += idPalletCurrent += ")";
-
+            string updateQuery = "UPDATE dbo.EquiposClaro SET idPallet = '" + nuevaEstiba + "', Posicion = '" + nuevaUbicacion + "' WHERE idPallet IN (";
+            string ConsultaSQL = "";
+            string idPallets = "''";
             try
             {
+                foreach (DataRowView item in View.ListadoBusquedaCambioClasificacion.SelectedItems)
+                {
+                    ConsultaSQL = "EXEC sp_InsertarNuevo_Movimiento 'UNIÓN DE ESTIBAS MOV. MERCANCIA', '" + nuevaEstiba + "', '" + item[0].ToString()  + "', '" + nuevaUbicacion + "', '', 'MOV. MERCANCIA','UNIONESTIBAS','" + this.user + "','';";
+                    service.DirectSQLNonQuery(ConsultaSQL, Local);
+                    idPallets += "," + "'" + item[0].ToString() + "'";
+                }
+                idPallets += ")";
+                updateQuery += idPallets;
                 service.DirectSQLNonQuery(updateQuery, Local);
+               
             }
             catch (Exception ex)
             {
@@ -1073,17 +1077,19 @@ namespace WpfFront.Presenters
             string UbicacionSelected = ((DataRowView)View.ListadoBusquedaCambioClasificacion.SelectedItem).Row[1].ToString();
             string Ubicacion;
             string Estado = Ubicacion = "ALMACENAMIENTO";
-          
 
+            string ConsultaSQL = "";
             string UpdateQuery = "UPDATE dbo.EquiposClaro SET idPallet = '" + idPalletSelected + "', Posicion = '" + UbicacionSelected + "', Ubicacion = '" + Ubicacion + "', Estado = '" + Estado + "' WHERE Serial IN ('' ";
-
-            foreach (DataRowView item in View.LV_serialesOneByOne.Items)
-            {
-                UpdateQuery += ", '" + item[0].ToString() +"'";
-            }
-            UpdateQuery += ")";
             try
             {
+                foreach (DataRowView item in View.LV_serialesOneByOne.Items)
+                {
+                    ConsultaSQL = "EXEC dbo.sp_InsertarNuevo_Movimiento 'ADICION SERIAL A ESTIBA', 'SERIAL ADICIONADO', '" + item[0].ToString() + "', '" + idPalletSelected + "', '', 'MOV. MERCANCIA','ADICIONSERIALES','" + this.user + "','';";
+                    service.DirectSQLNonQuery(ConsultaSQL, Local);
+                    UpdateQuery += ", '" + item[0].ToString() +"'";
+                }
+                UpdateQuery += ")";
+           
                 service.DirectSQLNonQuery(UpdateQuery, Local);
                 this.UbicacionDisponibleUnionEstiba();
                 this.BuscarRegistrosCambioClasificacion();

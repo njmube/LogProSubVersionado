@@ -29,7 +29,6 @@ namespace WpfFront.Presenters
         ToolWindow Window { get; set; }
     }
 
-
     public class AdministradorPresenter : IAdministradorPresenter
     {
         public IAdministradorView View { get; set; }
@@ -50,7 +49,6 @@ namespace WpfFront.Presenters
             this.container = container;
             this.service = new WMSServiceClient();
             View.Model = this.container.Resolve<AdministradorModel>();
-
 
             #region Metodos
 
@@ -85,7 +83,6 @@ namespace WpfFront.Presenters
             try { Local = service.GetConnection(new Connection { Name = "LOCAL" }).First(); }
             catch { }
 
-
             View.Model.ListadoEstatusLogPro = service.GetMMaster(new MMaster { MetaType = new MType { Code = "LOGPROSTAT" } });
             View.Model.ListadoPosiciones = service.GetMMaster(new MMaster { MetaType = new MType { Code = "POSICION1" } });
             //View.Model.ListadoModelos = service.GetMMaster(new MMaster { MetaType = new MType { Code = "DRIRECMODE" } });
@@ -95,7 +92,24 @@ namespace WpfFront.Presenters
             View.Model.ListadoFallas = service.GetMMaster(new MMaster { MetaType = new MType { Code = "FALLADIA" } });
             View.Model.ListadoMotScrap = service.GetMMaster(new MMaster { MetaType = new MType { Code = "MOTSCRAP" } });
             View.Model.ListadoEstadoRR = service.GetMMaster(new MMaster { MetaType = new MType { Code = "ESTADO RR" } });
-            View.Model.ListadoProductos = service.GetProduct(new Product());
+
+            //View.Model.ListadoProductos = service.GetProduct(new Product());
+
+            //Utilizar el service.GetProduct genera un retardo muy grande en la carga de la vista asi que se utiliza de la siguiente manera para evitar retardos
+
+            DataTable aux = service.DirectSQLQuery("select brand,ProductID,ProductCode,Manufacturer from Master.Product", "", "Master.Product", Local);
+
+            List<WpfFront.WMSBusinessService.Product> list = aux.AsEnumerable()
+               .Select(row => new WpfFront.WMSBusinessService.Product
+               {
+                   ProductID = Convert.ToInt32(row["ProductID"]),
+                   Brand = row["brand"].ToString(),
+                   ProductCode = row["ProductCode"].ToString(),
+                   Manufacturer = row["Manufacturer"].ToString()
+               }).ToList<WpfFront.WMSBusinessService.Product>();
+
+            View.Model.ListadoProductos = list;
+            /////////////////////////////////////////////////////////////////////////////////////
 
             View.Model.ListadoEquipos = service.DirectSQLQuery("exec sp_GetProcesos2 'HISTORICOSERIAL'", "", "dbo.movimientoclaro", Local);
 
@@ -109,7 +123,7 @@ namespace WpfFront.Presenters
                 Util.ShowMessage("Por favor seleccione un equipo para poder exportar todos sus movimientos");
                 return;
             }
-            
+
             Microsoft.Office.Interop.Excel.Application excel = null;
             Microsoft.Office.Interop.Excel.Workbook wb = null;
 
@@ -552,7 +566,7 @@ namespace WpfFront.Presenters
 
                 //insertar movimiento
                 ConsultaGuardar += "EXEC sp_InsertarNuevo_Movimiento 'MODIFICACION DEL EQUIPO EN ADMIN. SERIALES','" + Resultado.Rows[0]["Estado"].ToString() + "','" + View.EstadoSerial.Text.ToString() + "',''," + Resultado.Rows[0]["RowId"] + ",'" + View.EstadoSerial.Text.ToString() + "','CAMBIOADMINSERIALES','" + this.user + "','';";
-                
+
                 // Declaramos variables Globales
                 string nombreMovimiento = "MODIFICACION DEL EQUIPO EN ADMIN. SERIALES PRODUCCION";
                 string origen = View.Origen.Text.ToString();
@@ -560,7 +574,7 @@ namespace WpfFront.Presenters
                 string movPallet = View.IdPallet.Text.ToString();
                 string idSerial = View.GetSerial1.Text.ToString();
 
-                #region Insertar Movimiento Reparacion 
+                #region Insertar Movimiento Reparacion
                 // Declaramos las variables para realizar la insersión de REPARACION
                 string repaTecnico = View.TecnicoAsignadoRep.Text.ToString();
                 string fallaPrincipal = View.FallaReparacion.Text.ToString();

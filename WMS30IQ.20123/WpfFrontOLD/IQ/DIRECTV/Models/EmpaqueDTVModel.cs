@@ -27,6 +27,10 @@ namespace WpfFront.Models
         DataTable ListPallets_Empaque { get; set; }
         DataTable ListCajas_Empaque { get; set; }
         DataTable ListSeriales_Empaque { get; set; }
+        DataTable Listado_PalletSerial { get; set; }
+
+        IList<MMaster> ListCambioEstado { get; set; }
+        DataTable ListadoCalidad { get; set; }
     }
 
     public class EmpaqueDTVModel : BusinessEntityBase, IEmpaqueDTVModel
@@ -183,6 +187,50 @@ namespace WpfFront.Models
             {
                 _ListSeriales_Empaque = value;
                 OnPropertyChanged("ListSeriales_Empaque");
+            }
+        }
+
+        private DataTable _Listado_PalletSerial;
+        public DataTable Listado_PalletSerial
+        {
+            get { return _Listado_PalletSerial; }
+            set
+            {
+                _Listado_PalletSerial = value;
+                OnPropertyChanged("Listado_PalletSerial");
+            }
+        }
+
+        private IList<MMaster> _ListCambioEstado;
+        public IList<MMaster> ListCambioEstado
+        {
+            get { return _ListCambioEstado; }
+            set
+            {
+                _ListCambioEstado = value;
+                OnPropertyChanged("ListCambioEstado");
+            }
+        }
+
+        private DataTable _ListadoCalidad;
+        public DataTable ListadoCalidad
+        {
+            get { return _ListadoCalidad; }
+            set
+            {
+                _ListadoCalidad = value;
+                OnPropertyChanged("ListadoCalidad");
+            }
+        }
+
+        private DataTable _Listado_PalletSerialCalidad;
+        public DataTable Listado_PalletSerialCalidad
+        {
+            get { return _Listado_PalletSerialCalidad; }
+            set
+            {
+                _Listado_PalletSerialCalidad = value;
+                OnPropertyChanged("Listado_PalletSerialCalidad");
             }
         }
     }

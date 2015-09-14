@@ -260,7 +260,7 @@ namespace WpfFront.Presenters
 
             busqueda_Repetidos = true;
             Thread.Sleep(1000);
-            t.Dispose();
+            //t.Dispose();
 
             View.Dispatcher_Cargue.Invoke(new System.Action(() =>
             {
@@ -1677,7 +1677,7 @@ namespace WpfFront.Presenters
             }
 
             //Imprimo los registros
-            PrinterControl.PrintMovimientosBodega(SerialesImprimir, "PALLET", pallet, destino, "CLARO", "ALMACENAMIENTO", "", "CLARO");
+            PrinterControl.PrintMovimientosBodega(this.userName, SerialesImprimir, "PALLET", pallet, destino, "CLARO", "ALMACENAMIENTO", "", "CLARO");
         }
 
         public void OnKillProcess(object sender, EventArgs e)

@@ -29,7 +29,7 @@
 
             <!-- Ribbon -->
 
-            <awc:Ribbon x:Uid="mRibbon" x:Name="mRibbon" DockPanel.Dock="Top" Height="120"  SelectionChanged="Ribbon_SelectionChanged" TabStripPlacement="Bottom">
+            <awc:Ribbon x:Uid="mRibbon" x:Name="mRibbon" DockPanel.Dock="Top" Height="145"  SelectionChanged="Ribbon_SelectionChanged" TabStripPlacement="Bottom">
                 
                 <awc:Ribbon.Resources>
                     <Style x:Uid="Style_1" TargetType="ListView">
@@ -192,6 +192,7 @@
                                 </ListView.ItemTemplate>
                             </ListView>
                         </awc:RibbonPanel>
+                        <!--<Image x:Uid="Image_3" Width="100" Height="76" Margin="50,10,0,9" Source="/WpfFront;component/Images/Icons/directv.png"/>-->
                         
                     </StackPanel>
                 </awc:RibbonTabItem>

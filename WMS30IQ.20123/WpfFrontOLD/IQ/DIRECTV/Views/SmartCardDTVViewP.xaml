@@ -79,6 +79,10 @@
                                             <TextBlock x:Uid="txt_Smart1" Name="txt_Smart1" Text="Smart Card"  />
                                             <TextBox x:Uid="tb_Smart1" Name="tb_Smart1" Width="110" KeyDown="tb_Smart_KeyDown_1" />
                                         </StackPanel>
+                                        <StackPanel x:Uid="Stack_UploadFile" Name="Stack_UploadFile" Orientation="Vertical" Margin="150,-3,4,0" >
+                                            <TextBlock x:Uid="txt_UploadFile" Name="txt_UploadFile" Text="Cargar Archivo"  />
+                                            <uc:UploadFile x:Uid="fUpload" Margin="0,0,0,0" x:Name="fUpload" OnFileUpload="fUpload_OnFileUpload_1" />
+                                        </StackPanel>
                                     </StackPanel>
 
                                     <StackPanel x:Uid="Stack_Adicionales" Name="Stack_Adicionales" Orientation="Vertical" Margin="0,6,0,0">
@@ -98,11 +102,49 @@
 
                                         <StackPanel x:Uid="Stack_Button" Name="Stack_Button"  Margin="0,10,0,0" Orientation="Horizontal" HorizontalAlignment="Left">
                                             <Button x:Uid="Btn_Guardar" x:Name="Btn_Guardar" Width="70" Content="Aceptar" Click="Btn_Guardar_Click_1" />
+                                            <Grid Margin="120,0,0,0">
+                                                <TextBlock x:Uid="textblock_estadoCargue" x:Name="textblock_estadoCargue" Text="Operación detenida" Margin="0,-17,0,0" />
+                                                <ProgressBar x:Uid="PBar_cargue" x:Name="PBar_cargue" Margin="0,3,0,3" Width="255" Minimum="0" Maximum="100"/>
+                                                <TextBlock Text="{Binding Value, ElementName=PBar_cargue, StringFormat=\{0:0\}%}" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                                            </Grid>
                                         </StackPanel>
+                                        
                                     </StackPanel>
+                                    
                                 </StackPanel>
+                                
                             </Border>
                         </StackPanel>
+                        <Expander Grid.Row="1" Margin="0,10,0,0" VerticalAlignment="Stretch" Width="auto" Cursor="Hand">
+                            <Expander.Header>
+                                <Border Background="SeaShell">
+                                    <TextBlock><Run Text="Equipos no almacenados: ("/><Run Text=" "/><Run Text="{Binding List_Nocargue.Count}"/><Run Text=" "/><Run Text=")"/></TextBlock>
+                                </Border>
+                            </Expander.Header>
+                            <Border Margin="0,0,0,0" Background="AliceBlue">
+                                <StackPanel x:Name="stackpanel1111">
+                                    <ListView x:Uid="lv_NoCargue" ItemsSource="{Binding List_Nocargue}" Margin="0,0,0,0"  MaxHeight="280" x:Name="lv_NoCargue">
+                                        <ListView.ItemContainerStyle>
+                                            <Style TargetType="{x:Type ListViewItem}">
+                                                <Setter Property="HorizontalContentAlignment" Value="Center"/>
+                                            </Style>
+                                        </ListView.ItemContainerStyle>
+                                        <ListView.View>
+                                            <GridView x:Uid="GridViewDetails" x:Name="GridViewDetails1111">
+
+                                                <GridViewColumn x:Uid="GridViewColumn_2" Width="135" DisplayMemberBinding="{Binding SmartCard}">
+                                                    <TextBlock Text="Smart Card" ToolTip="Smart Card" />
+                                                </GridViewColumn>
+
+                                                <GridViewColumn x:Uid="GridViewColumn_2" Width="300" DisplayMemberBinding="{Binding Motivo}">
+                                                    <TextBlock Text="Motivo" ToolTip="Motivo del no cargue" />
+                                                </GridViewColumn>
+                                            </GridView>
+                                        </ListView.View>
+                                    </ListView>
+                                </StackPanel>
+                            </Border>
+                        </Expander>
                     </StackPanel>
                 </TabItem>
                 
@@ -124,7 +166,11 @@
                                         <Image x:Uid="ImageRefresh" Name="ImageRefresh"  Margin="10,1,5,0" Width="17"  HorizontalAlignment="Center" Source="/WpfFront;component/Images/refresh.png" ToolTip="Refresh List" MouseDown="ImageRefresh_MouseDown"  />
                                     </StackPanel>-->
 
-                                    <StackPanel x:Uid="Stack_Panel2" Width="auto" Orientation="Horizontal" Margin="4,3,4,3">
+                                    <StackPanel x:Uid="Stack_Panel2" Width="auto" Orientation="Horizontal" Margin="0,4,4,4">
+                                        <StackPanel x:Uid="Stack_Smart" x:Name="Stack_Smart" Orientation="Vertical" Margin="0,4,4,0" >
+                                            <TextBlock x:Uid="txt_Smart" x:Name="txt_Smart" Text="Smart Card" FontWeight="Bold" Margin="0,4,4,0" />
+                                            <TextBox x:Uid="tb_Smart" x:Name="tb_Smart" Width="150" Height="22" KeyDown="tb_SmartAsig_KeyDown_1" IsEnabled="True"/>
+                                        </StackPanel>
                                         <StackPanel x:Uid="stkData" Orientation="Vertical" Margin="0,4,4,4">
                                             <TextBlock x:Uid="TextBlock_4" FontWeight="Bold" Margin="0,4,4,0" HorizontalAlignment="Left" Text="Estado" />
                                             <ComboBox x:Uid="cb_Estado" Name="cb_Estado" Width="180" Height="23" ItemsSource="{Binding Path=ListEstados}" SelectedValue="Code" DisplayMemberPath="Name" />

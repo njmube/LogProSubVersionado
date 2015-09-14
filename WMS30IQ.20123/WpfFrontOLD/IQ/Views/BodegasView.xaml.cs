@@ -273,10 +273,6 @@ namespace WpfFront.Views
         //    fUpload.StreamFile = null;
         //}
 
-        //private void btn_imprimir_Click_1(object sender, RoutedEventArgs e)
-        //{
-        //    Imprimir_Hablador(sender, e);
-        //}
 
         //private void btn_confirmar_Click_1(object sender, RoutedEventArgs e)
         //{

@@ -52,10 +52,10 @@ namespace WpfFront.Views
         {
             InitializeComponent();
             Text_ShowHide.Text = "<< Ocultar";
-            if (App.curUser.UserName == "admin")
-            {
-                TxtQuery.Visibility = Visibility.Visible;
-            }
+            //if (App.curUser.UserName == "admin")
+            //{
+            //    TxtQuery.Visibility = Visibility.Visible;
+            //}
             charts = this.FindName("MyWinformChart") as Chart;
         }
 

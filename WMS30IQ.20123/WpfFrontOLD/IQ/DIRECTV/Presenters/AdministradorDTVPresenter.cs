@@ -153,6 +153,7 @@ namespace WpfFront.Presenters
             }
             else
             {
+                View.Serial.Text = Consulta.Rows[0]["Serial"].ToString();
                 View.IdReceiver.Text = Consulta.Rows[0]["Receiver"].ToString();
                 View.SmartCardEntrada.Text = Consulta.Rows[0]["SmartCard"].ToString();
                 View.EstadoSerial.Text = Consulta.Rows[0]["Estado"].ToString();
@@ -269,7 +270,7 @@ namespace WpfFront.Presenters
                 ConsultaGuardar += "";
 
                 //Construyo la consulta para guardar los datos
-                ConsultaGuardar += " UPDATE dbo.EquiposDIRECTVC SET RECEIVER = '" + View.IdReceiver.Text.ToString() + "', SMART_CARD_ENTRADA = '" + View.SmartCardEntrada.Text.ToString() + "'";
+                ConsultaGuardar += " UPDATE dbo.EquiposDIRECTVC SET SERIAL = '" + View.Serial.Text.ToString() + "', RECEIVER = '" + View.IdReceiver.Text.ToString() + "', SMART_CARD_ENTRADA = '" + View.SmartCardEntrada.Text.ToString() + "'";
                 ConsultaGuardar += ", Estado = '" + View.EstadoSerial.Text.ToString() + "', IDPALLET = '" + View.IdPallet.Text.ToString() + "'";
                 ConsultaGuardar += ", UBICACION = '" + View.Ubicacion.Text.ToString() + "', CodigoEmpaque = '" + View.CodigoEmpaque.Text.ToString() + "'";
                 ConsultaGuardar += ", CodigoEmpaque2 = '" + View.CodigoEmpaque2.Text.ToString() + "', Posicion = '" + View.Posicion.Text.ToString() + "'";

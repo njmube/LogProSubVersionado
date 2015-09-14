@@ -401,7 +401,7 @@ namespace WpfFront.Presenters
                     else
                     {
                         //Creo la consulta la cambiar la clasificacion de la estiba
-                        ConsultaSQL = "UPDATE dbo.EquiposDIRECTVC SET Estado = '" + NuevoEstado + "', Ubicacion = '" + NuevaUbicacion + "', CodigoEmpaque = '" + fila.Row["idPallet"].ToString() + "' WHERE IdPallet = '" + fila.Row["idPallet"].ToString() + "' AND ESTADO = 'ALMACENAMIENTO' AND ESTADO != 'DESPACHADO';";
+                        ConsultaSQL = "UPDATE dbo.EquiposDIRECTVC SET Estado = '" + NuevoEstado + "', Ubicacion = '" + NuevaUbicacion + "', Posicion = NULL, CodigoEmpaque = '" + fila.Row["idPallet"].ToString() + "' WHERE IdPallet = '" + fila.Row["idPallet"].ToString() + "' AND ESTADO = 'ALMACENAMIENTO' AND ESTADO != 'DESPACHADO';";
                         ConsultaTrack = "UPDATE dbo.TrackEquiposDIRECTV SET ESTADO_MOVMERCANCIA = '" + NuevoEstado + "' WHERE ESTIBA_ENTRADA = '" + fila.Row["idPallet"].ToString() + "';";
                         //Guardo en la tabla de movimientos el cambio de ubicacion del equipo
                         ConsultaMovSQL = "EXEC sp_InsertarNuevo_MovimientoDIRECTV 'ENVIO A PRODUCCIÓN " + NuevoEstado + "','ALMACENAMIENTO','REPARACIÓN','" + fila.Row["idPallet"].ToString() + "','','ALMACENAMIENTO','UBICACIONALMACEN','" + this.user + "','';";

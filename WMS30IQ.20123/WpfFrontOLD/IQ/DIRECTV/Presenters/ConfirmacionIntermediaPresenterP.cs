@@ -39,6 +39,8 @@ namespace WpfFront.Presenters
         //Variables Auxiliares 
         public Connection Local;
         public int offset = 5; //# columnas que no se debe replicar porque son fijas.
+        private String userName = App.curUser.UserName;
+        private String user = App.curUser.FirstName + " " + App.curUser.LastName;
 
         public ConfirmacionIntermediaPresenterP(IUnityContainer container, IConfirmacionIntermediaViewP view)
         {
@@ -59,8 +61,11 @@ namespace WpfFront.Presenters
             //Recibo
             View.BuscarRegistrosRecibo += this.OnBuscarRegistrosRecibo;
             View.FilaSeleccionada += this.OnFilaSeleccionada;
-            View.ImprimirHablador += new EventHandler<EventArgs>(this.OnImprimirHablador);
+            //View.ImprimirHablador += new EventHandler<EventArgs>(this.OnImprimirHablador);
             View.GenerarCodigo += new EventHandler<EventArgs>(this.OnGenerarCodigo);
+
+            //View.AddLine += this.OnAddLine;
+            View.AddLine += new EventHandler<EventArgs>(this.OnAddLine);
 
             //ConfirmarMovimiento
             #endregion
@@ -107,6 +112,14 @@ namespace WpfFront.Presenters
             View.Model.ListRecords = new DataTable("ListRecords");
 
             View.Model.ListRecords.Columns.Add("SmartCard", typeof(String));
+
+            View.Model.ListRecords_1 = new DataTable("ListRecords_1");
+            View.Model.ListRecords_1.Columns.Add("RowId", typeof(String));
+            View.Model.ListRecords_1.Columns.Add("prod_nombre", typeof(String));
+            View.Model.ListRecords_1.Columns.Add("prod_serial", typeof(String));
+            View.Model.ListRecords_1.Columns.Add("prod_receiver", typeof(String));
+            View.Model.ListRecords_1.Columns.Add("prod_status", typeof(String));
+            View.Model.ListRecords_1.Columns.Add("prod_falla", typeof(String));
         }
 
         private void ListarDatos()
@@ -180,50 +193,55 @@ namespace WpfFront.Presenters
             String ConsultaSQL = "", NuevaUbicacion, NuevoEstado, ConsultaTrack = "";
 
             //Evaluo que haya sido seleccionado un registro
-            if (View.ListadoItems.SelectedItems.Count == 0)
-                return;
+            //if (View.ListadoItems.SelectedItems.Count == 0)
+            //    return;
 
             //Evaluo que haya seleccionado la nueva clasificacion
-            if (View.Ubicacion.SelectedIndex == -1)
-            {
-                Util.ShowError("Por favor seleccionar la nueva clasificacion.");
-                return;
-            }
+            //if (View.Ubicacion.SelectedIndex == -1)
+            //{
+            //    Util.ShowError("Por favor seleccionar la nueva clasificacion.");
+            //    return;
+            //}
 
             //Coloco la ubicacion
-            NuevaUbicacion = ((DataRowView)View.Ubicacion.SelectedItem).Row["UbicacionDestino"].ToString();
+            //NuevaUbicacion = ((DataRowView)View.Ubicacion.SelectedItem).Row["UbicacionDestino"].ToString();
 
-            if (NuevaUbicacion == "DIAGNOSTICO")
-            {
-                NuevoEstado = "PARA DIAGNOSTICO";
+            //if (NuevaUbicacion == "DIAGNOSTICO")
+            //{
+                //NuevoEstado = "PARA DIAGNOSTICO";
 
-                foreach (DataRowView item in View.ListadoItems.SelectedItems)
+                foreach (DataRowView item in View.ListadoItems.Items)
                 {
                     //Creo la consulta para cambiar la ubicacion de la estiba
-                    ConsultaSQL += " UPDATE dbo.EquiposDIRECTVC SET Ubicacion = '" + NuevaUbicacion + "', Estado = '" + NuevoEstado + "', UA = '" + ((ComboBoxItem)View.UnidadAlmacenamiento.SelectedItem).Content.ToString() + "', IdPallet = '" + View.CodigoEmpaque.Text.ToString() + "' WHERE RowID = '" + item.Row["RowID"] + "'";
-                    ConsultaTrack += "UPDATE dbo.TrackEquiposDIRECTV SET CODEMPAQUE_REP = '" + View.CodigoEmpaque.Text.ToString() + "' WHERE ID_SERIAL = '" + item.Row["RowID"] + "'";
+                    ConsultaSQL += "UPDATE dbo.EquiposDIRECTVC SET Estado = 'PARA PROCESO DIAGNOSTICO', UBICACION = 'DIAGNOSTICO', UA = NULL, IdPallet = NULL WHERE RowID = '" + item.Row["RowID"] + "';";
+                    ConsultaSQL += "EXEC sp_InsertarNuevo_MovimientoDIRECTV 'CONFIRMACIO DAÑO FISICO','DAÑO FISICO','DIAGNOSTICO','Sin pallet','" + item.Row["RowID"].ToString() + "','DAÑO FISICO','UBICACIONPRODUCCION','" + this.user + "','';";
+                    //ConsultaTrack += "UPDATE dbo.TrackEquiposDIRECTV SET CODEMPAQUE_REP = '" + View.CodigoEmpaque.Text.ToString() + "' WHERE ID_SERIAL = '" + item.Row["RowID"] + "'";
 
-                    //Ejecuto la consulta
-                    service.DirectSQLNonQuery(ConsultaSQL, Local);
-                    service.DirectSQLNonQuery(ConsultaTrack, Local);
                 }
-            }
+            //}
+
+           Console.WriteLine(ConsultaSQL);
+           //Ejecuto la consulta
+           service.DirectSQLNonQuery(ConsultaSQL, Local);
+           //service.DirectSQLNonQuery(ConsultaTrack, Local);
 
             //Muestro el mensaje de confirmacion
             Util.ShowMessage("Cambio de ubicacion realizado satisfactoriamente.");
+            ConsultaSQL = "";
 
-            ListarDatos();
+            View.Model.ListRecords_1.Rows.Clear();
+            //ListarDatos();
 
             //Quito la selecion de la nueva ubicacion
-            View.Ubicacion.SelectedIndex = -1;
+            //View.Ubicacion.SelectedIndex = -1;
 
             //Quito la seleccion del listado
-            View.ListadoItems.SelectedIndex = -1;
+            //View.ListadoItems.SelectedIndex = -1;
 
             //Quito la seleccion del listado
-            View.UnidadAlmacenamiento.SelectedIndex = -1;
+            //View.UnidadAlmacenamiento.SelectedIndex = -1;
 
-            View.CodigoEmpaque.Text = "";
+            //View.CodigoEmpaque.Text = "";
         }
 
         private void OnFilaSeleccionada(object sender, SelectionChangedEventArgs e)
@@ -331,80 +349,80 @@ namespace WpfFront.Presenters
             View.Model.ListRecords.Rows.Clear();
         }
 
-        private void OnImprimirHablador(object sender, EventArgs e)
-        {
-            //Variables Auxiliares
-            String ConsultaSQL = "";
-            DataTable SerialesImprimir;
-            String unidad_almacenamiento = "";
-            String codigoEmp = View.CodigoEmpaque.Text.ToString();
-            String destino = "";
+        //private void OnImprimirHablador(object sender, EventArgs e)
+        //{
+        //    //Variables Auxiliares
+        //    String ConsultaSQL = "";
+        //    DataTable SerialesImprimir;
+        //    String unidad_almacenamiento = "";
+        //    //String codigoEmp = View.CodigoEmpaque.Text.ToString();
+        //    String destino = "";
 
-            //Evaluo que haya sido seleccionado un registro
-            if (View.ListadoItems.SelectedIndex == -1)
-            {
-                Util.ShowMessage("Debe seleccionar al menos un registro");
-                return;
-            }
+        //    //Evaluo que haya sido seleccionado un registro
+        //    if (View.ListadoItems.SelectedIndex == -1)
+        //    {
+        //        Util.ShowMessage("Debe seleccionar al menos un registro");
+        //        return;
+        //    }
 
-            //Evaluo que haya seleccionado laexport plain text  nueva clasificacion
-            if (View.Ubicacion.SelectedIndex == -1)
-            {
-                Util.ShowError("Por favor seleccionar la nueva clasificacion.");
-                return;
-            }
-            else
-            {
-                destino = ((DataRowView)View.Ubicacion.SelectedItem).Row["UbicacionDestino"].ToString();
-            }
+        //    //Evaluo que haya seleccionado laexport plain text  nueva clasificacion
+        //    if (View.Ubicacion.SelectedIndex == -1)
+        //    {
+        //        Util.ShowError("Por favor seleccionar la nueva clasificacion.");
+        //        return;
+        //    }
+        //    else
+        //    {
+        //        destino = ((DataRowView)View.Ubicacion.SelectedItem).Row["UbicacionDestino"].ToString();
+        //    }
 
-            if (String.Compare("", codigoEmp) == 0)
-            {
-                Util.ShowError("Por favor generar un código de empaque");
-                return;
-            }
+        //    if (String.Compare("", codigoEmp) == 0)
+        //    {
+        //        Util.ShowError("Por favor generar un código de empaque");
+        //        return;
+        //    }
 
-            //Creo la base de la consulta para traer los seriales respectivos
-            ConsultaSQL = "SELECT idPallet,Posicion,serial,Receiver,SMART_CARD_ENTRADA,MODELO,Estado,Fecha_Ingreso FROM dbo.EquiposDIRECTVC WHERE serial IN (''";
+        //    //Creo la base de la consulta para traer los seriales respectivos
+        //    ConsultaSQL = "SELECT idPallet,Posicion,serial,Receiver,SMART_CARD_ENTRADA,MODELO,Estado,Fecha_Ingreso FROM dbo.EquiposDIRECTVC WHERE serial IN (''";
 
-            //Recorro el listado de registros seleccionados para obtener los seriales e imprimirlos
-            foreach (DataRowView Registros in View.ListadoItems.SelectedItems)
-            {
-                //Util.ShowMessage(Registros.Row["Serial"].ToString());
-                //Creo la consulta para cambiar la ubicacion de la estiba
+        //    //Recorro el listado de registros seleccionados para obtener los seriales e imprimirlos
+        //    foreach (DataRowView Registros in View.ListadoItems.SelectedItems)
+        //    {
+        //        //Util.ShowMessage(Registros.Row["Serial"].ToString());
+        //        //Creo la consulta para cambiar la ubicacion de la estiba
 
-                ConsultaSQL += ",'" + Registros.Row["prod_serial"] + "'";
-            }
+        //        ConsultaSQL += ",'" + Registros.Row["prod_serial"] + "'";
+        //    }
 
-            //Completo la consulta
-            ConsultaSQL += ")";
+        //    //Completo la consulta
+        //    ConsultaSQL += ")";
 
-            //Elimino la basura en la cadena
-            ConsultaSQL = ConsultaSQL.Replace("'',", "");
+        //    //Elimino la basura en la cadena
+        //    ConsultaSQL = ConsultaSQL.Replace("'',", "");
 
-            try
-            {
-                //Ejecuto la consulta
-                SerialesImprimir = service.DirectSQLQuery(ConsultaSQL, "", "dbo.EquiposDIRECTVC", Local);
+        //    try
+        //    {
+        //        //Ejecuto la consulta
+        //        SerialesImprimir = service.DirectSQLQuery(ConsultaSQL, "", "dbo.EquiposDIRECTVC", Local);
 
-                if (View.UnidadAlmacenamiento.SelectedIndex != -1)
-                {
-                    unidad_almacenamiento = ((ComboBoxItem)View.UnidadAlmacenamiento.SelectedItem).Content.ToString();
-                }
-                else
-                {
-                    Util.ShowError("Selecciona una unidad de empaque");
-                    return;
-                }
+        //        if (View.UnidadAlmacenamiento.SelectedIndex != -1)
+        //        {
+        //            unidad_almacenamiento = ((ComboBoxItem)View.UnidadAlmacenamiento.SelectedItem).Content.ToString();
+        //        }
+        //        else
+        //        {
+        //            Util.ShowError("Selecciona una unidad de empaque");
+        //            return;
+        //        }
 
-                //Imprimo los registros
-                PrinterControl.PrintMovimientosBodegaDIRECTV(SerialesImprimir, unidad_almacenamiento, codigoEmp, "REPARACIÓN", "DIRECTV", "DAÑO FISICO - " + destino, "", "");
-            }
-            catch (Exception ex)
-            {
-                Util.ShowMessage("Se presento un error en el momento de generar el documento, " + ex.Message);
-            }
-        }
+        //        //Imprimo los registros
+        //        PrinterControl.PrintMovimientosBodegaDIRECTV(SerialesImprimir, unidad_almacenamiento, codigoEmp, "REPARACIÓN", "DIRECTV", "DAÑO FISICO - " + destino, "", "");
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        Util.ShowMessage("Se presento un error en el momento de generar el documento, " + ex.Message);
+        //    }
+        //}
 
         private void OnGenerarCodigo(object sender, EventArgs e)
         {
@@ -433,7 +451,7 @@ namespace WpfFront.Presenters
                     }
                     else
                     {
-                        View.CodigoEmpaque.Text = Resultado.Rows[0]["idpallet"].ToString();
+                        //View.CodigoEmpaque.Text = Resultado.Rows[0]["idpallet"].ToString();
                     }
 
                     ConsultaBuscar = "";
@@ -477,6 +495,63 @@ namespace WpfFront.Presenters
             //{
             //    Util.ShowError("No es posible generar el número de pallet, intente en unos momentos.");
             //}
+        }
+
+        private void OnAddLine(object sender, EventArgs e)
+        {
+            DataRow dr = View.Model.ListRecords_1.NewRow();
+            String ConsultaBuscar = "";
+
+            if (String.IsNullOrEmpty(View.GetSerial1.Text.ToString()))
+            {
+                Util.ShowError("El campo serial no puede ser vacio.");
+                return;
+            }
+
+            ConsultaBuscar = "SELECT RowId, MODELO, SERIAL, RECEIVER, ESTATUS_DIAGNOSTICO, FALLA_DIAGNOSTICO, Estado FROM dbo.EquiposDIRECTVC WHERE upper(SERIAL) = upper('" + View.GetSerial1.Text.ToString() + "')";
+            DataTable Resultado = service.DirectSQLQuery(ConsultaBuscar, "", "dbo.EquiposDIRECTVC", Local);
+
+            if (Resultado.Rows.Count > 0 && Resultado.Rows[0]["Estado"].ToString() == "P-ETIQUETADO")
+            {
+                //Recorro el listado de equipos ingresados al listado para saber que el serial no este ya ingresado
+                foreach (DataRow item in View.Model.ListRecords_1.Rows)
+                {
+                    if (View.GetSerial1.Text.ToUpper() == item["prod_serial"].ToString().ToUpper())
+                    {
+                        Util.ShowError("El serial " + View.GetSerial1.Text + " ya esta en el listado.");
+                        return;
+                    }
+                }
+
+                dr["RowId"] = Resultado.Rows[0]["RowId"].ToString();
+                dr["prod_nombre"] = Resultado.Rows[0]["MODELO"].ToString();
+                dr["prod_serial"] = Resultado.Rows[0]["SERIAL"].ToString();
+                dr["prod_receiver"] = Resultado.Rows[0]["RECEIVER"].ToString();
+                dr["prod_status"] = Resultado.Rows[0]["ESTATUS_DIAGNOSTICO"].ToString();
+                dr["prod_falla"] = Resultado.Rows[0]["FALLA_DIAGNOSTICO"].ToString();
+
+                View.Model.ListRecords_1.Rows.Add(dr);
+
+                View.GetSerial1.Text = "";
+                View.GetSerial2.Text = "";
+                View.GetSerial1.Focus();
+            }
+            else if (Resultado.Rows.Count > 0 && Resultado.Rows[0]["Estado"].ToString() != "P-ETIQUETADO")
+            {
+                Util.ShowError("El equipo se encuentra en estado " + Resultado.Rows[0]["Estado"].ToString());
+                View.GetSerial1.Text = "";
+                View.GetSerial2.Text = "";
+                View.GetSerial1.Focus();
+                return;
+            }
+            else {
+                Util.ShowError("El equipo NO se encuentra registrado en el sistema");
+                View.GetSerial1.Text = "";
+                View.GetSerial2.Text = "";
+                View.GetSerial1.Focus();
+                return;
+            }
+
         }
 
         #endregion

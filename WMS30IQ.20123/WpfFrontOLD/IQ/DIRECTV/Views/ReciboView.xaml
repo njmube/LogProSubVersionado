@@ -15,6 +15,102 @@
                 <TabItem x:Uid="TabItem_1" Header="Recibo prealerta" >
                     <StackPanel x:Uid="StackPanel_1" Orientation="Horizontal" >
                         <StackPanel x:Uid="Stack_Panel" Orientation="Vertical" Margin="3" HorizontalAlignment="Center" Width="auto" Height="auto" >
+                            <Border x:Uid="Border_1" Name="Border_Detasil1" Style="{DynamicResource UserControlFormInnerBorder}" Margin="3" HorizontalAlignment="Center" Width="226" >
+                                <StackPanel x:Name="Stack_DetailSerial11" Orientation="Vertical" Margin="3" HorizontalAlignment="Left" >
+
+                                    <StackPanel x:Name="stackValidation">
+
+                                        <!--<StackPanel.CommandBindings>
+                                            <CommandBinding Command="New" CanExecute="AddCustomer_CanExecute" Executed="AddCustomer_Executed" />
+                                        </StackPanel.CommandBindings>-->
+
+                                        <StackPanel>
+                                            <TextBlock Text="REGISTRO DE PRE-ALERTAS" HorizontalAlignment="Left" FontWeight="bold" />
+                                        </StackPanel>
+                                        <StackPanel x:Uid="Stack_SerialGroup" Name="Stack_SerialGroup1" Orientation="Vertical" Margin="0,6,0,0" Width="257">
+                                            <StackPanel x:Uid="Stack_SerialGroup" Name="Stack_SerialGroup12" Orientation="Vertical" Margin="0,6,0,0">
+
+                                                <StackPanel x:Uid="Stack_UploadFile1" Name="Stack_UploadPrealerta20" Orientation="Vertical" Margin="4,-8,72,3" >
+                                                    <TextBlock x:Uid="txt_Required" x:Name="txt_Required" Text="Campos Obligatorios *" FontSize="10.5" Margin="0,0,-17,0" />
+                                                </StackPanel>
+
+                                                <StackPanel x:Uid="Stack_UploadFile1" Name="Stack_UploadPrealerta9" Orientation="Vertical" Margin="4,0,0,3" >
+                                                    <TextBlock x:Uid="txt_nroPedido" x:Name="txt_nroPedido" Text="Nro. Pedido *" Margin="0,5,100,0" />
+                                                    <TextBox x:Uid="tb_nroPedido" x:Name="tb_nroPedido" Margin="0,2,100,2"  />
+                                                </StackPanel>
+
+                                                <StackPanel x:Uid="Stack_UploadFile1" Name="Stack_UploadPrealerta1" Orientation="Vertical" Margin="4,0,0,3" >
+                                                    <TextBlock x:Uid="txt_consecutivo" x:Name="txt_consecutivo" Text="Remisión *" Margin="0,0,100,0" />
+                                                    <TextBox x:Uid="tb_consecutivo" x:Name="tb_consecutivo" Grid.Row="0" Grid.Column="1" Margin="0,2,100,2"/>
+                                                </StackPanel>
+
+                                                <StackPanel x:Uid="Stack_UploadFile1" Name="Stack_UploadPrealerta8" Orientation="Vertical" Margin="4,0,4,3" >
+                                                    <TextBlock x:Uid="txt_tipoRecoleccion" x:Name="txt_tipoRecoleccion" Text="Tipo recolección *" Margin="0,0,100,0" />
+                                                    <ComboBox x:Uid="tb_tipoRecoleccion" x:Name="tb_tipoRecoleccion" ItemsSource="{Binding ListadoPreaTipoRecoleccion}" Grid.Row="0" Grid.Column="1" Margin="0,2,100,2" DisplayMemberPath="Code" SelectedValuePath="MetaMasterID"/>
+                                                </StackPanel>
+
+                                                <StackPanel x:Uid="Stack_UploadFile1" Name="Stack_UploadPrealerta2" Orientation="Vertical" Margin="4,0,4,3" >
+                                                    <TextBlock x:Uid="txt_tipoOrigen" x:Name="txt_tipoOrigen" Text="Tipo origen *" Margin="0,0,100,0" />
+                                                    <ComboBox x:Uid="tb_tipoOrigen" x:Name="tb_tipoOrigenPreale" ItemsSource="{Binding ListadoPreaTipoOrigen}" Grid.Row="0" Grid.Column="1" Margin="0,2,100,2" DisplayMemberPath="Code" SelectedValuePath="MetaMasterID" />
+                                                </StackPanel>
+
+                                                <StackPanel x:Uid="Stack_UploadFile1" Name="Stack_UploadPrealerta3" Orientation="Vertical" Margin="4,0,4,3" >
+                                                    <TextBlock x:Uid="txt_alerOrigen" x:Name="txt_alerOrigen" Text="Origen *" Margin="0,0,100,0" />
+                                                    <TextBox x:Uid="tb_alerOrigen" x:Name="tb_alerOrigen" Grid.Row="0" Grid.Column="1" Margin="0,2,100,2" />
+                                                </StackPanel>
+
+                                                <StackPanel x:Uid="Stack_UploadFile1" Name="Stack_UploadPrealerta5" Orientation="Vertical" Margin="4,0,72,3" >
+                                                    <TextBlock x:Uid="txt_fechaEmitido" x:Name="txt_fechaEmitido" Text="Fecha emitido *" Margin="0,0,100,0" />
+                                                    <DatePicker x:Uid="datePicker1" x:Name="datePicker1" Grid.Row="0" Grid.Column="1" 
+                                                     SelectedDate="{Binding Path=Fecha, UpdateSourceTrigger=LostFocus}"  Height="25" HorizontalAlignment="Left" Margin="0,0,0,0" VerticalAlignment="Top" Width="155" BorderBrush="AliceBlue" BorderThickness="0">
+                                                        <DatePicker.Resources>
+                                                            <Style TargetType="{x:Type DatePickerTextBox}">
+                                                                <Setter Property="Background" Value="{DynamicResource CtrlTextBackground}"/>
+                                                                <Setter Property="BorderThickness" Value="0"/>
+                                                                <Setter Property="Template">
+                                                                    <Setter.Value>
+                                                                        <ControlTemplate>
+                                                                            <TextBox x:Name="PART_TextBox" 
+                                        									Text="{Binding SelectedDate, RelativeSource={RelativeSource AncestorType={x:Type DatePicker}}, StringFormat=dd-MM-yyyy}"  Width="90" Margin="0,0,-20,0" IsReadOnly="True"/>
+                                                                        </ControlTemplate>
+                                                                    </Setter.Value>
+                                                                </Setter>
+                                                                <Setter Property="Text" Value="My Custom Text" />
+                                                                <Setter Property="Background" Value="AliceBlue" />
+                                                            </Style>
+                                                        </DatePicker.Resources>
+                                                    </DatePicker>
+                                                </StackPanel>
+
+                                                <StackPanel x:Uid="Stack_UploadFile1" Name="Stack_UploadPrealerta4" Orientation="Vertical" Margin="4,0,4,3" >
+                                                    <TextBlock x:Uid="txt_AlerDireccion" x:Name="txt_AlerDireccion" Text="Dirección" Margin="0,0,100,0" />
+                                                    <TextBox x:Uid="tb_AlerDireccion" x:Name="tb_AlerDireccion" Grid.Row="0" Grid.Column="1" Margin="0,2,100,2"/>
+                                                </StackPanel>
+
+                                                <StackPanel x:Uid="Stack_UploadFile1" Name="Stack_UploadFile123" Orientation="Vertical" Margin="4,0,4,3" >
+                                                    <TextBlock x:Uid="txt_AlerNombreContacto" x:Name="txt_AlerNombreContacto" Text="Nombre contacto" Margin="0,0,100,0" />
+                                                    <TextBox x:Uid="tb_AlerNombreContacto" x:Name="tb_AlerNombreContacto" Grid.Row="0" Grid.Column="1" Margin="0,2,100,2"/>
+                                                </StackPanel>
+
+                                                <StackPanel x:Uid="Stack_UploadFile1" Name="Stack_UploadPrealerta7" Orientation="Vertical" Margin="4,0,4,10" >
+                                                    <TextBlock x:Uid="txt_AlerCelular" x:Name="txt_AlerCelular" Text="Celular contacto" Margin="0,0,100,0" />
+                                                    <TextBox x:Uid="tb_AlerCelular" x:Name="tb_AlerCelular" Margin="0,2,100,2"/>
+                                                </StackPanel>
+                                            </StackPanel>
+
+                                            <!--<StackPanel x:Uid="Stack_UploadFile" Name="Stack_UploadFile1" Orientation="Vertical" Margin="4,-7,4,0" >
+                                                <TextBlock x:Uid="txt_UploadFile1" Name="txt_UploadFile1" Text="Cargar Archivo" />
+                                                <uc:UploadFile x:Uid="fUpload_Prealerta" Margin="0,0,59,0" x:Name="fUpload_Prealerta" OnFileUpload="fUpload_OnFileUpload_2" />
+                                                <Button x:Uid="Btn_Guardar" x:Name="Btn_Guardar1" Width="29" Content="Aceptar" Click="Btn_GuardarPrealer_Click_1"
+                                                	HorizontalAlignment="right" VerticalAlignment="Center" Margin="0,8,70,0"/>
+                                               </StackPanel>-->
+                                        </StackPanel>
+                                    </StackPanel>
+                                </StackPanel>
+                            </Border>
+
+                        </StackPanel>
+                        <StackPanel x:Uid="Stack_Panel" Orientation="Vertical" Margin="3" HorizontalAlignment="Center" Width="auto" Height="auto" >
                             <Border x:Uid="Border_1" x:Name="Border_Detail2" Style="{DynamicResource UserControlFormInnerBorder}" Margin="3" HorizontalAlignment="Center" Visibility="Visible" >
                                 <StackPanel x:Name="Stack_DetailSerial2" Orientation="Vertical" Margin="3" HorizontalAlignment="Center" >
                                     <StackPanel>
@@ -121,6 +217,7 @@
                                     </StackPanel>
                                     <Separator Margin="5,0,0,0"/>
                                     <StackPanel x:Uid="Stack_SerialGroup" x:Name="Stack_SerialGroup" Orientation="Horizontal" Margin="0,6,0,0">
+                                        
                                         <StackPanel x:Uid="Stack_Serial1" x:Name="Stack_Serial1" Orientation="Vertical" Margin="4,0,4,0" >
                                             <TextBlock x:Uid="txt_Serial1" x:Name="txt_Serial1" Text="Serial" />
                                             <TextBox x:Uid="tb_Serial1" x:Name="tb_Serial1" Width="110" KeyDown="tb_Serial1_KeyDown_1" />
@@ -131,14 +228,16 @@
                                         </StackPanel>
                                         <StackPanel x:Uid="Stack_Serial3" x:Name="Stack_Serial3" Orientation="Vertical" Margin="4,0,4,0" >
                                             <TextBlock x:Uid="txt_Serial3" x:Name="txt_Serial3" Text="Smart Card"  />
-                                            <TextBox x:Uid="tb_Serial3" x:Name="tb_Serial3" Width="110" KeyDown="tb_Serial3_KeyDown_1" />
+                                            <TextBox x:Uid="tb_Serial3" x:Name="tb_Serial3" Width="110" KeyDown="tb_Serial3_KeyDown_1" IsEnabled="True"/>
                                         </StackPanel>
                                         <StackPanel x:Uid="Stack_UploadFile" x:Name="Stack_UploadFile" Orientation="Vertical" Margin="4,-3,4,0" Visibility="Visible">
                                             <TextBlock x:Uid="txt_UploadFile" x:Name="txt_UploadFile" Text="Cargar Archivo"  />
                                             <uc:UploadFile x:Uid="fUpload" Margin="0,0,0,0" x:Name="fUpload" OnFileUpload="fUpload_OnFileUpload_1" />
                                         </StackPanel>
+                                        
                                     </StackPanel>
                                     <StackPanel x:Uid="Stack_Adicionales" x:Name="Stack_Adicionales" Orientation="Vertical" Margin="0,6,0,0">
+                                        <CheckBox Checked="chkDisableSmart_Checked_1" Unchecked="UnchkDisableSmart_Checked_1" x:Name="chkDisableSmart" Content="Habilitar/Deshabilitar campo Smart Card."/>
                                         <CheckBox Checked="chkRep_Checked_1" x:Name="chkRep" Content="Replicar fila/s seleccionadas."/>
                                         <ListView  ButtonBase.Click="GridViewColumnHeaderClickedHandler" x:Uid="lvDocumentMaster" ItemsSource="{Binding ListRecords}" Margin="0,4,0,0"  MaxHeight="400" x:Name="lvDocumentMaster">
                                             <ListView.View>
@@ -157,9 +256,9 @@
                                                         </DataTemplate>
                                                     </GridViewColumn.CellTemplate>
                                                 </GridViewColumn>-->
-                                                    <GridViewColumn x:Uid="GridViewColumn_2" Header="Serial" Width="60" DisplayMemberBinding="{Binding Serial}" />
-                                                    <GridViewColumn x:Uid="GridViewColumn_2" Header="ID Receiver" Width="80" DisplayMemberBinding="{Binding Receiver}" />
-                                                    <GridViewColumn x:Uid="GridViewColumn_2" Header="Smart Card" Width="80" DisplayMemberBinding="{Binding SmartCard}" />
+                                                    <GridViewColumn x:Uid="GridViewColumn_2" Header="Serial" Width="auto" DisplayMemberBinding="{Binding Serial}" />
+                                                    <GridViewColumn x:Uid="GridViewColumn_2" Header="ID Receiver" Width="auto" DisplayMemberBinding="{Binding Receiver}" />
+                                                    <GridViewColumn x:Uid="GridViewColumn_2" Header="Smart Card" Width="auto" DisplayMemberBinding="{Binding SmartCard}" />
                                                     <GridViewColumn x:Uid="GridViewColumn_2" Header="Novedad" Width="0" DisplayMemberBinding="{Binding Novedad}" />
                                                 </GridView>
                                             </ListView.View>

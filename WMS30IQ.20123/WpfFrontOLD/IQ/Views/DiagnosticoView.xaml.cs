@@ -41,9 +41,13 @@ namespace WpfFront.Views
         public event EventHandler<SelectionChangedEventArgs> FilaSeleccionada;
         public event EventHandler<EventArgs> DeleteDetails;
         public event EventHandler<EventArgs> Ocultar;
-        public event EventHandler<SelectionChangedEventArgs> FiltrarPorTecnico;
+        public event EventHandler<EventArgs> BuscarEquipos;
         public event EventHandler<EventArgs> AddToList;
         public event EventHandler<EventArgs> RemoveSelection;
+
+        public event EventHandler<EventArgs> ExportPalletSeleccion;
+        public event EventHandler<EventArgs> ExportSerialesSeleccion;
+        public event EventHandler<EventArgs> ConsultarTecnicos;
 
         #endregion
 
@@ -54,6 +58,26 @@ namespace WpfFront.Views
         }
 
         #region Variables
+        public ListView ListadoSerialesCambioClasificacion
+        {
+            get { return this.lv_PalletSeriales; }
+            set { this.lv_PalletSeriales = value; }
+        }
+        public GridView GridViewListaSerialesClasificacion
+        {
+            get { return this.GridViewDetails11; }
+            set { this.GridViewDetails11 = value; }
+        }
+        public GridView GridViewListaClasificacion
+        {
+            get { return this.GridViewDetails_1; }
+            set { this.GridViewDetails_1 = value; }
+        }
+        public TextBlock TXT_filterResults
+        {
+            get { return this.txt_filterResults; }
+            set { this.txt_filterResults = value; }
+        }
 
         public ComboBox cbo_FilterByWorker
         {
@@ -217,6 +241,19 @@ namespace WpfFront.Views
 
         #region Metodos
 
+        private void Btn_ExportarPalletsSeleccion_Click_1(object sender, RoutedEventArgs e)
+        {
+            ExportPalletSeleccion(sender, e);
+        }
+
+        private void Btn_ExportarSerialesSeleccion_Click_1(object sender, RoutedEventArgs e)
+        {
+            ExportSerialesSeleccion(sender, e);
+        }
+        private void btn_BuscarEquipos_Click(object sender, RoutedEventArgs e)
+        {
+            BuscarEquipos(sender, e);
+        }
 
         private void btn_confirmar_Click_1(object sender, RoutedEventArgs e)
         {
@@ -270,21 +307,6 @@ namespace WpfFront.Views
             }
         }
 
-        //private void fUpload_OnFileUpload_1(object sender, EventArgs e)
-        //{
-        //    //Mostrar ventana de Cargando...
-        //    ProcessWindow pw = new ProcessWindow("Cargando registros...por favor espere...");
-        //    //Procesar el Archivo Cargado
-        //    if (fUpload.StreamFile != null)
-        //    {
-        //        string dataFile = Util.GetPlainTextString(fUpload.StreamFile);
-
-        //        ProcessFile1(sender, e, dataFile);
-        //    }
-        //    //Cierro ventana de Cargando...
-        //    pw.Visibility = Visibility.Collapsed;
-        //    pw.Close();
-        //}
 
         private void ProcessFile(object sender, EventArgs e, string dataFile)
         {
@@ -324,28 +346,21 @@ namespace WpfFront.Views
 
         private void cb_BuscarItem_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            string selectedItem = ((ComboBoxItem)cb_BuscarItems.SelectedItem).Content.ToString();
-            if (selectedItem.Equals("MAL ESTADO"))
-            {
-                ListadoItems.Visibility = Visibility.Visible;
-                txt_buscarPorTecnico.Visibility = Visibility.Visible;
-                StackListaEquipos.Visibility = Visibility.Visible;
-                cbo_FilterByWorker.Visibility = Visibility.Visible;
-                ConfirmBasicData(sender, e);
-            }
-            else if (selectedItem.Equals("..."))
-            {
-                ListadoItems.Visibility = Visibility.Collapsed;
-                txt_buscarPorTecnico.Visibility = Visibility.Collapsed;
-                StackListaEquipos.Visibility = Visibility.Collapsed;
-                cbo_FilterByWorker.Visibility = Visibility.Collapsed;
-            }
+            if (this.cbo_BuscarByTecnico.SelectedIndex == -1)
+                return;
+            this.btn_BuscarEquipos.IsEnabled = true;
+            this.btn_BuscarEquipos.FontWeight = FontWeights.Light;
         }
 
         private void SelectionChanged_FiltrarPorTecnico(object sender, SelectionChangedEventArgs e)
         {
-            FiltrarPorTecnico(sender, e);
+            if (this.cb_BuscarItems.SelectedIndex == -1)
+                return;
+            this.btn_BuscarEquipos.IsEnabled = true;
+            this.btn_BuscarEquipos.FontWeight = FontWeights.Light;
+            
         }
+
         private void ProcessFile1(object sender, EventArgs e, string dataFile)
         {
             //Linea por linea obtiene el dato del serial y del RR y lo procesa.
@@ -430,7 +445,10 @@ namespace WpfFront.Views
         {
             RemoveSelection(sender, e);
         }
-
+        private void refreshListadoTecnicos_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            ConsultarTecnicos(sender, e);
+        }
 
         #endregion
 
@@ -442,7 +460,9 @@ namespace WpfFront.Views
         DiagnosticoModel Model { get; set; }
 
         #region Variables
-
+        ListView ListadoSerialesCambioClasificacion { get; set; }
+        GridView GridViewListaSerialesClasificacion { get; set; }
+        GridView GridViewListaClasificacion { get; set; }
         ComboBox GetListBinInicio { get; set; }
         ComboBox Ubicacion { get; set; }
         StackPanel StackUbicacion { get; set; }
@@ -470,6 +490,7 @@ namespace WpfFront.Views
         ListView ListadoBusquedaRecibo { get; set; }
         ComboBox cbo_FilterByWorker { get; set; }
         StackPanel StackListaEquiposEntrega { get; set; }
+        TextBlock TXT_filterResults { get; set; }
 
         #endregion
 
@@ -494,9 +515,13 @@ namespace WpfFront.Views
         event EventHandler<RoutedEventArgs> ReplicateDetailsBy_Column;
         event EventHandler<EventArgs> DeleteDetails;
         event EventHandler<EventArgs> Ocultar;
-        event EventHandler<SelectionChangedEventArgs> FiltrarPorTecnico;
+        event EventHandler<EventArgs> BuscarEquipos;
         event EventHandler<EventArgs> AddToList;
         event EventHandler<EventArgs> RemoveSelection;
+
+        event EventHandler<EventArgs> ExportPalletSeleccion;
+        event EventHandler<EventArgs> ExportSerialesSeleccion;
+        event EventHandler<EventArgs> ConsultarTecnicos;
 
         #endregion
 

@@ -29,6 +29,8 @@ namespace WpfFront.Models
 
         DataTable ListadoRecibo { get; set; }
         IList<MMaster> ListEstados { get; set; }
+
+        DataTable List_Nocargue { get; set; }
     }
 
     public class SmartCardProdDTVModel : BusinessEntityBase, ISmartCardProdDTVModel
@@ -185,6 +187,17 @@ namespace WpfFront.Models
             {
                 _ListRecordsReciclaje = value;
                 OnPropertyChanged("ListRecordsReciclaje");
+            }
+        }
+
+        private DataTable _List_Nocargue;
+        public DataTable List_Nocargue
+        {
+            get { return _List_Nocargue; }
+            set
+            {
+                _List_Nocargue = value;
+                OnPropertyChanged("List_Nocargue");
             }
         }
     }

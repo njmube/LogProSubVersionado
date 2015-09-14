@@ -65,7 +65,6 @@ namespace WpfFront.Presenters
             View.ReplicateDetails += new EventHandler<EventArgs>(this.OnReplicateDetails);
             View.SaveDetails += new EventHandler<EventArgs>(this.OnSaveDetails);
             View.ConfirmarMovimiento += new EventHandler<EventArgs>(this.OnConfirmarMovimiento);
-            View.FiltrarDatosEntrega += new EventHandler<SelectionChangedEventArgs>(this.OnFiltrarDatosEntrega);
             View.ConfirmarImpresion += new EventHandler<EventArgs>(this.OnConfirmarImpresion);
             View.HabilitarUbicacion += new EventHandler<SelectionChangedEventArgs>(this.OnHabilitarUbicacion);
 
@@ -83,13 +82,13 @@ namespace WpfFront.Presenters
             View.ConfirmarTecnicoEquipo += this.OnConfirmarTecnicoEquipo;
             View.ConsultaReparacionAnterior += new EventHandler<EventArgs>(this.OnConsultaReparacionAnterior);
             View.DeleteDetails += new EventHandler<EventArgs>(this.OnDeleteDetails);
-            View.FiltraPorTecnico += new EventHandler<EventArgs>(this.OnFiltraPorTecnico);
             View.AddToList += new EventHandler<EventArgs>(this.OnAddToList);
             View.RemoveSelection += new EventHandler<EventArgs>(this.OnRemoveSelection);
             View.HabilitarMotivo += new EventHandler<EventArgs>(this.OnHabilitarMotivo);
             View.CargarHistorico += new EventHandler<EventArgs>(this.CargarHistorico);
             View.BuscarEquiposPorTecnico += new EventHandler<MouseButtonEventArgs>(this.OnBuscarEquiposPorTecnico);
-
+            View.BuscarEquiposPorTecnicoEntrega += new EventHandler<EventArgs>(this.OnBuscarEquiposPorTecnicoEntrega);
+            View.ConsultarTecnicos += new EventHandler<EventArgs>(this.OnGetListTecnicos);
             #endregion
 
             #region Datos
@@ -106,7 +105,7 @@ namespace WpfFront.Presenters
 
             CargarDatosDetails();
             ListarDatos();
-            CargarTecnicosReparacion();
+            //CargarTecnicosReparacion();
         
 
             View.Model.ListRecordsAddToPallet = service.DirectSQLQuery("EXEC sp_GetProcesos 'BUSCARMERCANCIAENTREGAREP', '', '',''", "", "dbo.EquiposClaro", Local);
@@ -131,7 +130,71 @@ namespace WpfFront.Presenters
             #endregion
         }
 
+   
         #region Metodos
+
+        private void OnGetListTecnicos(object sender, EventArgs e)
+        {
+            CargarTecnicosReparacion();
+        }
+
+        private void OnBuscarEquiposPorTecnicoEntrega(object sender, EventArgs e)
+        {
+            BuscarEquiposPorTecnicoEntrega();
+        }
+
+        private void BuscarEquiposPorTecnicoEntrega()
+        {
+            //Variables Auxiliares
+            String ConsultaSQL;
+            string tipoEstado = ((ComboBoxItem)View.GetListaEstado.SelectedItem).Content.ToString();
+            string tecnico = ((DataRowView)View.TecnicosReparacion.SelectedItem).Row[0].ToString();
+
+            if (tipoEstado.Equals("REPARADO"))
+            {
+                tipoEstado = "REP";
+            }
+
+            //Creo la consulta para buscar los registros
+            ConsultaSQL = "EXEC sp_GetProcesos 'BUSCARMERCANCIAFILTRADA_REP', '" + tipoEstado + "','" + tecnico + "';";
+
+            try
+            {
+                //Ejecuto la consulta
+                View.Model.ListRecords_1 = service.DirectSQLQuery(ConsultaSQL, "", "dbo.EquiposClaro", Local);
+            }
+            catch (Exception ex)
+            {
+                Util.ShowError("Error desconocido: " + ex.Message.ToString());
+            }
+
+            if (((ComboBoxItem)View.GetListaEstado.SelectedItem).Content.ToString().Contains("REP"))
+            {
+                View.Model.ListUbicacionesDestino = service.DirectSQLQuery("EXEC sp_GetProcesos 'UBICACIONFILTRADA', 'REPARACION', 'CLARO', 'ALMACENAMIENTO'", "", "dbo.Ubicaciones", Local);
+            }
+            else
+            {
+                View.Model.ListUbicacionesDestino = service.DirectSQLQuery("EXEC sp_GetProcesos 'UBICACIONFILTRADA', 'REPARACION', 'CLARO', 'DIAGNOSTICO', 'ALMACENAMIENTO' ", "", "dbo.Ubicaciones", Local);
+                View.StackUbicacion.Visibility = Visibility.Collapsed;
+            }
+            int equiposCargados = View.Model.ListRecords_1.Rows.Count;
+            if (equiposCargados < 1)
+            {
+                View.TXT_filterResults.Text = "No se encontraron equipos reparados por el usuario " + tecnico.ToUpper();
+            }
+            else if (equiposCargados == 1)
+            {
+                View.TXT_filterResults.Text = equiposCargados.ToString() + " equipo fue reparado por el usuario " + tecnico.ToUpper();
+            }
+            else
+            {
+                View.TXT_filterResults.Text = equiposCargados + " equipos reparados por el usuario " + tecnico.ToUpper();
+            }
+
+            View.TXT_filterResults.Visibility = Visibility.Visible;
+            View.ListadoItems.Visibility = Visibility.Visible;
+            View.StackListaEquiposEntrega.Visibility = Visibility.Visible;
+        }
 
         private void OnBuscarEquiposPorTecnico(object sender, MouseButtonEventArgs e)
         {
@@ -159,6 +222,12 @@ namespace WpfFront.Presenters
             //    Util.ShowMessage("Debe seleccionar al menos un registro");
             //    return;
             //}
+
+            if (View.Model.ListRecordsAddToPallet.Rows.Count == 0)
+            {
+                Util.ShowMessage("No hay registros para empacar");
+                return;
+            }
 
             //Evaluo que haya seleccionado laexport plain text  nueva clasificacion
             if (View.Ubicacion.SelectedIndex == -1)
@@ -227,7 +296,7 @@ namespace WpfFront.Presenters
             
 
             //Imprimo los registros
-            PrinterControl.PrintMovimientosBodega(SerialesImprimir, unidad_almacenamiento, codigoEmp, estado, "CLARO", "REPARACIÓN - " + destino, tipo_listado, "AUX");
+            PrinterControl.PrintMovimientosBodega(this.userName, SerialesImprimir, unidad_almacenamiento, codigoEmp, estado, "CLARO", "REPARACIÓN - " + destino, tipo_listado, "AUX");
         }
 
         private void Actualizar_UbicacionDisponible()
@@ -266,41 +335,6 @@ namespace WpfFront.Presenters
             ConsultaSQL = "EXEC sp_GetProcesos 'BUSCARMERCANCIADIAGNOSTICO', 'PARA REPARACION'";
 
             ListarDatos();
-        }
-
-        private void OnFiltrarDatosEntrega(object sender, SelectionChangedEventArgs e)
-        {
-            FiltrarDatosEntrega();
-        }
-
-        private void FiltrarDatosEntrega()
-        {
-            //Variables Auxiliares
-            String ConsultaSQL;
-            string tipoEstado = ((ComboBoxItem)View.GetListaEstado.SelectedItem).Content.ToString();
-            if (tipoEstado.Equals("REPARADO"))
-            {
-                tipoEstado = "REP";
-            }
-
-            //Creo la consulta para buscar los registros
-            ConsultaSQL = "EXEC sp_GetProcesos 'BUSCARMERCANCIAFILTRADA_REP', '" + tipoEstado + "', 'REPARACION','" + this.user + "';";
-            
-
-            //Ejecuto la consulta
-            View.Model.ListRecords_1 = service.DirectSQLQuery(ConsultaSQL, "", "dbo.EquiposClaro", Local);
-
-            //Valido el estado por el cual se filtro para filtrar el destino al que pueden ir los items
-            //if (((ComboBoxItem)View.GetListaEstado.SelectedItem).Content.ToString() != "REPARADO")
-            if (((ComboBoxItem)View.GetListaEstado.SelectedItem).Content.ToString().Contains("REP"))
-            {
-                View.Model.ListUbicacionesDestino = service.DirectSQLQuery("EXEC sp_GetProcesos 'UBICACIONFILTRADA', 'REPARACION', 'CLARO', 'ALMACENAMIENTO'", "", "dbo.Ubicaciones", Local);
-            }
-            else
-            {
-                View.Model.ListUbicacionesDestino = service.DirectSQLQuery("EXEC sp_GetProcesos 'UBICACIONFILTRADA', 'REPARACION', 'CLARO', 'DIAGNOSTICO', 'ALMACENAMIENTO' ", "", "dbo.Ubicaciones", Local);
-                View.StackUbicacion.Visibility = Visibility.Collapsed;
-            }
         }
 
         public void CargarDatosDetails()
@@ -407,7 +441,7 @@ namespace WpfFront.Presenters
         private void CargarDatosReparacion(object sender, EventArgs e)
         {
             //Validacion existe o no el equipo en DB
-            String ConsultaBuscar = "SELECT * FROM dbo.EquiposCLARO WHERE Serial = '" + View.GetSerial1.Text.ToString() + "'";
+            String ConsultaBuscar = "SELECT Serial FROM dbo.EquiposCLARO WHERE Serial = '" + View.GetSerial1.Text.ToString() + "'";
             DataTable Resultado = service.DirectSQLQuery(ConsultaBuscar, "", "dbo.EquiposCLARO", Local);
 
             if (Resultado.Rows.Count == 0)
@@ -831,13 +865,11 @@ namespace WpfFront.Presenters
                 ConsultaGuardar += ", FALLA_REP3 = '" + Falla3 + "', FALLA_REP4 = '" + Falla4 + "', MOTIVO_SCRAP= '" + MotivoScrap + "'";
                 ConsultaGuardar += ", ESTATUS_REPARACION = '" + EstatusRep + "', PARTES_CAMBIADAS = '" + PartesCambiadas + "'  WHERE Serial = '" + View.GetSerial1.Text.ToString() + "' AND Estado != 'DESPACHADO';";
 
-                ConsultaGuardarTrack += "UPDATE dbo.TrackEquiposCLARO SET ESTADO_REPARACION = '" + EstatusRep + "', FECHA_REPARADO = getdate() WHERE SERIAL = '" + View.GetSerial1.Text.ToString() + "'";
+                ConsultaGuardarTrack += "UPDATE dbo.TrackEquiposCLARO SET ESTADO_REPARACION = '" + EstatusRep + "', FECHA_REPARADO = getdate() WHERE SERIAL = '" + View.GetSerial1.Text.ToString() + "';";
 
                 ConsultaGuardar += "exec sp_InsertarNuevo_MovimientoReparacion 'REPARACIÓN TERMINADA','REPARACIÓN','REPARACIÓN','Sin pallet','" + View.GetSerial1.Text.ToString() +
                     "','" + View.TecnicoAsignado.Text + "','" + FallaRep + "','" + Falla1 + "','" + Falla2 + "','" + Falla3 + "','" + Falla4 + "','" + EstatusRep +
                     "','" + PartesCambiadas + "','" + ((MotivoScrap != "NULL") ? MotivoScrap : "") + "','" + this.user + "','" + View.GetNroCaja.Text + "';";
-
-                Console.WriteLine("###### " + ConsultaGuardar);
 
                 service.DirectSQLNonQuery(ConsultaGuardar, Local);
                 service.DirectSQLNonQuery(ConsultaGuardarTrack, Local);
@@ -891,6 +923,12 @@ namespace WpfFront.Presenters
             if (View.Ubicacion.SelectedIndex == -1)
             {
                 Util.ShowError("Por favor seleccionar la nueva clasificacion.");
+                return;
+            }
+
+            if (View.Model.ListRecordsAddToPallet.Rows.Count == 0)
+            {
+                Util.ShowError("No hay registros para empacar.");
                 return;
             }
 
@@ -1359,29 +1397,6 @@ namespace WpfFront.Presenters
             }
         }
 
-        private void OnFiltraPorTecnico(object sender, EventArgs e)
-        {
-            String filtro = ((DataRowView)View.TecnicosReparacion.SelectedItem).Row["Tecnico"].ToString();
-            Console.WriteLine(filtro);
-            Console.WriteLine(this.user + "   " + this.userName);
-            //Util.ShowMessage(filtro);
-            //Variables Auxiliares
-            String ConsultaSQL;
-
-            //Creo la consulta para buscar los registros
-            ConsultaSQL = "EXEC sp_GetProcesos 'BUSCARMERCANCIAFILTRADA_REP_BYTecnico', '" + ((ComboBoxItem)View.GetListaEstado.SelectedItem).Content.ToString() + "', 'REPARACION','" + filtro + "';";
-            //Util.ShowMessage(ConsultaSQL);
-            //if (this.userName == "admin") {
-            //    View.GetQuery.Visibility = Visibility.Visible;
-            //    View.GetQuery.Text = ConsultaSQL;
-            //}
-                
-
-            //Ejecuto la consulta
-            View.Model.ListRecords_1 = service.DirectSQLQuery(ConsultaSQL, "", "dbo.EquiposClaro", Local);
-
-        }
-
         private void OnAddToList(object sender, EventArgs e)
         {
             DataRow dr;
@@ -1432,6 +1447,7 @@ namespace WpfFront.Presenters
             {
                 View.Model.ListRecords_1.Rows.RemoveAt(View.ListadoItems.Items.IndexOf(View.ListadoItems.SelectedItem));
             }
+            BuscarEquiposPorTecnicoEntrega();
         }
 
         private void OnRemoveSelection(object sender, EventArgs e)
@@ -1453,12 +1469,11 @@ namespace WpfFront.Presenters
                 ConsultaAgregar = "";
             }
 
-            FiltrarDatosEntrega();
-
             while (View.ListadoItemsAgregados.SelectedItems.Count > 0)
             {
                 View.Model.ListRecordsAddToPallet.Rows.RemoveAt(View.ListadoItemsAgregados.Items.IndexOf(View.ListadoItemsAgregados.SelectedItem));
             }
+            BuscarEquiposPorTecnicoEntrega();
         }
 
         private void OnHabilitarMotivo(object sender, EventArgs e)

@@ -35,7 +35,6 @@ namespace WpfFront.Presenters
         ToolWindow Window { get; set; }
     }
 
-
     public class EntradaAlmacenV2Presenter : IEntradaAlmacenV2Presenter
     {
         public IEntradaAlmacenV2View View { get; set; }
@@ -115,11 +114,23 @@ namespace WpfFront.Presenters
 
             //Cargo los productos en el tableview y se ordenan
             //View.Model.ListadoProductos = service.GetProduct(new Product { Reference = "425" });
-            IList<Product> list = service.GetProduct(new Product { Reference = "425" });
-            IEnumerable<Product> sortedEnum = list.OrderBy(f => f.Brand);
-            IList<Product> sortedList = sortedEnum.ToList();
 
-            View.Model.ListadoProductos = sortedList;
+            DataTable aux = service.DirectSQLQuery("select brand,ProductID,ProductCode,Manufacturer from Master.Product where Reference = 425 order by brand;", "", "Master.Product", Local);
+
+            List<WpfFront.WMSBusinessService.Product> list = aux.AsEnumerable()
+               .Select(row => new WpfFront.WMSBusinessService.Product
+               {
+                   ProductID = Convert.ToInt32(row["ProductID"]),
+                   Brand = row["brand"].ToString(),
+                   ProductCode = row["ProductCode"].ToString(),
+                   Manufacturer = row["Manufacturer"].ToString()
+               }).ToList<WpfFront.WMSBusinessService.Product>();
+
+            View.Model.ListadoProductos = list;
+
+            //IList<Product> list = service.GetProduct(new Product { Reference = "425" });
+            //IEnumerable<Product> sortedEnum = list.OrderBy(f => f.Brand);
+            //IList<Product> sortedList = sortedEnum.ToList();
 
             //Cargo los listados de los detalles
             View.Model.ListadoOrigen = service.GetMMaster(new MMaster { MetaType = new MType { Code = "REMISIONRR" } });
@@ -169,7 +180,7 @@ namespace WpfFront.Presenters
 
             //Validacion existe o no el equipo en DB
             ConsultaBuscar = "SELECT Serial, Mac FROM dbo.EquiposCLARO WHERE UPPER(Serial) = UPPER('" + View.GetSerial1.Text.ToString() + "')";
-            
+
             DataTable Resultado = service.DirectSQLQuery(ConsultaBuscar, "", "dbo.EquiposCLARO", Local);
 
             if (Resultado.Rows.Count > 0)
@@ -221,7 +232,7 @@ namespace WpfFront.Presenters
                 View.GetSerial2.Text = "";
                 View.GetSerial1.Focus();
             }
-            
+
         }
 
         private void OnCargaMasiva(object sender, EventArgs e)
@@ -435,7 +446,7 @@ namespace WpfFront.Presenters
             Thread.Sleep(1000);
             busqueda_SAPSerial = true;
             trsap.Dispose();
-           // cont_SAPseriales = 0;
+            // cont_SAPseriales = 0;
 
             this.MostrarErrores_Cargue(listNoCargue); // Agrega a un segundo listview los equipos que no fueron cargados
 
@@ -445,7 +456,7 @@ namespace WpfFront.Presenters
             }), null);
 
             StartTimer_Seriales();
-         
+
             foreach (DataRow dr in SerialesIngresados.Rows)
             {
                 // Modificamos un UIElement que no corresponde con este hilo, para ello usamos su dispatcher
@@ -1330,27 +1341,27 @@ namespace WpfFront.Presenters
 
                     //if (ContadorFilas % 50 != 0)
                     //{
-                        //Obtengo la cantidad de columnas del listado
-                        ContadorCampos = View.Model.ListRecords_Alertas.Columns.Count;
+                    //Obtengo la cantidad de columnas del listado
+                    ContadorCampos = View.Model.ListRecords_Alertas.Columns.Count;
 
-                        //Construyo la consulta para guardar los datos
-                        ConsultaGuardar += " INSERT INTO DBO.preAlerta_EQUIPOSCLARO(aleEquip_codSap,aleEquip_serial,aleEquip_codDescripcion,aleEquip_cantidad,aleEquip_observaciones) VALUES(";
+                    //Construyo la consulta para guardar los datos
+                    ConsultaGuardar += " INSERT INTO DBO.preAlerta_EQUIPOSCLARO(aleEquip_codSap,aleEquip_serial,aleEquip_codDescripcion,aleEquip_cantidad,aleEquip_observaciones) VALUES(";
 
-                        //Obtengo los datos de cada campo con su nombre
-                        foreach (DataColumn c in View.Model.ListRecords_Alertas.Columns)
-                        {
-                            //Adiciono cada dato a la consulta
-                            ConsultaGuardar = ConsultaGuardar + "'" + DataRow[c.ColumnName].ToString() + "'";
+                    //Obtengo los datos de cada campo con su nombre
+                    foreach (DataColumn c in View.Model.ListRecords_Alertas.Columns)
+                    {
+                        //Adiciono cada dato a la consulta
+                        ConsultaGuardar = ConsultaGuardar + "'" + DataRow[c.ColumnName].ToString() + "'";
 
-                            //Evaluo el contador de columnas para saber si adiciono la coma
-                            ConsultaGuardar += (ContadorCampos != 1) ? "," : "";
+                        //Evaluo el contador de columnas para saber si adiciono la coma
+                        ConsultaGuardar += (ContadorCampos != 1) ? "," : "";
 
-                            //Disminuyo el contador
-                            ContadorCampos--;
-                        }
-                        ConsultaGuardar += ") ";
+                        //Disminuyo el contador
+                        ContadorCampos--;
+                    }
+                    ConsultaGuardar += ") ";
 
-                        //ConsultaGuardar += "INSERT INTO dbo.TrackEquiposClaro(ID_SERIAL,Serial,Mac,FECHA_INGRESO,ESTADO_RECIBO) VALUES (@@IDENTITY, '" + DataRow[0].ToString() + "', '" + DataRow[1].ToString() + "', getdate(), 'RECIBO') ";
+                    //ConsultaGuardar += "INSERT INTO dbo.TrackEquiposClaro(ID_SERIAL,Serial,Mac,FECHA_INGRESO,ESTADO_RECIBO) VALUES (@@IDENTITY, '" + DataRow[0].ToString() + "', '" + DataRow[1].ToString() + "', getdate(), 'RECIBO') ";
                     //}
                     //else
                     //{
@@ -1491,21 +1502,21 @@ namespace WpfFront.Presenters
 
         private void SavePreAlert(Object e)
         {
-            String FechaEmitido ="";
+            String FechaEmitido = "";
             DateTime aux_fechaEmitido;
             string dateFormat = "MM/dd/yyyy";
 
             View.Dispatcher_PreAlertas.Invoke(new System.Action(() =>
-                {
+            {
                 FechaEmitido = View.GetPreFecha_Emision.Text;
-                
+
 
                 if (!String.IsNullOrEmpty(FechaEmitido))
                 {
-                        aux_fechaEmitido = DateTime.Parse(View.GetPreFecha_Emision.Text);
-                        FechaEmitido = aux_fechaEmitido.ToString(dateFormat);
+                    aux_fechaEmitido = DateTime.Parse(View.GetPreFecha_Emision.Text);
+                    FechaEmitido = aux_fechaEmitido.ToString(dateFormat);
                 }
-                }), null);
+            }), null);
 
 
             try
@@ -1522,7 +1533,7 @@ namespace WpfFront.Presenters
                 string[] split = Cadena.Split(new Char[] { '\\' });
                 Cadena = split.Last();
 
-                
+
 
                 String ConsultaGuardar = "Declare @prea_id int, @aleEquip_id int; ";
 
@@ -1784,7 +1795,6 @@ namespace WpfFront.Presenters
             TipoDato = "System.Windows.Controls.ComboBox";
             Columna.Header = "Origen";
             Txt = new FrameworkElementFactory(assembly.GetType(TipoDato));
-
 
             Txt.SetValue(ComboBox.ItemsSourceProperty, View.Model.ListadoAliado);
             Txt.SetValue(ComboBox.DisplayMemberPathProperty, "Name");

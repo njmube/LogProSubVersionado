@@ -156,8 +156,10 @@ namespace WpfFront.Presenters
         {
             //Inicializo el DataTable
             View.Model.ListRecords = new DataTable("ListadoRegistros");
+            
             View.Model.ListadoFallaDiagnostico = service.GetMMaster(new MMaster { MetaType = new MType { Code = "ESTADOMAT" } });
             View.Model.ListadoMotivos = service.GetMMaster(new MMaster { MetaType = new MType { Code = "MOTSCRAP" } });
+            View.Model.ListadoSubFalla = service.GetMMaster(new MMaster { MetaType = new MType { Code = "SUBFALLA" } });
 
             //Asigno las columnas
             View.Model.ListRecords.Columns.Add("RowID", typeof(String));
@@ -538,6 +540,7 @@ namespace WpfFront.Presenters
             String ConsultaGuardar = "";
             String ConsultaGuardarTrack = "";
             string FallaRep = "";
+            string subfalla = "";
             string Falla1 = "";
             string Falla2 = "";
             string Falla3 = "";
@@ -610,15 +613,22 @@ namespace WpfFront.Presenters
                     else
                     { MotivoScrap = View.MotivoSCRAP.Text.ToString(); }
                 }
-                
 
+                if (((MMaster)View.SubFallas.SelectedItem == null))
+                {
+                    Util.ShowError("Por favor ingresar la sub-falla de reparacion");
+                    return;
+                }
+                else
+                { subfalla = ((MMaster)View.SubFallas.SelectedItem).Code.ToString(); }
 
                 //Construyo la consulta para guardar los datos
                 ConsultaGuardar += " UPDATE dbo.EquiposDIRECTVC SET Ubicacion = 'REPARACION', Estado = 'REPARACION',";
                 ConsultaGuardar += " FALLA_REP = '" + FallaRep + "', FALLA_REP1 = '" + Falla1 + "', FALLA_REP2 = '" + Falla2 + "'";
                 ConsultaGuardar += ", FALLA_REP3 = '" + Falla3 + "', FALLA_REP4 = '" + Falla4 + "', MOTIVO_SCRAP= '" + MotivoScrap + "'";
                 ConsultaGuardar += ", ESTATUS_REPARACION = '" + EstatusRep + "', PARTES_CAMBIADAS = '" + PartesCambiadas 
-                            + "'  WHERE Serial = '" + View.GetSerial1.Text.ToString() + "' AND Estado != 'DESPACHADO';";
+                            + "', SUBFALLA_REPARACION = '" + subfalla + "'" 
+                            + " WHERE Serial = '" + View.GetSerial1.Text.ToString() + "' AND Estado != 'DESPACHADO';";
 
                 ConsultaGuardar += "exec sp_InsertarNuevo_MovimientoReparacionDIRECTV 'REPARACIÓN TERMINADA','REPARACIÓN','REPARACIÓN','Sin pallet','" + View.GetSerial1.Text.ToString() +
                     "','" + View.TecnicoAsignado.Text + "','" + FallaRep + "','" + Falla1 + "','" + Falla2 + "','" + Falla3 + "','" + Falla4 + "','" + EstatusRep +
@@ -889,7 +899,7 @@ namespace WpfFront.Presenters
             + "TIPO_ORIGEN as PTRecibo, "
             + "convert(VARCHAR,FECHA_INGRESO,120) as PFRegistro,  "
             + "DATEDIFF(day, FECHA_INGRESO,GETDATE()) as NumeroDias,dbo.TIMELAPSELEO(FECHA_INGRESO) as horas "
-            + "from dbo.EquiposDIRECTVC WHERE ((IdPallet IS NOT NULL) AND (Posicion IS NOT NULL) AND (ESTADO = 'PARA REPARACION')) "
+            + "from dbo.EquiposDIRECTVC WHERE ((IdPallet IS NOT NULL) AND (ESTADO = 'PARA REPARACION')) "
             + " AND IdPallet = '" + aux_idPallet + "'";
 
             Console.WriteLine(Consulta);

@@ -176,7 +176,7 @@ namespace WpfFront.Presenters
             }
 
             //Imprimo los registros
-            PrinterControl.PrintMovimientosBodega(SerialesImprimir, unidad_almacenamiento, codigoEmp, destino, "CLARO", "CONFIRMACIÓN - DIAGNOSTICO", "DAÑADOS", "");
+            PrinterControl.PrintMovimientosBodega(this.userName, SerialesImprimir, unidad_almacenamiento, codigoEmp, destino, "CLARO", "CONFIRMACIÓN - DIAGNOSTICO", "DAÑADOS", "");
         }
 
         private void OnAddLine(object sender, EventArgs e)

@@ -351,6 +351,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="IQ\DIRECTV\Views\PreDiagnosticoDTVView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="IQ\DIRECTV\Views\ReciboView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -667,7 +671,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="DevTool\IqToolView.xaml">
+    <Page Include="General\DevTool\IqToolView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
       <Generator>MSBuild:Compile</Generator>
@@ -1053,16 +1057,21 @@
     </Page>
     <Compile Include="Common\RawPrinterHelper.cs" />
     <Compile Include="IQ\DIRECTV\Models\NovedadesDTVModel.cs" />
+    <Compile Include="IQ\DIRECTV\Models\PreDiagnosticoDTVModel.cs" />
     <Compile Include="IQ\DIRECTV\Models\SmartCardProdDTVModel.cs" />
     <Compile Include="IQ\DIRECTV\Presenters\ConfirmacionIntermediaPresenterP.cs" />
     <Compile Include="IQ\DIRECTV\Models\ConfirmacionIntermediaModelP.cs" />
     <Compile Include="IQ\DIRECTV\Presenters\NovedadesDTVPresenter.cs" />
+    <Compile Include="IQ\DIRECTV\Presenters\PreDiagnosticoDTVPresenter.cs" />
     <Compile Include="IQ\DIRECTV\Presenters\SmartCardProdDTVPresenter.cs" />
     <Compile Include="IQ\DIRECTV\Views\ConfirmacionIntermediaViewP.xaml.cs">
       <DependentUpon>ConfirmacionIntermediaViewP.xaml</DependentUpon>
     </Compile>
     <Compile Include="IQ\DIRECTV\Views\NovedadesDTVView.xaml.cs">
       <DependentUpon>NovedadesDTVView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="IQ\DIRECTV\Views\PreDiagnosticoDTVView.xaml.cs">
+      <DependentUpon>PreDiagnosticoDTVView.xaml</DependentUpon>
     </Compile>
     <Compile Include="IQ\DIRECTV\Views\SmartCardProdDTVView.xaml.cs">
       <DependentUpon>SmartCardProdDTVView.xaml</DependentUpon>
@@ -1225,13 +1234,13 @@
     <Compile Include="Common\Windows\WindowInfo.xaml.cs">
       <DependentUpon>WindowInfo.xaml</DependentUpon>
     </Compile>
-    <Compile Include="DevTool\IqToolModel.cs">
+    <Compile Include="General\DevTool\IqToolModel.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="DevTool\IqToolPresenter.cs">
+    <Compile Include="General\DevTool\IqToolPresenter.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="DevTool\IqToolView.xaml.cs">
+    <Compile Include="General\DevTool\IqToolView.xaml.cs">
       <DependentUpon>IqToolView.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
@@ -1826,56 +1835,56 @@
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
-    <None Include="Service References\WMSBusinessService\Arrays1.xsd">
+    <None Include="Service References\WMSBusinessService\Arrays.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Service References\WMSBusinessService\Entities.General2.xsd">
+    <None Include="Service References\WMSBusinessService\Entities.General.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Service References\WMSBusinessService\Entities.General21.xsd">
+    <None Include="Service References\WMSBusinessService\Entities.General1.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Service References\WMSBusinessService\Entities.Master2.xsd">
+    <None Include="Service References\WMSBusinessService\Entities.Master.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Service References\WMSBusinessService\Entities.Master21.xsd">
+    <None Include="Service References\WMSBusinessService\Entities.Master1.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Service References\WMSBusinessService\Entities.Process2.xsd">
+    <None Include="Service References\WMSBusinessService\Entities.Process.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Service References\WMSBusinessService\Entities.Process21.xsd">
+    <None Include="Service References\WMSBusinessService\Entities.Process1.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Service References\WMSBusinessService\Entities.Profile1.xsd">
+    <None Include="Service References\WMSBusinessService\Entities.Profile.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Service References\WMSBusinessService\Entities.Report2.xsd">
+    <None Include="Service References\WMSBusinessService\Entities.Report.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Service References\WMSBusinessService\Entities.Report21.xsd">
+    <None Include="Service References\WMSBusinessService\Entities.Report1.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Service References\WMSBusinessService\Entities.Trace2.xsd">
+    <None Include="Service References\WMSBusinessService\Entities.Trace.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Service References\WMSBusinessService\Entities.Trace21.xsd">
+    <None Include="Service References\WMSBusinessService\Entities.Trace1.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Service References\WMSBusinessService\Entities.Workflow1.xsd">
+    <None Include="Service References\WMSBusinessService\Entities.Workflow.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Service References\WMSBusinessService\service1.wsdl" />
-    <None Include="Service References\WMSBusinessService\service3.xsd">
+    <None Include="Service References\WMSBusinessService\service.wsdl" />
+    <None Include="Service References\WMSBusinessService\service.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Service References\WMSBusinessService\service31.xsd">
+    <None Include="Service References\WMSBusinessService\service1.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Service References\WMSBusinessService\service32.xsd">
+    <None Include="Service References\WMSBusinessService\service2.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Service References\WMSBusinessService\System.Data1.xsd">
+    <None Include="Service References\WMSBusinessService\System.Data.xsd">
       <SubType>Designer</SubType>
     </None>
     <None Include="Service References\WMSBusinessService\WpfFront.WMSBusinessService.Account.datasource">
@@ -2429,6 +2438,13 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\Icons\48x48\novedad_48x48.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Icons\claro.png" />
+    <Resource Include="Images\Icons\directv.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Icons\48x48\admin.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

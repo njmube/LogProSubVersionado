@@ -111,6 +111,8 @@ namespace WpfFront.Presenters
 
             View.Model.ListUbicacionesDestino = service.DirectSQLQuery("EXEC sp_GetProcesos 'UBICACIONESDESTINO', 'RECIBOALMACEN', 'CLARO'", "", "dbo.Ubicaciones", Local);
 
+            
+
             CargarListPallets();
             //Cargo los datos del listado
             CargarDatosDetails();
@@ -633,6 +635,8 @@ namespace WpfFront.Presenters
 
         private void OnSaveDetails(object sender, EventArgs e)
         {
+            String ubicacion= "";
+
             //Validacion si no existen datos para guardar
             if (View.Model.ListRecords.Rows.Count == 0)
                 return;
@@ -643,11 +647,19 @@ namespace WpfFront.Presenters
                 return;
             }
 
+
+
             String aux_idpallet = "";
             if (View.GetCodPallet.Text.ToString() == "" && View.ListadoPalletsBusqueda.SelectedIndex > -1)
+            {
                 aux_idpallet = ((DataRowView)View.ListadoPalletsBusqueda.SelectedItem).Row["Pallet"].ToString();
+                ubicacion = ((DataRowView)View.ListadoPalletsBusqueda.SelectedItem).Row["Posicion"].ToString();
+            }
             else if (View.GetCodPallet.Text.ToString() != "" && View.ListadoPalletsBusqueda.SelectedIndex == -1)
+            { 
                 aux_idpallet = View.GetCodPallet.Text.ToString();
+                ubicacion = View.GetUbicacionPallet.Text.ToString();
+            }
             
             //Variables Auxiliares
             String ConsultaGuardar = "";
@@ -687,9 +699,9 @@ namespace WpfFront.Presenters
 
                     
                         //Construyo la consulta para guardar los datos
-                        ConsultaGuardar += " UPDATE dbo.EquiposDIRECTVC SET Posicion = '" + View.GetUbicacionPallet.Text.ToString() + "', IdPallet = '" + aux_idpallet + "', Ubicacion = 'ALMACENAMIENTO', Estado= 'ALMACENAMIENTO', ENSAMBLADO='" + DataRow["ENSAMBLADO"] + "' WHERE Serial = '" + DataRow["SERIAL"].ToString() + "' AND (Estado = 'CUARENTENA' OR Estado = 'PARA PROCESO') AND ESTADO IS NOT NULL;";
+                        ConsultaGuardar += " UPDATE dbo.EquiposDIRECTVC SET Posicion = '" + ubicacion+ "', IdPallet = '" + aux_idpallet + "', Ubicacion = 'ALMACENAMIENTO', Estado= 'ALMACENAMIENTO', ENSAMBLADO='" + DataRow["ENSAMBLADO"] + "' WHERE Serial = '" + DataRow["SERIAL"].ToString() + "' AND (Estado = 'CUARENTENA' OR Estado = 'PARA PROCESO') AND ESTADO IS NOT NULL;";
                         ConsultaGuardarTrack += "UPDATE dbo.TrackEquiposDIRECTV SET ESTIBA_ENTRADA = '" + aux_idpallet + "', ESTADO_ALMACEN1 = 'ALMACENAMIENTO', UBICACION_ENTRADA = 'ALMACENAMIENTO', FECHA_ING_ALMACEN = GETDATE() WHERE ID_SERIAL = '" + DataRow["RowID"].ToString() + "'";
-                        ConsultaGuardar += "EXEC sp_InsertarNuevo_MovimientoDIRECTV 'ALMACENAMIENTO DE EQUIPOS EN BODEGA','ESPERANDO POR ENVIO A PRODUCCION','" + View.GetUbicacionPallet.Text.ToString() + "','" + View.GetCodPallet.Text + "','','ALMACENAMIENTO','ALMACENARENBODEGA','" + this.user + "','" + DataRow["Serial"].ToString() + "';";
+                        ConsultaGuardar += "EXEC sp_InsertarNuevo_MovimientoDIRECTV 'ALMACENAMIENTO DE EQUIPOS EN BODEGA','ESPERANDO POR ENVIO A PRODUCCION','" + ubicacion + "','" + View.GetCodPallet.Text + "','','ALMACENAMIENTO','ALMACENARENBODEGA','" + this.user + "','" + DataRow["Serial"].ToString() + "';";
                 }
 
                 //Evaluo si la consulta no envio los ultimos registros para forzar a enviarlos
@@ -935,7 +947,6 @@ namespace WpfFront.Presenters
         private void ConsultarPallets()
         {
             String ConsultaSQL = "EXEC sp_GetProcesosDIRECTVC 'BUSCARPALLETALMACENAMIENTO','','','',''";
-
             View.Model.ListPallets_Almacenamiento = service.DirectSQLQuery(ConsultaSQL, "", "dbo.EquiposDIRECTVC", Local);
         }
 
@@ -1155,6 +1166,7 @@ namespace WpfFront.Presenters
                 }
             }
         }
+
 
         private void OnGenerarNumero(object sender, EventArgs e)
         {

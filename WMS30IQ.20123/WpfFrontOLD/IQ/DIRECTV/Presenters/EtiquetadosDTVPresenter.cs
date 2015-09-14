@@ -136,7 +136,7 @@ namespace WpfFront.Presenters
             Assembly assembly;
             string TipoDato;
 
-            //#region Columna Falla Equipo
+            #region Columna Falla Equipo
 
             //IList<MMaster> ListadoFallaEquipoEtiquetado = service.GetMMaster(new MMaster { MetaType = new MType { Code = "DTVCFALLAR" } });
             //Columna = new GridViewColumn();
@@ -156,31 +156,31 @@ namespace WpfFront.Presenters
             //View.ListadoEquipos.Columns.Add(Columna); //Creacion de la columna en el GridView
             //View.Model.ListRecords.Columns.Add("FALLA_EQUIPO_VERIF", typeof(String)); //Creacion de la columna en el DataTable
 
-            //#endregion
+            #endregion
 
-            //#region Columna Tecnico Diagnosticador
+            #region Columna Tecnico Diagnosticador
 
-            IList<MMaster> ListadonNiveles = service.GetMMaster(new MMaster { MetaType = new MType { Code = "NIVELDTVET" } });
-            Columna = new GridViewColumn();
-            assembly = Assembly.GetAssembly(Type.GetType("System.Windows.Controls.ComboBox, PresentationFramework, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35"));
-            TipoDato = "System.Windows.Controls.ComboBox";
-            Columna.Header = "Nivel";
-            Txt = new FrameworkElementFactory(assembly.GetType(TipoDato));
-            Txt.SetValue(ComboBox.ItemsSourceProperty, ListadonNiveles);
-            Txt.SetValue(ComboBox.DisplayMemberPathProperty, "Name");
-            Txt.SetValue(ComboBox.SelectedValuePathProperty, "Code");
-            Txt.SetBinding(ComboBox.SelectedValueProperty, new System.Windows.Data.Binding("NIVEL"));
-            Txt.SetValue(ComboBox.WidthProperty, (double)110);
+            //IList<MMaster> ListadonNiveles = service.GetMMaster(new MMaster { MetaType = new MType { Code = "NIVELDTVET" } });
+            //Columna = new GridViewColumn();
+            //assembly = Assembly.GetAssembly(Type.GetType("System.Windows.Controls.ComboBox, PresentationFramework, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35"));
+            //TipoDato = "System.Windows.Controls.ComboBox";
+            //Columna.Header = "Nivel";
+            //Txt = new FrameworkElementFactory(assembly.GetType(TipoDato));
+            //Txt.SetValue(ComboBox.ItemsSourceProperty, ListadonNiveles);
+            //Txt.SetValue(ComboBox.DisplayMemberPathProperty, "Name");
+            //Txt.SetValue(ComboBox.SelectedValuePathProperty, "Code");
+            //Txt.SetBinding(ComboBox.SelectedValueProperty, new System.Windows.Data.Binding("NIVEL"));
+            //Txt.SetValue(ComboBox.WidthProperty, (double)110);
 
-            // add textbox template
-            Columna.CellTemplate = new DataTemplate();
-            Columna.CellTemplate.VisualTree = Txt;
-            View.ListadoEquipos.Columns.Add(Columna); //Creacion de la columna en el GridView
-            View.Model.ListRecords.Columns.Add("NIVEL", typeof(String)); //Creacion de la columna en el DataTable
+            //// add textbox template
+            //Columna.CellTemplate = new DataTemplate();
+            //Columna.CellTemplate.VisualTree = Txt;
+            //View.ListadoEquipos.Columns.Add(Columna); //Creacion de la columna en el GridView
+            //View.Model.ListRecords.Columns.Add("NIVEL", typeof(String)); //Creacion de la columna en el DataTable
 
-            //#endregion
+            #endregion
 
-            //#region Columna SmartCard Asignada
+            #region Columna SmartCard Asignada
 
             ////IList<MMaster> ListadoCodigoSAP = service.GetMMaster(new MMaster { MetaType = new MType { Code = "TELMEXCOD" } });
             //Columna = new GridViewColumn();
@@ -199,7 +199,29 @@ namespace WpfFront.Presenters
             //View.ListadoEquipos.Columns.Add(Columna); //Creacion de la columna en el GridView
             //View.Model.ListRecords.Columns.Add("SMART_CARD_ASIGNADA", typeof(String)); //Creacion de la columna en el DataTable
 
-            //#endregion
+            #endregion
+
+            #region Columna Nivel.
+
+            IList<MMaster> ListadoNivel = service.GetMMaster(new MMaster { MetaType = new MType { Code = "NIVELMAT" } });
+            Columna = new GridViewColumn();
+            assembly = Assembly.GetAssembly(Type.GetType("System.Windows.Controls.ComboBox, PresentationFramework, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35"));
+            TipoDato = "System.Windows.Controls.ComboBox";
+            Columna.Header = "Nivel";
+            Txt = new FrameworkElementFactory(assembly.GetType(TipoDato));
+            Txt.SetValue(ComboBox.ItemsSourceProperty, ListadoNivel);
+            Txt.SetValue(ComboBox.DisplayMemberPathProperty, "Name");
+            Txt.SetValue(ComboBox.SelectedValuePathProperty, "Code");
+            Txt.SetBinding(ComboBox.SelectedValueProperty, new System.Windows.Data.Binding("NIVEL_MATERIAL"));
+            Txt.SetValue(ComboBox.WidthProperty, (double)110);
+
+            // add textbox template
+            Columna.CellTemplate = new DataTemplate();
+            Columna.CellTemplate.VisualTree = Txt;
+            View.ListadoEquipos.Columns.Add(Columna); //Creacion de la columna en el GridView
+            View.Model.ListRecords.Columns.Add("NIVEL_MATERIAL", typeof(String)); //Creacion de la columna en el DataTable
+
+            #endregion
         }
 
         //Recibo
@@ -399,6 +421,7 @@ namespace WpfFront.Presenters
                         dr["Receiver"] = RegistroValidado.Rows[0]["Receiver"].ToString();
                         dr["Estado"] = RegistroValidado.Rows[0]["Estado"].ToString();
                         dr["SMART_CARD_ASIGNADA"] = View.GetSmartCard.Text.ToUpper();
+                        dr["NIVEL_MATERIAL"] = RegistroValidado.Rows[0]["NIVEL_MATERIAL"].ToString();
 
                         //Agrego el registro al listado
                         View.Model.ListRecords.Rows.Add(dr);
@@ -531,7 +554,7 @@ namespace WpfFront.Presenters
                         {
                                 //Construyo la consulta para guardar los datos
                                 ConsultaGuardar += " UPDATE dbo.EquiposDIRECTVC SET Ubicacion = 'VERIFICACION', Estado = 'P-VERIFICACION'";
-                                ConsultaGuardar += ",NIVEL = '" + DataRow["NIVEL"] + "', SMART_CARD_ASIGNADA = '" + DataRow["SMART_CARD_ASIGNADA"] + "'";
+                                ConsultaGuardar += ",NIVEL_FINAL = '" + DataRow["NIVEL_MATERIAL"] + "', SMART_CARD_ASIGNADA = '" + DataRow["SMART_CARD_ASIGNADA"] + "'";
                                 ConsultaGuardar += " WHERE RowID = '" + DataRow["RowID"].ToString() + "'";
 
                                 //VALIDAR QUE SMART CARD NO ESTE DAÑADA NI ASIGNADADataRow["SMART_CARD_ASIGNADA"]

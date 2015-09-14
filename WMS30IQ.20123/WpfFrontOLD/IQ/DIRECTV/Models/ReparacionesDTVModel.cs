@@ -29,6 +29,7 @@ namespace WpfFront.Models
         IList<SysUser> ListadoTecnicos { get; set; }
 
         DataTable Listado_PalletSerial { get; set; }
+        IList<MMaster> ListadoSubFalla { get; set; } 
     }
 
     public class ReparacionesDTVModel : BusinessEntityBase, IReparacionesDTVModel
@@ -216,6 +217,17 @@ namespace WpfFront.Models
             {
                 _Listado_PalletSerial = value;
                 OnPropertyChanged("Listado_PalletSerial");
+            }
+        }
+
+        private IList<MMaster> _ListadoSubFalla;
+        public IList<MMaster> ListadoSubFalla
+        {
+            get { return _ListadoSubFalla; }
+            set
+            {
+                _ListadoSubFalla = value;
+                OnPropertyChanged("ListadoSubFalla");
             }
         }
     }

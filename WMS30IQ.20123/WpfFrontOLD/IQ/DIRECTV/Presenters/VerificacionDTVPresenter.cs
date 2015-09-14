@@ -489,41 +489,58 @@ namespace WpfFront.Presenters
                     //Aumento el contador de filas
                     ContadorFilas++;
 
-                    if (DataRow["ESTATUS_VERIFICACION"].ToString() == "VERIFICADO" && DataRow["ESTADO_MATERIAL"].ToString() == "STOCK BULCK S02")
+                    if (DataRow["ESTATUS_VERIFICACION"].ToString() == "" || DataRow["ESTADO_MATERIAL"].ToString() == "" || 
+                        DataRow["FALLA_EQUIPO_VERIF"].ToString() == "")
+                    {
+                        Util.ShowError("Hay campos vacios. Para continuar debe completar toda la informacion.");
+                        return;
+                    }
+                    else
+                    {
+
+                        if (DataRow["ESTATUS_VERIFICACION"].ToString() == "VERIFICADO" && DataRow["ESTADO_MATERIAL"].ToString() == "BUEN ESTADO" /*"STOCK BULCK S02"*/)
                         {
-                                //Construyo la consulta para guardar los datos
-                                ConsultaGuardar += " UPDATE dbo.EquiposDIRECTVC SET Ubicacion = 'EMPAQUE', Estado = 'P-EMPAQUE'";
-                                ConsultaGuardar += ", FALLA_EQUIPO_VERIF = '" + DataRow["FALLA_EQUIPO_VERIF"].ToString() + "', TECNICO_DIAGNOSTICADOR_VERIF = '" + DataRow["TECNICO_DIAGNOSTICADOR_VERIF"].ToString() + "', ESTATUS_VERIFICACION = '" + DataRow["Estatus_Verificacion"].ToString() + "'";
-                                ConsultaGuardar += " WHERE RowID = '" + DataRow["RowID"].ToString() + "';";
+                            //Construyo la consulta para guardar los datos
+                            ConsultaGuardar += " UPDATE dbo.EquiposDIRECTVC SET Ubicacion = 'EMPAQUE', Estado = 'P-EMPAQUE'";
+                            ConsultaGuardar += ", FALLA_EQUIPO_VERIF = '" + DataRow["FALLA_EQUIPO_VERIF"].ToString() + "', TECNICO_DIAGNOSTICADOR_VERIF = '" 
+                                            + DataRow["TECNICO_DIAGNOSTICADOR_VERIF"].ToString() + "', ESTATUS_VERIFICACION = '"
+                                            + DataRow["Estatus_Verificacion"].ToString() + "', SUBFALLA_VERIFICACION = '" + DataRow["SUBFALLA"].ToString() + "'";
+                            ConsultaGuardar += " WHERE RowID = '" + DataRow["RowID"].ToString() + "';";
 
-                                ConsultaGuardarTrack += "UPDATE dbo.TrackEquiposDIRECTV SET ESTADO_VERIFICACION = '" + DataRow["Estatus_Verificacion"].ToString() + "', FECHA_VERIFICADO = '" + DateTime.Now.ToString("dd/MM/yyyy") + "' WHERE ID_SERIAL = '" + DataRow["RowID"].ToString() + "';";
+                            ConsultaGuardarTrack += "UPDATE dbo.TrackEquiposDIRECTV SET ESTADO_VERIFICACION = '" + DataRow["Estatus_Verificacion"].ToString() + "', FECHA_VERIFICADO = '" + DateTime.Now.ToString("dd/MM/yyyy") + "' WHERE ID_SERIAL = '" + DataRow["RowID"].ToString() + "';";
 
-                                ConsultaGuardar += "exec sp_InsertarNuevo_MovimientoVerificacionDIRECTV 'VERIFICACIÓN TERMINADA, " + DataRow["Estatus_Verificacion"].ToString() + "','VERIFICACION','EMPAQUE','Sin pallet','" + DataRow["RowID"].ToString() + "','" + DataRow["FALLA_EQUIPO_VERIF"].ToString() + "','" +
-                                DataRow["Estatus_Verificacion"].ToString() + "','" + App.curUser.UserName.ToString() + "','" + DataRow["SMART_CARD_ASIGNADA"].ToString() + "','" + this.user + "';";
+                            ConsultaGuardar += "exec sp_InsertarNuevo_MovimientoVerificacionDIRECTV 'VERIFICACIÓN TERMINADA, " + DataRow["Estatus_Verificacion"].ToString() + "','VERIFICACION','EMPAQUE','Sin pallet','" + DataRow["RowID"].ToString() + "','" + DataRow["FALLA_EQUIPO_VERIF"].ToString() + "','" +
+                            DataRow["Estatus_Verificacion"].ToString() + "','" + App.curUser.UserName.ToString() + "','" + DataRow["SMART_CARD_ASIGNADA"].ToString() + "','" + this.user + "';";
 
-                                Console.WriteLine("###### " + ConsultaGuardar);
+                            Console.WriteLine("###### " + ConsultaGuardar);
                         }
-                    else if (DataRow["ESTATUS_VERIFICACION"].ToString() == "VERIFICADO" && DataRow["ESTADO_MATERIAL"].ToString() != "STOCK BULCK S02")
+                        else if (DataRow["ESTATUS_VERIFICACION"].ToString() == "VERIFICADO" && DataRow["ESTADO_MATERIAL"].ToString() != "BUEN ESTADO" /*"STOCK BULCK S02"*/)
                         {
-                        //Construyo la consulta para guardar los datos
-                                ConsultaGuardar += " UPDATE dbo.EquiposDIRECTVC SET Ubicacion = 'ETIQUETADO', Estado = 'P-ETIQUETADO'";
-                                ConsultaGuardar += ", FALLA_EQUIPO_VERIF = '" + DataRow["FALLA_EQUIPO_VERIF"].ToString() + "', TECNICO_DIAGNOSTICADOR_VERIF = '" + DataRow["TECNICO_DIAGNOSTICADOR_VERIF"].ToString() + "', ESTATUS_VERIFICACION = '" + DataRow["Estatus_Verificacion"].ToString() + "'";
-                                ConsultaGuardar += ", SMART_CARD_ASIGNADA = NULL WHERE RowID = '" + DataRow["RowID"].ToString() + "';";
+                            //Construyo la consulta para guardar los datos
+                            ConsultaGuardar += " UPDATE dbo.EquiposDIRECTVC SET Ubicacion = 'ETIQUETADO', Estado = 'P-ETIQUETADO'";
+                            ConsultaGuardar += ", FALLA_EQUIPO_VERIF = '" + DataRow["FALLA_EQUIPO_VERIF"].ToString() 
+                                            + "', TECNICO_DIAGNOSTICADOR_VERIF = '" + DataRow["TECNICO_DIAGNOSTICADOR_VERIF"].ToString()
+                                            + "', ESTATUS_VERIFICACION = '" + DataRow["Estatus_Verificacion"].ToString() 
+                                            + "', SUBFALLA_VERIFICACION = '" + DataRow["SUBFALLA"].ToString() + "'";
+                            ConsultaGuardar += ", SMART_CARD_ASIGNADA = NULL WHERE RowID = '" + DataRow["RowID"].ToString() + "';";
 
-                                ConsultaGuardar += "update dbo.SmartCardEquiposDIRECTV set SMART_ESTADO = '" + DataRow["ESTADO_MATERIAL"].ToString() + "', SMART_ESTADOASIG = 'SIN ASIGNAR' where SMART_SERIAL = '" + DataRow["SMART_CARD_ASIGNADA"].ToString() + "';";
+                            ConsultaGuardar += "update dbo.SmartCardEquiposDIRECTV set SMART_ESTADO = '" + DataRow["ESTADO_MATERIAL"].ToString() + "', SMART_ESTADOASIG = 'SIN ASIGNAR' where SMART_SERIAL = '" + DataRow["SMART_CARD_ASIGNADA"].ToString() + "';";
 
-                                ConsultaGuardarTrack += "UPDATE dbo.TrackEquiposDIRECTV SET ESTADO_VERIFICACION = '" + DataRow["Estatus_Verificacion"].ToString() + "', FECHA_VERIFICADO = '" + DateTime.Now.ToString("dd/MM/yyyy") + "' WHERE ID_SERIAL = '" + DataRow["RowID"].ToString() + "';";
+                            ConsultaGuardarTrack += "UPDATE dbo.TrackEquiposDIRECTV SET ESTADO_VERIFICACION = '" + DataRow["Estatus_Verificacion"].ToString() + "', FECHA_VERIFICADO = '" + DateTime.Now.ToString("dd/MM/yyyy") + "' WHERE ID_SERIAL = '" + DataRow["RowID"].ToString() + "';";
 
-                                ConsultaGuardar += "exec sp_InsertarNuevo_MovimientoVerificacionDIRECTV 'VERIFICACIÓN TERMINADA, " + DataRow["Estatus_Verificacion"].ToString() + "','VERIFICACION','ETIQUETADO','Sin pallet','" + DataRow["RowID"].ToString() + "','" + DataRow["FALLA_EQUIPO_VERIF"].ToString() + "','" +
-                                DataRow["Estatus_Verificacion"].ToString() + "','" + App.curUser.UserName.ToString() + "','" + DataRow["SMART_CARD_ASIGNADA"].ToString() + "','" + this.user + "';";
+                            ConsultaGuardar += "exec sp_InsertarNuevo_MovimientoVerificacionDIRECTV 'VERIFICACIÓN TERMINADA, " + DataRow["Estatus_Verificacion"].ToString() + "','VERIFICACION','ETIQUETADO','Sin pallet','" + DataRow["RowID"].ToString() + "','" + DataRow["FALLA_EQUIPO_VERIF"].ToString() + "','" +
+                            DataRow["Estatus_Verificacion"].ToString() + "','" + App.curUser.UserName.ToString() + "','" + DataRow["SMART_CARD_ASIGNADA"].ToString() + "','" + this.user + "';";
 
-                                Console.WriteLine("###### " + ConsultaGuardar);
+                            Console.WriteLine("###### " + ConsultaGuardar);
                         }
-                    else if (DataRow["ESTATUS_VERIFICACION"].ToString() == "DAÑADO" && DataRow["ESTADO_MATERIAL"].ToString() == "STOCK BULCK S02")
+                        else if (DataRow["ESTATUS_VERIFICACION"].ToString() == "DAÑADO" && DataRow["ESTADO_MATERIAL"].ToString() == "BUEN ESTADO" /*"STOCK BULCK S02"*/)
                         {
                             //Construyo la consulta para guardar los datos
                             ConsultaGuardar += " UPDATE dbo.EquiposDIRECTVC SET Ubicacion = 'VERIFICACION', Estado = 'VERIFICACION'";
-                            ConsultaGuardar += ", FALLA_EQUIPO_VERIF = '" + DataRow["FALLA_EQUIPO_VERIF"].ToString() + "', TECNICO_DIAGNOSTICADOR_VERIF = '" + DataRow["TECNICO_DIAGNOSTICADOR_VERIF"].ToString() + "', ESTATUS_VERIFICACION = '" + DataRow["Estatus_Verificacion"].ToString() + "'";
+                            ConsultaGuardar += ", FALLA_EQUIPO_VERIF = '" + DataRow["FALLA_EQUIPO_VERIF"].ToString() 
+                                            + "', TECNICO_DIAGNOSTICADOR_VERIF = '" + DataRow["TECNICO_DIAGNOSTICADOR_VERIF"].ToString()
+                                            + "', ESTATUS_VERIFICACION = '" + DataRow["Estatus_Verificacion"].ToString() 
+                                            + "', SUBFALLA_VERIFICACION = '" + DataRow["SUBFALLA"].ToString() + "'";
                             ConsultaGuardar += ", SMART_CARD_ASIGNADA = NULL WHERE RowID = '" + DataRow["RowID"].ToString() + "';";
 
                             ConsultaGuardar += "update dbo.SmartCardEquiposDIRECTV set SMART_ESTADOASIG = 'SIN ASIGNAR'where SMART_SERIAL = '" + DataRow["SMART_CARD_ASIGNADA"].ToString() + "';";
@@ -535,11 +552,14 @@ namespace WpfFront.Presenters
 
                             Console.WriteLine("###### " + ConsultaGuardar);
                         }
-                    else if (DataRow["ESTATUS_VERIFICACION"].ToString() == "DAÑADO" && DataRow["ESTADO_MATERIAL"].ToString() != "STOCK BULCK S02")
-                    {
+                        else if (DataRow["ESTATUS_VERIFICACION"].ToString() == "DAÑADO" && DataRow["ESTADO_MATERIAL"].ToString() != "BUEN ESTADO" /*"STOCK BULCK S02"*/)
+                        {
                             //Construyo la consulta para guardar los datos
                             ConsultaGuardar += " UPDATE dbo.EquiposDIRECTVC SET Ubicacion = 'VERIFICACION', Estado = 'VERIFICACION'";
-                            ConsultaGuardar += ", FALLA_EQUIPO_VERIF = '" + DataRow["FALLA_EQUIPO_VERIF"].ToString() + "', TECNICO_DIAGNOSTICADOR_VERIF = '" + DataRow["TECNICO_DIAGNOSTICADOR_VERIF"].ToString() + "', ESTATUS_VERIFICACION = '" + DataRow["Estatus_Verificacion"].ToString() + "'";
+                            ConsultaGuardar += ", FALLA_EQUIPO_VERIF = '" + DataRow["FALLA_EQUIPO_VERIF"].ToString() 
+                                            + "', TECNICO_DIAGNOSTICADOR_VERIF = '" + DataRow["TECNICO_DIAGNOSTICADOR_VERIF"].ToString()
+                                            + "', ESTATUS_VERIFICACION = '" + DataRow["Estatus_Verificacion"].ToString() 
+                                            + "', SUBFALLA_VERIFICACION = '" + DataRow["SUBFALLA"].ToString() + "'";
                             ConsultaGuardar += ", SMART_CARD_ASIGNADA = NULL WHERE RowID = '" + DataRow["RowID"].ToString() + "';";
 
                             ConsultaGuardar += "update dbo.SmartCardEquiposDIRECTV set SMART_ESTADO = '" + DataRow["ESTADO_MATERIAL"].ToString() + "', SMART_ESTADOASIG = 'SIN ASIGNAR'where SMART_SERIAL = '" + DataRow["SMART_CARD_ASIGNADA"].ToString() + "';";
@@ -550,9 +570,9 @@ namespace WpfFront.Presenters
                             DataRow["Estatus_Verificacion"].ToString() + "','" + App.curUser.UserName.ToString() + "','" + DataRow["SMART_CARD_ASIGNADA"].ToString() + "','" + this.user + "';";
 
                             Console.WriteLine("###### " + ConsultaGuardar);
+                        }
                     }
                 }
-
                 //Evaluo si la consulta no envio los ultimos registros para forzar a enviarlos
                 if (!String.IsNullOrEmpty(ConsultaGuardar))
                 {
@@ -778,7 +798,7 @@ namespace WpfFront.Presenters
 
                 #endregion
 
-                //#region Columna Tipo Calidad
+                #region Columna Tipo Calidad
 
                 //IList<MMaster> ListadoTipoCalidad = service.GetMMaster(new MMaster { MetaType = new MType { Code = "TIPOCALIDAD_DIRECTV" } });
                 //Columna = new GridViewColumn();
@@ -798,11 +818,11 @@ namespace WpfFront.Presenters
                 //View.ListadoEquipos.Columns.Add(Columna); //Creacion de la columna en el GridView
                 //View.Model.ListRecords.Columns.Add("TIPO_CALIDAD", typeof(String)); //Creacion de la columna en el DataTable
 
-                //#endregion
+                #endregion
 
                 #region Columna Falla Equipo Calidad
 
-                IList<MMaster> ListadoFallaEquipoCalidad = service.GetMMaster(new MMaster { MetaType = new MType { Code = "DTVCFALLAR" } });
+                IList<MMaster> ListadoFallaEquipoCalidad = service.GetMMaster(new MMaster { MetaType = new MType { Code = "FALLADIR" } });
                 Columna = new GridViewColumn();
                 assembly = Assembly.GetAssembly(Type.GetType("System.Windows.Controls.ComboBox, PresentationFramework, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35"));
                 TipoDato = "System.Windows.Controls.ComboBox";
@@ -824,10 +844,31 @@ namespace WpfFront.Presenters
 
                 #endregion
 
+                #region Columna SubFalla Equipo
+
+                IList<MMaster> ListadosSubFallaEquipoDiagnostico = service.GetMMaster(new MMaster { MetaType = new MType { Code = "SUBFALLA" } });
+                Columna = new GridViewColumn();
+                assembly = Assembly.GetAssembly(Type.GetType("System.Windows.Controls.ComboBox, PresentationFramework, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35"));
+                TipoDato = "System.Windows.Controls.ComboBox";
+                Columna.Header = "Sub-Falla Equipo";
+                Txt = new FrameworkElementFactory(assembly.GetType(TipoDato));
+                Txt.SetValue(ComboBox.ItemsSourceProperty, ListadosSubFallaEquipoDiagnostico);
+                Txt.SetValue(ComboBox.DisplayMemberPathProperty, "Name");
+                Txt.SetValue(ComboBox.SelectedValuePathProperty, "Name");
+                Txt.SetBinding(ComboBox.SelectedValueProperty, new System.Windows.Data.Binding("SUBFALLA"));
+                Txt.SetValue(ComboBox.WidthProperty, (double)110);
+
+                // add textbox template
+                Columna.CellTemplate = new DataTemplate();
+                Columna.CellTemplate.VisualTree = Txt;
+                View.ListadoEquipos.Columns.Add(Columna); //Creacion de la columna en el GridView
+                View.Model.ListRecords.Columns.Add("SUBFALLA", typeof(String)); //Creacion de la columna en el DataTable
+
+                #endregion
 
                 #region Columna Estado Material.
 
-                IList<MMaster> ListadoFalla = service.GetMMaster(new MMaster { MetaType = new MType { Code = "ESTADOSMAR" } });
+                IList<MMaster> ListadoFalla = service.GetMMaster(new MMaster { MetaType = new MType { Code = "ESTADOS" } });
 
                 Columna = new GridViewColumn();
                 assembly = Assembly.GetAssembly(Type.GetType("System.Windows.Controls.ComboBox, PresentationFramework, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35"));

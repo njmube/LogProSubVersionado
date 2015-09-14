@@ -11,6 +11,7 @@ using System.Windows.Input;
 using System.Data;
 using WpfFront.Common.UserControls;
 using WpfFront.WMSBusinessService;
+using System.Windows.Threading;
 
 namespace WpfFront.Views
 {
@@ -26,7 +27,8 @@ namespace WpfFront.Views
         public event EventHandler<DataEventArgs<Product>> EvaluarTipoProducto;
         public event EventHandler<EventArgs> AddLine;
         public event EventHandler<EventArgs> AddLineReciclaje;
-        public event EventHandler<DataEventArgs<DataTable>> CargaMasiva;
+        public event EventHandler<EventArgs> AddLineAsignacion;
+        //public event EventHandler<DataEventArgs<DataTable>> CargaMasiva;
         public event EventHandler<EventArgs> ReplicateDetails;
         public event EventHandler<EventArgs> SaveDetails;
         public event EventHandler<EventArgs> SaveDetailsReciclaje;
@@ -43,6 +45,9 @@ namespace WpfFront.Views
         public event EventHandler<EventArgs> ExportCargueAsig;
         public event EventHandler<EventArgs> LoadSmartAsig;
         public event EventHandler<RoutedEventArgs> ReplicateDetailsBy_ColumnRec;
+
+        public event EventHandler<EventArgs> KillProcess;
+        public event EventHandler<EventArgs> CargaMasiva;
 
         #endregion
 
@@ -203,6 +208,42 @@ namespace WpfFront.Views
         //    set { this.lv_ListadoBusquedaRecibo = value; }
         //}
 
+        public TextBlock GetEstado_Cargue
+        {
+            get { return this.textblock_estadoCargue; }
+            set { this.textblock_estadoCargue = value; }
+        }
+
+        public ProgressBar Progress_Cargue
+        {
+            get { return this.PBar_cargue; }
+            set { this.PBar_cargue = value; }
+        }
+
+
+        public Dispatcher Dispatcher_Cargue
+        {
+            get { return this.Dispatcher; }
+        }
+
+        public ListView ListadoNo_Cargue
+        {
+            get { return this.lv_NoCargue; }
+            set { this.lv_NoCargue = value; }
+        }
+
+        public UploadFile GetUpLoadFile
+        {
+            get { return this.fUpload; }
+            set { this.fUpload = value; }
+        }
+
+        public TextBox GetSmartCardAsignacion
+        {
+            get { return this.tb_Smart; }
+            set { this.tb_Smart = value; }
+        }
+
         #endregion
 
         #region Metodos
@@ -309,7 +350,7 @@ namespace WpfFront.Views
                 return;
             }
 
-            CargaMasiva(sender, new DataEventArgs<DataTable>(lines));
+            //CargaMasiva(sender, new DataEventArgs<DataTable>(lines));
 
             //fUpload.StreamFile = null;
 
@@ -349,6 +390,7 @@ namespace WpfFront.Views
             //Mostrar ventana de Cargando...
             ProcessWindow pw = new ProcessWindow("Procesando registros...por favor espere...");
             SaveDetails(sender, e);
+            fUpload.IsEnabled = true;
             //Cierro ventana de Cargando...
             pw.Visibility = Visibility.Collapsed;
             pw.Close();
@@ -396,6 +438,40 @@ namespace WpfFront.Views
             ExportCargueAsig(sender, e);
         }
 
+        private void tb_SmartAsig_KeyDown_1(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+            {
+                if (!tb_Smart.Text.StartsWith("000") || tb_Smart.Text.StartsWith("0000") == true)
+                {
+                    Util.ShowError("La Smart Card no cuenta con la estructura correcta!");
+                    tb_Smart.Text = "";
+                    return;
+                }
+
+                if (tb_Smart.Text != "" && tb_Smart.Text != null)
+                {
+                    if (tb_Smart.Text.Length < 12 || tb_Smart.Text.Length > 12)
+                    {
+
+                        Util.ShowError("La Smart Card debe contener 12 digitos!");
+                        tb_Smart.Text = "";
+                        tb_Smart.Focus();
+                        return;
+                    }
+                    else
+                    {
+                        AddLineAsignacion(sender, e);
+                    }
+                }
+                else
+                {
+                    //Adiciono el registro al listado
+                    AddLineAsignacion(sender, e);
+                }
+
+            }
+        }
         #endregion
 
         private void MySelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -406,6 +482,37 @@ namespace WpfFront.Views
         private void btn_BuscarSmartEstado_Click_1(object sender, RoutedEventArgs e)
         {
             ConfirmBasicData(sender, e);
+        }
+
+        private void fUpload_OnFileUpload_1(object sender, EventArgs e)
+        {
+            KillProcess(sender, e);
+            string Cadena = fUpload.FileName.ToString();
+
+            //Valido que el Archivo seleccionado tengo formato .txt 
+            if (Cadena.Contains(".xls") == false || Cadena.Contains(".xlsx") == true)
+            {
+                Util.ShowError("El Archivo cargado no tiene el formato correcto");
+                return;
+            }
+            else
+            {
+                //Procesar el Archivo Cargado
+                if (fUpload.StreamFile != null)
+                {
+                    try
+                    {
+                        fUpload.IsEnabled = false;
+                        CargaMasiva(sender, e);
+                    }
+                    catch (Exception)
+                    {
+                        Util.ShowError("Error al cargar el archivo, revise que el formato de cargue sea correcto");
+                    }
+
+                }
+            }
+            fUpload.StreamFile = null;
         }
 
     }
@@ -441,6 +548,14 @@ namespace WpfFront.Views
         //ComboBox BuscarPosicionRecibo { get; set; }
         //ListView ListadoBusquedaRecibo { get; set; }
 
+        TextBlock GetEstado_Cargue { get; set; }
+        Dispatcher Dispatcher_Cargue { get; }
+        ProgressBar Progress_Cargue { get; set; }
+
+        ListView ListadoNo_Cargue { get; set; }
+        UploadFile GetUpLoadFile { get; set; }
+        TextBox GetSmartCardAsignacion { get; set; }
+
         #endregion
 
         #region Obtener Metodos
@@ -449,7 +564,7 @@ namespace WpfFront.Views
         event EventHandler<DataEventArgs<Product>> EvaluarTipoProducto;
         event EventHandler<EventArgs> AddLine;
         event EventHandler<EventArgs> AddLineReciclaje;
-        event EventHandler<DataEventArgs<DataTable>> CargaMasiva;
+        //event EventHandler<DataEventArgs<DataTable>> CargaMasiva;
         event EventHandler<EventArgs> ReplicateDetails;
         event EventHandler<EventArgs> SaveDetails;
         event EventHandler<EventArgs> SaveDetailsReciclaje;
@@ -466,6 +581,10 @@ namespace WpfFront.Views
         event EventHandler<EventArgs> ExportCargue;
         event EventHandler<EventArgs> ExportCargueAsig;
         event EventHandler<EventArgs> LoadSmartAsig;
+
+        event EventHandler<EventArgs> KillProcess;
+        event EventHandler<EventArgs> CargaMasiva;
+        event EventHandler<EventArgs> AddLineAsignacion;
 
         #endregion
 

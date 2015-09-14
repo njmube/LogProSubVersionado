@@ -93,10 +93,16 @@
                                 <TextBlock Text="CAMPOS LOGISTICA" HorizontalAlignment="Left" FontWeight="bold" Foreground="Brown" />
                             </StackPanel>
 
-                            <StackPanel x:Uid="Stack_Adicionales" Name="Stack_Info1" Orientation="Horizontal" Margin="0,6,0,0">
-                                <TextBlock x:Uid="Text_block" Width="100" Text="ID Receiver" VerticalAlignment="Center" Margin="4,0,6,0" FontWeight="Bold" />
-                                <TextBox x:Uid="txt_IDReceiver" x:Name="txt_IDReceiver" Width="150" Height="23" VerticalAlignment="Center" />
-                                <!---->
+                                    <StackPanel x:Uid="Stack_FallaDiagnostico" Width="auto" Orientation="Horizontal" Margin="0,3,4,3">
+                                        <TextBlock x:Uid="Text_block" Width="100" Text="Serial" VerticalAlignment="Center" Margin="4,0,6,0" FontWeight="Bold" />
+                                        <TextBox x:Uid="txt_Serial" x:Name="txt_Serial" Width="150" Height="23" VerticalAlignment="Center" />
+                                    </StackPanel>
+
+                                    <StackPanel x:Uid="Stack_Adicionales" Name="Stack_Info1" Orientation="Horizontal" Margin="0,6,0,0">
+                                        
+                                        <TextBlock x:Uid="Text_block" Width="100" Text="ID Receiver" VerticalAlignment="Center" Margin="4,0,6,0" FontWeight="Bold" />
+                                        <TextBox x:Uid="txt_IDReceiver" x:Name="txt_IDReceiver" Width="150" Height="23" VerticalAlignment="Center" />
+                                        <!---->
                                 <StackPanel x:Uid="Stack_FallaDiagnostico" Width="auto" Orientation="Horizontal" Margin="4,3,4,3">
                                     <TextBlock x:Uid="Text_block" Width="100" Text="SmartCard Ing" VerticalAlignment="Center" Margin="4,0,6,0" FontWeight="Bold" />
                                     <TextBox x:Uid="txt_EstadoAsoc" x:Name="txt_SmartCardEntrada" Width="150" Height="23" VerticalAlignment="Center"/>
@@ -335,7 +341,7 @@
                                                     </StackPanel>
 
                                                     <StackPanel x:Uid="Stack_UploadFile1" x:Name="Stack_UploadPrealerta10" Orientation="Vertical" HorizontalAlignment="Right" Margin="0,0,0,3" Width="122" >
-                                                        <TextBlock x:Uid="txt_mac" x:Name="txt_mac" Text="Mac" Margin="0,5,10,0" />
+                                                        <TextBlock x:Uid="txt_mac" x:Name="txt_mac" Text="Receiver" Margin="0,5,10,0" />
                                                         <TextBox x:Uid="tb_mac" x:Name="tb_mac" KeyDown="tb_mac_keydown_admin" Margin="0,2,10,2"  />
                                                     </StackPanel>
                                                 </StackPanel>

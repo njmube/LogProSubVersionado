@@ -370,6 +370,12 @@ namespace WpfFront.Views
             set { this.Stack_Adicionales_2 = value; }
         }
 
+        public ComboBox SubFallas
+        {
+            get { return this.cb_SubFallaRep; }
+            set { this.cb_SubFallaRep = value; }
+        }
+
         #endregion
 
         #region Metodos
@@ -665,6 +671,8 @@ namespace WpfFront.Views
         Border Border_ListaHP { get; set; }
 
         ListView ListadoBusquedaCambioClasificacion { get; set; }
+
+        ComboBox SubFallas { get; set; }
 
         #endregion
 

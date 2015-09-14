@@ -54,6 +54,12 @@ namespace WpfFront.Views
         public event EventHandler<EventArgs> ActualizarRegistrosRecibo;
         public event EventHandler<EventArgs> ConfirmarRecibo;
         public event EventHandler<EventArgs> ImprimirEtiqueta;
+        public event EventHandler<EventArgs> VerSerialesEntrega;
+        public event EventHandler<EventArgs> ExportSerialesSeleccion;
+
+        public event EventHandler<EventArgs> ConfirmBasicDataCalidad;
+        public event EventHandler<EventArgs> VerSerialesCalidad;
+        public event EventHandler<EventArgs> ConfirmarMovimientoCalidad;
 
         #endregion
 
@@ -199,6 +205,30 @@ namespace WpfFront.Views
         {
             get { return this.Stack_Panel13; }
             set { this.Stack_Panel13 = value; }
+        }
+
+        public ListView ListadoSerialesEntregaEmpaque
+        {
+            get { return this.lv_PalletSeriales; }
+            set { this.lv_PalletSeriales = value; }
+        }
+
+        public GridView GridViewListaSerialesEntregaEmpaque
+        {
+            get { return this.GridViewDetails111; }
+            set { this.GridViewDetails111 = value; }
+        }
+
+        public ListView ListadoItemsCalidad
+        {
+            get { return this.lvDocumentMaster_22; }
+            set { this.lvDocumentMaster_22 = value; }
+        }
+
+        public ComboBox EstadoCalidad
+        {
+            get { return this.cb_Estado; }
+            set { this.cb_Estado = value; }
         }
 
         #endregion
@@ -365,6 +395,31 @@ namespace WpfFront.Views
             ImprimirEtiqueta(sender, e);
         }
 
+        private void lv_ListadoEntregaEmpaque_SelectionChanged_1(object sender, SelectionChangedEventArgs e)
+        {
+            VerSerialesEntrega(sender, e);
+        }
+
+        private void Btn_ExportarSerialesSeleccion_Click_1(object sender, RoutedEventArgs e)
+        {
+            ExportSerialesSeleccion(sender, e);
+        }
+
+        private void ImageRefresh_MouseDownCalidad(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            ConfirmBasicDataCalidad(sender, e);
+        }
+
+        private void lv_ListadoCalidadEmpaque_SelectionChanged_1(object sender, SelectionChangedEventArgs e)
+        {
+            VerSerialesCalidad(sender, e);
+        }
+
+        private void btn_confirmarCalidad_Click_1(object sender, RoutedEventArgs e)
+        {
+            ConfirmarMovimientoCalidad(sender, e);
+        }
+
         #endregion
 
     }
@@ -397,6 +452,11 @@ namespace WpfFront.Views
         Button btnEliminarPallet { get; set; }
         StackPanel StackCajas { get; set; }
         StackPanel StackSeriales { get; set; }
+        ListView ListadoSerialesEntregaEmpaque { get; set; }
+        GridView GridViewListaSerialesEntregaEmpaque { get; set; }
+
+        ListView ListadoItemsCalidad { get; set; }
+        ComboBox EstadoCalidad { get; set; }
 
         #endregion
 
@@ -435,6 +495,12 @@ namespace WpfFront.Views
         event EventHandler<EventArgs> ConfirmarRecibo;
         event EventHandler<EventArgs> ConfirmarImpresionHablador;
         event EventHandler<EventArgs> ImprimirEtiqueta;
+        event EventHandler<EventArgs> VerSerialesEntrega;
+        event EventHandler<EventArgs> ExportSerialesSeleccion;
+
+        event EventHandler<EventArgs> ConfirmBasicDataCalidad;
+        event EventHandler<EventArgs> VerSerialesCalidad;
+        event EventHandler<EventArgs> ConfirmarMovimientoCalidad;
 
         #endregion
 

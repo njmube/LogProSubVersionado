@@ -19,6 +19,7 @@ using WpfFront.Common.Windows;
 using System.Windows.Input;
 using System.Drawing.Printing;
 
+
 namespace WpfFront.Presenters
 {
 
@@ -83,6 +84,13 @@ namespace WpfFront.Presenters
             View.AbrirCaja += new EventHandler<EventArgs>(this.OnAbrirCaja);
             View.DesempacarEquipos += new EventHandler<EventArgs>(this.OnDesempacarEquipos);
             View.ImprimirEtiqueta += new EventHandler<EventArgs>(this.OnImprimirEtiqueta);
+            //View.VerSerialesEntrega += new EventHandler<EventArgs>(this.OnVerSerialesEntrega);
+            View.VerSerialesEntrega += this.OnVerSerialesEntrega;
+            View.ExportSerialesSeleccion += this.OnExportSerialesSeleccion;
+
+            View.ConfirmBasicDataCalidad += new EventHandler<EventArgs>(this.OnConfirmBasicDataCalidad);
+            View.VerSerialesCalidad += this.OnVerSerialesCalidad;
+            View.ConfirmarMovimientoCalidad += new EventHandler<EventArgs>(this.OnConfirmarMovimientoCalidad);
 
             #endregion
 
@@ -104,6 +112,7 @@ namespace WpfFront.Presenters
 
             //Cargo las ubicaciones
             View.Model.ListadoPosiciones = service.GetMMaster(new MMaster { MetaType = new MType { Code = "POSICION1" } });
+            View.Model.ListCambioEstado = service.GetMMaster(new MMaster { MetaType = new MType { Code = "DTVCALIDAD" } });
 
             #endregion
         }
@@ -120,6 +129,8 @@ namespace WpfFront.Presenters
 
             //Ejecuto la consulta
             View.Model.ListadoRecibo = service.DirectSQLQuery(ConsultaSQL, "", "dbo.EquiposDIRECTVC", Local);
+
+            View.Model.Listado_PalletSerial.Rows.Clear();
             ConsultarPallets();
         }
 
@@ -391,7 +402,8 @@ namespace WpfFront.Presenters
             foreach (DataRowView item in View.ListadoSerialesBusqueda.Items)
             {
                 //Creo la consulta para cambiar la ubicacion de la estiba
-                ConsultaSQL += " UPDATE dbo.EquiposDIRECTVC SET Estado = 'PARA ENTREGA_EMPAQUE',CodigoEmpaque = '" + aux_idPallet + "', PILA = '" + aux_idPallet + "', NROCAJA = '" + aux_idCaja + "' WHERE Rowid = '" + item.Row["RowID"].ToString() + "'; ";
+                //ConsultaSQL += " UPDATE dbo.EquiposDIRECTVC SET Estado = 'PARA ENTREGA_EMPAQUE', IDPALLET = '" + pallet + "', CodigoEmpaque = '" + aux_idPallet + "', PILA = '" + aux_idPallet + "', NROCAJA = '" + aux_idCaja + "' WHERE Rowid = '" + item.Row["RowID"].ToString() + "'; ";
+                ConsultaSQL += " UPDATE dbo.EquiposDIRECTVC SET Estado = 'EMPAQUE_CALIDAD', IDPALLET = '" + pallet + "', CodigoEmpaque = '" + aux_idPallet + "', PILA = '" + aux_idPallet + "', NROCAJA = '" + aux_idCaja + "' WHERE Rowid = '" + item.Row["RowID"].ToString() + "'; ";
                 ConsultaSQL += "exec sp_InsertarNuevo_MovimientoDIRECTV 'EMPAQUE REALIZADO','EMPAQUE','EMPAQUE - ESPERANDO CIERRE DE CAJA','" + pallet + "','" + item.Row["RowID"].ToString() + "','EMPAQUE','UBICACIONPRODUCCION','" + this.user + "','';";
             }
 
@@ -594,8 +606,13 @@ namespace WpfFront.Presenters
         {
             String ConsultaBuscar = "";
             String ConsultaValidar = "";
-            View.Model.ListCajas_Empaque.Rows.Clear();
-            View.Model.ListSeriales_Empaque.Rows.Clear();
+
+            //if (View.Model.ListCajas_Empaque.Rows.Count > 0)
+            //    View.Model.ListCajas_Empaque.Rows.Clear();
+
+            //if (View.Model.ListSeriales_Empaque.Rows.Count > 0)
+            //    View.Model.ListSeriales_Empaque.Rows.Clear();
+
             try
             {
 
@@ -1310,6 +1327,200 @@ namespace WpfFront.Presenters
             {
                 Util.ShowError("Error en la impresión, por favor verifique la conexión a la impresora Zebra " + ex.Message);
             }
+        }
+
+        private void OnVerSerialesEntrega(object sender, EventArgs e)
+        {
+            //Evaluo que haya sido seleccionado un registro
+            if (View.ListadoItems.SelectedIndex == -1)
+                return;
+
+            string aux_idPallet = ((DataRowView)View.ListadoItems.SelectedItem).Row["idPallet"].ToString();
+
+            String Consulta = "SELECT IdPallet as Pallet, "
+            + "serial as Serial, "
+            + "RECEIVER as Receiver, "
+            + "SMART_CARD_ASIGNADA as SmartCard,  "
+            + "MODELO as Modelo,  "
+            + "convert(VARCHAR,FECHA_INGRESO,120) as FRegistro,  "
+            + "DATEDIFF(day, FECHA_INGRESO,GETDATE()) as NumeroDias, dbo.TIMELAPSELEO(FECHA_INGRESO) as horas "
+            + "from dbo.EquiposDIRECTVC WHERE ((IdPallet IS NOT NULL) AND (ESTADO = 'PARA ENTREGA_EMPAQUE')) "
+            + " AND CodigoEmpaque = '" + aux_idPallet + "';";
+
+            Console.WriteLine(Consulta);
+
+            View.Model.Listado_PalletSerial = service.DirectSQLQuery(Consulta, "", "dbo.EquiposDIRECTVC", Local);
+
+        }
+
+        private void OnExportSerialesSeleccion(object sender, EventArgs e)
+        {
+            Microsoft.Office.Interop.Excel.Application excel = null;
+            Microsoft.Office.Interop.Excel.Workbook wb = null;
+
+            object missing = Type.Missing;
+            Microsoft.Office.Interop.Excel.Worksheet ws = null;
+            Microsoft.Office.Interop.Excel.Range rng = null;
+
+            try
+            {
+                int filas_Seleccion = View.ListadoItems.SelectedItems.Count;
+
+                if (filas_Seleccion > 0)
+                {
+                    excel = new Microsoft.Office.Interop.Excel.Application();
+
+                    wb = excel.Workbooks.Add();
+                    ws = (Microsoft.Office.Interop.Excel.Worksheet)wb.ActiveSheet;
+
+                    for (int Idx = 0; Idx < View.GridViewListaSerialesEntregaEmpaque.Columns.Count; Idx++)
+                    {
+                        ws.Range["A1"].Offset[0, Idx].Value = View.GridViewListaSerialesEntregaEmpaque.Columns[Idx].Header.ToString();
+                        ws.Range["A1"].Offset[0, Idx].Interior.Color = System.Drawing.ColorTranslator.ToOle(System.Drawing.Color.Orange);
+                    }
+
+
+                    int cont = 0;
+                    foreach (DataRowView Registros in View.ListadoSerialesEntregaEmpaque.Items)
+                    {
+                        ws.get_Range("A1", "H" + cont + 1).EntireColumn.NumberFormat = "@";
+
+                        ws.Range["A2"].Offset[cont].Resize[1, View.GridViewListaSerialesEntregaEmpaque.Columns.Count].Value =
+                                Registros.Row.ItemArray;
+                        cont++;
+                    }
+
+                    rng = ws.get_Range("A1", "H" + cont + 1);
+                    rng.Cells.HorizontalAlignment = Microsoft.Office.Interop.Excel.XlHAlign.xlHAlignCenter;
+                    rng.Columns.AutoFit();
+
+                    excel.Visible = true;
+                    wb.Activate();
+                }
+                else
+                {
+                    Util.ShowMessage("Debe seleccionar uno o varios seriales para generar el archivo");
+                }
+
+            }
+            catch (Exception ex)
+            {
+                Util.ShowMessage("Problema al exportar la información a Excel: " + ex.ToString());
+            }
+        }
+
+        private void OnConfirmBasicDataCalidad(object sender, EventArgs e)
+        {
+            //Variables Auxiliares
+            String ConsultaSQL;
+
+            //Creo la consulta para buscar los registros
+            ConsultaSQL = "EXEC sp_GetProcesosDIRECTV2 'BUSCARMERCANCIAEMPAQUECALIDAD', 'EMPAQUE', '" + this.user + "', '',''";
+
+            //Ejecuto la consulta
+            View.Model.ListadoCalidad = service.DirectSQLQuery(ConsultaSQL, "", "dbo.EquiposDIRECTVC", Local);
+
+            //View.Model.Listado_PalletSerial.Rows.Clear();
+            //ConsultarPallets();
+        }
+
+        private void OnVerSerialesCalidad(object sender, EventArgs e)
+        {
+            //Evaluo que haya sido seleccionado un registro
+            if (View.ListadoItemsCalidad.SelectedIndex == -1)
+                return;
+
+            string aux_idPallet = ((DataRowView)View.ListadoItemsCalidad.SelectedItem).Row["idPallet"].ToString();
+
+            String Consulta = "SELECT IdPallet as Pallet, "
+            + "serial as Serial, "
+            + "RECEIVER as Receiver, "
+            + "SMART_CARD_ASIGNADA as SmartCard,  "
+            + "MODELO as Modelo,  "
+            + "convert(VARCHAR,FECHA_INGRESO,120) as FRegistro,  "
+            + "DATEDIFF(day, FECHA_INGRESO,GETDATE()) as NumeroDias, dbo.TIMELAPSELEO(FECHA_INGRESO) as horas "
+            + "from dbo.EquiposDIRECTVC WHERE ((IdPallet IS NOT NULL) AND (ESTADO = 'EMPAQUE_CALIDAD')) "
+            + " AND CodigoEmpaque = '" + aux_idPallet + "';";
+
+            Console.WriteLine(Consulta);
+
+            View.Model.Listado_PalletSerialCalidad = service.DirectSQLQuery(Consulta, "", "dbo.EquiposDIRECTVC", Local);
+
+        }
+
+        public void OnConfirmarMovimientoCalidad(object sender, EventArgs e)
+        {
+            //Variables Auxiliares
+            String ConsultaSQL = "", EstadoCalidad, Estado, Ubicacion;
+
+            //Evaluo que haya sido seleccionado un registro
+            if (View.ListadoItemsCalidad.SelectedIndex == -1)
+            {
+                Util.ShowError("Debe seleccionar al menos un pallet.");
+                return;
+            }
+                
+            //Coloco la ubicacion
+            EstadoCalidad = ((MMaster)View.EstadoCalidad.SelectedItem).Name.ToString();
+
+            //Valido la ubicacion para colocar el estado
+            if (EstadoCalidad == "RECHAZO COSMÉTICO")
+            {
+                Estado = "P-ETIQUETADO";
+                Ubicacion = "ETIQUETADO"; 
+
+                foreach (DataRowView Registros in View.ListadoItemsCalidad.SelectedItems)
+                {
+                    String aux_idPallet = Registros["idPallet"].ToString();
+
+                    //Creo la consulta para confirmar el cambio de ubicacion de la estiba
+                    ConsultaSQL = "EXEC sp_GetProcesosDIRECTV2 'UPDATEEMPAQUECALIDAD','" + Registros["Pallet"].ToString() + "','" + Estado + "', '" + Ubicacion + "','" + aux_idPallet + "';";
+
+                    ConsultaSQL += "exec sp_InsertarNuevo_MovimientoDIRECTV 'EMPAQUE CALIDAD','EMPAQUE','ETIQUETADO','" + Registros["Pallet"].ToString() + "','" + aux_idPallet + "','ETIQUETADO','UBICACIONPRODUCCION_EMPAQUE','" + this.user + "','';";
+                }
+            }
+            else if (EstadoCalidad == "RECHAZO FUNCIONAL")
+            {
+                Estado = "PARA PROCESO DIAGNOSTICO";
+                Ubicacion = "DIAGNOSTICO";
+
+                foreach (DataRowView Registros in View.ListadoItemsCalidad.SelectedItems)
+                {
+                    String aux_idPallet = Registros["idPallet"].ToString();
+
+                    //Creo la consulta para confirmar el cambio de ubicacion de la estiba
+                    ConsultaSQL = "EXEC sp_GetProcesosDIRECTV2 'UPDATEEMPAQUECALIDAD','" + Registros["Pallet"].ToString() + "','" + Estado + "', '" + Ubicacion + "','" + aux_idPallet + "';";
+
+                    ConsultaSQL += "exec sp_InsertarNuevo_MovimientoDIRECTV 'EMPAQUE CALIDAD','EMPAQUE','DIAGNOSTICO','" + Registros["Pallet"].ToString() + "','" + aux_idPallet + "','DIAGNOSTICO','UBICACIONPRODUCCION_EMPAQUE','" + this.user + "','';";
+                }
+            }
+            else
+            {
+                Estado = "PARA ENTREGA_EMPAQUE";
+                Ubicacion = "EMPAQUE";
+
+                foreach (DataRowView Registros in View.ListadoItemsCalidad.SelectedItems)
+                {
+                    String aux_idPallet = Registros["idPallet"].ToString();
+
+                    //Creo la consulta para confirmar el cambio de ubicacion de la estiba
+                    ConsultaSQL = "EXEC sp_GetProcesosDIRECTV2 'UPDATEEMPAQUECALIDAD_ENTREGA','" + Registros["Pallet"].ToString() + "','" + Estado + "', '" + Ubicacion + "','" + aux_idPallet + "';";
+
+                    ConsultaSQL += "exec sp_InsertarNuevo_MovimientoDIRECTV 'EMPAQUE CALIDAD','EMPAQUE','EMPAQUE','" + Registros["Pallet"].ToString() + "','" + aux_idPallet + "','EMPAQUE','UBICACIONPRODUCCION_EMPAQUE','" + this.user + "','';";
+                }
+            }
+                
+            service.DirectSQLNonQuery(ConsultaSQL, Local);
+            ConsultaSQL = "";
+
+            //Muestro el mensaje de confirmacion
+            Util.ShowMessage("Pallet enviado correctamente.");
+
+            OnConfirmBasicDataCalidad(sender, e);
+            this.Actualizar_UbicacionDisponible();
+
+            View.EstadoCalidad.SelectedIndex = -1;
+
         }
 
         #endregion

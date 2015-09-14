@@ -103,7 +103,7 @@
                                             <Button x:Uid="Btn_Guardar" x:Name="Btn_Guardar11" Width="70" Content="Aceptar" Click="Btn_Guardar_Click_1" />
                                         </StackPanel>-->
                                         <StackPanel x:Uid="Stack_Panel_2" Name="Stack_Panel_22" Width="auto" Orientation="Horizontal" Margin="4,3,4,3" HorizontalAlignment="Right" >
-                                            <Button x:Uid="btn_imprimir" Name="btn_imprimir" Content="Imprimir" Click="btn_imprimir_Click_1" />
+                                            <Button x:Uid="btn_imprimir" Name="btn_imprimir" Content="Imprimir" Click="btn_imprimir_Click_1"/>
                                         </StackPanel>
                                     </StackPanel>
 

@@ -18,6 +18,9 @@ using Microsoft.Windows.Controls;
 using WpfFront.Common.Windows;
 using System.Windows.Input;
 using System.Windows.Data;
+using System.Diagnostics;
+using System.Threading;
+using System.Data.OleDb;
 
 namespace WpfFront.Presenters
 {
@@ -40,6 +43,17 @@ namespace WpfFront.Presenters
         public Connection Local;
         public int offset = 1; //# columnas que no se debe replicar porque son fijas.
 
+        private DataTable SerialesIngresados = new DataTable();
+        private DataRow NoLoad_Row = null;
+        private Timer t;
+        private Timer t1;
+        private Timer tsmart;
+        private Thread updateLabelThread;
+        private Boolean estado_cargue = false, busqueda_Repetidos = false, busqueda_smart = false;
+        private OleDbConnection oledbcon;
+        private OleDbDataAdapter adaptador;
+        private Thread hilo_repetidos;
+
         public SmartCardDTVPresenterP(IUnityContainer container, ISmartCardDTVViewP view)
         {
             View = view;
@@ -53,7 +67,7 @@ namespace WpfFront.Presenters
             //View.EvaluarTipoProducto += new EventHandler<DataEventArgs<Product>>(this.OnEvaluarTipoProducto);
             View.AddLine += new EventHandler<EventArgs>(this.OnAddLine);
             //View.AddLineReciclaje += new EventHandler<EventArgs>(this.OnAddLineReciclaje);
-            view.CargaMasiva += new EventHandler<DataEventArgs<DataTable>>(this.OnCargaMasiva);
+            //view.CargaMasiva += new EventHandler<DataEventArgs<DataTable>>(this.OnCargaMasiva);
             View.ReplicateDetails += new EventHandler<EventArgs>(this.OnReplicateDetails);
             View.SaveDetails += new EventHandler<EventArgs>(this.OnSaveDetails);
             View.SaveDetailsReciclaje += new EventHandler<EventArgs>(this.OnSaveDetailsReciclaje);
@@ -69,6 +83,11 @@ namespace WpfFront.Presenters
             View.ExportCargue += new EventHandler<EventArgs>(this.OnExportCargue);
             View.ExportCargueAsig += new EventHandler<EventArgs>(this.OnExportCargueAsig);
             View.LoadSmartAsig += new EventHandler<EventArgs>(this.OnLoadSmartAsig);
+
+            view.CargaMasiva += new EventHandler<EventArgs>(this.OnCargaMasiva);
+            view.KillProcess += new EventHandler<EventArgs>(this.OnKillProcess);
+            View.AddLineAsignacion += new EventHandler<EventArgs>(this.OnAddLineAsignacion);
+
             //ConfirmarMovimiento
             #endregion
 
@@ -161,6 +180,18 @@ namespace WpfFront.Presenters
             View.Model.ListRecordsReciclaje.Columns.Add("SmartCard", typeof(String));
             View.Model.ListRecordsReciclaje.Columns.Add("Modelo", typeof(String));
 
+            // Datatable lista de seriales no cargados
+            View.Model.List_Nocargue = new DataTable("ListadoNoCargue");
+            View.Model.List_Nocargue.Columns.Add("SmartCard", typeof(String));
+            View.Model.List_Nocargue.Columns.Add("Motivo", typeof(String)); // Motivo del no cargue
+
+            //Inicializo el DataTable
+            View.Model.ListRecords_1 = new DataTable("ListRecords_1");
+            //Asigno las columnas
+            View.Model.ListRecords_1.Columns.Add("smart_serial", typeof(String));
+            View.Model.ListRecords_1.Columns.Add("smart_estado", typeof(String));
+            View.Model.ListRecords_1.Columns.Add("smart_fecha", typeof(String));
+            View.Model.ListRecords_1.Columns.Add("smart_estadoasig", typeof(String));
             //Genero las columnas dinamicas
             GenerarColumnasDinamicas();
         }
@@ -422,6 +453,32 @@ namespace WpfFront.Presenters
                 //Asigno los campos
                 dr["SmartCard"] = View.GetSmartCard1.Text.ToString();
 
+                if (View.GetSmartCard1.Text.ToString().StartsWith("00000"))
+                    dr["Modelo"] = "P1";
+
+                if (View.GetSmartCard1.Text.ToString().StartsWith("00006") || View.GetSmartCard1.Text.ToString().StartsWith("00007") || View.GetSmartCard1.Text.ToString().StartsWith("00008") ||
+                    View.GetSmartCard1.Text.ToString().StartsWith("00009") || View.GetSmartCard1.Text.ToString().StartsWith("00010") || View.GetSmartCard1.Text.ToString().StartsWith("00011")
+                    )
+                    dr["Modelo"] = "P2";
+
+                if (View.GetSmartCard1.Text.ToString().StartsWith("00012") || View.GetSmartCard1.Text.ToString().StartsWith("00013") || View.GetSmartCard1.Text.ToString().StartsWith("00014")
+                    )
+                    dr["Modelo"] = "P3";
+
+                if (View.GetSmartCard1.Text.ToString().StartsWith("00015") || View.GetSmartCard1.Text.ToString().StartsWith("00016") || View.GetSmartCard1.Text.ToString().StartsWith("00017") ||
+                    View.GetSmartCard1.Text.ToString().StartsWith("00018") || View.GetSmartCard1.Text.ToString().StartsWith("00019") || View.GetSmartCard1.Text.ToString().StartsWith("00020") ||
+                    View.GetSmartCard1.Text.ToString().StartsWith("00021") || View.GetSmartCard1.Text.ToString().StartsWith("00022") || View.GetSmartCard1.Text.ToString().StartsWith("00023") ||
+                    View.GetSmartCard1.Text.ToString().StartsWith("00024") || View.GetSmartCard1.Text.ToString().StartsWith("00025") || View.GetSmartCard1.Text.ToString().StartsWith("00026") 
+                    )
+                    dr["Modelo"] = "P5";
+
+                if (View.GetSmartCard1.Text.ToString().StartsWith("00065") || View.GetSmartCard1.Text.ToString().StartsWith("00066") || View.GetSmartCard1.Text.ToString().StartsWith("00067") ||
+                    View.GetSmartCard1.Text.ToString().StartsWith("00068") || View.GetSmartCard1.Text.ToString().StartsWith("00069") || View.GetSmartCard1.Text.ToString().StartsWith("00070") ||
+                    View.GetSmartCard1.Text.ToString().StartsWith("00071") || View.GetSmartCard1.Text.ToString().StartsWith("00072") || View.GetSmartCard1.Text.ToString().StartsWith("00073") ||
+                    View.GetSmartCard1.Text.ToString().StartsWith("00074") || View.GetSmartCard1.Text.ToString().StartsWith("00075") || View.GetSmartCard1.Text.ToString().StartsWith("00076")
+                    )
+                    dr["Modelo"] = "P6";
+
                 //Agrego el registro al listado
                 View.Model.ListRecords.Rows.Add(dr);
 
@@ -450,43 +507,43 @@ namespace WpfFront.Presenters
         //}
 
 
-        private void OnCargaMasiva(object sender, DataEventArgs<DataTable> e)
-        {
-            //Variables Auxiliares
-            DataRow dr1;
-            int NumeroSerial;
+        //private void OnCargaMasiva(object sender, DataEventArgs<DataTable> e)
+        //{
+        //    //Variables Auxiliares
+        //    DataRow dr1;
+        //    int NumeroSerial;
 
-            foreach (DataRow dr in e.Value.Rows)
-            {
-                dr1 = View.Model.ListRecords.NewRow();
+        //    foreach (DataRow dr in e.Value.Rows)
+        //    {
+        //        dr1 = View.Model.ListRecords.NewRow();
 
-                //Asigno los campos
-                /*dr1[0] = View.Model.ProductoSerial.ProductID;
-                dr1[1] = View.Model.ProductoSerial.Name;*/
+        //        //Asigno los campos
+        //        /*dr1[0] = View.Model.ProductoSerial.ProductID;
+        //        dr1[1] = View.Model.ProductoSerial.Name;*/
 
-                NumeroSerial = 1;
-                foreach (DataColumn dc in e.Value.Columns)
-                {
-                    switch (NumeroSerial.ToString())
-                    {
-                        case "1":
-                            dr1[3] = dr[dc.ColumnName].ToString();
-                            break;
-                        case "2":
-                            dr1[4] = dr[dc.ColumnName].ToString();
-                            break;
-                        case "3":
-                            dr1[5] = dr[dc.ColumnName].ToString();
-                            break;
+        //        NumeroSerial = 1;
+        //        foreach (DataColumn dc in e.Value.Columns)
+        //        {
+        //            switch (NumeroSerial.ToString())
+        //            {
+        //                case "1":
+        //                    dr1[3] = dr[dc.ColumnName].ToString();
+        //                    break;
+        //                case "2":
+        //                    dr1[4] = dr[dc.ColumnName].ToString();
+        //                    break;
+        //                case "3":
+        //                    dr1[5] = dr[dc.ColumnName].ToString();
+        //                    break;
 
-                    }
-                    NumeroSerial++;
-                }
+        //            }
+        //            NumeroSerial++;
+        //        }
 
-                //Agrego el registro al listado
-                View.Model.ListRecords.Rows.Add(dr1);
-            }
-        }
+        //        //Agrego el registro al listado
+        //        View.Model.ListRecords.Rows.Add(dr1);
+        //    }
+        //}
 
         private void OnReplicateDetails(object sender, EventArgs e)
         {
@@ -870,6 +927,417 @@ namespace WpfFront.Presenters
         //        }
         //    }
         //}
+
+        public void OnKillProcess(object sender, EventArgs e)
+        {
+            LimpiarList();
+            //detengo procesos activos de excel para el cargue masivo
+            Process[] proceso = Process.GetProcessesByName("EXCEL");
+
+            if (proceso.Length > 0)
+                proceso[0].Kill();
+        }
+
+        public void LimpiarList()
+        {
+            View.Dispatcher_Cargue.Invoke(new System.Action(() =>
+            {
+                View.Model.ListRecords.Rows.Clear();
+                View.Model.List_Nocargue.Rows.Clear();
+            }), null);
+            
+        }
+
+        private void OnCargaMasiva(object sender, EventArgs e)
+        {
+            hilo_repetidos = new Thread(new ParameterizedThreadStart(SetRepeat));
+            hilo_repetidos.SetApartmentState(ApartmentState.STA);
+            hilo_repetidos.IsBackground = true;
+            hilo_repetidos.Priority = ThreadPriority.Highest;
+
+            String Cadena = View.GetUpLoadFile.FileName.ToString();
+            String conexion = "Provider=Microsoft.Jet.OleDb.4.0; Extended Properties=\"Excel 8.0; HDR=yes\"; Data Source=" + Cadena;
+            try
+            {
+                //creo la coneccion para leer  el .xls
+                //OleDbConnection oledbcon = default(OleDbConnection);
+                oledbcon = new OleDbConnection(conexion);
+
+                //traigo los datos del .xls
+                adaptador = new OleDbDataAdapter("select SMART_CARD, ESTADO, MODELO, ORIGEN from [Hoja1$]", oledbcon);
+
+                //guardo la info en un datatable
+                adaptador.Fill(SerialesIngresados);
+
+                oledbcon.Close();
+                oledbcon.Dispose();
+
+                //valido que existan registros
+                if (SerialesIngresados.Rows.Count == 0)
+                {
+                    Util.ShowMessage("No hay registros para procesar");
+                }
+                else
+                {
+                    View.Progress_Cargue.Value = 0;
+                    View.GetEstado_Cargue.Text = "Iniciando operación";
+                    hilo_repetidos.Start(SerialesIngresados);
+
+                    StartTimer();//Inicia el timmer para mostrar visualmente el progreso del cargue masivo
+
+                }
+            }
+            catch (Exception ex)
+            {
+                Util.ShowError("El archivo a cargar no cuenta con la estructura correcta.");
+            }
+        }
+
+        int cont = 0;
+        int cont_cargue = 0;
+        int cont_repeat = 0;
+        private void StartTimer()
+        {
+            int num_seriales = SerialesIngresados.Rows.Count;
+            // Creamos diferentes hilos a través de un temporizador
+            t = new Timer(new TimerCallback((o) =>
+            {
+                // Invocamos un método anónimo que cumpla con un delegado genérico
+                (o as System.Windows.Controls.ProgressBar).Dispatcher.Invoke(new System.Action(() =>
+                {
+                    cont++;
+
+                    if (cont == 1)
+                    {
+                        View.GetEstado_Cargue.Text = "Buscando equipos duplicados";
+                    }
+                    else if (cont == 2)
+                    {
+                        View.GetEstado_Cargue.Text = "Buscando equipos duplicados.";
+                    }
+                    else if (cont == 3)
+                    {
+                        View.GetEstado_Cargue.Text = "Buscando equipos duplicados..";
+                    }
+                    else if (cont == 4 || cont > 4)
+                    {
+                        View.GetEstado_Cargue.Text = "Buscando equipos duplicados...";
+                        cont = 0;
+                    }
+
+                    // Implementación del método anónimo
+                    if (View.Progress_Cargue.Value < 100D && busqueda_Repetidos == false)
+                    {
+                        if (num_seriales == 0) { num_seriales = 1; }
+                        View.Progress_Cargue.Value = cont_repeat * 100D / num_seriales;
+                    }
+                    else
+                    {
+                        // Anulamos el ciclo del temporizador ya que el proceso de la barra de progreso ha acabado
+                        t.Change(System.Threading.Timeout.Infinite, System.Threading.Timeout.Infinite);
+
+                        // Invocamos de nuevo al mismo delegado para modificar la apariencia visual de la barra de progreso
+                        (o as System.Windows.Controls.ProgressBar).Dispatcher.Invoke(new System.Action(() =>
+                        {
+                            View.GetEstado_Cargue.Text = "Verificación de equipos duplicados terminada.";
+                            View.Progress_Cargue.Value = 100D;
+                        }));
+                    }
+                }));
+            }), View.Progress_Cargue, 0, 1000);
+        }
+
+        int cont2 = 0;
+        int cont_repeat2 = 0;
+        private void StartTimerSerial()
+        {
+            int num_seriales = SerialesIngresados.Rows.Count;
+            // Creamos diferentes hilos a través de un temporizador
+            tsmart = new Timer(new TimerCallback((o) =>
+            {
+                // Invocamos un método anónimo que cumpla con un delegado genérico
+                (o as System.Windows.Controls.ProgressBar).Dispatcher.Invoke(new System.Action(() =>
+                {
+                    cont2++;
+
+                    if (cont2 == 1)
+                    {
+                        View.GetEstado_Cargue.Text = "Validando Smart previamente ingresadas";
+                    }
+                    else if (cont2 == 2)
+                    {
+                        View.GetEstado_Cargue.Text = "Validando Smart previamente ingresadas.";
+                    }
+                    else if (cont2 == 3)
+                    {
+                        View.GetEstado_Cargue.Text = "Validando Smart previamente ingresadas..";
+                    }
+                    else if (cont2 == 4 || cont > 4)
+                    {
+                        View.GetEstado_Cargue.Text = "Validando Smart previamente ingresadas...";
+                        cont2 = 0;
+                    }
+
+                    // Implementación del método anónimo
+                    if (busqueda_smart == false)
+                    {
+                        if (num_seriales == 0) { num_seriales = 1; }
+                        View.Progress_Cargue.Value = cont_repeat2 * 100D / num_seriales;
+                    }
+                    else
+                    {
+                        // Anulamos el ciclo del temporizador ya que el proceso de la barra de progreso ha acabado
+                        tsmart.Change(System.Threading.Timeout.Infinite, System.Threading.Timeout.Infinite);
+                        //Util.ShowMessage("Cargue masivo finalizado");
+                        // Invocamos de nuevo al mismo delegado para modificar la apariencia visual de la barra de progreso
+                        (o as System.Windows.Controls.ProgressBar).Dispatcher.Invoke(new System.Action(() =>
+                        {
+                            View.GetEstado_Cargue.Text = "Verificación de seriales terminada.";
+                            View.Progress_Cargue.Value = 100D;
+                        }));
+                    }
+                }));
+            }), View.Progress_Cargue, 0, 1000);
+        }
+
+        private void StartTimer2()
+        {
+            int num_seriales = SerialesIngresados.Rows.Count;
+            // Creamos diferentes hilos a través de un temporizador
+            t1 = new Timer(new TimerCallback((o) =>
+            {
+                // Invocamos un método anónimo que cumpla con un delegado genérico
+                (o as System.Windows.Controls.ProgressBar).Dispatcher.Invoke(new System.Action(() =>
+                {
+                    cont_cargue++;
+
+                    if (cont_cargue == 1)
+                    {
+                        View.GetEstado_Cargue.Text = "Cargando archivo";
+                    }
+                    else if (cont_cargue == 2)
+                    {
+                        View.GetEstado_Cargue.Text = "Cargando archivo.";
+                    }
+                    else if (cont_cargue == 3)
+                    {
+                        View.GetEstado_Cargue.Text = "Cargando archivo..";
+                    }
+                    else if (cont_cargue == 4 || cont_cargue > 4)
+                    {
+                        View.GetEstado_Cargue.Text = "Cargando archivo...";
+                        cont_cargue = 0;
+                    }
+                    // Implementación del método anónimo  && SerialesIngresados.Rows.Count > 0
+                    if (estado_cargue == false)
+                    {
+                        if (num_seriales == 0) { num_seriales = 1; }
+                        View.Progress_Cargue.Value = ((View.Model.ListRecords.Rows.Count * 100D) / num_seriales);
+                    }
+                    else
+                    {
+                        // Anulamos el ciclo del temporizador ya que el proceso de la barra de progreso ha acabado
+                        t1.Change(System.Threading.Timeout.Infinite, System.Threading.Timeout.Infinite);
+
+                        // Invocamos de nuevo al mismo delegado para modificar la apariencia visual de la barra de progreso
+                        (o as System.Windows.Controls.ProgressBar).Dispatcher.Invoke(new System.Action(() =>
+                        {
+                            View.GetEstado_Cargue.Text = "Carga de archivo terminada.";
+                            View.Progress_Cargue.Value = 100D;
+                            //t1.Dispose();
+                        }));
+                    }
+                }));
+            }), View.Progress_Cargue, 0, 1000);
+        }
+
+        private void SetRepeat(object o)
+        {
+            busqueda_Repetidos = false;
+            busqueda_smart = false;
+            estado_cargue = false;
+
+            List<String> listNoCargue = new List<String>(); //Guarda los seriales que no cumplen con los requisitos del cargue
+
+            for (int i = 0; i < SerialesIngresados.Rows.Count; i++)
+            {
+                for (int j = i + 1; j < SerialesIngresados.Rows.Count; j++)
+                {
+                    if (SerialesIngresados.Rows[i]["SMART_CARD"].ToString() == "" & SerialesIngresados.Rows[j]["SMART_CARD"].ToString() == "")
+                    {
+                        SerialesIngresados.Rows.RemoveAt(i); //Elimino el primer serial y dejo el repetido o posterior.
+                        //j = i + 1; //Como borre el elemento de la posicion i provoco que j continue un serial posterior al borrado
+                        if (j > 0)
+                            j = i - 1;
+                    }
+                    //if (SerialesIngresados.Rows[i]["SERIAL"].ToString() != "" && SerialesIngresados.Rows[j]["SERIAL"].ToString() != "")
+                    else
+                    {
+                        if (SerialesIngresados.Rows[i]["SMART_CARD"].ToString() == SerialesIngresados.Rows[j]["SMART_CARD"].ToString())
+                        {
+                            listNoCargue.InsertRange(listNoCargue.Count, new string[] {SerialesIngresados.Rows[j]["SMART_CARD"].ToString(), 
+                                                                                       "Serial duplicado dentro del archivo de cargue"});
+
+                            SerialesIngresados.Rows.RemoveAt(i); //Elimino el primer serial y dejo el repetido o posterior.
+                            j = i + 1; //Como borre el elemento de la posicion i provoco que j continue un serial posterior al borrado
+                        }
+                    }
+                }
+                cont_repeat++;
+            }
+
+            busqueda_Repetidos = true;
+            Thread.Sleep(1000);
+            t.Dispose();
+
+            View.Dispatcher_Cargue.Invoke(new System.Action(() =>
+            {
+                View.Progress_Cargue.Value = 0;
+            }), null);
+
+            StartTimerSerial();
+
+            //validamos que los seriales ya se encuentren liberados
+            String ConsultaBuscarSerial = "";
+            int temp2 = 0;
+            while (temp2 < SerialesIngresados.Rows.Count)
+            {
+                ConsultaBuscarSerial = "SELECT SMART_SERIAL from dbo.SmartCardEquiposDIRECTV WHERE UPPER(SMART_SERIAL) = UPPER('" + SerialesIngresados.Rows[temp2]["SMART_CARD"].ToString() + "')";
+                DataTable Resultado = service.DirectSQLQuery(ConsultaBuscarSerial, "", "dbo.SmartCardEquiposDIRECTV", Local);
+
+                if (Resultado.Rows.Count > 0)
+                {
+                    listNoCargue.InsertRange(listNoCargue.Count, new string[] {SerialesIngresados.Rows[temp2]["SMART_CARD"].ToString(), 
+                                                                                        "Smart Card existente en el sistema."});
+
+                    SerialesIngresados.Rows.RemoveAt(temp2);
+                }
+                else
+                {
+                    temp2++;
+                }
+                cont_repeat2++;
+            }
+
+            busqueda_smart = true;
+            Thread.Sleep(1000);
+            tsmart.Dispose();
+
+            View.Dispatcher_Cargue.Invoke(new System.Action(() =>
+            {
+                View.Progress_Cargue.Value = 0;
+            }), null);
+
+
+            this.MostrarErrores_Cargue(listNoCargue); // Agrega a un segundo listview los equipos que no fueron cargados
+
+            StartTimer2();
+
+            cont = 0;
+            cont2 = 0;
+
+            CargarListDetails();
+
+            estado_cargue = true;
+        }
+
+        private void MostrarErrores_Cargue(List<String> listNoCargue)
+        {
+            int columna = 0;
+            View.Dispatcher_Cargue.Invoke(new System.Action(() =>
+            {
+                NoLoad_Row = View.Model.List_Nocargue.NewRow();
+            }), null);
+
+            foreach (var dr in listNoCargue)
+            {
+                View.Dispatcher_Cargue.Invoke(new System.Action(() =>
+                {
+                    if (columna != View.Model.List_Nocargue.Columns.Count - 1)
+                    {
+                        NoLoad_Row[columna] = dr;
+                        columna++;
+                    }
+                    else
+                    {
+                        NoLoad_Row[columna] = dr;
+                        columna = 0;
+                        View.Model.List_Nocargue.Rows.Add(NoLoad_Row);
+                        NoLoad_Row = View.Model.List_Nocargue.NewRow();
+                    }
+                }), null);
+            }
+        }
+
+        public void CargarListDetails()
+        {
+
+            foreach (DataRow dr in SerialesIngresados.Rows)
+            {
+                // Modificamos un UIElement que no corresponde con este hilo, para ello usamos su dispatcher
+                View.Dispatcher_Cargue.Invoke(new System.Action(() =>
+                {
+                    DataRow RegistroGuardar = View.Model.ListRecords.NewRow();
+
+                    //Asigno los campos
+                    RegistroGuardar["SmartCard"] = dr[0].ToString();
+                    RegistroGuardar["ESTADO_MATERIAL"] = dr[1].ToString();
+                    RegistroGuardar["Modelo"] = dr[2].ToString();
+                    RegistroGuardar["ORIGEN_SMARTCARD"] = dr[3].ToString();
+
+                    View.Model.ListRecords.Rows.Add(RegistroGuardar);
+
+                }), null);
+            }
+
+            adaptador.Dispose();
+        }
+
+        private void OnAddLineAsignacion(object sender, EventArgs e)
+        {
+            DataRow dr = View.Model.ListRecords_1.NewRow();
+            String ConsultaBuscar = "";
+            String ConsultaBuscar1 = "";
+
+            if (String.IsNullOrEmpty(View.GetSmartCardAsignacion.Text.ToString()))
+            {
+                Util.ShowError("El campo smart card no puede ser vacio.");
+                return;
+            }
+
+            //Validacion existe o no el equipo en DB
+            ConsultaBuscar = "SELECT TOP 1 SMART_CARD_ENTRADA as SmartCard FROM dbo.EquiposDIRECTVC WHERE SMART_CARD_ENTRADA = '" + View.GetSmartCardAsignacion.Text.ToString() + "'";
+            ConsultaBuscar1 = "SELECT TOP 1 SMART_SERIAL,SMART_MODELO, SMART_ESTADO, SMART_FECHA, SMART_ESTADOASIG FROM dbo.SmartCardEquiposDIRECTV WHERE SMART_SERIAL = '" + View.GetSmartCardAsignacion.Text.ToString() + "'";
+
+            DataTable Resultado = service.DirectSQLQuery(ConsultaBuscar, "", "dbo.EquiposDIRECTVC", Local);
+            DataTable Resultado1 = service.DirectSQLQuery(ConsultaBuscar1, "", "dbo.SmartCardEquiposDIRECTV", Local);
+
+            if ((Resultado1.Rows.Count > 0) || (Resultado.Rows.Count > 0))
+            {
+                View.Model.ListRecords_1.Rows.Clear();
+
+                //Asigno los campos
+                dr["smart_serial"] = Resultado1.Rows[0]["SMART_SERIAL"].ToString();
+                dr["smart_estado"] = Resultado1.Rows[0]["SMART_ESTADO"].ToString();
+                dr["smart_fecha"] = Resultado1.Rows[0]["SMART_FECHA"].ToString();
+                dr["smart_estadoasig"] = Resultado1.Rows[0]["SMART_ESTADOASIG"].ToString();
+
+                //Agrego el registro al listado
+                View.Model.ListRecords_1.Rows.Add(dr);
+
+                //Limpio los seriales para digitar nuevos datos
+                View.GetSmartCardAsignacion.Text = "";
+                View.GetSmartCardAsignacion.Focus();
+            }
+            else
+            {
+                Util.ShowError("La smart card " + View.GetSmartCardAsignacion.Text.ToString() + " no se encuentra registrada.");
+                //Limpio los seriales para digitar nuevos datos
+                View.GetSmartCardAsignacion.Text = "";
+                View.GetSmartCardAsignacion.Focus();
+            }
+
+        }
 
         #endregion
     }

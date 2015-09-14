@@ -413,7 +413,7 @@ namespace WpfFront
                 return;
 
             module = ((RibbonTabItem)((Ribbon)sender).SelectedItem).Name.ToString();
-            mRibbon.Height = 110;
+            mRibbon.Height = 140;
 
             //Check for location y company only First time.
             if (!loaded && cboLocation.SelectedItem == null)
@@ -461,7 +461,7 @@ namespace WpfFront
 
             if (module == "tbReports" && !App.showingReports)
             {
-                System.Diagnostics.Process.Start("http://severwms/Reports/Pages/Folder.aspx");
+                System.Diagnostics.Process.Start("http://sql-general/Reports/Pages/Folder.aspx");
                 //App.showingReports = true;
                 //ShowReports(sender, e);
                 //mRibbon.SelectedIndex = 0;

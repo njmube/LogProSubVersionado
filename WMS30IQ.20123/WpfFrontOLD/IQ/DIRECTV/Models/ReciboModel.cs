@@ -17,6 +17,7 @@ namespace WpfFront.Models
 
         DataTable List_NocarguePrea { get; set; }
         DataTable ListPrealerta { get; set; }
+
     }
 
     public class ReciboModel : BusinessEntityBase, IReciboModel
@@ -97,7 +98,6 @@ namespace WpfFront.Models
                 OnPropertyChanged("ListPrealerta");
             }
         }
-
         
     }
 }

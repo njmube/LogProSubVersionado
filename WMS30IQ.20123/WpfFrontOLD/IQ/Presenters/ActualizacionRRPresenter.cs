@@ -983,7 +983,7 @@ namespace WpfFront.Presenters
             View.Model.ListRecordsSAP.Clear();
             SerialesIngresados.Rows.Clear();
             View.Model.List_Nocargue.Clear();
-
+            View.Model.List_Cuarentena.Clear();
             //oculto los list de las validaciones
             //View.StackInFile.Visibility = Visibility.Collapsed;
             //View.StackInDB.Visibility = Visibility.Collapsed;
