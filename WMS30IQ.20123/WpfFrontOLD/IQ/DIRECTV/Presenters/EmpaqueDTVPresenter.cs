@@ -268,11 +268,6 @@ namespace WpfFront.Presenters
             }
         }
 
-
-
-
-      
-
         private void OnSaveDetails(object sender, EventArgs e)
         {
             //Validacion si no existen datos para guardar
@@ -1335,7 +1330,7 @@ namespace WpfFront.Presenters
             if (View.ListadoItems.SelectedIndex == -1)
                 return;
 
-            string aux_idPallet = ((DataRowView)View.ListadoItems.SelectedItem).Row["idPallet"].ToString();
+            string aux_idPallet = ((DataRowView)View.ListadoItems.SelectedItem).Row["Pallet"].ToString();
 
             String Consulta = "SELECT IdPallet as Pallet, "
             + "serial as Serial, "

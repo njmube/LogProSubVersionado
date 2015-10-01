@@ -88,12 +88,9 @@ namespace WpfFront.Presenters
 
             try { Local = service.GetConnection(new Connection { Name = "LOCAL" }).First(); }
             catch { }
-
-            //GetListTecnicos();  
             View.Model.ListUbicacionesDestino = service.DirectSQLQuery("EXEC sp_GetProcesos 'UBICACIONESDESTINO', 'DIAGNOSTICO', 'CLARO'", "", "dbo.Ubicaciones", Local);
 
             CargarDatosDetails();
-            //ListarDatos();
             OcultarPestanas();
 
             View.Model.ListRecordsAddToPallet = service.DirectSQLQuery("EXEC sp_GetProcesos 'BUSCARMERCANCIAENTREGADIAG', '', '',''", "", "dbo.EquiposClaro", Local);
@@ -456,7 +453,6 @@ namespace WpfFront.Presenters
             //Variables Auxiliares
             String ConsultaGuardar = "";
             String ConsultaGuardarTrack = "";
-            Int32 ContadorFilas = 0;
 
             try
             {
@@ -536,16 +532,7 @@ namespace WpfFront.Presenters
 
         public void OnConfirmarMovimiento(object sender, EventArgs e)
         {
-            String ConsultaSQL = "", NuevaUbicacion, NuevoEstado;
-
-            
-
-            //Evaluo que haya sido seleccionado un registro
-            //if (View.ListadoItems.SelectedItems.Count == 0)
-            //{
-            //    Util.ShowError("Por favor seleccionar uno o más equipos");
-            //    return;
-            //}
+            string ConsultaSQL = "", ConsultaMov = "", NuevaUbicacion, NuevoEstado;
 
             //Evaluo que haya seleccionado la nueva clasificacion
             if (View.Ubicacion.SelectedIndex == -1)
@@ -559,10 +546,19 @@ namespace WpfFront.Presenters
                 Util.ShowMessage("No hay registros para empacar.");
                 return;
             }
+            if (String.IsNullOrEmpty(View.CodigoEmpaque.Text.ToString()))
+            {
+                Util.ShowMessage("Por favor genere un codigo un pallet");
+                return;
+            }
 
-            //Coloco la ubicacion
+            //Asigno las variables concurrentes para cualquier opción que el usuario elija.
             NuevaUbicacion = ((DataRowView)View.Ubicacion.SelectedItem).Row["UbicacionDestino"].ToString();
+            string UnidadAlmacenamiento = ((ComboBoxItem)View.UnidadAlmacenamiento.SelectedItem).Content.ToString();
+            string idPallet = View.CodigoEmpaque.Text.ToString();
+            string RowID = "";
 
+            
             if (NuevaUbicacion == "REPARACION")
             {
                 NuevoEstado = "PARA REPARACION";
@@ -578,44 +574,47 @@ namespace WpfFront.Presenters
 
             if (NuevoEstado == "PARA ALMACENAMIENTO")
             {
+                ConsultaSQL += " UPDATE dbo.EquiposCLARO SET Ubicacion = '" + NuevaUbicacion + "', Posicion = '' , Estado = '" + NuevoEstado + "', UA = '" + UnidadAlmacenamiento + "', CodigoEmpaque = '" + idPallet + "', idpallet = '" + idPallet + "' WHERE RowID IN (";
+
                 foreach (DataRowView item in View.ListadoItemsAgregados.Items)
                 {
-                    //Si se asigna desde reparacion una ubicacion, Posicion = '"+ ((MMaster)View.NuevaUbicacion.SelectedItem).Code.ToString()+ "' 
+                    RowID = item.Row["RowID"].ToString();
                     //Creo la consulta para cambiar la ubicacion de la estiba
-                    ConsultaSQL += " UPDATE dbo.EquiposCLARO SET Ubicacion = '" + NuevaUbicacion + "',Posicion = '' ,Estado = '" + NuevoEstado + "', UA = '" + ((ComboBoxItem)View.UnidadAlmacenamiento.SelectedItem).Content.ToString() + "', CodigoEmpaque = '" + View.CodigoEmpaque.Text.ToString() +
-                        "', idpallet = '" + View.CodigoEmpaque.Text.ToString() + "' WHERE RowID = '" + item.Row["RowID"] + "'";
+                    ConsultaSQL += "'" + RowID + "',";
 
-                    //Guardo en la tabla de movimientos el cambio de ubicacion del equipo
-                    ConsultaSQL += "EXEC sp_InsertarNuevo_Movimiento 'EMPAQUE DIAGNOSTICO','DIAGNOSTICO','ALMACENAMIENTO','" + View.CodigoEmpaque.Text.ToString() + "','" + item.Row["RowID"] + "','DIAGNOSTICO','UBICACIONPRODUCCION','" + this.user + "','';";
-                    Console.WriteLine("###### " + ConsultaSQL);
-
-                    //Ejecuto la consulta
-                    service.DirectSQLNonQuery(ConsultaSQL, Local);
-                    ConsultaSQL = "";
+                    //Guardo en la tabla de movimientos el cambio de ubicación del equipo
+                    ConsultaMov += "EXEC dbo.sp_InsertarNuevo_Movimiento 'EMPAQUE DIAGNOSTICO','DIAGNOSTICO','ALMACENAMIENTO','" + idPallet + "','" + RowID + "', 'DIAGNOSTICO', 'UBICACIONPRODUCCION','" + this.user + "','';";
                 }
+                ConsultaSQL += ");";
+                ConsultaSQL = ConsultaSQL.Replace(",);", ");");
+                service.DirectSQLNonQuery(ConsultaSQL, Local);
+                service.DirectSQLNonQuery(ConsultaMov, Local);
+
+                ConsultaSQL = "";
+                ConsultaMov = "";
             }
             else
             {
+                //Creo la consulta para cambiar la ubicacion de la estiba
+                ConsultaSQL += " UPDATE dbo.EquiposCLARO SET Ubicacion = '" + NuevaUbicacion + "', Estado = '" + NuevoEstado + "', UA = '" + UnidadAlmacenamiento + "', CodigoEmpaque = '" + idPallet + "', idPallet = '" + idPallet + "' WHERE RowID IN (";
                 foreach (DataRowView item in View.ListadoItemsAgregados.Items)
                 {
-                    //Creo la consulta para cambiar la ubicacion de la estiba
-                    ConsultaSQL += " UPDATE dbo.EquiposCLARO SET Ubicacion = '" + NuevaUbicacion + "',Estado = '" + NuevoEstado + "', UA = '" + ((ComboBoxItem)View.UnidadAlmacenamiento.SelectedItem).Content.ToString() + "', CodigoEmpaque = '" + View.CodigoEmpaque.Text.ToString() +
-                        "', idpallet = '" + View.CodigoEmpaque.Text.ToString() + "' WHERE RowID = '" + item.Row["RowID"] + "'";
-
+                    RowID = item.Row["RowID"].ToString();
+                    ConsultaSQL += "'" + RowID + "',";
                     //Guardo en la tabla de movimientos el cambio de ubicacion del equipo
-                    ConsultaSQL += "EXEC sp_InsertarNuevo_Movimiento 'EMPAQUE DIAGNOSTICO','DIAGNOSTICO','" + NuevoEstado + "','" + View.CodigoEmpaque.Text.ToString() + "','" + item.Row["RowID"] + "','DIAGNOSTICO','UBICACIONPRODUCCION','" + this.user + "','';";
-                    Console.WriteLine("###### " + ConsultaSQL);
-
-                    //Ejecuto la consulta
-                    service.DirectSQLNonQuery(ConsultaSQL, Local);
-                    ConsultaSQL = "";
+                    ConsultaMov += "EXEC sp_InsertarNuevo_Movimiento 'EMPAQUE DIAGNOSTICO','DIAGNOSTICO','" + NuevoEstado + "','" + idPallet + "','" + RowID + "','DIAGNOSTICO','UBICACIONPRODUCCION','" + this.user + "','';";
                 }
+                ConsultaSQL += ");";
+                ConsultaSQL = ConsultaSQL.Replace(",);", ");");
+                service.DirectSQLNonQuery(ConsultaSQL, Local);
+                service.DirectSQLNonQuery(ConsultaMov, Local);
+
+                ConsultaSQL = "";
+                ConsultaMov = "";
             }
 
             //Muestro el mensaje de confirmacion
-            Util.ShowMessage("Cambio de ubicacion realizado satisfactoriamente.");
-
-            ListarDatos();
+            Util.ShowMessage("Cambio de ubicación realizado satisfactoriamente.");
 
             View.GetListaEstado.SelectedItem = "...";
 
@@ -627,9 +626,7 @@ namespace WpfFront.Presenters
 
             //Quito la seleccion del listado
             View.UnidadAlmacenamiento.SelectedIndex = -1;
-
             View.Model.ListRecordsAddToPallet.Rows.Clear();
-
             View.CodigoEmpaque.Text = "";
         }
 
@@ -949,7 +946,9 @@ namespace WpfFront.Presenters
         {
             DataRow dr;
             int aux = 0;
-            String ConsultaAgregar = "";
+            string ConsultaAgregar = "";
+            string RowID = "";
+            ConsultaAgregar += "UPDATE dbo.EquiposCLARO set Estado = 'DIAGNOSTICO_ENTREGA' WHERE RowID IN (";
             foreach (DataRowView item in View.ListadoItems.SelectedItems)
             {
                 foreach (DataRowView itemAdd in View.ListadoItemsAgregados.Items)
@@ -975,17 +974,17 @@ namespace WpfFront.Presenters
                     dr["Estado"] = item.Row["Estado"].ToString();
                     dr["Tecnico"] = item.Row["Tecnico"].ToString();
                     dr["RowID"] = item.Row["RowID"].ToString();
-                    
 
                     View.Model.ListRecordsAddToPallet.Rows.Add(dr);
 
                     //cambio el estado para no mostrar mas en el listado general
-                    ConsultaAgregar = "update dbo.EquiposCLARO set Estado = 'DIAGNOSTICO_ENTREGA' where RowID = " + item.Row["RowID"];
-                    service.DirectSQLNonQuery(ConsultaAgregar, Local);
-                    ConsultaAgregar = "";
+                     ConsultaAgregar += "'" + RowID + "',";
                 }
-
             }
+            ConsultaAgregar += ");";
+            ConsultaAgregar = ConsultaAgregar.Replace(",);", ");");
+            service.DirectSQLNonQuery(ConsultaAgregar, Local);
+            ConsultaAgregar = "";
 
             while (View.ListadoItems.SelectedItems.Count > 0)
             {

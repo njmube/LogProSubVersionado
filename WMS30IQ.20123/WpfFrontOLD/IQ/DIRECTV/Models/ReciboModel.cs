@@ -17,11 +17,35 @@ namespace WpfFront.Models
 
         DataTable List_NocarguePrea { get; set; }
         DataTable ListPrealerta { get; set; }
-
+        IList<MMaster> ListadoPreaTipoRecoleccion { get; set; }
+        IList<MMaster> ListadoPreaTipoOrigen { get; set; }
     }
 
     public class ReciboModel : BusinessEntityBase, IReciboModel
     {
+        private IList<MMaster> _ListadoPreaTipoRecoleccion;
+        public IList<MMaster> ListadoPreaTipoRecoleccion
+        {
+            get { return _ListadoPreaTipoRecoleccion; }
+            set
+            {
+                _ListadoPreaTipoRecoleccion = value;
+                OnPropertyChanged("ListadoPreaTipoRecoleccion");
+            }
+        }
+
+        private IList<MMaster> _ListadoPreaTipoOrigen;
+        public IList<MMaster> ListadoPreaTipoOrigen
+        {
+            get { return _ListadoPreaTipoOrigen; }
+            set
+            {
+                _ListadoPreaTipoOrigen = value;
+                OnPropertyChanged("ListadoPreaTipoOrigen");
+            }
+        }
+
+
         private DataTable _ListRecords;
         public DataTable ListRecords
         {

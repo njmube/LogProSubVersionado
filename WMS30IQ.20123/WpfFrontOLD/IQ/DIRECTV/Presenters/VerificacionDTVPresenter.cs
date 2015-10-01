@@ -79,7 +79,7 @@ namespace WpfFront.Presenters
             View.Model.ListadoPosiciones = service.GetMMaster(new MMaster { MetaType = new MType { Code = "POSICION1" } });
 
             CargarDatosDetails();
-            ListarDatos();
+            //ListarDatos();
 
 
             #endregion

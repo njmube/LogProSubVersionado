@@ -71,7 +71,9 @@ namespace WpfFront.Presenters
             View.ReplicateDetailsBy_Column += new EventHandler<RoutedEventArgs>(this.OnReplicateDetailsBy_Column);
             View.DeleteDetails += new EventHandler<EventArgs>(this.OnDeleteDetails);
             View.ImprimirEtiqueta_Individual += new EventHandler<EventArgs>(this.OnImprimirEtiqueta_Individual);
-            //ConfirmarMovimiento
+
+            View.ListarEquiposSeleccion += new EventHandler<EventArgs>(this.OnListarEquiposSeleccion);
+
             #endregion
 
             #region Datos
@@ -233,26 +235,17 @@ namespace WpfFront.Presenters
 
         public void BuscarRegistrosRecibo()
         {
-            ////Variables Auxiliares
-            //String ConsultaSQL;
+            String ConsultaSQL = "EXEC sp_GetProcesosDIRECTV2 'BUSCARMERCANCIAETIQUETADO', 'RECIBO ETIQUETADO'";
 
-            ////Creo la consulta para buscar los registros
-            //ConsultaSQL = "EXEC sp_GetProcesosDIRECTVC 'BUSCARMERCANCIADIAGNOSTICO', 'PARA ETIQUETADO'";
+            //Valido si fue digitado una estiba para buscar
+            if (!String.IsNullOrEmpty(View.BuscarEstibaRecibo.Text.ToString()))
+                ConsultaSQL += ",'" + View.BuscarEstibaRecibo.Text.ToString() + "'";
+            else
+                ConsultaSQL += ",NULL";
 
-            ////Valido si fue digitado una estiba para buscar
-            //if (!String.IsNullOrEmpty(View.BuscarEstibaRecibo.Text.ToString()))
-            //    ConsultaSQL += ",'" + View.BuscarEstibaRecibo.Text.ToString() + "'";
-            //else
-            //    ConsultaSQL += ",NULL";
 
-            ////Valido si fue seleccionado ubicaciones para filtrar
-            ////if (View.BuscarPosicionRecibo.SelectedIndex != -1)
-            ////    ConsultaSQL += ",'" + ((MMaster)View.BuscarPosicionRecibo.SelectedItem).Code.ToString() + "'";
-            ////else
-            ////    ConsultaSQL += ",NULL";
-
-            ////Ejecuto la consulta
-            //View.Model.ListadoRecibo = service.DirectSQLQuery(ConsultaSQL, "", "dbo.EquiposDIRECTVC", Local);
+            //Ejecuto la consulta
+            View.Model.ListadoRecibo = service.DirectSQLQuery(ConsultaSQL, "", "dbo.EquiposDIRECTVC", Local);
         }
 
         private void OnActualizarRegistrosRecibo(object sender, EventArgs e)
@@ -273,28 +266,33 @@ namespace WpfFront.Presenters
 
         private void OnConfirmarRecibo(object sender, EventArgs e)
         {
-            ////Variables Auxiliares
-            //String ConsultaSQL;
+            //Variables Auxiliares
+            String ConsultaSQL;
 
-            ////Evaluo que haya sido seleccionado un registro
-            //if (View.ListadoBusquedaRecibo.SelectedIndex == -1)
-            //    return;
+            //Evaluo que haya sido seleccionado un registro
+            if (View.ListadoBusquedaCambioClasificacion.SelectedIndex == -1)
+                return;
 
-            ////Recorro el listado de registros seleccionados para confirmar el recibo
-            //foreach (DataRowView Registros in View.ListadoBusquedaRecibo.SelectedItems)
-            //{
-            //    //Creo la consulta para confirmar el cambio de ubicacion de la estiba
-            //    ConsultaSQL = "EXEC sp_GetProcesosDIRECTVC 'UPDATEPOSICION','" + Registros.Row["Posicion"] + "','ETIQUETADO','ETIQUETADO','" + Registros.Row["UA"].ToString() + "'";
+            //Recorro el listado de registros seleccionados para confirmar el recibo
+            foreach (DataRowView Registros in View.ListadoBusquedaCambioClasificacion.SelectedItems)
+            {
+                //Creo la consulta para confirmar el cambio de ubicacion de la estiba
+                ConsultaSQL = "EXEC sp_GetProcesosDIRECTV2 'RECIBOETIQUETADO','P-ETIQUETADO','ETIQUETADO','" + Registros.Row["UA"].ToString() + "';";
 
-            //    //Ejecuto la consulta
-            //    service.DirectSQLNonQuery(ConsultaSQL, Local);
-            //}
+                //Guardo en la tabla de movimientos el cambio de ubicacion del equipo
+                ConsultaSQL += "EXEC sp_InsertarNuevo_MovimientoDIRECTV 'RECIBO DE MERCANCIA ETIQUETADO','','ETIQUETADO','" + Registros.Row["UA"].ToString() + "','','ETIQUETADO','UBICACIONALMACEN','" + this.user + "','';";
 
-            ////Muestro el mensaje de confirmacion
-            //Util.ShowMessage("Recibo de estibas realizado satisfactoriamente.");
+                Console.WriteLine("###### " + ConsultaSQL);
+                //Ejecuto la consulta
+                service.DirectSQLNonQuery(ConsultaSQL, Local);
+            }
 
-            ////Busco los registros para actualizar el listado
-            //BuscarRegistrosRecibo();
+            //Muestro el mensaje de confirmacion
+            Util.ShowMessage("Recibo de estibas realizado satisfactoriamente.");
+
+            //Busco los registros para actualizar el listado
+            BuscarRegistrosRecibo();
+            View.Model.Listado_PalletSerial.Rows.Clear();
         }
 
 
@@ -846,6 +844,32 @@ namespace WpfFront.Presenters
             {
                 Util.ShowError("Error al buscar diseño de etiqueta en el servidor " + ex.Message);
             }
+        }
+
+        private void OnListarEquiposSeleccion(object sender, EventArgs e)
+        {
+            //Evaluo que haya sido seleccionado un registro
+            if (View.ListadoBusquedaCambioClasificacion.SelectedIndex == -1)
+                return;
+
+            string aux_idPallet = ((DataRowView)View.ListadoBusquedaCambioClasificacion.SelectedItem).Row["UA"].ToString();
+
+            String Consulta = "SELECT IdPallet as PPallet, "
+            + "serial as PSerial, "
+            + "RECEIVER as Receiver, "
+            + "SMART_CARD_ENTRADA as PMac,  "
+            + "MODELO as Modelo,  "
+            + "TIPO_ORIGEN as PTRecibo, "
+            + "convert(VARCHAR,FECHA_INGRESO,120) as PFRegistro,  "
+            + "DATEDIFF(day, FECHA_INGRESO,GETDATE()) as NumeroDias,dbo.TIMELAPSELEO(FECHA_INGRESO) as horas "
+            + "from dbo.EquiposDIRECTVC WHERE ((IdPallet IS NOT NULL) AND (ESTADO = 'RECIBO ETIQUETADO')) "
+            + " AND IdPallet = '" + aux_idPallet + "'";
+
+            Console.WriteLine(Consulta);
+
+            View.Model.Listado_PalletSerial =
+            service.DirectSQLQuery(Consulta, "", "dbo.EquiposDIRECTVC", Local);
+
         }
 
         #endregion

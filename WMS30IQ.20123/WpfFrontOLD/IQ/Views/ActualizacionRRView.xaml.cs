@@ -183,13 +183,13 @@ namespace WpfFront.Views
                 return;
 
             //Mostrar ventana de Cargando...
-            //ProcessWindow pw = new ProcessWindow("Procesando registros...por favor espere...");
+            ProcessWindow pw = new ProcessWindow("Procesando registros...por favor espere...");
             SaveDetails(sender, e);
             //Cierro ventana de Cargando...
-            //pw.Visibility = Visibility.Collapsed;
+            pw.Visibility = Visibility.Collapsed;
             ClearDetails(sender, e);
             fUpload.IsEnabled = true;
-            //pw.Close();
+            pw.Close();
         }
 
         private void Btn_Cancelar_Click_1(object sender, RoutedEventArgs e)

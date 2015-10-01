@@ -17,8 +17,109 @@
             <TabControl x:Uid="tabMenu" Margin="7,2,6,6" Name="tabMenu" 
                         Style="{DynamicResource TabControlStyle}"
                         VerticalAlignment="Stretch">
-                
-               
+
+                <TabItem x:Uid="TabItem_1" Header="Recibo">
+                    <StackPanel x:Uid="StackPanel_1" Orientation="Horizontal" >
+                        <StackPanel x:Uid="Stack_Panel" Orientation="Vertical" Margin="3" HorizontalAlignment="Center" Width="auto" Height="auto" >
+                            <Border x:Uid="Border_1" Style="{DynamicResource UserControlFormInnerBorder}" Margin="3" HorizontalAlignment="Center" Visibility="Visible" >
+                                <StackPanel Orientation="Vertical" Margin="3" HorizontalAlignment="Center" >
+                                    <StackPanel>
+                                        <TextBlock Text="Listado Estibas" HorizontalAlignment="Left" FontWeight="bold" />
+                                    </StackPanel>
+                                    <Separator Margin="5,0,0,0"/>
+                                    <StackPanel x:Uid="Stack_Panel2" Width="auto" Orientation="Horizontal" Margin="4,3,4,3">
+                                        <StackPanel x:Uid="stkData" Orientation="Vertical" Margin="0,4,4,4">
+                                            <TextBlock x:Uid="TextBlock_4" FontWeight="Bold" Margin="0,4,4,0" HorizontalAlignment="Left" Text="Codigo Pallet" />
+                                            <TextBox x:Uid="tb_BuscarEstibaRecibo" Name="tb_BuscarEstibaRecibo" Width="110" Height="23"  Margin="0,0,0,0" />
+                                        </StackPanel>
+
+                                        <StackPanel x:Uid="Stack_Panel9_2" Name="Stack_Panel_1" Width="auto" Orientation="Horizontal" Margin="4,3,4,3" HorizontalAlignment="Right" VerticalAlignment="Bottom" >
+                                            <Button x:Uid="btn_BuscarListadoEstibaRecibo" Name="btn_BuscarListadoEstibaRecibo" Height="23" Content="Buscar" Click="btn_BuscarListadoEstibaRecibo_Click_1" />
+                                        </StackPanel>
+                                    </StackPanel>
+                                    <StackPanel x:Uid="Stack_Adicionales_2" x:Name="Stack_Adicionales_1" Orientation="Vertical" Margin="0,6,0,0">
+                                        <ListView x:Uid="lv_ListadoBusquedaRecibo" x:Name="lv_ListadoBusquedaRecibo" SelectionMode="Multiple" ItemsSource="{Binding Path=ListadoRecibo}" Margin="0,4,0,0" SelectionChanged="MySelectionChanged" MaxHeight="400" >
+                                            <ListView.View>
+                                                <GridView x:Uid="GridViewDetails_2" x:Name="GridViewDetails_1">
+                                                    <GridViewColumn x:Uid="GridViewColumn_1" Header="" Width="0" DisplayMemberBinding="{Binding Path=Estiba}" />
+                                                    <GridViewColumn x:Uid="GridViewColumn_1" Header="Pallet" Width="100" DisplayMemberBinding="{Binding Path=UA}" />
+                                                    <GridViewColumn x:Uid="GridViewColumn_2" Header="" Width="0" DisplayMemberBinding="{Binding Path=Posicion}" />
+                                                    <GridViewColumn x:Uid="GridViewColumn_2" Header="Modelo" Width="100" DisplayMemberBinding="{Binding Path=Modelo}" />
+                                                    <GridViewColumn x:Uid="GridViewColumn_4" Header="Fecha" Width="110" DisplayMemberBinding="{Binding Path=Fecha}" />
+                                                    <GridViewColumn x:Uid="GridViewColumn_5" Header="" Width="0" DisplayMemberBinding="{Binding Path=Ubicacion}" />
+                                                    <GridViewColumn x:Uid="GridViewColumn_5" Header="Cantidad" Width="80" DisplayMemberBinding="{Binding Path=Cantidad}" />
+                                                </GridView>
+                                            </ListView.View>
+                                        </ListView>
+                                    </StackPanel>
+
+                                    <Separator Margin="5,10,0,10"/>
+
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock x:Uid="textblock_recuento" Text="Registros Cargados: " FontWeight="Bold" Margin="0,0,8,4" />
+                                        <TextBlock x:Uid="textblock_recuento1" x:Name="textblock_recuento1" Text="{Binding Path=ListadoRecibo.Count}" FontWeight="Bold" Margin="0,0,8,4" />
+                                    </StackPanel>
+
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock x:Uid="textblock_totalSeriales" Text="Total seriales seleccionados: " FontWeight="Bold" Margin="0,0,8,4" />
+                                        <TextBlock x:Uid="textblock_totalSeriales1" x:Name="textblock_totalSeriales1" Text="0" FontWeight="Bold" Margin="0,0,8,4" />
+                                    </StackPanel>
+
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock x:Uid="textblock_totalEstibass" Text="Total estibas seleccionados: " FontWeight="Bold" Margin="0,0,8,4" />
+                                        <TextBlock x:Uid="textblock_totalEstibas1" x:Name="textblock_totalEstibas1" Text="0" FontWeight="Bold" Margin="0,0,8,4" />
+                                    </StackPanel>
+
+                                    <!-- Barra de totales, registros, seriales estibas-->
+
+                                    <StackPanel x:Uid="Stack_Adicionales_2" Orientation="Vertical" Margin="0,6,0,0">
+                                        <StackPanel x:Uid="Stack_Panel9_2" Width="auto" Orientation="Horizontal" Margin="4,3,4,3" HorizontalAlignment="Right" VerticalAlignment="Bottom" >
+                                            <Button x:Uid="btn_ConfirmarRecibo" Name="btn_ConfirmarRecibo" Height="23" Content="Confirmar" Click="btn_ConfirmarRecibo_Click_1"/>
+                                        </StackPanel>
+                                    </StackPanel>
+
+                                    <Expander Margin="-5,10,0,0" VerticalAlignment="Bottom" Cursor="Hand" Width="648">
+                                        <Expander.Header>
+                                            <Border Background="WhiteSmoke">
+                                                <TextBlock><Run Text="Listado de equipos X estiba"/></TextBlock>
+                                            </Border>
+                                        </Expander.Header>
+
+                                        <Border Margin="0,0,0,0" Background="AliceBlue">
+                                            <StackPanel x:Name="stackpanel111">
+                                                <ListView x:Uid="lv_PalletSeriales" ItemsSource="{Binding Listado_PalletSerial}" Margin="0,0,0,0"  MaxHeight="280" x:Name="lv_PalletSeriales">
+                                                    <ListView.View>
+                                                        <GridView x:Uid="GridViewDetails" x:Name="GridViewDetails11">
+
+                                                            <GridViewColumn x:Uid="GridViewColumn_1" Header="Pallet" Width="100" DisplayMemberBinding="{Binding PPallet}" />
+
+                                                            <GridViewColumn Header="Serial" x:Uid="GridViewColumn_2" Width="140" DisplayMemberBinding="{Binding PSerial}"/>
+
+                                                            <GridViewColumn Header="Receiver" x:Uid="GridViewColumn_2" Width="90" DisplayMemberBinding="{Binding Receiver }"/>
+
+                                                            <GridViewColumn Header="Smart Card" x:Uid="GridViewColumn_2" Width="90" DisplayMemberBinding="{Binding PMac}"/>
+
+                                                            <GridViewColumn Header="Modelo" x:Uid="GridViewColumn_2" Width="100" DisplayMemberBinding="{Binding Modelo}"/>
+
+
+                                                            <GridViewColumn Header="Fecha registro" x:Uid="GridViewColumn_2" Width="115" DisplayMemberBinding="{Binding PFRegistro}"/>
+
+                                                        </GridView>
+                                                    </ListView.View>
+                                                </ListView>
+                                                <StackPanel Orientation="Horizontal">
+                                                    <TextBlock x:Uid="textblock_recuento" Text="Total de equipos: " FontWeight="Bold" Margin="0,6,8,4" />
+                                                    <TextBlock x:Uid="textblock_recuento1" x:Name="textblock_recuento3" Text="{Binding Listado_PalletSerial.Count}" FontWeight="Bold" Margin="0,6,8,4" />
+                                                </StackPanel>
+                                            </StackPanel>
+                                        </Border>
+                                    </Expander>
+                                </StackPanel>
+                            </Border>
+                        </StackPanel>
+                    </StackPanel>
+                </TabItem>
+
                 <TabItem x:Uid="TabItem_1" Header="Procesamiento">
                     <!--#LG:MAKE_ADJUSTMENT:Make Adjustment:Relizar Ajuste-->
 

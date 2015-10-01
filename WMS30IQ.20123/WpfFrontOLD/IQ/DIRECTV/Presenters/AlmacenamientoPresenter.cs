@@ -129,7 +129,8 @@ namespace WpfFront.Presenters
             try
             {
                 //List<String> validValues = new List<String>() { "A1A1", "A1A2" };
-                DataTable dt_auxiliar = service.DirectSQLQuery("select POSICION from dbo.EquiposDIRECTVC where posicion is not null ", "", "dbo.EquiposDIRECTVC", Local);
+                DataTable dt_auxiliar = service.DirectSQLQuery("select POSICION from dbo.EquiposDIRECTVC where posicion is not null AND (estado LIKE 'ALMACENAMIENTO' OR estado LIKE 'DESPACHO')  group by posicion", "", "dbo.EquiposDIRECTVC", Local);
+
 
                 List<String> list = dt_auxiliar.AsEnumerable()
                            .Select(r => r.Field<String>("POSICION"))
@@ -700,8 +701,9 @@ namespace WpfFront.Presenters
                     
                         //Construyo la consulta para guardar los datos
                         ConsultaGuardar += " UPDATE dbo.EquiposDIRECTVC SET Posicion = '" + ubicacion+ "', IdPallet = '" + aux_idpallet + "', Ubicacion = 'ALMACENAMIENTO', Estado= 'ALMACENAMIENTO', ENSAMBLADO='" + DataRow["ENSAMBLADO"] + "' WHERE Serial = '" + DataRow["SERIAL"].ToString() + "' AND (Estado = 'CUARENTENA' OR Estado = 'PARA PROCESO') AND ESTADO IS NOT NULL;";
-                        ConsultaGuardarTrack += "UPDATE dbo.TrackEquiposDIRECTV SET ESTIBA_ENTRADA = '" + aux_idpallet + "', ESTADO_ALMACEN1 = 'ALMACENAMIENTO', UBICACION_ENTRADA = 'ALMACENAMIENTO', FECHA_ING_ALMACEN = GETDATE() WHERE ID_SERIAL = '" + DataRow["RowID"].ToString() + "'";
                         ConsultaGuardar += "EXEC sp_InsertarNuevo_MovimientoDIRECTV 'ALMACENAMIENTO DE EQUIPOS EN BODEGA','ESPERANDO POR ENVIO A PRODUCCION','" + ubicacion + "','" + View.GetCodPallet.Text + "','','ALMACENAMIENTO','ALMACENARENBODEGA','" + this.user + "','" + DataRow["Serial"].ToString() + "';";
+
+                        ConsultaGuardarTrack += "UPDATE dbo.TrackEquiposDIRECTV SET ESTIBA_ENTRADA = '" + aux_idpallet + "', ESTADO_ALMACEN1 = 'ALMACENAMIENTO', UBICACION_ENTRADA = 'ALMACENAMIENTO', FECHA_ING_ALMACEN = GETDATE() WHERE ID_SERIAL = '" + DataRow["RowID"].ToString() + "';";
                 }
 
                 //Evaluo si la consulta no envio los ultimos registros para forzar a enviarlos

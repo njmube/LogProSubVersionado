@@ -36,7 +36,6 @@
                                         </StackPanel>-->
                                         <StackPanel x:Uid="Stack_Panel9_2" Name="Stack_Panel_1" Width="auto" Orientation="Horizontal" Margin="4,3,4,3" HorizontalAlignment="Right" VerticalAlignment="Bottom" >
                                             <Button x:Uid="btn_BuscarListadoEstibaRecibo" Name="btn_BuscarListadoEstibaRecibo" Height="23" Content="Buscar" Click="btn_BuscarListadoEstibaRecibo_Click_1" />
-                                            <!--<Button x:Uid="btn_ActualizarListadoEstibaRecibo" Name="btn_ActualizarListadoEstibaRecibo" Height="23" Margin="8,0,0,0" Content="Actualizar" Click="btn_ActualizarListadoEstibaRecibo_Click_1" />-->
                                         </StackPanel>
                                     </StackPanel>
                                     <StackPanel x:Uid="Stack_Adicionales_2" x:Name="Stack_Adicionales_1" Orientation="Vertical" Margin="0,6,0,0">
@@ -86,7 +85,7 @@
                                         <StackPanel x:Uid="Stack_Panel9_2" Width="auto" Orientation="Horizontal" Margin="4,3,4,3" HorizontalAlignment="Right" VerticalAlignment="Bottom" >
                                             <Button x:Uid="btn_ConfirmarRecibo" x:Name="btn_ConfirmarRecibo" Height="23" Content="Confirmar" Click="btn_ConfirmarRecibo_Click_1"/>
                                         </StackPanel>
-                                        <Expander Margin="-5,10,0,0" VerticalAlignment="Bottom" Cursor="Hand" Width="700">
+                                        <Expander Margin="-5,10,0,0" VerticalAlignment="Bottom" Cursor="Hand" Width="740">
                                             <Expander.Header>
                                                 <Border Background="WhiteSmoke">
                                                     <TextBlock><Run Text="Listado de equipos X estiba"/></TextBlock>

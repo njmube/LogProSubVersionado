@@ -469,7 +469,7 @@ namespace WpfFront.Presenters
                         {
                             View.GetEstado_Cargue.Text = "Carga de archivo terminada.";
                             View.Progress_CargueRR.Value = 100D;
-                            t1.Dispose();
+                            //t1.Dispose();
                         }));
                     }
                 }));
@@ -855,7 +855,10 @@ namespace WpfFront.Presenters
         private void OnSaveDetails(object sender, EventArgs e)
         {
             if (View.Model.ListRecords.Rows.Count == 0)
+            {
                 Util.ShowMessage("No hay registros para actualizar");
+                return;
+            }
 
             hilo_saveLiberacion = new Thread(new ParameterizedThreadStart(SaveLiberacion));
             hilo_saveLiberacion.SetApartmentState(ApartmentState.STA);
@@ -880,61 +883,65 @@ namespace WpfFront.Presenters
         {
             try
             {
-                String ConsultaActualizar = "";
+                string ConsultaActualizar = "";
+                string ConsultaMovimiento = "";
+                string ESTADORR = "";
+                string DOCSAP = "";
+                string DIRECCIONABLE = "";
+                string LOTE = "";
+                string SERIAL = "";
 
                 //guarda el nuevo estado RR si no esta vacio en el archivo
                 foreach (DataRow dr1 in RegistrosSave_Aux.Rows)
                 {
-                    ConsultaActualizar += " UPDATE dbo.EquiposClaro SET ESTADO_RR = IIF('" + dr1["ESTADORR"].ToString().ToUpper() + "' LIKE" +
-                                         " '' OR '" + dr1["ESTADORR"].ToString().ToUpper() + "' IS NULL,ESTADO_RR,'" + dr1["ESTADORR"].ToString().ToUpper() + "')," +
-                                         " FECHA_DOC = IIF('" + dr1["ESTADORR"].ToString().ToUpper() + "' LIKE '' OR '" + dr1["ESTADORR"].ToString().ToUpper() + "' IS NULL,FECHA_DOC,GETDATE())," +
-                                         " DOC_INGRESO = IIF('" + dr1["DOCSAP"].ToString().ToUpper() + "' LIKE" +
-                                         " '' OR '" + dr1["DOCSAP"].ToString().ToUpper() + "' IS NULL,DOC_INGRESO,'" + dr1["DOCSAP"].ToString().ToUpper() + "')," +
-                                         " FECHA_DOC_SAP = IIF('" + dr1["DOCSAP"].ToString().ToUpper() + "' LIKE '' OR '" + dr1["DOCSAP"].ToString().ToUpper() + "' IS NULL,FECHA_DOC_SAP,GETDATE())," +
-                                         " DIRECCIONABLE = '" + dr1["DIRECCIONABLE"].ToString().ToUpper() + "'," +
-                                         " TIPO = '" + dr1["LOTE"].ToString().ToUpper() + "'" +
-                                         " WHERE Serial LIKE '" + dr1["SERIAL"].ToString().ToUpper() + "';";
+                    // Almaceno las variables auxiliares.
+                    ESTADORR = dr1["ESTADORR"].ToString().ToUpper();
+                    DOCSAP = dr1["DOCSAP"].ToString().ToUpper();
+                    DIRECCIONABLE = dr1["DIRECCIONABLE"].ToString().ToUpper();
+                    LOTE = dr1["LOTE"].ToString().ToUpper();
+                    SERIAL = dr1["SERIAL"].ToString().ToUpper();
+
+                    ConsultaActualizar += " UPDATE dbo.EquiposClaro SET ESTADO_RR = IIF('" + ESTADORR + "' LIKE '' OR '" + ESTADORR + "' IS NULL,ESTADO_RR,'" + ESTADORR + "')," +
+                                         " FECHA_DOC = IIF('" + ESTADORR + "' LIKE '' OR '" + ESTADORR + "' IS NULL,FECHA_DOC,GETDATE())," +
+                                         " DOC_INGRESO = IIF('" + DOCSAP + "' LIKE '' OR '" + DOCSAP + "' IS NULL, DOC_INGRESO,'" + DOCSAP + "')," +
+                                         " FECHA_DOC_SAP = IIF('" + DOCSAP + "' LIKE '' OR '" + DOCSAP + "' IS NULL, FECHA_DOC_SAP, GETDATE())," +
+                                         " DIRECCIONABLE = '" + DIRECCIONABLE + "',  TIPO = '" + LOTE + "' WHERE Serial LIKE '" + SERIAL + "';";
 
                     //INSERTO EL MOVIMIENTO EN LA TABLA DE MOVIMIENTOS
-                    if (dr1["ESTADORR"].ToString() != "" && dr1["ESTADORR"].ToString() != null)
+                    if (ESTADORR != "" && ESTADORR != null)
                     {
-                        ConsultaActualizar += "exec sp_InsertarNuevo_Movimiento 'EQUIPO LIBERADO ESTADO RR','LIBERADO','ESPERANDO POR SER ALMACENADO',''"
-                                        + ",'','LIBERACION','UBICACIONENTRADALIBERACION','" + this.user + "','" + dr1["SERIAL"] + "';";
+                        ConsultaActualizar += "EXEC dbo.sp_InsertarNuevo_Movimiento 'EQUIPO LIBERADO ESTADO RR','LIBERADO','ESPERANDO POR SER ALMACENADO',''"
+                                        + ",'','LIBERACION','UBICACIONENTRADALIBERACION','" + this.user + "','" + SERIAL + "';";
                     }
-                    if (dr1["DOCSAP"].ToString() != "" && dr1["DOCSAP"].ToString() != null)
+                    if (DOCSAP != "" && DOCSAP != null)
                     {
-                        ConsultaActualizar += "exec sp_InsertarNuevo_Movimiento 'EQUIPO LIBERADO ESTADO SAP','LIBERADO','ESPERANDO POR SER ALMACENADO',''"
-                                        + ",'','LIBERACION','UBICACIONENTRADALIBERACION','" + this.user + "','" + dr1["SERIAL"] + "';";
-                    }
-
-                    if ((dr1["ESTADORR"].ToString() != "" && dr1["ESTADORR"].ToString() != null) && (dr1["DOCSAP"].ToString() != "" && dr1["DOCSAP"].ToString() != null))
-                    {
-                        ConsultaActualizar += "update dbo.EquiposCLARO set Estado = 'LIBERADO' where Serial like '" + dr1["SERIAL"].ToString().ToUpper() + "';";
+                        ConsultaMovimiento += "EXEC dbo.sp_InsertarNuevo_Movimiento 'EQUIPO LIBERADO ESTADO SAP','LIBERADO','ESPERANDO POR SER ALMACENADO',''"
+                                        + ",'','LIBERACION','UBICACIONENTRADALIBERACION','" + this.user + "','" + SERIAL + "';";
                     }
 
-                    service.DirectSQLNonQuery(ConsultaActualizar, Local);
-                    ConsultaActualizar = "";
+                    if ((ESTADORR != "" && ESTADORR != null) && (DOCSAP != "" && DOCSAP != null))
+                    {
+                        ConsultaActualizar += "UPDATE dbo.EquiposCLARO SET Estado = 'LIBERADO' WHERE Serial like '" + SERIAL + "';";
+                    }
                     ContadorSave++;
                 }
 
                 //Evaluo si la consulta no envio los ultimos registros para forzar a enviarlos
-                //if (!String.IsNullOrEmpty(ConsultaActualizar))
-                //{
-                //    //ConsultaActualizar = "";
-                //}
-
-                //Carga la consulta a un textbox, se utiliza para pruebas
-                //View.GetCodPallet.Text = ConsultaActualizar;
+                if (!String.IsNullOrEmpty(ConsultaActualizar))
+                {
+                    service.DirectSQLNonQuery(ConsultaActualizar, Local);
+                    ConsultaActualizar = "";
+                }
 
                 this.estado_almacenamiento = true;
-                //Muestro el mensaje de confirmacion
+                //Muestro el mensaje de confirmación
                 Util.ShowMessage("Registros guardados satisfactoriamente.");
 
                 ValidarLiberado();
 
                 View.Dispatcher_Liberacion.Invoke(new System.Action(() =>
                 {
-                    View.Model.ListRecords.Clear();
+                    View.Model.ListRecords.Rows.Clear();
                 }), null);
 
                 //CargarEquiposCuarentena();
@@ -948,31 +955,39 @@ namespace WpfFront.Presenters
 
         public void ValidarLiberado()
         {
-            String ConsultaActualizar = "";
-            String ConsultaBuscarliberado = "";
             DataTable Resultado = null;
+            string ConsultaActualizar = "";
+            string ConsultaBuscarliberado = "";
+            string serial = "";
+            string doc_rr = "";
+            string doc_sap = "";
+            string estado_rr = "";
 
+            ConsultaActualizar += " UPDATE dbo.EquiposClaro SET Estado = 'LIBERADO', ESTADO_LIBERACION = 'LIBERADO', FECHA_LIBERADO = GETDATE() WHERE UPPER(SERIAL) IN (";
             foreach (DataRow dr1 in RegistrosSave_Aux.Rows)
             {
-                ConsultaBuscarliberado = "SELECT RowID,serial,MAC,CODIGO_SAP,productoid,fecha_doc,fecha_doc_sap,ESTADO_RR from dbo.EquiposCLARO WHERE UPPER(Serial) = UPPER('" + dr1["SERIAL"].ToString().ToUpper() + "')";
+                serial = dr1["SERIAL"].ToString().ToUpper() ;
+                //ConsultaBuscarliberado = "SELECT RowID,serial,MAC,CODIGO_SAP,productoid,fecha_doc,fecha_doc_sap,ESTADO_RR FROM dbo.EquiposCLARO WHERE UPPER(Serial) = UPPER('" + serial + "');";
+                ConsultaBuscarliberado = "SELECT RowID, serial, fecha_doc, fecha_doc_sap, ESTADO_RR FROM dbo.EquiposCLARO WHERE UPPER(Serial) = '" + serial + "';";
                 Resultado = service.DirectSQLQuery(ConsultaBuscarliberado, "", "dbo.EquiposCLARO", Local);
 
                 if (Resultado.Rows.Count > 0)
                 {
-                    String doc_rr = Resultado.Rows[0]["fecha_doc"].ToString();
-                    String doc_sap = Resultado.Rows[0]["fecha_doc_sap"].ToString();
-                    String estado_rr = Resultado.Rows[0]["ESTADO_RR"].ToString();
+                    doc_rr = Resultado.Rows[0]["fecha_doc"].ToString();
+                    doc_sap = Resultado.Rows[0]["fecha_doc_sap"].ToString();
+                    estado_rr = Resultado.Rows[0]["ESTADO_RR"].ToString();
 
                     if (estado_rr != "" && estado_rr != null && doc_rr != "" && doc_rr != null && doc_sap != "" && doc_sap != null)
                     {
-                        ConsultaActualizar = " UPDATE dbo.EquiposClaro SET Estado = 'LIBERADO', ESTADO_LIBERACION = 'LIBERADO', FECHA_LIBERADO = GETDATE() WHERE Serial = '" + dr1["SERIAL"].ToString().ToUpper() + "'";
-                        service.DirectSQLNonQuery(ConsultaActualizar, Local);
+                        ConsultaActualizar= "'" + serial + "',";
                     }
-                    ConsultaBuscarliberado = "";
-                    ConsultaActualizar = "";
                 }
             }
-
+            ConsultaActualizar += ");";
+            ConsultaActualizar = ConsultaActualizar.Replace(",);", ");");
+            service.DirectSQLNonQuery(ConsultaActualizar, Local);
+            ConsultaBuscarliberado = "";
+            ConsultaActualizar = "";
         }
 
         public void OnClearDetails(object sender, EventArgs e)

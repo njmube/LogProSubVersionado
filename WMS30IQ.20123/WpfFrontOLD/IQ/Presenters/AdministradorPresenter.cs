@@ -473,18 +473,18 @@ namespace WpfFront.Presenters
             {
                 String EstadoActual = View.EstadoSerial.Text.ToString();
 
-                string FechaIngreso = "";
-                DateTime aux_fechaIngreso;
-                string dateFormat = "yyyy-MM-dd";
-                FechaIngreso = View.FechaIngreso.Text;
-                aux_fechaIngreso = DateTime.Parse(View.FechaIngreso.Text);
-                FechaIngreso = aux_fechaIngreso.ToString(dateFormat);
+                //string FechaIngreso = "";
+                //DateTime aux_fechaIngreso;
+                //string dateFormat = "yyyy-MM-dd";
+                //FechaIngreso = View.FechaIngreso.Text;
+                //aux_fechaIngreso = DateTime.Parse(View.FechaIngreso.Text);
+                //FechaIngreso = aux_fechaIngreso.ToString(dateFormat);
 
-                string FechaDoc = "";
-                DateTime aux_fechaDoc;
-                string dateFormatDoc = "yyyy-MM-dd";
-                aux_fechaDoc = DateTime.Parse(View.FechaDoc.Text);
-                FechaDoc = aux_fechaDoc.ToString(dateFormatDoc);
+                //string FechaDoc = "";
+                //DateTime aux_fechaDoc;
+                //string dateFormatDoc = "yyyy-MM-dd";
+                //aux_fechaDoc = DateTime.Parse(View.FechaDoc.Text);
+                //FechaDoc = aux_fechaDoc.ToString(dateFormatDoc);
 
                 ConsultaGuardar += "";
 
@@ -497,9 +497,9 @@ namespace WpfFront.Presenters
 
                 ConsultaGuardar += ", ESTADO_RR = '" + View.EstadoRR.Text.ToString() + "', TIPO_REC = '" + View.TipoRecibo.Text.ToString() + "'";
 
-                ConsultaGuardar += ", FECHA_INGRESO = '" + FechaIngreso + "', DOC_INGRESO = '" + View.DocIngreso.Text.ToString() + "'";
+                ConsultaGuardar += ", DOC_INGRESO = '" + View.DocIngreso.Text.ToString() + "'";
 
-                ConsultaGuardar += ", FECHA_DOC = '" + FechaDoc + "', CENTRO = '" + View.Centro.Text.ToString() + "'";
+                ConsultaGuardar += ", CENTRO = '" + View.Centro.Text.ToString() + "'";
 
                 ConsultaGuardar += ", FAMILIA = '" + View.Familia.Text.ToString() + "', CONSECUTIVO = '" + View.Consecutivo.Text.ToString() + "'";
 
@@ -554,9 +554,6 @@ namespace WpfFront.Presenters
 
                 if (View.StatusVerificacion.Text.ToString() != "" && View.StatusVerificacion.Text.ToString() != null)
                     ConsultaGuardar += ", ESTATUS_VERIFICACION = '" + View.StatusVerificacion.Text.ToString() + "'";
-
-                if (View.FechaDespacho.Text.ToString() != "" && View.FechaDespacho.Text.ToString() != null)
-                    ConsultaGuardar += ", FECHA_DESPACHO = '" + View.FechaDespacho.Text.ToString() + "'";
 
 
                 ConsultaGuardar += " WHERE Serial = '" + View.GetSerial1.Text.ToString() + "';";

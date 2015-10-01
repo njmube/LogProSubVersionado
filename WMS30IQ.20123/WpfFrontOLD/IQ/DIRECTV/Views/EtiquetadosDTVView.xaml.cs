@@ -40,6 +40,7 @@ namespace WpfFront.Views
         public event EventHandler<EventArgs> ImprimirEtiqueta_Individual;
         public event EventHandler<SelectionChangedEventArgs> GetNumeroCodigos;
 
+        public event EventHandler<EventArgs> ListarEquiposSeleccion;
         #endregion
 
         public EtiquetadosDTVView()
@@ -180,6 +181,19 @@ namespace WpfFront.Views
             get { return this.Stack_CodigosAdicionales; }
             set { this.Stack_CodigosAdicionales = value; }
         }
+
+        public TextBox BuscarEstibaRecibo
+        {
+            get { return this.tb_BuscarEstibaRecibo; }
+            set { this.tb_BuscarEstibaRecibo = value; }
+        }
+
+        public ListView ListadoBusquedaCambioClasificacion
+        {
+            get { return this.lv_ListadoBusquedaRecibo; }
+            set { this.lv_ListadoBusquedaRecibo = value; }
+        }
+
 
         #endregion
 
@@ -393,7 +407,10 @@ namespace WpfFront.Views
             }
         }
 
-        
+        private void MySelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            ListarEquiposSeleccion(sender, e);
+        }
 
         #endregion
 
@@ -421,8 +438,8 @@ namespace WpfFront.Views
         //ListView ListadoItems { get; set; }
 
         //Recibo
-        //TextBox BuscarEstibaRecibo { get; set; }
-        //ComboBox BuscarPosicionRecibo { get; set; }
+        TextBox BuscarEstibaRecibo { get; set; }
+        
         ListView ListadoEquiposAProcesar { get; set; }
 
         TextBox GetMacImpre_Individual { get; set; }
@@ -430,6 +447,7 @@ namespace WpfFront.Views
         TextBox GetCantidad_Impresiones { get; set; }
 
         StackPanel Get_StackCodigosAdicionales { get; set; }
+        ListView ListadoBusquedaCambioClasificacion { get; set; }
 
         #endregion
 
@@ -452,6 +470,8 @@ namespace WpfFront.Views
         event EventHandler<EventArgs> DeleteDetails;
         event EventHandler<EventArgs> ImprimirEtiqueta_Individual;
         event EventHandler<SelectionChangedEventArgs> GetNumeroCodigos;
+
+        event EventHandler<EventArgs> ListarEquiposSeleccion;
 
         #endregion
 

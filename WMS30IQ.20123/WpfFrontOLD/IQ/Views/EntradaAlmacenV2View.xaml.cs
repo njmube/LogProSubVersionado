@@ -586,12 +586,12 @@ namespace WpfFront.Views
                 return;
 
             //Mostrar ventana de Cargando...
-            //ProcessWindow pw = new ProcessWindow("Procesando registros...por favor espere...");
+            ProcessWindow pw = new ProcessWindow("Procesando registros... por favor espere...");
             SaveDetails(sender, e);
             //Cierro ventana de Cargando...
-            //pw.Visibility = Visibility.Collapsed;
+            pw.Visibility = Visibility.Collapsed;
             fUpload.IsEnabled = true;
-            //pw.Close();
+            pw.Close();
         }
 
         private void Btn_GuardarPrealer_Click_1(object sender, RoutedEventArgs e)

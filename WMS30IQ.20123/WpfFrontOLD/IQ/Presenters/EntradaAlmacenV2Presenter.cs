@@ -1255,8 +1255,9 @@ namespace WpfFront.Presenters
         private void SaveSerial(Object e)
         {
             //Variables Auxiliares
-            String ConsultaGuardar = "Declare @RowId int ";
-            String ConsultaGuardarMovimiento = "";
+            string ConsultaGuardar = "Declare @RowId int ";
+            string ConsultaGuardarMovimiento = "";
+
             try
             {
                 foreach (DataRow DataRow in this.serialesSave_Aux.Rows)
@@ -1265,7 +1266,7 @@ namespace WpfFront.Presenters
                     int ContadorCampos = this.serialesSave_Aux.Columns.Count;
 
                     //Construyo la consulta para guardar los datos
-                    ConsultaGuardar += " INSERT INTO dbo.EquiposCLARO(Serial,Mac,Tipo_REC,Codigo_SAP,ProductoID,FAMILIA,TIPO_ORIGEN,ORIGEN,Ciudad,CENTRO,CONSECUTIVO,CONTROL,ESTADO) VALUES(";
+                    ConsultaGuardar += "INSERT INTO dbo.EquiposCLARO(Serial,Mac,Tipo_REC,Codigo_SAP,ProductoID,FAMILIA,TIPO_ORIGEN,ORIGEN,Ciudad,CENTRO,CONSECUTIVO,CONTROL,ESTADO) VALUES(";
 
                     //Obtengo los datos de cada campo con su nombre
                     foreach (DataColumn c in this.serialesSave_Aux.Columns)
@@ -1284,26 +1285,25 @@ namespace WpfFront.Presenters
 
                         //Disminuyo el contador
                         ContadorCampos--;
-
-
                     }
 
+                    string row0 = DataRow[0].ToString();
+                    string row1 = DataRow[1].ToString();
                     ConsultaGuardar += ", 'CUARENTENA') SET @RowId = SCOPE_IDENTITY();";
 
-                    ConsultaGuardar += "INSERT INTO dbo.TrackEquiposClaro(ID_SERIAL,Serial,Mac,FECHA_INGRESO,ESTADO_RECIBO) VALUES (@RowId, '" + DataRow[0].ToString() + "', '" + DataRow[1].ToString() + "', getdate(), 'RECIBO'); ";
+                    ConsultaGuardar += "INSERT INTO dbo.TrackEquiposClaro(ID_SERIAL,Serial,Mac,FECHA_INGRESO,ESTADO_RECIBO) VALUES (@RowId, '" + row0 + "', '" + row1 + "', GETDATE(), 'RECIBO'); ";
 
-                    ConsultaGuardar += "exec sp_InsertarNuevo_Movimiento 'EQUIPO RECIBIDO ENTRADA ALMACEN','RECIBIDO','ESPERANDO POR SER LIBERADO',''"
+                    ConsultaGuardarMovimiento += "EXEC dbo.sp_InsertarNuevo_Movimiento 'EQUIPO RECIBIDO ENTRADA ALMACEN','RECIBIDO','ESPERANDO POR SER LIBERADO',''"
                                     + ",@RowId,'RECIBO','UBICACIONENTRADAALMACEN','" + this.user + "','';";
-
                     ContadorSave++;
                 }
 
                 //Evaluo si la consulta no envio los ultimos registros para forzar a enviarlos
                 if (!String.IsNullOrEmpty(ConsultaGuardar))
                 {
-                    Console.WriteLine(ConsultaGuardar);
                     //Ejecuto la consulta
                     service.DirectSQLNonQuery(ConsultaGuardar, Local);
+                    service.DirectSQLNonQuery(ConsultaGuardarMovimiento , Local);
 
                     //Limpio la consulta para volver a generar la nueva
                     ConsultaGuardar = "";

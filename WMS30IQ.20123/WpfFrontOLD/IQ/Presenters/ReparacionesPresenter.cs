@@ -56,7 +56,6 @@ namespace WpfFront.Presenters
 
             #region Metodos
 
-            View.ConfirmBasicData += new EventHandler<EventArgs>(this.OnConfirmBasicData);
             View.GenerarCodigo += new EventHandler<EventArgs>(this.OnGenerarCodigo);
             //View.EvaluarTipoProducto += new EventHandler<DataEventArgs<Product>>(this.OnEvaluarTipoProducto);
             View.AddLine += new EventHandler<EventArgs>(this.OnAddLine);
@@ -105,7 +104,6 @@ namespace WpfFront.Presenters
 
             CargarDatosDetails();
             ListarDatos();
-            //CargarTecnicosReparacion();
         
 
             View.Model.ListRecordsAddToPallet = service.DirectSQLQuery("EXEC sp_GetProcesos 'BUSCARMERCANCIAENTREGAREP', '', '',''", "", "dbo.EquiposClaro", Local);
@@ -326,24 +324,14 @@ namespace WpfFront.Presenters
             }
         }
 
-        private void OnConfirmBasicData(object sender, EventArgs e)
-        {
-            //Variables Auxiliares
-            String ConsultaSQL;
-
-            //Creo la consulta para buscar los registros
-            ConsultaSQL = "EXEC sp_GetProcesos 'BUSCARMERCANCIADIAGNOSTICO', 'PARA REPARACION'";
-
-            ListarDatos();
-        }
 
         public void CargarDatosDetails()
         {
             //Variables Auxiliares
-            GridViewColumn Columna;
-            FrameworkElementFactory Txt;
-            Assembly assembly;
-            string TipoDato;
+            //GridViewColumn Columna;
+            //FrameworkElementFactory Txt;
+            //Assembly assembly;
+            //string TipoDato;
 
             //Inicializo el DataTable
 
@@ -476,22 +464,16 @@ namespace WpfFront.Presenters
             }
             else
             {
-                //Console.WriteLine(Consulta.Rows[0]["Tecnico"].ToString());
-                //Console.WriteLine(this.userName);
-                //Console.WriteLine(this.user);
-                //Console.WriteLine(this.userName + ", " + this.user);
-
-                String TecnicoAsignado = Consulta.Rows[0]["Tecnico"].ToString().ToUpper();
-                String NombreTecnicoSesion = (this.userName + ", " + this.user).ToUpper();
+               
+                string TecnicoAsignado = Consulta.Rows[0]["Tecnico"].ToString().ToUpper();
+                if (TecnicoAsignado.Contains(","))
+                {
+                    string[] split = TecnicoAsignado.Split(new Char[] { ',' });
+                    TecnicoAsignado = split.First();
+                }
                 String UserTecnicoSesion = this.userName.ToUpper();
 
-                //if (this.userName == "admin")
-                //{
-                //    View.GetQuery.Visibility = Visibility.Visible;
-                //    View.GetQuery.Text = "Asignado: " + TecnicoAsignado + " - Nombre Session: " + NombreTecnicoSesion + "Username Sesion:" + UserTecnicoSesion;
-                //}
-
-                if ((TecnicoAsignado == NombreTecnicoSesion) || (TecnicoAsignado == UserTecnicoSesion))
+                if ((UserTecnicoSesion == TecnicoAsignado))
                 {
                     View.StackProcesoReparacion.IsEnabled = true;
                     View.ProductoProcesamiento.Text = Consulta.Rows[0]["Producto"].ToString();
@@ -605,12 +587,9 @@ namespace WpfFront.Presenters
                                     View.FechaReparacion.Text = "";
                                     return;
                                 }
-                                
                             }
-
                             //Asigno los campos
                             dr["RowID"] = RegistroValidado.Rows[0]["RowID"].ToString();
-                            //dr["Producto"] = RegistroValidado.Rows[0]["Producto"].ToString();//Comentado 25 de febrero 2015, Error: el campo producto no se encuentra
                             dr["Serial"] = RegistroValidado.Rows[0]["Serial"].ToString();
                             dr["Mac"] = RegistroValidado.Rows[0]["Mac"].ToString();
                             dr["Estado"] = RegistroValidado.Rows[0]["Estado"].ToString();
@@ -867,7 +846,7 @@ namespace WpfFront.Presenters
 
                 ConsultaGuardarTrack += "UPDATE dbo.TrackEquiposCLARO SET ESTADO_REPARACION = '" + EstatusRep + "', FECHA_REPARADO = getdate() WHERE SERIAL = '" + View.GetSerial1.Text.ToString() + "';";
 
-                ConsultaGuardar += "exec sp_InsertarNuevo_MovimientoReparacion 'REPARACIÓN TERMINADA','REPARACIÓN','REPARACIÓN','Sin pallet','" + View.GetSerial1.Text.ToString() +
+                ConsultaGuardar += "exec dbo.sp_InsertarNuevo_MovimientoReparacion 'REPARACIÓN TERMINADA','REPARACIÓN','REPARACIÓN','Sin pallet','" + View.GetSerial1.Text.ToString() +
                     "','" + View.TecnicoAsignado.Text + "','" + FallaRep + "','" + Falla1 + "','" + Falla2 + "','" + Falla3 + "','" + Falla4 + "','" + EstatusRep +
                     "','" + PartesCambiadas + "','" + ((MotivoScrap != "NULL") ? MotivoScrap : "") + "','" + this.user + "','" + View.GetNroCaja.Text + "';";
 
@@ -913,92 +892,118 @@ namespace WpfFront.Presenters
 
         public void OnConfirmarMovimiento(object sender, EventArgs e)
         {
-            String ConsultaSQL = "", NuevaUbicacion, NuevoEstado, ConsultaTrack = "";
+            string ConsultaSQL = "", ConsultaTrack = "", ConsultaMov = "", NuevaUbicacion, NuevoEstado;
+            string UnidadAlmacenamiento = "";
+            string idPallet = "";
+            string RowID = "";
 
-            //Evaluo que haya sido seleccionado un registro
-            //if (View.ListadoItems.SelectedItems.Count == 0)
-            //    return;
+            if (String.IsNullOrEmpty(View.CodigoEmpaque.Text.ToString()))
+            {
+                Util.ShowMessage("Por favor generar un código de estiba.");
+                return;
+            }
 
             //Evaluo que haya seleccionado la nueva clasificacion
             if (View.Ubicacion.SelectedIndex == -1)
             {
-                Util.ShowError("Por favor seleccionar la nueva clasificacion.");
+                Util.ShowMessage("Por favor seleccionar la nueva clasificacion.");
                 return;
             }
-
+            // Evaluo si hay registros para empacar.
             if (View.Model.ListRecordsAddToPallet.Rows.Count == 0)
             {
-                Util.ShowError("No hay registros para empacar.");
+                Util.ShowMessage("No hay registros para empacar.");
                 return;
             }
 
-            //Coloco la ubicacion
+            //Coloco la ubicación
             NuevaUbicacion = ((DataRowView)View.Ubicacion.SelectedItem).Row["UbicacionDestino"].ToString();
-            String categoria = (((ComboBoxItem)View.GetListaEstado.SelectedItem).Content.ToString()); // REPARADO O PARA SCRAP
-
-            if (NuevaUbicacion == "DIAGNOSTICO")
+            UnidadAlmacenamiento = ((ComboBoxItem)View.UnidadAlmacenamiento.SelectedItem).Content.ToString();
+            idPallet = View.CodigoEmpaque.Text.ToString();
+            try
             {
-                NuevoEstado = "PARA DIAGNOSTICO";
-
-                //foreach (DataRowView item in View.ListadoItems.SelectedItems)
-                foreach (DataRowView item in View.ListadoItemsAgregados.Items)
+                if (NuevaUbicacion == "DIAGNOSTICO")
                 {
-                    //Creo la consulta para cambiar la ubicacion de la estiba
-                    ConsultaSQL += " UPDATE dbo.EquiposCLARO SET Ubicacion = '" + NuevaUbicacion + "', Estado = '" + NuevoEstado + "', UA = '" + ((ComboBoxItem)View.UnidadAlmacenamiento.SelectedItem).Content.ToString() + "', IdPallet = '" + View.CodigoEmpaque.Text.ToString() + "' WHERE RowID = '" + item.Row["RowID"] + "';";
-                    ConsultaTrack += "UPDATE dbo.TrackEquiposCLARO SET CODEMPAQUE_REP = '" + View.CodigoEmpaque.Text.ToString() + "' WHERE ID_SERIAL = '" + item.Row["RowID"] + "';";
+                    NuevoEstado = "PARA DIAGNOSTICO";
+                    ConsultaSQL = "UPDATE dbo.EquiposCLARO SET Ubicacion = '" + NuevaUbicacion + "', Estado = '" + NuevoEstado + "', UA = '" + UnidadAlmacenamiento + "', IdPallet = '" + idPallet + "' WHERE RowID IN (";
+                    ConsultaTrack = "UPDATE dbo.TrackEquiosCLARO SET CODEMPAQUE_REP = '" + idPallet + "' WHERE ID_SERIAL IN (";
+                    
+                    foreach (DataRowView item in View.ListadoItemsAgregados.Items)
+                    {
+                        // Almaceno el rowID de cada serial en la base de datos
+                        RowID = item.Row["RowID"].ToString();
 
-                    ConsultaSQL += "exec sp_InsertarNuevo_Movimiento 'EMPAQUE REPARACIÓN','REPARACIÓN','DIAGNOSTICO','" + View.CodigoEmpaque.Text.ToString() + "','" + item.Row["RowID"] + "','REPARACION','UBICACIONPRODUCCION','" + this.user + "','';";
+                        //Creo la consulta para cambiar la ubicacion de la estiba
+                        ConsultaSQL += "'" + RowID + "',";
+                        ConsultaTrack += "'" + RowID + "',";
+                        ConsultaMov += "EXEC dbo.sp_InsertarNuevo_Movimiento 'EMPAQUE REPARACIÓN','REPARACIÓN','DIAGNOSTICO','" + idPallet + "','" + RowID + "','REPARACION','UBICACIONPRODUCCION','" + this.user + "','';";
+                    }
+
+                    ConsultaSQL += ");";
+                    ConsultaTrack += ");";
+                    ConsultaSQL = ConsultaSQL.Replace(",);", ");");
+                    ConsultaTrack = ConsultaTrack.Replace(",);", ");");
 
                     //Ejecuto la consulta
                     service.DirectSQLNonQuery(ConsultaSQL, Local);
                     service.DirectSQLNonQuery(ConsultaTrack, Local);
+                    service.DirectSQLNonQuery(ConsultaMov, Local);
 
                     ConsultaSQL = "";
                     ConsultaTrack = "";
+                    ConsultaMov = "";
                 }
-                
-            }
-            else // Sino es DIAGNOSTICO Es ALMACENAMIENTO Y EL EQUIPO PUEDE SER SCRAP O REPARADO
-            {
-                NuevoEstado = "PARA ALMACENAMIENTO";
-
-                //foreach (DataRowView item in View.ListadoItems.SelectedItems)
-                foreach (DataRowView item in View.ListadoItemsAgregados.Items)
+                else // Sino es DIAGNOSTICO Es ALMACENAMIENTO Y EL EQUIPO PUEDE SER SCRAP O REPARADO
                 {
-                    //Creo la consulta para cambiar la ubicacion de la estiba
-                    ConsultaSQL += " UPDATE dbo.EquiposCLARO SET Ubicacion = '" + NuevaUbicacion + "', Estado = '" + NuevoEstado + "', UA = '" + ((ComboBoxItem)View.UnidadAlmacenamiento.SelectedItem).Content.ToString() + "', CodigoEmpaque = '" + View.CodigoEmpaque.Text.ToString() + "' WHERE RowID = '" + item.Row["RowID"] + "';";
-                    ConsultaTrack += "UPDATE dbo.TrackEquiposCLARO SET CODEMPAQUE_REP = '" + View.CodigoEmpaque.Text.ToString() + "' WHERE ID_SERIAL = '" + item.Row["RowID"] + "';";
+                    NuevoEstado = "PARA ALMACENAMIENTO";
+                    ConsultaSQL += " UPDATE dbo.EquiposCLARO SET Ubicacion = '" + NuevaUbicacion + "', Estado = '" + NuevoEstado + "', UA = '" + UnidadAlmacenamiento + "', CodigoEmpaque = '" + idPallet + "' WHERE RowID IN (";
+                    ConsultaTrack += "UPDATE dbo.TrackEquiposCLARO SET CODEMPAQUE_REP = '" + idPallet + "' WHERE ID_SERIAL IN (";
+                    
+                    foreach (DataRowView item in View.ListadoItemsAgregados.Items)
+                    {
+                        // Almaceno el rowID de cada serial en la base de datos
+                        RowID = item.Row["RowID"].ToString();
 
-                    ConsultaSQL += "exec sp_InsertarNuevo_Movimiento 'EMPAQUE REPARACIÓN','REPARACIÓN','ALMACENAMIENTO','" + View.CodigoEmpaque.Text.ToString() + "','" + item.Row["RowID"] + "','REPARACION','UBICACIONPRODUCCION','" + this.user + "','';";
+                        //Creo la consulta para cambiar la ubicacion de la estiba
+                        ConsultaSQL += "'" + RowID + "',";
+                        ConsultaTrack += "'" + RowID + "',";
+                        ConsultaMov += "EXEC dbo.sp_InsertarNuevo_Movimiento 'EMPAQUE REPARACIÓN','REPARACIÓN','ALMACENAMIENTO','" + idPallet + "','" + RowID + "','REPARACION','UBICACIONPRODUCCION','" + this.user + "','';";
+                    }
+                    ConsultaSQL += ");";
+                    ConsultaTrack += ");";
+                    ConsultaSQL = ConsultaSQL.Replace(",);", ");");
+                    ConsultaTrack = ConsultaTrack.Replace(",);", ");");
 
-                    Console.WriteLine(ConsultaSQL);
                     //Ejecuto la consulta
                     service.DirectSQLNonQuery(ConsultaSQL, Local);
                     service.DirectSQLNonQuery(ConsultaTrack, Local);
+                    service.DirectSQLNonQuery(ConsultaMov, Local);
 
                     ConsultaSQL = "";
                     ConsultaTrack = "";
+                    ConsultaMov = "";
                 }
-
-                
+            }// EndTry
+            catch (Exception ex)
+            {
+                string Ubicacion = "REPARACION - ENTREGA";
+                string Usuario = this.userName;
+                string codigoError = ex.HResult.ToString();
+                string errorMessage = ex.Message.ToString() ;
+                string errorTrackMessage = ex.StackTrace.ToString() ;
+                service.DirectSQLNonQuery("INSERT INTO dbo.LogProError VALUES ('"+ Ubicacion +"', '"+ Usuario +"', '" + codigoError + "', '"+ errorTrackMessage +"', GETDATE())", Local);
             }
 
             //Muestro el mensaje de confirmacion
-            Util.ShowMessage("Cambio de ubicacion realizado satisfactoriamente.");
-
-            ListarDatos();
+            Util.ShowMessage("Cambio de ubicación realizado satisfactoriamente.");
 
             //Quito la selecion de la nueva ubicacion
             View.Ubicacion.SelectedIndex = -1;
-
-            //Quito la seleccion del listado
-            //View.ListadoItems.SelectedIndex = -1;
             View.Model.ListRecordsAddToPallet.Rows.Clear();
+
             //Quito la seleccion del listado
             View.UnidadAlmacenamiento.SelectedIndex = -1;
             View.CodigoEmpaque.Text = "";
-
-            //View.ListadoItems.Visibility = Visibility.Collapsed;
         }
 
         private void OnBuscarRegistrosRecibo(object sender, EventArgs e)
@@ -1058,8 +1063,6 @@ namespace WpfFront.Presenters
 
                 //Guardo en la tabla de movimientos el cambio de ubicacion del equipo
                 ConsultaSQL += "EXEC sp_InsertarNuevo_Movimiento 'RECIBO DE MERCANCIA REPARACIÓN','','REPARACIÓN','" + Registros.Row["UA"].ToString() + "','','REPARACION','UBICACIONALMACEN','" + this.user + "','';";
-
-                Console.WriteLine("###### " + ConsultaSQL);
 
                 //Ejecuto la consulta
                 service.DirectSQLNonQuery(ConsultaSQL, Local);
@@ -1208,7 +1211,7 @@ namespace WpfFront.Presenters
         private void OnConfirmarTecnicoEquipo(object sender, EventArgs e)
         {
             //Variables Auxiliares
-            String ConsultaSQL = "";
+            string ConsultaSQL = "", ConsultaMov = "",  TecnicoAsignacion = "", RowID = "";
             //DataTable RegistroAuxiliar;
 
             //Valido que haya sido seleccionado un equipo
@@ -1222,36 +1225,38 @@ namespace WpfFront.Presenters
                 Util.ShowError("Por favor seleccionar el tecnico para este equipo.");
                 return;
             }
-
             try
             {
-                String TecnicoAsignacion = View.TecnicosAsignar.Text.ToString();
-                Console.WriteLine(TecnicoAsignacion);
-                //((SysUser)View.TecnicosAsignar.SelectedItem).UserName.ToString();
-
+                TecnicoAsignacion = View.TecnicosAsignar.Text.ToString();
+                //Creo la consulta para asignar el tecnico
+                ConsultaSQL += "UPDATE dbo.EquiposCLARO SET Tecnico_Reparacion = '" + TecnicoAsignacion + "', Estado = 'PARA PROCESO' WHERE RowID IN (";
                 foreach (DataRowView item in View.ListadoItemsAsignacion.SelectedItems)
                 {
-                    //Creo la consulta para asignar el tecnico
-                    ConsultaSQL += "UPDATE dbo.EquiposCLARO SET Tecnico_Reparacion = '" + TecnicoAsignacion + "', Estado = 'PARA PROCESO' WHERE RowID = '" + item.Row["RowID"].ToString() + "';";
-
-                    ConsultaSQL += "exec sp_InsertarNuevo_Movimiento 'TECNICO ASIGNADO','REPARACIÓN','REPARACIÓN','Sin pallet','" + item.Row["RowID"].ToString() + "','REPARACION','UBICACIONPRODUCCION','" + this.user + " - " + TecnicoAsignacion + "','';";
-                    Console.WriteLine("###### " + ConsultaSQL);
-
-                    //Ejecuto la query
-                    //service.DirectSQLNonQuery(ConsultaSQL, Local);
+                    RowID = item.Row["RowID"].ToString();
+                    ConsultaSQL += "'" + RowID + "',";
+                    ConsultaMov += "EXEC dbo.sp_InsertarNuevo_Movimiento 'TECNICO ASIGNADO','REPARACIÓN','REPARACIÓN','Sin pallet','" + item.Row["RowID"].ToString() + "','REPARACION','UBICACIONPRODUCCION','" + this.user + " - " + TecnicoAsignacion + "','';";
                 }
 
+                //borra de la lista los elementos seleccionados
+                while (View.ListadoItemsAsignacion.SelectedItems.Count > 0)
+                {
+                    View.Model.ListRecords.Rows.RemoveAt(View.ListadoItemsAsignacion.Items.IndexOf(View.ListadoItemsAsignacion.SelectedItem));
+                }
+                
                 //Evaluo si la consulta no envio los ultimos registros para forzar a enviarlos
                 if (!String.IsNullOrEmpty(ConsultaSQL))
                 {
                     //Ejecuto la consulta
+                    ConsultaSQL += ");";
+                    ConsultaSQL = ConsultaSQL.Replace(",);", ");");
                     service.DirectSQLNonQuery(ConsultaSQL, Local);
-
+                    service.DirectSQLNonQuery(ConsultaMov, Local);
                     //Limpio la consulta para volver a generar la nueva
                     ConsultaSQL = "";
+                    ConsultaMov = "";
 
                     //Muestro el mensaje de confirmacion
-                    Util.ShowMessage("Tecnico asignado correctamente.");
+                    Util.ShowMessage("Técnico asignado correctamente.");
                 }
 
                 //BuscarRegistrosAsignacion();
@@ -1261,7 +1266,6 @@ namespace WpfFront.Presenters
                 //Lispio los datos del combo de tecnicos
                 View.TecnicosAsignar.SelectedIndex = -1;
                 View.ListadoItemsAsignacion.SelectedIndex = -1;
-                View.Model.ListRecords.Clear();
                 return;
             }
             catch (Exception Ex)
@@ -1274,59 +1278,30 @@ namespace WpfFront.Presenters
 
         private void OnConsultaReparacionAnterior(object sender, EventArgs e)
         {
-            //if (View.ListadoItemsAsignacion.SelectedIndex != -1)
-            //{
-                //String serial = ((DataRowView)View.ListadoItemsAsignacion.SelectedItem).Row["Serial"].ToString();
-                //Validacion existe o no el equipo en DB
-                String ConsultaBuscar = "SELECT Serial FROM dbo.EquiposCLARO WHERE Serial = '" + SerialAsignacion + "'";
-                DataTable Resultado = service.DirectSQLQuery(ConsultaBuscar, "", "dbo.EquiposCLARO", Local);
+            //Validacion existe o no el equipo en DB
+            String ConsultaBuscar = "SELECT Serial FROM dbo.EquiposCLARO WHERE Serial = '" + SerialAsignacion + "'";
+            DataTable Resultado = service.DirectSQLQuery(ConsultaBuscar, "", "dbo.EquiposCLARO", Local);
 
-                //Validacion existe o no el equipo en DB Despacho
-                String ConsultaBuscarDespacho = "SELECT Serial FROM dbo.Despacho_EquiposCLARO WHERE Serial = '" + SerialAsignacion + "'";
-                DataTable ResultadoDespacho = service.DirectSQLQuery(ConsultaBuscarDespacho, "", "dbo.Despacho_EquiposCLARO", Local);
+            //Validacion existe o no el equipo en DB Despacho
+            String ConsultaBuscarDespacho = "SELECT Serial FROM dbo.Despacho_EquiposCLARO WHERE Serial = '" + SerialAsignacion + "'";
+            DataTable ResultadoDespacho = service.DirectSQLQuery(ConsultaBuscarDespacho, "", "dbo.Despacho_EquiposCLARO", Local);
 
-                Console.WriteLine("en equipos:" + Resultado.Rows.Count);
-                Console.WriteLine("en despachos:" + ResultadoDespacho.Rows.Count);
+            if (Resultado.Rows.Count > 0 && ResultadoDespacho.Rows.Count == 0)
+            {
+                //Busco el registro en la DB para validar que exista y que este en la ubicacion valida
+                DataTable RegistroValidado = service.DirectSQLQuery("EXEC sp_GetProcesos 'BUSCAREQUIPOGENERALREPARACION','" + SerialAsignacion + "'", "", "dbo.EquiposCLARO", Local);
 
-                if (Resultado.Rows.Count > 0 && ResultadoDespacho.Rows.Count == 0)
+                if (RegistroValidado.Rows.Count == 0)
                 {
-                    //Busco el registro en la DB para validar que exista y que este en la ubicacion valida
-                    DataTable RegistroValidado = service.DirectSQLQuery("EXEC sp_GetProcesos 'BUSCAREQUIPOGENERALREPARACION','" + SerialAsignacion + "'", "", "dbo.EquiposCLARO", Local);
-
-                    if (RegistroValidado.Rows.Count == 0)
-                    {
-                        View.TecnicoReparador.Text = "Primera asignacion del equipo";
-                        View.FallaAnteriorDiag.Text = "";
-                        View.FechaReparacion.Text = "";
-                    }
-                    else // Entra como garantia
-                    {
-                        String tecnico = RegistroValidado.Rows[0]["TecnicoRep"].ToString();
-                        String falla = RegistroValidado.Rows[0]["FallaDiag"].ToString();
-                        String fecha = RegistroValidado.Rows[0]["FechaRep"].ToString();
-
-                        if (UtilWindow.ConfirmOK("El equipo entra como garantia. \nTecnico anterior " + tecnico + " \nFalla: " + falla + "\nFecha ultima reparación: " + fecha + " \n\n ¿Desea asignar el equipo ahora?") == false)
-                        {
-                            View.TecnicoReparador.Text = "";
-                            View.FallaAnteriorDiag.Text = "";
-                            View.FechaReparacion.Text = "";
-                            return;
-                        }
-
-                        //UtilWindow.ConfirmOK("El equipo entra como garantia. \nTecnico anterior " + tecnico + " \nFalla: " + falla + "\nFecha ultima reparación: " + fecha + " \n\n ¿Desea asignar el equipo ahora?");
-                        
-                        View.TecnicoReparador.Text = tecnico;
-                        View.FallaAnteriorDiag.Text = falla;
-                        View.FechaReparacion.Text = fecha;
-                    }
+                    View.TecnicoReparador.Text = "Primera asignación del equipo";
+                    View.FallaAnteriorDiag.Text = "";
+                    View.FechaReparacion.Text = "";
                 }
-                else if (Resultado.Rows.Count > 0 && ResultadoDespacho.Rows.Count > 0)
+                else // Entra como garantia
                 {
-                    DataTable RegistroValidadoDespacho = service.DirectSQLQuery("EXEC sp_GetProcesos 'BUSCAREQUIPOGENERALDESPACHO','" + SerialAsignacion + "'", "", "dbo.Despacho_EquiposCLARO", Local);
-
-                    String tecnico = RegistroValidadoDespacho.Rows[0]["TecnicoRep"].ToString();
-                    String falla = RegistroValidadoDespacho.Rows[0]["FallaDiag"].ToString();
-                    String fecha = RegistroValidadoDespacho.Rows[0]["FechaRep"].ToString();
+                    String tecnico = RegistroValidado.Rows[0]["TecnicoRep"].ToString();
+                    String falla = RegistroValidado.Rows[0]["FallaDiag"].ToString();
+                    String fecha = RegistroValidado.Rows[0]["FechaRep"].ToString();
 
                     if (UtilWindow.ConfirmOK("El equipo entra como garantia. \nTecnico anterior " + tecnico + " \nFalla: " + falla + "\nFecha ultima reparación: " + fecha + " \n\n ¿Desea asignar el equipo ahora?") == false)
                     {
@@ -1335,13 +1310,35 @@ namespace WpfFront.Presenters
                         View.FechaReparacion.Text = "";
                         return;
                     }
-                    //UtilWindow.ConfirmOK("El equipo entra como garantia. \nTecnico anterior " + tecnico + " \nFalla: " + falla + "\nFecha ultima reparación: " + fecha + " \n\n ¿Desea asignar el equipo ahora?");
 
-                    View.TecnicoReparador.Text = RegistroValidadoDespacho.Rows[0]["TecnicoRep"].ToString();
-                    View.FallaAnteriorDiag.Text = RegistroValidadoDespacho.Rows[0]["FallaDiag"].ToString();
-                    View.FechaReparacion.Text = RegistroValidadoDespacho.Rows[0]["FechaRep"].ToString();
+                    //UtilWindow.ConfirmOK("El equipo entra como garantia. \nTecnico anterior " + tecnico + " \nFalla: " + falla + "\nFecha ultima reparación: " + fecha + " \n\n ¿Desea asignar el equipo ahora?");
+                        
+                    View.TecnicoReparador.Text = tecnico;
+                    View.FallaAnteriorDiag.Text = falla;
+                    View.FechaReparacion.Text = fecha;
                 }
-            //}
+            }
+            else if (Resultado.Rows.Count > 0 && ResultadoDespacho.Rows.Count > 0)
+            {
+                DataTable RegistroValidadoDespacho = service.DirectSQLQuery("EXEC sp_GetProcesos 'BUSCAREQUIPOGENERALDESPACHO','" + SerialAsignacion + "'", "", "dbo.Despacho_EquiposCLARO", Local);
+
+                String tecnico = RegistroValidadoDespacho.Rows[0]["TecnicoRep"].ToString();
+                String falla = RegistroValidadoDespacho.Rows[0]["FallaDiag"].ToString();
+                String fecha = RegistroValidadoDespacho.Rows[0]["FechaRep"].ToString();
+
+                if (UtilWindow.ConfirmOK("El equipo entra como garantia. \nTecnico anterior " + tecnico + " \nFalla: " + falla + "\nFecha ultima reparación: " + fecha + " \n\n ¿Desea asignar el equipo ahora?") == false)
+                {
+                    View.TecnicoReparador.Text = "";
+                    View.FallaAnteriorDiag.Text = "";
+                    View.FechaReparacion.Text = "";
+                    return;
+                }
+                //UtilWindow.ConfirmOK("El equipo entra como garantia. \nTecnico anterior " + tecnico + " \nFalla: " + falla + "\nFecha ultima reparación: " + fecha + " \n\n ¿Desea asignar el equipo ahora?");
+
+                View.TecnicoReparador.Text = RegistroValidadoDespacho.Rows[0]["TecnicoRep"].ToString();
+                View.FallaAnteriorDiag.Text = RegistroValidadoDespacho.Rows[0]["FallaDiag"].ToString();
+                View.FechaReparacion.Text = RegistroValidadoDespacho.Rows[0]["FechaRep"].ToString();
+            }
         }
 
         private void OnDeleteDetails(object sender, EventArgs e)
@@ -1364,9 +1361,8 @@ namespace WpfFront.Presenters
 
         public void CargarTecnicosReparacion()
         {
-            String ConsultaSQL = "Select TECNICO_REPARACION as Tecnico from dbo.EquiposCLARO where Estado = 'REPARACION' group by TECNICO_REPARACION";
+            String ConsultaSQL = "SELECT TECNICO_REPARACION as Tecnico from dbo.EquiposCLARO where Estado = 'REPARACION' group by TECNICO_REPARACION";
             DataTable Resultado = service.DirectSQLQuery(ConsultaSQL, "", "dbo.EquiposCLARO", Local);
-            //View.Model.ListadoTecnicosReparacion = service.DirectSQLQuery(ConsultaSQL, "", "dbo.EquiposCLARO", Local);
 
             View.Model.ListadoTecnicosReparacion = new DataTable("ListadoTecnicosReparacion");
             View.Model.ListadoTecnicosReparacion.Columns.Add("Tecnico", typeof(string));
@@ -1402,7 +1398,7 @@ namespace WpfFront.Presenters
             DataRow dr;
             int aux = 0;
             String ConsultaAgregar = "";
-
+            ConsultaAgregar = "UPDATE dbo.EquiposCLARO set Estado = 'REPARACION_ENTREGA' WHERE RowID IN (";
             foreach (DataRowView item in View.ListadoItems.SelectedItems)
             {
                 foreach (DataRowView itemAdd in View.ListadoItemsAgregados.Items)
@@ -1436,13 +1432,12 @@ namespace WpfFront.Presenters
                     View.Model.ListRecordsAddToPallet.Rows.Add(dr);
 
                     //cambio el estado para no mostrar mas en el listado general
-                    ConsultaAgregar = "update dbo.EquiposCLARO set Estado = 'REPARACION_ENTREGA' where RowID = " + item.Row["RowID"];
-                    service.DirectSQLNonQuery(ConsultaAgregar, Local);
-                    ConsultaAgregar = "";
+                    ConsultaAgregar += "'" + item.Row["RowID"] + "',";
                 }
-                
             }
-
+            ConsultaAgregar += ");";
+            ConsultaAgregar = ConsultaAgregar.Replace(",);", ");");
+            service.DirectSQLNonQuery(ConsultaAgregar, Local);
             while (View.ListadoItems.SelectedItems.Count > 0)
             {
                 View.Model.ListRecords_1.Rows.RemoveAt(View.ListadoItems.Items.IndexOf(View.ListadoItems.SelectedItem));
@@ -1495,7 +1490,6 @@ namespace WpfFront.Presenters
                 }
                 else
                 {
-                    //Util.ShowMessage(((MMaster)View.FallaReparacionAdic5.SelectedItem).Name);
                     View.FallaReparacion.SelectedIndex = -1;
                     View.FallaReparacionAdic.SelectedIndex = -1;
                     View.FallaReparacionAdic2.SelectedIndex = -1;
@@ -1546,9 +1540,6 @@ namespace WpfFront.Presenters
                 {
                     View.Border_ListaHP.Visibility = Visibility.Visible;
                 }
-
-
-
             }
             catch (Exception Ex)
             {

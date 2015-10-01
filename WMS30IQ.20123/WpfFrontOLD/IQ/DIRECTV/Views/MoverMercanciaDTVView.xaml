@@ -218,7 +218,7 @@
                                             <TextBlock Text="Exportar&#10; Seriales"  HorizontalAlignment="Left" FontWeight="bold" Height="31" Width="61" />
                                         </StackPanel>
                                     </StackPanel>
-                                    <Expander Margin="-5,10,0,0" VerticalAlignment="Bottom" Cursor="Hand" Width="848">
+                                    <Expander Margin="-5,10,0,0" VerticalAlignment="Bottom" Cursor="Hand" Width="auto">
                                         <Expander.Header>
                                             <Border Background="WhiteSmoke">
                                                 <TextBlock><Run Text="Listado de equipos X estiba"/></TextBlock>

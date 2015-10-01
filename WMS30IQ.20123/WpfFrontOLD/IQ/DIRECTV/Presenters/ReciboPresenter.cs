@@ -118,6 +118,9 @@ namespace WpfFront.Presenters
             //Cargo los lsitados de los combobx
             View.Model.ListadoModelosDescripcion = service.GetMMaster(new MMaster { MetaType = new MType { Code = "DRIRECMODE" } });
 
+            View.Model.ListadoPreaTipoRecoleccion = service.GetMMaster(new MMaster { MetaType = new MType { Code = "PREATREC" } });
+            View.Model.ListadoPreaTipoOrigen = service.GetMMaster(new MMaster { MetaType = new MType { Code = "PREATORIGE" } });
+
             //Cargo los datos del listado
             CargarDatosDetails();
 
@@ -882,12 +885,19 @@ namespace WpfFront.Presenters
 
         public void CargarListDetails()
         {
+            String consultaCruzar = "";
             foreach (DataRow dr in SerialesIngresados.Rows)
             {
                 // Modificamos un UIElement que no corresponde con este hilo, para ello usamos su dispatcher
                 View.Dispatcher_Cargue.Invoke(new System.Action(() =>
                 {
                     DataRow RegistroGuardar = View.Model.ListRecords.NewRow();
+
+                    String serial = dr[0].ToString();
+                    String validar = serial.Substring(serial.Length - 9);
+
+                    consultaCruzar = "SELECT TOP 1 * FROM dbo.preAlerta_EQUIPOSDIRECTV WHERE upper(aleEquip_serial) = upper('" + validar + "')";
+                    DataTable ResultadoCruce = service.DirectSQLQuery(consultaCruzar, "", "dbo.preAlerta_EQUIPOSDIRECTV", Local);
 
                     //Asigno los campos
                     RegistroGuardar["Serial"] = dr[0].ToString();
@@ -906,6 +916,11 @@ namespace WpfFront.Presenters
                     RegistroGuardar["ESTADO_MATERIAL"] = dr[10].ToString();
                     //Agrego el registro al listado
                     View.Model.ListRecords.Rows.Add(RegistroGuardar);
+
+                    if (ResultadoCruce.Rows.Count == 0)
+                        RegistroGuardar["Novedad"] = "SI";
+                    else
+                        RegistroGuardar["Novedad"] = "NO";
 
                 }), null);
             }
@@ -2198,6 +2213,9 @@ namespace WpfFront.Presenters
                 {
                     View.Model.ListPrealerta.Clear();
                     View.Model.List_NocarguePrea.Clear();
+                    View.Model.ListadoPreaTipoRecoleccion.Clear();
+                    View.Model.ListadoPreaTipoRecoleccion = service.GetMMaster(new MMaster { MetaType = new MType { Code = "PREATREC" } });
+                    View.Model.ListadoPreaTipoOrigen = service.GetMMaster(new MMaster { MetaType = new MType { Code = "PREATORIGE" } });
                 }), null);
                 
             }
@@ -2250,7 +2268,7 @@ namespace WpfFront.Presenters
                 Util.ShowMessage("Error creando el archivo Excel: " + ex.ToString());
             }
         }
-        
+
 
         #endregion
     }

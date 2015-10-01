@@ -23,6 +23,8 @@ namespace WpfFront.Models
         DataTable ListadoRecibo { get; set; }
 
         DataTable ListadoEtiquetas { get; set; }
+        DataTable Listado_PalletSerial { get; set; }
+
     }
 
     public class EtiquetadosDTVModel : BusinessEntityBase, IEtiquetadosDTVModel
@@ -145,6 +147,17 @@ namespace WpfFront.Models
             {
                 _ListadoEtiquetas = value;
                 OnPropertyChanged("ListadoEtiquetas");
+            }
+        }
+
+        private DataTable _Listado_PalletSerial;
+        public DataTable Listado_PalletSerial
+        {
+            get { return _Listado_PalletSerial; }
+            set
+            {
+                _Listado_PalletSerial = value;
+                OnPropertyChanged("Listado_PalletSerial");
             }
         }
     }

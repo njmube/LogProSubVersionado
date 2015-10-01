@@ -331,10 +331,7 @@ namespace WpfFront.Presenters
                     //Aumento el contador de filas
                     ContadorFilas++;
 
-
-
-
-                    if (DataRow["ESTATUS_DIAGNOSTICO"].ToString() == "BUEN ESTADO" && DataRow["NIVEL_CANDIDATO"].ToString() == "NIVEL 1")
+                        if (DataRow["ESTATUS_DIAGNOSTICO"].ToString() == "BUEN ESTADO")
                         {
                             if (String.IsNullOrEmpty(DataRow["ESTATUS_DIAGNOSTICO"].ToString()))
                             {
@@ -353,8 +350,6 @@ namespace WpfFront.Presenters
 
                                 ConsultaGuardar += "exec sp_InsertarNuevo_MovimientoDiagnosticoDIRECTV 'DIAGNOSTICO TERMINADO, BUEN ESTADO','DIAGNOSTICO','ETIQUETADO','Sin pallet','" + DataRow["RowID"].ToString() + "','" + DataRow["Falla_Diagnostico"].ToString() + "','" +
                                 DataRow["Estatus_Diagnostico"].ToString() + "','" + DataRow["TECNICO_DIAG"].ToString() + "','','" + this.user + "';";
-
-                                Console.WriteLine("###### " + ConsultaGuardar);
 
                                 ConsultaGuardarTrack += "UPDATE dbo.TrackEquiposDIRECTV SET ESTADO_DIAGNOSTICO = '" + DataRow["ESTATUS_DIAGNOSTICO"].ToString() + "', FECHA_DIAGNOSTICADO = '" + DateTime.Now.ToString("dd/MM/yyyy") + "' WHERE ID_SERIAL='" + DataRow["RowID"].ToString() + "';";
 
@@ -380,8 +375,6 @@ namespace WpfFront.Presenters
 
                                 ConsultaGuardar += "exec sp_InsertarNuevo_MovimientoDiagnosticoDIRECTV 'DIAGNOSTICO TERMINADO, MAL ESTADO','DIAGNOSTICO','DIAGNOSTICO EMPAQUE','Sin pallet','" + DataRow["RowID"].ToString() + "','" + DataRow["Falla_Diagnostico"].ToString() + "','" +
                                 DataRow["Estatus_Diagnostico"].ToString() + "','" + DataRow["TECNICO_DIAG"].ToString() + "','','" + this.user + "';";
-
-                                Console.WriteLine("###### " + ConsultaGuardar);
 
                                 ConsultaGuardarTrack += "UPDATE dbo.TrackEquiposDIRECTV SET ESTADO_DIAGNOSTICO = '" + DataRow["ESTATUS_DIAGNOSTICO"].ToString() + "', FECHA_DIAGNOSTICADO = '" + DateTime.Now.ToString("dd/MM/yyyy") + "' WHERE ID_SERIAL='" + DataRow["RowID"].ToString() + "';";
 

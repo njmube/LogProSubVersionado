@@ -58,6 +58,7 @@ namespace WpfFront.Views
         }
 
         #region Variables
+
         public ListView ListadoSerialesCambioClasificacion
         {
             get { return this.lv_PalletSeriales; }
@@ -258,8 +259,6 @@ namespace WpfFront.Views
         private void btn_confirmar_Click_1(object sender, RoutedEventArgs e)
         {
             ConfirmarMovimiento(sender, e);
-
-            //ListadoItems.Visibility = Visibility.Collapsed;
         }
 
         private void btn_imprimirHablador_Click_1(object sender, RoutedEventArgs e)

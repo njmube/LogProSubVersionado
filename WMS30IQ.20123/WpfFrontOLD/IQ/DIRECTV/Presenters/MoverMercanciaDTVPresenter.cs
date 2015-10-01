@@ -177,7 +177,10 @@ namespace WpfFront.Presenters
 
             //Coloco la ubicacion del registro seleccionado en el campo de ubicacion actual
             View.TextoUbicacionActual.Text = ((DataRowView)View.ListadoBusquedaCambioUbicacion.SelectedItem).Row["Posicion"].ToString();
-            View.TextoEstadoActual.Text = ((DataRowView)View.ListadoBusquedaCambioUbicacion.SelectedItem).Row["Estado"].ToString();
+            if (String.IsNullOrEmpty(((DataRowView)View.ListadoBusquedaCambioUbicacion.SelectedItem).Row["Estado"].ToString()))
+            {
+                View.TextoEstadoActual.Text = ((DataRowView)View.ListadoBusquedaCambioUbicacion.SelectedItem).Row["Estado"].ToString();
+            }
         }
 
         private void OnGuardarNuevaUbicacion(object sender, EventArgs e)
