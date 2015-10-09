@@ -883,14 +883,13 @@ namespace WpfFront.Presenters
         {
             try
             {
-                string ConsultaActualizar = "";
-                string ConsultaMovimiento = "";
+                System.Text.StringBuilder ConsultaActualizar = new StringBuilder();
+                System.Text.StringBuilder ConsultaMovimiento = new StringBuilder();
                 string ESTADORR = "";
                 string DOCSAP = "";
                 string DIRECCIONABLE = "";
                 string LOTE = "";
                 string SERIAL = "";
-
                 //guarda el nuevo estado RR si no esta vacio en el archivo
                 foreach (DataRow dr1 in RegistrosSave_Aux.Rows)
                 {
@@ -901,36 +900,37 @@ namespace WpfFront.Presenters
                     LOTE = dr1["LOTE"].ToString().ToUpper();
                     SERIAL = dr1["SERIAL"].ToString().ToUpper();
 
-                    ConsultaActualizar += " UPDATE dbo.EquiposClaro SET ESTADO_RR = IIF('" + ESTADORR + "' LIKE '' OR '" + ESTADORR + "' IS NULL,ESTADO_RR,'" + ESTADORR + "')," +
+                    ConsultaActualizar.AppendLine(" UPDATE dbo.EquiposClaro SET ESTADO_RR = IIF('" + ESTADORR + "' LIKE '' OR '" + ESTADORR + "' IS NULL,ESTADO_RR,'" + ESTADORR + "')," +
                                          " FECHA_DOC = IIF('" + ESTADORR + "' LIKE '' OR '" + ESTADORR + "' IS NULL,FECHA_DOC,GETDATE())," +
                                          " DOC_INGRESO = IIF('" + DOCSAP + "' LIKE '' OR '" + DOCSAP + "' IS NULL, DOC_INGRESO,'" + DOCSAP + "')," +
                                          " FECHA_DOC_SAP = IIF('" + DOCSAP + "' LIKE '' OR '" + DOCSAP + "' IS NULL, FECHA_DOC_SAP, GETDATE())," +
-                                         " DIRECCIONABLE = '" + DIRECCIONABLE + "',  TIPO = '" + LOTE + "' WHERE Serial LIKE '" + SERIAL + "';";
+                                         " DIRECCIONABLE = '" + DIRECCIONABLE + "',  TIPO = '" + LOTE + "' WHERE Serial LIKE '" + SERIAL + "';");
 
                     //INSERTO EL MOVIMIENTO EN LA TABLA DE MOVIMIENTOS
                     if (ESTADORR != "" && ESTADORR != null)
                     {
-                        ConsultaActualizar += "EXEC dbo.sp_InsertarNuevo_Movimiento 'EQUIPO LIBERADO ESTADO RR','LIBERADO','ESPERANDO POR SER ALMACENADO',''"
-                                        + ",'','LIBERACION','UBICACIONENTRADALIBERACION','" + this.user + "','" + SERIAL + "';";
+                        ConsultaActualizar.AppendLine("EXEC dbo.sp_InsertarNuevo_Movimiento 'EQUIPO LIBERADO ESTADO RR','LIBERADO','ESPERANDO POR SER ALMACENADO',''"
+                                        + ",'','LIBERACION','UBICACIONENTRADALIBERACION','" + this.user + "','" + SERIAL + "';");
                     }
                     if (DOCSAP != "" && DOCSAP != null)
                     {
-                        ConsultaMovimiento += "EXEC dbo.sp_InsertarNuevo_Movimiento 'EQUIPO LIBERADO ESTADO SAP','LIBERADO','ESPERANDO POR SER ALMACENADO',''"
-                                        + ",'','LIBERACION','UBICACIONENTRADALIBERACION','" + this.user + "','" + SERIAL + "';";
+                        ConsultaMovimiento.AppendLine("EXEC dbo.sp_InsertarNuevo_Movimiento 'EQUIPO LIBERADO ESTADO SAP','LIBERADO','ESPERANDO POR SER ALMACENADO',''"
+                                        + ",'','LIBERACION','UBICACIONENTRADALIBERACION','" + this.user + "','" + SERIAL + "';");
                     }
 
                     if ((ESTADORR != "" && ESTADORR != null) && (DOCSAP != "" && DOCSAP != null))
                     {
-                        ConsultaActualizar += "UPDATE dbo.EquiposCLARO SET Estado = 'LIBERADO' WHERE Serial like '" + SERIAL + "';";
+                        ConsultaActualizar.AppendLine("UPDATE dbo.EquiposCLARO SET Estado = 'LIBERADO' WHERE Serial like '" + SERIAL + "';");
                     }
                     ContadorSave++;
                 }
 
                 //Evaluo si la consulta no envio los ultimos registros para forzar a enviarlos
-                if (!String.IsNullOrEmpty(ConsultaActualizar))
+                if (!String.IsNullOrEmpty(ConsultaActualizar.ToString()))
                 {
-                    service.DirectSQLNonQuery(ConsultaActualizar, Local);
-                    ConsultaActualizar = "";
+                    service.DirectSQLNonQuery(ConsultaActualizar.ToString(), Local);
+                    service.DirectSQLNonQuery(ConsultaMovimiento.ToString(), Local);
+                    ConsultaActualizar = new StringBuilder();
                 }
 
                 this.estado_almacenamiento = true;

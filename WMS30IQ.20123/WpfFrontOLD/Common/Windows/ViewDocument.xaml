@@ -12,7 +12,7 @@
 
         <Grid  x:Uid="gridP" Name="gridP"  HorizontalAlignment="Center" Margin="5"
            VerticalAlignment="Stretch" Width="790" Height="690">
-       
-    </Grid>    
+
+        </Grid>
     </StackPanel>
 </Window>

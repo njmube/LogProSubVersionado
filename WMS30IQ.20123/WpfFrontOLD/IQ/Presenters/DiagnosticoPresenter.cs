@@ -55,7 +55,6 @@ namespace WpfFront.Presenters
 
             View.ConfirmBasicData += new EventHandler<EventArgs>(this.OnConfirmBasicData);
             View.GenerarCodigo += new EventHandler<EventArgs>(this.OnGenerarCodigo);
-            //View.EvaluarTipoProducto += new EventHandler<DataEventArgs<Product>>(this.OnEvaluarTipoProducto);
             View.AddLine += new EventHandler<EventArgs>(this.OnAddLine);
             view.CargaMasiva += new EventHandler<DataEventArgs<DataTable>>(this.OnCargaMasiva);
             View.ReplicateDetails += new EventHandler<EventArgs>(this.OnReplicateDetails);

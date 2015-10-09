@@ -140,6 +140,9 @@ namespace WpfFront.Common
 
                 //Showing
                 pivotView.Show();
+                pivotView.ShowFindControls = false;
+                pivotView.ShowExportButton = false;
+                pivotView.ShowRefreshButton = false;
                 pivotView.LocalReport.Refresh();
                 pivotView.RefreshReport();
 
@@ -197,10 +200,13 @@ namespace WpfFront.Common
 
             #endregion
 
-
-
-
-
+            Warning[] warnings;
+            string[] streamids;
+            string mimeType;
+            string encoding;
+            string extension;
+            string idpallet = "";
+            string date = DateTime.Now.ToString("ddMMyyy-HHmmss");
             try
             {
                 //Report File exists
@@ -229,36 +235,64 @@ namespace WpfFront.Common
                 try { this.pivotView.LocalReport.AddTrustedCodeModuleInCurrentAppDomain("System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a"); }
                 catch { }
 
-                flag = "Process";     
+                flag = "Process";
                 pivotView.LocalReport.DataSources.Add(new ReportDataSource("Header", ds.Tables[0]));
                 pivotView.LocalReport.DataSources.Add(new ReportDataSource("DataSet1", ds.Tables[1]));
-                //try { pivotView.LocalReport.DataSources.Add(new ReportDataSource("Details2", ds.Tables[2])); }
-                //catch { }
+
+                idpallet = ds.Tables[1].Rows[0][4].ToString();
 
                 //Showing
                 flag = "Showing";
+                pivotView.ShowFindControls = false;
+                pivotView.ShowExportButton = false;
+                pivotView.ShowRefreshButton = false;
                 pivotView.Show();
                 pivotView.LocalReport.Refresh();
                 pivotView.RefreshReport();
 
-            }
+            }// End try
             catch (Exception ex)
             {
                 Util.ShowError("Error mostrando el reporte: " + flag + ", " + ex);
             }
-        }
+            finally
+            {
+                string filePath = "";
+                // Asigno el nombre del archivo e.g.  RES-A0215544, Fecha 09102015-0941009  
+                //(La fecha tiene el siguiente formato "ddMMyyy-HHmmss").
+                string nameFile = idpallet + ", Fecha " + date;
+                try
+                {
+                // Especifico un nombre para la ruta.
+                filePath = @"c:\Habladores";
+                // Asignamos la extensión del archivo.
+                nameFile += ".PDF";
+                // Evaluo si la ruta ya existe para no volver a crearla.
+                if (!System.IO.File.Exists(filePath))
+                {
+                    // Creo el directorio especificado.
+                    System.IO.Directory.CreateDirectory(filePath);
+                }
+                // Combino la ruta con el nombre del archivo.
+                filePath = System.IO.Path.Combine(filePath, nameFile);
+                // Creo un arreglo de bytes para almacenar allí el archivo con la información
+                // que se guardará.
+                byte[] bytes = this.pivotView.LocalReport.Render("PDF", null, out mimeType, out encoding, out extension, out streamids, out warnings);
 
-
-        ////Imprime el reporte en batch
-        //private void btnPrintBatch_Click(object sender, RoutedEventArgs e)
-        //{
-        //    //Llama al Dao de reportes, y segun el Tipo Obtiene un DataSet Con Los datos Requeridos
-        //    ReportHeaderFormat rptHdr = service.SerClient.GetReportInformation(new Document { DocID = documentID, Company = App.curCompany, Location = App.curLocation });
-        //    DataSet ds = ReportMngr.GetReportDataset(rptHdr);
-        //    ReportMngr.PrintReportInBatch(report, ds, printerName);
-        //}
-
-
-    }
-}
-
+                // Creo el archivo en la ruta especificada.
+                FileStream fs = new FileStream(filePath, FileMode.Create);
+                //Cierro el objeto FileStream.
+                fs.Close();
+                // Libero la memoria que fue ocupada por el objeto.
+                fs.Dispose();
+                // mostramos la información de que se guardo satisfactoriamente el archivo y mostramos la ruta.
+                Util.ShowMessage("Reporte exportado en la siguiente ruta: " + filePath);
+                }
+                catch (System.IO.IOException e)
+                {
+                    Util.ShowError(e.Message);
+                }
+            }// End finally
+        }// End ViewDocument(dataset, string)
+    }// End partial class
+}// end namespace
