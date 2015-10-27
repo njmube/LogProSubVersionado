@@ -461,7 +461,7 @@ namespace WpfFront
 
             if (module == "tbReports" && !App.showingReports)
             {
-                System.Diagnostics.Process.Start("http://sql-general/Reports/Pages/Folder.aspx");
+                System.Diagnostics.Process.Start("http://sql-claro/Reports/Pages/Folder.aspx");
                 //App.showingReports = true;
                 //ShowReports(sender, e);
                 //mRibbon.SelectedIndex = 0;
@@ -560,7 +560,7 @@ namespace WpfFront
 
         private void goNavigateButton_Click(object sender, RoutedEventArgs e)
         {
-            Uri uri = new Uri("http://severwms/Reports/Pages/Folder.aspx", UriKind.RelativeOrAbsolute);
+            Uri uri = new Uri("http://sql-claro/Reports/Pages/Folder.aspx", UriKind.RelativeOrAbsolute);
             this.myWebBrowser.Navigate(uri);
         }
 
