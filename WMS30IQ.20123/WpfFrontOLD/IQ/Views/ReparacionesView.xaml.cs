@@ -453,12 +453,6 @@ namespace WpfFront.Views
             set { this.BorderDetailJ = value; }
         }
 
-        public TextBox GetQuery
-        {
-            get { return this.txt_Query; }
-            set { this.txt_Query = value; }
-        }
-
         #endregion
 
         #region Metodos
@@ -810,8 +804,6 @@ namespace WpfFront.Views
         Border Border_ListaHP { get; set; }
         Border Border_ListEquipos { get; set; }
         TextBlock txt_User { get; set; }
-
-        TextBox GetQuery { get; set; }
 
         #endregion
 

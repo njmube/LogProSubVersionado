@@ -890,6 +890,8 @@ namespace WpfFront.Presenters
                 string DIRECCIONABLE = "";
                 string LOTE = "";
                 string SERIAL = "";
+
+                int contadorFilas = 0;
                 //guarda el nuevo estado RR si no esta vacio en el archivo
                 foreach (DataRow dr1 in RegistrosSave_Aux.Rows)
                 {
@@ -923,6 +925,15 @@ namespace WpfFront.Presenters
                         ConsultaActualizar.AppendLine("UPDATE dbo.EquiposCLARO SET Estado = 'LIBERADO' WHERE Serial like '" + SERIAL + "';");
                     }
                     ContadorSave++;
+                    contadorFilas++;
+                    if (contadorFilas == 200)
+                    {
+                        service.DirectSQLNonQuery(ConsultaActualizar.ToString(), Local);
+                        service.DirectSQLNonQuery(ConsultaMovimiento.ToString(), Local);
+                        ConsultaActualizar.Clear();
+                        ConsultaMovimiento.Clear();
+                        contadorFilas = 0;
+                    }
                 }
 
                 //Evaluo si la consulta no envio los ultimos registros para forzar a enviarlos
@@ -930,7 +941,8 @@ namespace WpfFront.Presenters
                 {
                     service.DirectSQLNonQuery(ConsultaActualizar.ToString(), Local);
                     service.DirectSQLNonQuery(ConsultaMovimiento.ToString(), Local);
-                    ConsultaActualizar = new StringBuilder();
+                    ConsultaActualizar.Clear();
+                    ConsultaMovimiento.Clear();
                 }
 
                 this.estado_almacenamiento = true;

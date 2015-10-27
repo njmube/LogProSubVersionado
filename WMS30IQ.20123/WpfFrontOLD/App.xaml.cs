@@ -83,8 +83,6 @@ namespace WpfFront
                 Util.ShowError("Please check the WCF service.\n" + Util.GetTechMessage(ex));
                 Shutdown(1);
             } 
-
-
         }
 
 

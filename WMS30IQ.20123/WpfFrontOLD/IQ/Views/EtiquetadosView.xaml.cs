@@ -49,7 +49,21 @@ namespace WpfFront.Views
             txtCantidad_Impresiones.Text = _numValue.ToString();
         }
 
+       
+
         #region Variables
+
+        private int _numValue = 0;
+
+        public int NumValue
+        {
+            get { return _numValue; }
+            set
+            {
+                _numValue = value;
+                txtCantidad_Impresiones.Text = value.ToString();
+            }
+        }
 
         public EtiquetadosModel Model
         {
@@ -169,78 +183,65 @@ namespace WpfFront.Views
 
         #region Metodos
 
-
-        private int _numValue = 0;
-    
-        public int NumValue
+        private void cmdUp_Click(object sender, RoutedEventArgs e)
         {
-           get {  return _numValue; }
-           set
-           {
-            _numValue = value;
-            txtCantidad_Impresiones.Text = value.ToString();
-           }
+           NumValue++;
         }
 
-    private void cmdUp_Click(object sender, RoutedEventArgs e)
-    {
-       NumValue++;
-    }
-
-    private void cmdDown_Click(object sender, RoutedEventArgs e)
-    {
-      if (NumValue > 1)
-      {
-          NumValue--;
-      }
-    }
-
-    private void txtNum_TextChanged(object sender, TextChangedEventArgs e)
-    {
-        if (txtCantidad_Impresiones == null)
+        private void cmdDown_Click(object sender, RoutedEventArgs e)
         {
-            return;
+          if (NumValue > 1)
+          {
+              NumValue--;
+          }
         }
-        if (!txtCantidad_Impresiones.Text.ToString().Contains("-"))
+
+        private void txtNum_TextChanged(object sender, TextChangedEventArgs e)
         {
-            if (!int.TryParse(txtCantidad_Impresiones.Text, out _numValue))
+            if (txtCantidad_Impresiones == null)
             {
-                if (_numValue > 0)
+                return;
+            }
+            if (!txtCantidad_Impresiones.Text.ToString().Contains("-"))
+            {
+                if (!int.TryParse(txtCantidad_Impresiones.Text, out _numValue))
                 {
-                    txtCantidad_Impresiones.Text = _numValue.ToString();
-                }
-                else
-                {
-                    txtCantidad_Impresiones.Text = "1";
+                    if (_numValue > 0)
+                    {
+                        txtCantidad_Impresiones.Text = _numValue.ToString();
+                    }
+                    else
+                    {
+                        txtCantidad_Impresiones.Text = "1";
+                    }
                 }
             }
+            else {
+                txtCantidad_Impresiones.Text = "1";
+            }
         }
-        else {
-            txtCantidad_Impresiones.Text = "1";
+
+        private void btn_confirmar_Click_1(object sender, RoutedEventArgs e)
+        {
+           ConfirmarMovimiento(sender, e);
         }
-    }
 
-    private void btn_confirmar_Click_1(object sender, RoutedEventArgs e)
-    {
-       ConfirmarMovimiento(sender, e);
-    }
+        private void tb_Serial1_KeyDown_1(object sender, KeyEventArgs e)
+        {
+           //Evaluo si la tecla es un Tab
+           if (e.Key == Key.Tab)
+           {
+             GetSerial1.Text = GetSerial1.Text.ToString().ToUpper();
+             //Paso el focus al siguiente campo de serial
+             GetSerial2.Focus();
+           }
 
-    private void tb_Serial1_KeyDown_1(object sender, KeyEventArgs e)
-    {
-       //Evaluo si la tecla es un Tab
-       if (e.Key == Key.Tab)
-       {
-         GetSerial1.Text = GetSerial1.Text.ToString().ToUpper();
-         //Paso el focus al siguiente campo de serial
-         GetSerial2.Focus();
-       }
-
-       if (e.Key == Key.Enter)
-       {
-          GetSerial1.Text = GetSerial1.Text.ToString().ToUpper();
-          GetSerial2.Focus();
-       }
-    }
+           if (e.Key == Key.Enter)
+           {
+              GetSerial1.Text = GetSerial1.Text.ToString().ToUpper();
+              GetSerial2.Focus();
+           }
+        }
 
         private void tb_Serial2_KeyDown_1(object sender, KeyEventArgs e)
         {
@@ -261,90 +262,11 @@ namespace WpfFront.Views
             ImprimirEtiqueta_Individual(sender, e);
         }
 
-        private void ImageRefresh_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
-        {
-            ConfirmBasicData(sender, e);
-        }
-
         private void cb_BuscarSticker_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             GetNumeroCodigos(sender, e);
         }
 
-        private void ProcessFile(object sender, EventArgs e, string dataFile)
-        {
-
-            //Linea por linea obtiene el dato del serial y del RR y lo procesa.
-            //Obtiene los errores de procesamiento, muestra los que el RR no es IQRE
-
-            DataTable lines = Util.ConvertToDataTable(dataFile, "RR", "\t", false);
-
-            if (lines == null || lines.Rows.Count == 0)
-            {
-                Util.ShowError("No hay registros a procesar.\n" + dataFile);
-                return;
-            }
-
-            int NumeroSerial;
-            foreach (DataRow dr in lines.Rows)
-            {
-                NumeroSerial = 1;
-                foreach (DataColumn dc in lines.Columns)
-                {
-                    switch (NumeroSerial.ToString())
-                    {
-                        case "1":
-                            GetSerial1.Text = dr[dc.ColumnName].ToString();
-                            break;
-                        case "2":
-                            GetSerial2.Text = dr[dc.ColumnName].ToString();
-                            break;
-                    }
-                    NumeroSerial++;
-                }
-
-                AddLine(sender, e);
-            }
-
-            //fUpload.StreamFile = null;
-
-        }
-
-        private void ProcessFile1(object sender, EventArgs e, string dataFile)
-        {
-
-            //Linea por linea obtiene el dato del serial y del RR y lo procesa.
-            //Obtiene los errores de procesamiento, muestra los que el RR no es IQRE
-
-            DataTable lines = Util.ConvertToDataTable(dataFile, "RR", "\t", false);
-
-            if (lines == null || lines.Rows.Count == 0)
-            {
-                Util.ShowError("No hay registros a procesar.\n" + dataFile);
-                return;
-            }
-
-            CargaMasiva(sender, new DataEventArgs<DataTable>(lines));
-
-            //fUpload.StreamFile = null;
-
-        }
-
-        //Recibo
-        private void btn_BuscarListadoEstibaRecibo_Click_1(object sender, RoutedEventArgs e)
-        {
-            BuscarRegistrosRecibo(sender, e);
-        }
-
-        private void btn_ActualizarListadoEstibaRecibo_Click_1(object sender, RoutedEventArgs e)
-        {
-            ActualizarRegistrosRecibo(sender, e);
-        }
-
-        private void btn_ConfirmarRecibo_Click_1(object sender, RoutedEventArgs e)
-        {
-            ConfirmarRecibo(sender, e);
-        }
 
 
         private void chkRep_Checked_1(object sender, RoutedEventArgs e)
@@ -362,11 +284,11 @@ namespace WpfFront.Views
         private void Btn_Guardar_Click_1(object sender, RoutedEventArgs e)
         {
             //Mostrar ventana de Cargando...
-            //ProcessWindow pw = new ProcessWindow("Procesando registros...por favor espere...");
+            ProcessWindow pw = new ProcessWindow("Procesando registros...por favor espere...");
             SaveDetails(sender, e);
             //Cierro ventana de Cargando...
-            //pw.Visibility = Visibility.Collapsed;
-            //pw.Close();
+            pw.Visibility = Visibility.Collapsed;
+            pw.Close();
         }
 
         private void GridViewColumnHeaderClickedHandler(object sender, RoutedEventArgs e)

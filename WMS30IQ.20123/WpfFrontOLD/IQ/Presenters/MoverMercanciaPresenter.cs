@@ -269,7 +269,7 @@ namespace WpfFront.Presenters
 
         #endregion
 
-        #region Cambio Clasificacion
+        #region Cambio Clasificación
 
         private void OnBuscarRegistrosCambioClasificacion(object sender, EventArgs e)
         {
@@ -402,7 +402,6 @@ namespace WpfFront.Presenters
 
                     //Guardo en la tabla de movimientos el cambio de ubicacion del equipo
                     ConsultaMovSQL = "EXEC sp_InsertarNuevo_Movimiento 'ENVIO A " + NuevoEstado + "','ALMACENAMIENTO','DESPACHO','" + fila.Row["idPallet"].ToString() + "','','ALMACENAMIENTO','UBICACIONALMACEN','" + this.user + "','';";
-                    Console.WriteLine("###### " + ConsultaMovSQL);
 
                     ConsultaTrack = "UPDATE dbo.TrackEquiposCLARO SET ESTADO_MOVMERCANCIA = '" + NuevoEstado + "' WHERE ESTIBA_ENTRADA = '" + fila.Row["idPallet"].ToString() + "'";
 

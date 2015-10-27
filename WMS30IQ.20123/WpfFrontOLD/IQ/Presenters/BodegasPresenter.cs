@@ -610,17 +610,10 @@ namespace WpfFront.Presenters
 
             try
             {
-                //Validacion existe o no el equipo en DB  select form table where para= ?
-                //ConsultaBuscar = "SELECT * FROM dbo.EquiposCLARO WHERE upper(Serial) = upper('" + View.GetSerial1.Text.ToString() + "') AND (Estado IS NULL OR Estado ='CUARENTENA')";
-                //DataTable Resultado = service.DirectSQLQuery(ConsultaBuscar, "", "dbo.EquiposCLARO", Local);
+                
                 //Evaluo si el serial existe
                 ConsultaBuscar = "EXEC sp_GetProcesos 'BUSCAREQUIPOSALMACENAR', '" + View.GetSerial1.Text + "', NULL, NULL";
                 RegistroValidado = service.DirectSQLQuery(ConsultaBuscar, "", "dbo.EquiposCLARO", Local);
-
-                //RegistroValidado = service.DirectSQLQuery("select RowID,serial,MAC,CODIGO_SAP,productoid,fecha_doc,fecha_doc_sap,estado_RR,ubicacion,estado from dbo.EquiposCLARO where serial = '" + View.GetSerial1.Text + "' and estado not like 'DESPACHO'", "", "dbo.EquiposCLARO", Local);
-
-                //Busco el registro en la DB para validar que exista y que este en la ubicacion valida
-                //RegistroValidado = service.DirectSQLQuery("EXEC sp_GetEstadoLiberacion 'BUSCAREQUIPO','" + View.GetSerial1.Text + "'", "", "dbo.EquiposCLARO", Local);
 
                 if (RegistroValidado.Rows.Count > 0)
                 {
@@ -728,11 +721,6 @@ namespace WpfFront.Presenters
             }
         }
 
-        //private void OnBuscarRegistrosRecibo(object sender, EventArgs e)
-        //{
-        //    //Busco los registros
-        //    BuscarRegistrosRecibo();
-        //}
 
         /** Se ejecuta cuando se clickea en una fila del listado de pallets registrados **/
         private void OnSeleccionPalletConsulta(object sender, EventArgs e)
@@ -1457,20 +1445,18 @@ namespace WpfFront.Presenters
 
         private void OnSaveDetails(object sender, EventArgs e)
         {
-            
-
             //Validacion si no existen datos para guardar
             if (View.Model.ListRecords.Rows.Count == 0)
                 return;
 
             //Variables Auxiliares
-            String ConsultaGuardar = "";
-            String ConsultaGuardarTrack = "";
+            System.Text.StringBuilder ConsultaGuardar = new System.Text.StringBuilder();
+            System.Text.StringBuilder ConsultaGuardarTrack = new System.Text.StringBuilder();
+            System.Text.StringBuilder ConsultaMovimiento = new System.Text.StringBuilder();
             Int32 ContadorFilas = 0;
-            DataTable SerialesIngresados;
-            Boolean Existe;
-            String ubicacion = "";
-
+            string ubicacion = "";
+            string pallet = View.GetCodPallet.Text;
+            string serial = "";
             if (View.ListadoPalletsBusqueda.SelectedIndex != -1 && View.GetCodPallet.Text.ToString() == "")
             {
                 this.codigoPallet = ((DataRowView)View.ListadoPalletsBusqueda.SelectedItem).Row["Pallet"].ToString();
@@ -1481,8 +1467,6 @@ namespace WpfFront.Presenters
                 this.codigoPallet = View.GetCodPallet.Text.ToString();
                 ubicacion = (this.seleccionUbicacion) ? this.ubicacionPallet : View.GetUbicacionPallet.SelectedValue.ToString();
             }
-            //Valido la existencia de los equipos ingresados
-            //SerialesIngresados = ValidarSerialesIngresados(View.Model.ListRecords);   // NO ES NECESARIO VALIDAR LA EXISTENCIA CUANDO NO ESTA HABILITADO EL CARGUE MASIVO
             try
             {
                 for (int i = this.contFilas_byPallet; i < View.Model.ListRecords.Rows.Count; i++)
@@ -1491,14 +1475,13 @@ namespace WpfFront.Presenters
                     ContadorFilas++;
 
                     //String ubicacion = (this.seleccionUbicacion) ? this.ubicacionPallet : View.GetUbicacionPallet.SelectedValue.ToString();
-
-
+                    serial = View.Model.ListRecords.Rows[i]["Serial"].ToString();
                     if (ubicacion != "" && ubicacion != null)
                     {
                         if (this.codigoPallet != "")
                         {
                             //Valido que la ubicacion no este ocupada por otro pallet 
-                            String consulta = "select top 1 idpallet from dbo.EquiposClaro where Posicion LIKE '" + ubicacion + "' AND idpallet NOT LIKE '" + this.codigoPallet + "';";
+                            String consulta = "SELECT TOP 1 IDPALLET FROM DBO.EQUIPOSCLARO WHERE POSICION LIKE '" + ubicacion + "' AND idpallet NOT LIKE '" + this.codigoPallet + "';";
                             DataTable aux = service.DirectSQLQuery(consulta, "", "dbo.EquiposClaro", Local);
 
                             if (aux.Rows.Count > 0)
@@ -1509,10 +1492,22 @@ namespace WpfFront.Presenters
                             else
                             {
                                 //Construyo la consulta para guardar los datos
-                                ConsultaGuardar += " UPDATE dbo.EquiposCLARO SET Posicion = '" + ubicacion + "', IdPallet = '" + this.codigoPallet + "', Ubicacion = 'ALMACENAMIENTO', Estado= 'ALMACENAMIENTO'  WHERE Serial = '" + View.Model.ListRecords.Rows[i]["Serial"].ToString() + "';";
-                                ConsultaGuardarTrack += "UPDATE dbo.TrackEquiposCLARO SET ESTIBA_ENTRADA = '" + this.codigoPallet + "', ESTADO_ALMACEN1 = 'ALMACENAMIENTO', UBICACION_ENTRADA = 'ALMACENAMIENTO', FECHA_ING_ALMACEN = GETDATE() WHERE Serial = '" + View.Model.ListRecords.Rows[i]["Serial"].ToString() + "'";
-                                ConsultaGuardar += "EXEC sp_InsertarNuevo_Movimiento 'ALMACENAMIENTO DE EQUIPOS EN BODEGA','ESPERANDO POR ENVIO A PRODUCCION','" + ubicacion  + "','" + View.GetCodPallet.Text + "','','ALMACENAMIENTO','ALMACENARENBODEGA','" + this.user + "','" + View.Model.ListRecords.Rows[i]["Serial"].ToString() + "';";
-                
+                                ConsultaGuardar.AppendLine(" UPDATE dbo.EquiposCLARO SET Posicion = '" + ubicacion + "', IdPallet = '" + this.codigoPallet + "', Ubicacion = 'ALMACENAMIENTO', Estado = 'ALMACENAMIENTO'  WHERE Serial = '" + serial + "';");
+                                ConsultaGuardarTrack.AppendLine("UPDATE dbo.TrackEquiposCLARO SET ESTIBA_ENTRADA = '" + this.codigoPallet + "', ESTADO_ALMACEN1 = 'ALMACENAMIENTO', UBICACION_ENTRADA = 'ALMACENAMIENTO', FECHA_ING_ALMACEN = GETDATE() WHERE Serial = '" + serial + "'");
+                                ConsultaMovimiento.AppendLine("EXEC sp_InsertarNuevo_Movimiento 'ALMACENAMIENTO DE EQUIPOS EN BODEGA','ESPERANDO POR ENVIO A PRODUCCION','" + ubicacion  + "','" + pallet + "','','ALMACENAMIENTO','ALMACENARENBODEGA','" + this.user + "','" + serial + "';");
+                            }
+                            if (ContadorFilas == 200)
+                            {
+                                //Ejecuto la consulta
+                                service.DirectSQLNonQuery(ConsultaGuardar.ToString(), Local);
+                                service.DirectSQLNonQuery(ConsultaGuardarTrack.ToString(), Local);
+                                service.DirectSQLNonQuery(ConsultaMovimiento.ToString(), Local);
+
+                                //Limpio la consulta para volver a generar la nueva
+                                ConsultaGuardar.Clear();
+                                ConsultaGuardarTrack.Clear();
+                                ConsultaMovimiento.Clear();
+                                ContadorFilas = 0;
                             }
                         }
                         else
@@ -1528,21 +1523,21 @@ namespace WpfFront.Presenters
                     }
                 }
 
-
                 //Evaluo si la consulta no envio los ultimos registros para forzar a enviarlos
-                if (!String.IsNullOrEmpty(ConsultaGuardar))
+                if (!String.IsNullOrEmpty(ConsultaGuardar.ToString()))
                 {
-
-                    Console.WriteLine(ConsultaGuardar);
                     //Ejecuto la consulta
-                    service.DirectSQLNonQuery(ConsultaGuardar, Local);
-                    service.DirectSQLNonQuery(ConsultaGuardarTrack, Local);
+                    service.DirectSQLNonQuery(ConsultaGuardar.ToString(), Local);
+                    service.DirectSQLNonQuery(ConsultaGuardarTrack.ToString(), Local);
+                    service.DirectSQLNonQuery(ConsultaMovimiento.ToString(), Local);
 
                     //Limpio la consulta para volver a generar la nueva
-                    ConsultaGuardar = "";
-                    ConsultaGuardarTrack = "";
+                    ConsultaGuardar.Clear();
+                    ConsultaGuardarTrack.Clear();
+                    ConsultaMovimiento.Clear();
+                }
 
-                    //Muestro el mensaje de confirmacion
+                    //Muestro el mensaje de confirmación
                     Util.ShowMessage("Registros guardados satisfactoriamente.");
                     //Reinicio los campos
                     LimpiarDatosIngresoSeriales();
@@ -1553,8 +1548,6 @@ namespace WpfFront.Presenters
                     this.contFilas_byPallet = 0;
                     this.codigoPallet = "";
                     ConsultarPallets();
-
-                }
             }
             catch (Exception Ex) { Util.ShowError("Se presento un error al momento de guardar los registros. Error: " + Ex.Message); }
         }

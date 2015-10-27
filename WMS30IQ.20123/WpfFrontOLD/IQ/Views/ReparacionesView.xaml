@@ -31,10 +31,6 @@
                                             <TextBlock x:Uid="TextBlock_4" FontWeight="Bold" Margin="0,4,4,0" HorizontalAlignment="Left" Text="Pallet" />
                                             <TextBox x:Uid="tb_BuscarEstibaRecibo" x:Name="tb_BuscarEstibaRecibo" Width="110" Height="23"  Margin="0,0,0,0" />
                                         </StackPanel>
-                                        <!--<StackPanel x:Uid="stkData" Orientation="Vertical" Margin="0,4,4,4">
-                                            <TextBlock x:Uid="TextBlock_4" FontWeight="Bold" Margin="0,4,4,0" HorizontalAlignment="Left" Text="Ubicaciones" />
-                                            <ComboBox x:Uid="cb_BuscarPosicionRecibo" Name="cb_BuscarPosicionRecibo" Width="100" Height="23" ItemsSource="{Binding Path=ListadoPosiciones}" SelectedValue="Code" DisplayMemberPath="Name" />
-                                        </StackPanel>-->
                                         <StackPanel x:Uid="Stack_Panel9_2" x:Name="Stack_Panel_1" Width="auto" Orientation="Horizontal" Margin="4,3,4,3" HorizontalAlignment="Right" VerticalAlignment="Bottom" >
                                             <Button x:Uid="btn_BuscarListadoEstibaRecibo" x:Name="btn_BuscarListadoEstibaRecibo" Height="23" Content="Buscar" Click="btn_BuscarListadoEstibaRecibo_Click_1" />
                                             <Button x:Uid="btn_ActualizarListadoEstibaRecibo" x:Name="btn_ActualizarListadoEstibaRecibo" Height="23" Margin="8,0,0,0" Content="Actualizar" Click="btn_ActualizarListadoEstibaRecibo_Click_1" Visibility="Collapsed" />
@@ -186,7 +182,6 @@
                                         </StackPanel>
 
                                         <StackPanel x:Uid="Stack_Button" Name="Stack_Button"  Margin="0,0,0,0" Orientation="Horizontal" HorizontalAlignment="Right">
-                                            <!--<Button x:Uid="Btn_Guardar" x:Name="Btn_Guardar" Width="70" Content="Aceptar" Click="Btn_Guardar_Click_1" />-->
                                             <Button x:Uid="Btn_Eliminar" x:Name="Btn_Eliminar" HorizontalAlignment="Right" Width="70" Margin="0,0,5,0" Content="Eliminar" Click="Btn_Eliminar_Click_1" ToolTip="Elimina las filas seleccionadas" />
                                         </StackPanel>
                                     </StackPanel>
@@ -226,7 +221,7 @@
                         </Border>
                     </StackPanel>
                 </TabItem>
-                <TabItem x:Uid="TabItem_1" Header="Procesamiento" Margin="0,0,0,0">
+                <TabItem x:Uid="TabItem_1" Header="Procesamiento">
                     <!--#LG:MAKE_ADJUSTMENT:Make Adjustment:Relizar Ajuste-->
 
                     <StackPanel x:Uid="StackPanel_1" Orientation="Horizontal" >
@@ -407,7 +402,6 @@
                                         </StackPanel>-->
                                         <StackPanel x:Uid="Stack_Button" Name="Stack_Button_2"  Margin="0,10,0,0" Orientation="Horizontal" HorizontalAlignment="Left">
                                             <Button x:Uid="Btn_Guardar" x:Name="Btn_Guardar_2" Width="70" Content="Aceptar" Click="Btn_Guardar_Click_1" />
-                                            <TextBox x:Uid="txt_Query" x:Name="txt_Query" Width="300" MaxLength="200" VerticalAlignment="Center" Margin="100,0,0,0" Visibility="Collapsed"/>
                                         </StackPanel>
                                     </StackPanel>
                                 </StackPanel>
@@ -508,7 +502,7 @@
                                     <StackPanel x:Uid="Stack_SerialGroup_2" x:Name="Stack_SerialGroup2_2" Orientation="Horizontal" Margin="0,6,0,0">
                                     </StackPanel>
                                     <StackPanel x:Uid="Stack_Adicionales2_2" x:Name="Stack_Adicionales2_2" Orientation="Vertical" Margin="0,6,0,0">
-                                        <ListView x:Uid="lvDocumentMaster" ItemsSource="{Binding Path=ListRecords_1}" Margin="0,4,0,0"  MaxHeight="400" Name="lvDocumentMaster2_2" Visibility="Collapsed">
+                                        <ListView x:Uid="lvDocumentMaster" ItemsSource="{Binding Path=ListRecords_1}" Margin="0,4,0,0"  MaxHeight="400" Name="lvDocumentMaster2_2" Visibility="Visible">
                                             <ListView.View>
                                                 <GridView x:Uid="GridViewDetails" x:Name="GridViewDetails2_2">
                                                     <GridViewColumn x:Uid="GridViewColumn_2" Header="Modelo" Width="250" DisplayMemberBinding="{Binding Path=Producto}" />

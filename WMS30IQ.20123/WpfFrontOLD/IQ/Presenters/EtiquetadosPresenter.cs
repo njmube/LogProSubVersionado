@@ -71,12 +71,7 @@ namespace WpfFront.Presenters
             View.ImprimirEtiqueta_Individual += new EventHandler<EventArgs>(this.OnImprimirEtiqueta_Individual);
             View.GetNumeroCodigos += new EventHandler<SelectionChangedEventArgs>(this.OnGetNumeroCodigos);
 
-            //Recibo
-            //View.BuscarRegistrosRecibo += this.OnBuscarRegistrosRecibo;
-            //View.ActualizarRegistrosRecibo += this.OnActualizarRegistrosRecibo;
-            //View.ConfirmarRecibo += this.OnConfirmarRecibo;
 
-            //ConfirmarMovimiento
             #endregion
 
             #region Datos
@@ -527,11 +522,10 @@ namespace WpfFront.Presenters
                             ConsultaGuardar += ", REUSO = '" + DataRow["Reuso"].ToString() + "', OBSERVACIONES_ETIQUETADO = '" + DataRow["Observaciones_Etiquetado"].ToString() + "'";
                             ConsultaGuardar += " WHERE RowID = '" + DataRow["RowID"].ToString() + "';";
 
-                            ConsultaGuardarTrack += "UPDATE dbo.TrackEquiposCLARO SET ESTADO_ETIQUETADO = 'VERIFICACION', FECHA_ETIQUETADO = GETDATE() WHERE ID_SERIAL = '" + DataRow["RowID"].ToString() + "'";
+                            ConsultaGuardarTrack += "UPDATE dbo.TrackEquiposCLARO SET ESTADO_ETIQUETADO = 'VERIFICACION', FECHA_ETIQUETADO = GETDATE() WHERE ID_SERIAL = '" + DataRow["RowID"].ToString() + "';";
 
                             //Guardo en la tabla de movimientos el cambio de ubicacion del equipo
                             ConsultaGuardar += "EXEC sp_InsertarNuevo_Movimiento 'ETIQUETADO DE EQUIPO','ETIQUETADO','VERIFICACION','Sin pallet','" + DataRow["RowID"].ToString() + "','ETIQUETADO','UBICACIONPRODUCCION','" + this.user + "','';";
-                            Console.WriteLine("###### " + ConsultaGuardar);
                
                             String archivo = DataRow["ProductoID"].ToString();
                             archivo = archivo.Replace("/", "");

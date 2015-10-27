@@ -277,10 +277,11 @@ namespace WpfFront.Common
                 filePath = System.IO.Path.Combine(filePath, nameFile);
                 // Creo un arreglo de bytes para almacenar allí el archivo con la información
                 // que se guardará.
-                byte[] bytes = this.pivotView.LocalReport.Render("PDF", null, out mimeType, out encoding, out extension, out streamids, out warnings);
+                byte[] bytes = this.pivotView.LocalReport.Render("pdf", null, out mimeType, out encoding, out extension, out streamids, out warnings);
 
                 // Creo el archivo en la ruta especificada.
                 FileStream fs = new FileStream(filePath, FileMode.Create);
+                fs.Write(bytes, 0, bytes.Length);
                 //Cierro el objeto FileStream.
                 fs.Close();
                 // Libero la memoria que fue ocupada por el objeto.
@@ -288,7 +289,7 @@ namespace WpfFront.Common
                 // mostramos la información de que se guardo satisfactoriamente el archivo y mostramos la ruta.
                 Util.ShowMessage("Reporte exportado en la siguiente ruta: " + filePath);
                 }
-                catch (System.IO.IOException e)
+                catch (Exception e)
                 {
                     Util.ShowError(e.Message);
                 }

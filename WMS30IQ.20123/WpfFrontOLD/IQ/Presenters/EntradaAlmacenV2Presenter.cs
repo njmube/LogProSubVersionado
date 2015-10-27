@@ -393,7 +393,7 @@ namespace WpfFront.Presenters
             int temp2 = 0;
             while (temp2 < SerialesIngresados.Rows.Count)
             {
-                ConsultaBuscar = "SELECT TOP 1 Serial FROM dbo.EquiposCLARO WHERE UPPER(Serial) = UPPER('" + SerialesIngresados.Rows[temp2]["SERIAL"].ToString() + "')";
+                ConsultaBuscar = "SELECT TOP 1 Serial FROM dbo.EquiposCLARO WHERE LTRIM(RTRIM(UPPER(Serial))) = LTRIM(RTRIM(UPPER('" + SerialesIngresados.Rows[temp2]["SERIAL"].ToString() + "')))";
                 DataTable Resultado = service.DirectSQLQuery(ConsultaBuscar, "", "dbo.EquiposCLARO", Local);
 
                 if (Resultado.Rows.Count >= 1)
@@ -1255,18 +1255,17 @@ namespace WpfFront.Presenters
         private void SaveSerial(Object e)
         {
             //Variables Auxiliares
-            string ConsultaGuardar = "Declare @RowId int ";
-            string ConsultaGuardarMovimiento = "";
-
+            System.Text.StringBuilder ConsultaGuardar = new System.Text.StringBuilder("Declare @RowId int;");
+            int ContadorCampos = 0;
+            int contadorFilas = 0;
             try
             {
                 foreach (DataRow DataRow in this.serialesSave_Aux.Rows)
                 {
                     //Obtengo la cantidad de columnas del listado
-                    int ContadorCampos = this.serialesSave_Aux.Columns.Count;
-
+                    ContadorCampos = this.serialesSave_Aux.Columns.Count;
                     //Construyo la consulta para guardar los datos
-                    ConsultaGuardar += "INSERT INTO dbo.EquiposCLARO(Serial,Mac,Tipo_REC,Codigo_SAP,ProductoID,FAMILIA,TIPO_ORIGEN,ORIGEN,Ciudad,CENTRO,CONSECUTIVO,CONTROL,ESTADO) VALUES(";
+                    ConsultaGuardar.Append("INSERT INTO dbo.EquiposCLARO(Serial,Mac,Tipo_REC,Codigo_SAP,ProductoID,FAMILIA,TIPO_ORIGEN,ORIGEN,Ciudad,CENTRO,CONSECUTIVO,CONTROL,ESTADO) VALUES(");
 
                     //Obtengo los datos de cada campo con su nombre
                     foreach (DataColumn c in this.serialesSave_Aux.Columns)
@@ -1278,10 +1277,10 @@ namespace WpfFront.Presenters
                         }
 
                         //Adiciono cada dato a la consulta
-                        ConsultaGuardar = ConsultaGuardar + "'" + DataRow[c.ColumnName].ToString() + "'";
+                        ConsultaGuardar.Append("'" + DataRow[c.ColumnName].ToString() + "'");
 
                         //Evaluo el contador de columnas para saber si adiciono la coma
-                        ConsultaGuardar += (ContadorCampos != 1) ? "," : "";
+                        ConsultaGuardar.Append((ContadorCampos != 1) ? "," : "");
 
                         //Disminuyo el contador
                         ContadorCampos--;
@@ -1289,24 +1288,34 @@ namespace WpfFront.Presenters
 
                     string row0 = DataRow[0].ToString();
                     string row1 = DataRow[1].ToString();
-                    ConsultaGuardar += ", 'CUARENTENA') SET @RowId = SCOPE_IDENTITY();";
+                    ConsultaGuardar.AppendLine(", 'CUARENTENA') SET @RowId = SCOPE_IDENTITY();");
 
-                    ConsultaGuardar += "INSERT INTO dbo.TrackEquiposClaro(ID_SERIAL,Serial,Mac,FECHA_INGRESO,ESTADO_RECIBO) VALUES (@RowId, '" + row0 + "', '" + row1 + "', GETDATE(), 'RECIBO'); ";
+                    ConsultaGuardar.Append("INSERT INTO dbo.TrackEquiposClaro(ID_SERIAL,Serial,Mac,FECHA_INGRESO,ESTADO_RECIBO) VALUES (@RowId, '" + row0 + "', '" + row1 + "', GETDATE(), 'RECIBO'); ");
 
-                    ConsultaGuardarMovimiento += "EXEC dbo.sp_InsertarNuevo_Movimiento 'EQUIPO RECIBIDO ENTRADA ALMACEN','RECIBIDO','ESPERANDO POR SER LIBERADO',''"
-                                    + ",@RowId,'RECIBO','UBICACIONENTRADAALMACEN','" + this.user + "','';";
+                    ConsultaGuardar.AppendLine("EXEC dbo.sp_InsertarNuevo_Movimiento 'EQUIPO RECIBIDO ENTRADA ALMACEN','RECIBIDO','ESPERANDO POR SER LIBERADO',''"
+                                    + ",@RowId,'RECIBO','UBICACIONENTRADAALMACEN','" + this.user + "','';");
                     ContadorSave++;
+                    contadorFilas++;
+                    if (contadorFilas == 200)
+                    {
+                        //Ejecuto la consulta
+                        service.DirectSQLNonQuery(ConsultaGuardar.ToString(), Local);
+
+                        //Limpio la consulta para volver a generar la nueva
+                        ConsultaGuardar.Clear();
+                        ConsultaGuardar.AppendLine("Declare @RowId int;");
+                        contadorFilas = 0;
+                    }
                 }
 
                 //Evaluo si la consulta no envio los ultimos registros para forzar a enviarlos
-                if (!String.IsNullOrEmpty(ConsultaGuardar))
+                if (!String.IsNullOrEmpty(ConsultaGuardar.ToString()))
                 {
                     //Ejecuto la consulta
-                    service.DirectSQLNonQuery(ConsultaGuardar, Local);
-                    service.DirectSQLNonQuery(ConsultaGuardarMovimiento , Local);
+                    service.DirectSQLNonQuery(ConsultaGuardar.ToString(), Local);
 
                     //Limpio la consulta para volver a generar la nueva
-                    ConsultaGuardar = "";
+                    ConsultaGuardar.Clear();
                 }
                 estado_almacenamiento = true;
                 //Muestro el mensaje de confirmacion

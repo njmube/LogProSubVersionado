@@ -57,7 +57,6 @@ namespace WpfFront.Presenters
             #region Metodos
 
             View.GenerarCodigo += new EventHandler<EventArgs>(this.OnGenerarCodigo);
-            //View.EvaluarTipoProducto += new EventHandler<DataEventArgs<Product>>(this.OnEvaluarTipoProducto);
             View.AddLine += new EventHandler<EventArgs>(this.OnAddLine);
             View.CargarDatosReparacion += new EventHandler<EventArgs>(this.CargarDatosReparacion);
             view.CargaMasiva += new EventHandler<DataEventArgs<DataTable>>(this.OnCargaMasiva);
@@ -103,9 +102,6 @@ namespace WpfFront.Presenters
             View.Model.ListadoPosiciones = service.GetMMaster(new MMaster { MetaType = new MType { Code = "POSICION1" } });
 
             CargarDatosDetails();
-            ListarDatos();
-        
-
             View.Model.ListRecordsAddToPallet = service.DirectSQLQuery("EXEC sp_GetProcesos 'BUSCARMERCANCIAENTREGAREP', '', '',''", "", "dbo.EquiposClaro", Local);
 
             //Cargo los tecnicos
@@ -209,25 +205,24 @@ namespace WpfFront.Presenters
             String ConsultaSQL = "";
             DataTable SerialesImprimir;
             String unidad_almacenamiento = "";
-            String codigoEmp = View.CodigoEmpaque.Text.ToString();
+            String codigoEmp = View.CodigoEmpaque.Text;
             String destino = "";
             String tipo_listado = "";
             String estado = "";
 
-            //Evaluo que haya sido seleccionado un registro
-            //if (View.ListadoItems.SelectedIndex == -1)
-            //{
-            //    Util.ShowMessage("Debe seleccionar al menos un registro");
-            //    return;
-            //}
 
             if (View.Model.ListRecordsAddToPallet.Rows.Count == 0)
             {
                 Util.ShowMessage("No hay registros para empacar");
                 return;
             }
+            if (View.GetListaEstado.SelectedIndex == -1)
+            {
+                Util.ShowMessage("Por favor seleccionar un estado para los equipos que desea empacar o imprimir, los estados son SCRAP, REPARADO, ETIQUETA ERRONEA.");
+                return;
+            }
 
-            //Evaluo que haya seleccionado laexport plain text  nueva clasificacion
+            //Evaluo que haya seleccionado la nueva clasificacion
             if (View.Ubicacion.SelectedIndex == -1)
             {
                 Util.ShowError("Por favor seleccionar la nueva clasificacion.");
@@ -243,6 +238,7 @@ namespace WpfFront.Presenters
                 Util.ShowError("Por favor generar un código de empaque");
                 return;
             }
+           
 
             //Creo la base de la consulta para traer los seriales respectivos
             ConsultaSQL = "SELECT idPallet,Posicion,serial,Mac,Codigo_SAP,Fecha_ingreso,ProductoID FROM dbo.EquiposCLARO WHERE serial IN (''";
@@ -323,7 +319,6 @@ namespace WpfFront.Presenters
                 Util.ShowError("No es posible actualizar el listado de ubicaciones disponibles " + ex.ToString());
             }
         }
-
 
         public void CargarDatosDetails()
         {
@@ -419,13 +414,6 @@ namespace WpfFront.Presenters
             }
         }
 
-        private void ListarDatos()
-        {
-            DataSet ds = Util.GetListaDatosModulo("REPARACION", null);
-
-            View.Model.ListRecords_1 = ds.Tables[0];
-        }
-
         private void CargarDatosReparacion(object sender, EventArgs e)
         {
             //Validacion existe o no el equipo en DB
@@ -511,7 +499,7 @@ namespace WpfFront.Presenters
             {
                 if (View.GetSerialAsignacion.Text == item["Serial"].ToString())
                 {
-                    Util.ShowError("El serial " + View.GetSerialAsignacion.Text + " ya esta en el listado.");
+                    Util.ShowError("El serial " + SerialAsignacion + " ya esta en el listado.");
                     View.GetSerialAsignacion.Text = "";
                     View.GetMacAsignacion.Text = "";
                     View.GetSerialAsignacion.Focus();
@@ -522,14 +510,14 @@ namespace WpfFront.Presenters
             try
             {
                 //Validacion existe o no el equipo en DB
-                ConsultaBuscar = "SELECT * FROM dbo.EquiposCLARO WHERE Serial = '" + View.GetSerialAsignacion.Text.ToString() + "'";
+                ConsultaBuscar = "SELECT Serial FROM dbo.EquiposCLARO WHERE Serial = '" + SerialAsignacion + "'";
                 DataTable Resultado = service.DirectSQLQuery(ConsultaBuscar, "", "dbo.EquiposCLARO", Local);
 
 
                 if (Resultado.Rows.Count > 0)
                 {
                     //Busco el registro en la DB para validar que exista y que este en la ubicacion valida
-                    RegistroValidado = service.DirectSQLQuery("EXEC sp_GetProcesos 'BUSCAREQUIPOGENERALCARGAR','" + View.GetSerialAsignacion.Text + "'", "", "dbo.EquiposCLARO", Local);
+                    RegistroValidado = service.DirectSQLQuery("EXEC sp_GetProcesos 'BUSCAREQUIPOGENERALCARGAR','" + SerialAsignacion + "'", "", "dbo.EquiposCLARO", Local);
 
                     //Evaluo si el serial existe
 
@@ -552,8 +540,8 @@ namespace WpfFront.Presenters
                     else
                     {
                         OnConsultaReparacionAnterior(sender, e);
-                        String validar = "EXEC sp_GetProcesos 'BUSCARUSUARIORECIBOREP', '" + View.GetSerialAsignacion.Text + "', '" + this.user + "', NULL";
-                        DataTable Garantia = service.DirectSQLQuery("EXEC sp_GetProcesos 'BUSCAREQUIPOGENERALREPARACION','" + View.GetSerialAsignacion.Text + "'", "", "dbo.EquiposCLARO", Local);
+                        String validar = "EXEC sp_GetProcesos 'BUSCARUSUARIORECIBOREP', '" + SerialAsignacion + "', '" + this.user + "', NULL";
+                        DataTable Garantia = service.DirectSQLQuery("EXEC sp_GetProcesos 'BUSCAREQUIPOGENERALREPARACION','" + SerialAsignacion + "'", "", "dbo.EquiposCLARO", Local);
 
                         DataTable ValidarUsuario = service.DirectSQLQuery(validar, "", "dbo.EquiposCLARO", Local);
 
@@ -659,11 +647,6 @@ namespace WpfFront.Presenters
                 {
                     //Asigno los campos
                     View.CodigoEmpaque.Text = "RES-R" + Resultado.Rows[0]["idpallet"].ToString();
-
-                    ////Limpio los seriales para digitar nuevos datos
-                    //View.GetSerial1.Text = "";
-                    //View.GetSerial2.Text = "";
-                    //View.GetSerial1.Focus();
                 }
             }
             else
@@ -681,10 +664,6 @@ namespace WpfFront.Presenters
             foreach (DataRow dr in e.Value.Rows)
             {
                 dr1 = View.Model.ListRecords.NewRow();
-
-                //Asigno los campos
-                /*dr1[0] = View.Model.ProductoSerial.ProductID;
-                dr1[1] = View.Model.ProductoSerial.Name;*/
 
                 NumeroSerial = 1;
                 foreach (DataColumn dc in e.Value.Columns)
@@ -721,8 +700,8 @@ namespace WpfFront.Presenters
         private void OnSaveDetails(object sender, EventArgs e)
         {
             //Variables Auxiliares
-            String ConsultaGuardar = "";
-            String ConsultaGuardarTrack = "";
+            string ConsultaGuardar = "";
+            string ConsultaGuardarTrack = "";
             string FallaRep = "";
             string Falla1 = "";
             string Falla2 = "";
@@ -737,17 +716,15 @@ namespace WpfFront.Presenters
                 //----------------------------------
                 if ((View.FallaReparacionAdic5.Text.ToString() == null) || (View.FallaReparacionAdic5.Text.ToString() == ""))
                 {
-                    Util.ShowError("Por favor ingresar el estado de reparacion");
+                    Util.ShowError("Por favor ingresar el estado de reparación");
                     return;
                 }
                 else
                 {
                     EstatusRep = View.FallaReparacionAdic5.Text.ToString();
-                    //EstatusRep = ((ComboBoxItem)View.FallaReparacionAdic5.SelectedItem).Content.ToString();
                 }
 
                 if (!((MMaster)View.FallaReparacionAdic5.SelectedItem).Name.ToString().Contains("SCRAP"))
-                //if (!View.FallaReparacionAdic5.Text.ToString().Contains("SCRAP"))
                 {
                     if (((MMaster)View.FallaReparacion.SelectedItem == null))
                     {
@@ -789,7 +766,6 @@ namespace WpfFront.Presenters
                     }
                     else
                     {
-                        //EstatusRep = ((ComboBoxItem)View.FallaReparacionAdic5.SelectedItem).Content.ToString();
                         EstatusRep = View.FallaReparacionAdic5.Text.ToString();
                     }
 
@@ -846,16 +822,10 @@ namespace WpfFront.Presenters
 
                 ConsultaGuardarTrack += "UPDATE dbo.TrackEquiposCLARO SET ESTADO_REPARACION = '" + EstatusRep + "', FECHA_REPARADO = getdate() WHERE SERIAL = '" + View.GetSerial1.Text.ToString() + "';";
 
-                ConsultaGuardar += "exec dbo.sp_InsertarNuevo_MovimientoReparacion 'REPARACIÓN TERMINADA','REPARACIÓN','REPARACIÓN','Sin pallet','" + View.GetSerial1.Text.ToString() +
+                ConsultaGuardar += "EXEC dbo.sp_InsertarNuevo_MovimientoReparacion 'REPARACIÓN TERMINADA','REPARACIÓN','REPARACIÓN','Sin pallet','" + View.GetSerial1.Text.ToString() +
                     "','" + View.TecnicoAsignado.Text + "','" + FallaRep + "','" + Falla1 + "','" + Falla2 + "','" + Falla3 + "','" + Falla4 + "','" + EstatusRep +
                     "','" + PartesCambiadas + "','" + ((MotivoScrap != "NULL") ? MotivoScrap : "") + "','" + this.user + "','" + View.GetNroCaja.Text + "';";
 
-                service.DirectSQLNonQuery(ConsultaGuardar, Local);
-                service.DirectSQLNonQuery(ConsultaGuardarTrack, Local);
-
-                //Limpio la consulta para volver a generar la nueva
-                ConsultaGuardar = "";
-                ConsultaGuardarTrack = "";
 
                 //Evaluo si la consulta no envio los ultimos registros para forzar a enviarlos
                 if (!String.IsNullOrEmpty(ConsultaGuardar))
@@ -1263,7 +1233,8 @@ namespace WpfFront.Presenters
                 View.TecnicoReparador.Text = "";
                 View.FallaReparacion.Text = "";
                 View.FechaReparacion.Text = "";
-                //Lispio los datos del combo de tecnicos
+
+                //Limspio los datos del combo de tecnicos
                 View.TecnicosAsignar.SelectedIndex = -1;
                 View.ListadoItemsAsignacion.SelectedIndex = -1;
                 return;
@@ -1311,8 +1282,6 @@ namespace WpfFront.Presenters
                         return;
                     }
 
-                    //UtilWindow.ConfirmOK("El equipo entra como garantia. \nTecnico anterior " + tecnico + " \nFalla: " + falla + "\nFecha ultima reparación: " + fecha + " \n\n ¿Desea asignar el equipo ahora?");
-                        
                     View.TecnicoReparador.Text = tecnico;
                     View.FallaAnteriorDiag.Text = falla;
                     View.FechaReparacion.Text = fecha;
@@ -1333,7 +1302,6 @@ namespace WpfFront.Presenters
                     View.FechaReparacion.Text = "";
                     return;
                 }
-                //UtilWindow.ConfirmOK("El equipo entra como garantia. \nTecnico anterior " + tecnico + " \nFalla: " + falla + "\nFecha ultima reparación: " + fecha + " \n\n ¿Desea asignar el equipo ahora?");
 
                 View.TecnicoReparador.Text = RegistroValidadoDespacho.Rows[0]["TecnicoRep"].ToString();
                 View.FallaAnteriorDiag.Text = RegistroValidadoDespacho.Rows[0]["FallaDiag"].ToString();
@@ -1530,11 +1498,11 @@ namespace WpfFront.Presenters
                         return;
                     }
                 }
-                ConsultaBuscar = "select repa_id,repa_tecnico,repa_fallaPrincipal,repa_falla1,repa_falla2,repa_falla3,repa_falla4,repa_estadoFinal,repa_observaciones,repa_scrap,ProcesoReparacionClaro.mov_id as 'Id_movimiento',repa_caja from EquiposCLARO inner join MovimientoClaro on (EquiposCLARO.RowID = MovimientoClaro.rowid) inner join ProcesoReparacionClaro on (MovimientoClaro.mov_id = ProcesoReparacionClaro.mov_id) where Serial=" + "'" + SerialReparacionH + "'";
+                ConsultaBuscar = "select repa_id,Tecnico_Reparacion as repa_tecnico,FALLA_REP as  repa_fallaPrincipal,FALLA_REP1 as repa_falla1,FALLA_REP2 as repa_falla2,FALLA_REP3 as repa_falla3,FALLA_REP4 as repa_falla4,ESTATUS_REPARACION AS repa_estadoFinal,OBSERVACIONES repa_observaciones,MOTIVO_SCRAP AS  repa_scrap,ProcesoReparacionClaro.mov_id as 'Id_movimiento',repa_caja from Despacho_EquiposCLARO LEFT join MovimientoClaro on (Despacho_EquiposCLARO.RowID = MovimientoClaro.rowid) LEFT join ProcesoReparacionClaro on (MovimientoClaro.mov_id = ProcesoReparacionClaro.mov_id)  where Serial=" + "'" + SerialReparacionH + "'";
                 View.Model.ListReparaciones = service.DirectSQLQuery(ConsultaBuscar, "", "dbo.EquiposCLARO", Local);
                 if (View.Model.ListReparaciones.Rows.Count <= 0)
                 {
-                    //Util.ShowMessage("El equipo no tiene historial");
+
                 }
                 else
                 {
@@ -1547,7 +1515,6 @@ namespace WpfFront.Presenters
                 return;
             }
         }
-
         #endregion
 
     }

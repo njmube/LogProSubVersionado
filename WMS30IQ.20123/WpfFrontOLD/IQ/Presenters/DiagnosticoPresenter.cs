@@ -76,7 +76,7 @@ namespace WpfFront.Presenters
             View.ExportPalletSeleccion += new EventHandler<EventArgs>(this.OnExportPalletSeleccion);
             View.ExportSerialesSeleccion += new EventHandler<EventArgs>(this.OnExportSerialesSeleccion);
             View.ConsultarTecnicos += new EventHandler<EventArgs>(this.OnGetListTecnicos);
-            //ConfirmarMovimiento
+
             #endregion
 
             #region Datos
@@ -457,52 +457,48 @@ namespace WpfFront.Presenters
             {
                 foreach (DataRow DataRow in View.Model.ListRecords.Rows)
                 {
-                    //Aumento el contador de filas
-                    //ContadorFilas++;
+                    
+                    if (DataRow["Estatus_Diagnostico"].ToString() == "BUEN ESTADO")
+                    {
 
-                    //if (ContadorFilas % 50 != 0)
-                    //{
-                        if (DataRow["Estatus_Diagnostico"].ToString() == "BUEN ESTADO")
+                        if (String.IsNullOrEmpty(DataRow["ESTATUS_DIAGNOSTICO"].ToString()))
                         {
-
-                            if (String.IsNullOrEmpty(DataRow["ESTATUS_DIAGNOSTICO"].ToString()))
-                            {
-                                Util.ShowError("Por favor ingrese estatus de diagnostico");
-                                return;
-                            }
-                            else
-                            {
-                                //Construyo la consulta para guardar los datos
-                                ConsultaGuardar += " UPDATE dbo.EquiposCLARO SET Ubicacion = 'ETIQUETADO', Estado = 'P-ETIQUETADO'";
-                                ConsultaGuardar += ", ESTATUS_DIAGNOSTICO = '" + DataRow["Estatus_Diagnostico"].ToString() + "', FALLA_DIAGNOSTICO = '" + DataRow["Falla_Diagnostico"].ToString() + "', DIAGNOSTICADOR = '" + App.curUser.UserName.ToString() + "', TECNICO_ASIGNADO_DIAG = '" + DataRow["Diagnosticador"].ToString() + "', OBSERVACIONES_DIAGNOSTICADOR = '" + DataRow["Observaciones_Diagnosticador"].ToString() + "'";
-                                ConsultaGuardar += " WHERE RowID = '" + DataRow["RowID"].ToString() + "';";
-
-                                ConsultaGuardar += "exec sp_InsertarNuevo_MovimientoDiagnostico 'DIAGNOSTICO TERMINADO, BUEN ESTADO','DIAGNOSTICO','ETIQUETADO','Sin pallet','" + DataRow["RowID"].ToString() + "','" + DataRow["Falla_Diagnostico"].ToString() + "','" +
-                                DataRow["Estatus_Diagnostico"].ToString() + "','" + DataRow["Diagnosticador"].ToString() + "','" + DataRow["Observaciones_Diagnosticador"].ToString() + "','" + this.user + "';";
-
-                                ConsultaGuardarTrack += "UPDATE dbo.TrackEquiposCLARO SET ESTADO_DIAGNOSTICO = '" + DataRow["Estatus_Diagnostico"].ToString() + "', FECHA_DIAGNOSTICADO = CONVERT(VARCHAR(10),GETDATE(), 103)  WHERE ID_SERIAL='" + DataRow["RowID"].ToString() + "';";
-                            }
+                            Util.ShowError("Por favor ingrese estatus de diagnostico");
+                            return;
                         }
                         else
                         {
-                            if (String.IsNullOrEmpty(DataRow["ESTATUS_DIAGNOSTICO"].ToString()))
-                            {
-                                Util.ShowError("Por favor ingrese estatus de diagnostico");
-                                return;
-                            }
-                            else
-                            {
-                                //Construyo la consulta para guardar los datos
-                                ConsultaGuardar += " UPDATE dbo.EquiposCLARO SET Ubicacion = 'DIAGNOSTICO', Estado = 'DIAGNOSTICO'";
-                                ConsultaGuardar += ", ESTATUS_DIAGNOSTICO = '" + DataRow["Estatus_Diagnostico"].ToString() + "', FALLA_DIAGNOSTICO = '" + DataRow["Falla_Diagnostico"].ToString() + "', DIAGNOSTICADOR = '" + App.curUser.UserName.ToString() + "', TECNICO_ASIGNADO_DIAG = '" + DataRow["Diagnosticador"].ToString() + "', OBSERVACIONES_DIAGNOSTICADOR = '" + DataRow["Observaciones_Diagnosticador"].ToString() + "'";
-                                ConsultaGuardar += " WHERE RowID = '" + DataRow["RowID"].ToString() + "';";
+                            //Construyo la consulta para guardar los datos
+                            ConsultaGuardar += " UPDATE dbo.EquiposCLARO SET Ubicacion = 'ETIQUETADO', Estado = 'P-ETIQUETADO'";
+                            ConsultaGuardar += ", ESTATUS_DIAGNOSTICO = '" + DataRow["Estatus_Diagnostico"].ToString() + "', FALLA_DIAGNOSTICO = '" + DataRow["Falla_Diagnostico"].ToString() + "', DIAGNOSTICADOR = '" + App.curUser.UserName.ToString() + "', TECNICO_ASIGNADO_DIAG = '" + DataRow["Diagnosticador"].ToString() + "', OBSERVACIONES_DIAGNOSTICADOR = '" + DataRow["Observaciones_Diagnosticador"].ToString() + "'";
+                            ConsultaGuardar += " WHERE RowID = '" + DataRow["RowID"].ToString() + "';";
 
-                                ConsultaGuardar += "exec sp_InsertarNuevo_MovimientoDiagnostico 'DIAGNOSTICO TERMINADO, MAL ESTADO','DIAGNOSTICO','DIAGNOSTICO EMPAQUE','Sin pallet','" + DataRow["RowID"].ToString() + "','" + DataRow["Falla_Diagnostico"].ToString() + "','" +
-                                DataRow["Estatus_Diagnostico"].ToString() + "','" + DataRow["Diagnosticador"].ToString() + "','" + DataRow["Observaciones_Diagnosticador"].ToString() + "','" + this.user + "';";
+                            ConsultaGuardar += "exec sp_InsertarNuevo_MovimientoDiagnostico 'DIAGNOSTICO TERMINADO, BUEN ESTADO','DIAGNOSTICO','ETIQUETADO','Sin pallet','" + DataRow["RowID"].ToString() + "','" + DataRow["Falla_Diagnostico"].ToString() + "','" +
+                            DataRow["Estatus_Diagnostico"].ToString() + "','" + DataRow["Diagnosticador"].ToString() + "','" + DataRow["Observaciones_Diagnosticador"].ToString() + "','" + this.user + "';";
 
-                                ConsultaGuardarTrack += "UPDATE dbo.TrackEquiposCLARO SET ESTADO_DIAGNOSTICO = '" + DataRow["Estatus_Diagnostico"].ToString() + "', FECHA_DIAGNOSTICADO = CONVERT(VARCHAR(10),GETDATE(), 103) WHERE ID_SERIAL='" + DataRow["RowID"].ToString() + "';";
-                            }
+                            ConsultaGuardarTrack += "UPDATE dbo.TrackEquiposCLARO SET ESTADO_DIAGNOSTICO = '" + DataRow["Estatus_Diagnostico"].ToString() + "', FECHA_DIAGNOSTICADO = CONVERT(VARCHAR(10),GETDATE(), 103)  WHERE ID_SERIAL='" + DataRow["RowID"].ToString() + "';";
                         }
+                    }
+                    else
+                    {
+                        if (String.IsNullOrEmpty(DataRow["ESTATUS_DIAGNOSTICO"].ToString()))
+                        {
+                            Util.ShowError("Por favor ingrese estatus de diagnostico");
+                            return;
+                        }
+                        else
+                        {
+                            //Construyo la consulta para guardar los datos
+                            ConsultaGuardar += " UPDATE dbo.EquiposCLARO SET Ubicacion = 'DIAGNOSTICO', Estado = 'DIAGNOSTICO'";
+                            ConsultaGuardar += ", ESTATUS_DIAGNOSTICO = '" + DataRow["Estatus_Diagnostico"].ToString() + "', FALLA_DIAGNOSTICO = '" + DataRow["Falla_Diagnostico"].ToString() + "', DIAGNOSTICADOR = '" + App.curUser.UserName.ToString() + "', TECNICO_ASIGNADO_DIAG = '" + DataRow["Diagnosticador"].ToString() + "', OBSERVACIONES_DIAGNOSTICADOR = '" + DataRow["Observaciones_Diagnosticador"].ToString() + "'";
+                            ConsultaGuardar += " WHERE RowID = '" + DataRow["RowID"].ToString() + "';";
+
+                            ConsultaGuardar += "exec sp_InsertarNuevo_MovimientoDiagnostico 'DIAGNOSTICO TERMINADO, MAL ESTADO','DIAGNOSTICO','DIAGNOSTICO EMPAQUE','Sin pallet','" + DataRow["RowID"].ToString() + "','" + DataRow["Falla_Diagnostico"].ToString() + "','" +
+                            DataRow["Estatus_Diagnostico"].ToString() + "','" + DataRow["Diagnosticador"].ToString() + "','" + DataRow["Observaciones_Diagnosticador"].ToString() + "','" + this.user + "';";
+
+                            ConsultaGuardarTrack += "UPDATE dbo.TrackEquiposCLARO SET ESTADO_DIAGNOSTICO = '" + DataRow["Estatus_Diagnostico"].ToString() + "', FECHA_DIAGNOSTICADO = CONVERT(VARCHAR(10),GETDATE(), 103) WHERE ID_SERIAL='" + DataRow["RowID"].ToString() + "';";
+                        }
+                    }
                    
                 }
 
@@ -975,7 +971,7 @@ namespace WpfFront.Presenters
                     dr["RowID"] = item.Row["RowID"].ToString();
 
                     View.Model.ListRecordsAddToPallet.Rows.Add(dr);
-
+                    RowID = item.Row["RowID"].ToString();
                     //cambio el estado para no mostrar mas en el listado general
                      ConsultaAgregar += "'" + RowID + "',";
                 }

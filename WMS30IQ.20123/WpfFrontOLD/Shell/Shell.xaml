@@ -44,7 +44,8 @@
                 </awc:Ribbon.Resources>
                 
                 <awc:RibbonTabItem x:Uid="TabInitial" x:Name="TabInitial" Header="{StaticResource MAIN_CONSOLE}">
-                    <StackPanel x:Uid="StackPanel_2" Orientation="Horizontal" Height="95" >                      
+                    <StackPanel x:Uid="StackPanel_2" Orientation="Horizontal" Height="95" >
+                       
                         <awc:RibbonPanel x:Uid="awc:RibbonPanel_1" Header="Windows">
                             <StackPanel x:Uid="StackPanel_3" Orientation="Horizontal">
                                 <awc:DropDownButton x:Uid="awc:DropDownButton_1" OverridesDefaultStyle="True">
@@ -131,7 +132,9 @@
                             </StackPanel>
 
                         </awc:RibbonPanel>
-
+                        <StackPanel HorizontalAlignment="Right">
+                            <Image x:Uid="Image_3" Width="auto" Height="76" Margin="400,0,0,0"  Source="/WpfFront;component/Images/Icons/claro.png" HorizontalAlignment="Right"/>
+                        </StackPanel>
                     </StackPanel>
                 </awc:RibbonTabItem>
 
@@ -141,7 +144,7 @@
 
                     <StackPanel x:Uid="StackPanel_8" Orientation="Horizontal" Height="95" >
 
-
+                       
                         <awc:RibbonPanel x:Uid="awc:RibbonPanel_3" Header="Windows">
                             <StackPanel x:Uid="StackPanel_9" Orientation="Horizontal">
                                 <awc:DropDownButton x:Uid="awc:DropDownButton_2" OverridesDefaultStyle="True">
@@ -193,7 +196,9 @@
                             </ListView>
                         </awc:RibbonPanel>
                         <!--<Image x:Uid="Image_3" Width="100" Height="76" Margin="50,10,0,9" Source="/WpfFront;component/Images/Icons/directv.png"/>-->
-                        
+                        <StackPanel HorizontalAlignment="Right">
+                            <Image x:Uid="Image_3" Width="auto" Height="76" Margin="480,0,0,0"  Source="/WpfFront;component/Images/Icons/claro.png" HorizontalAlignment="Right"/>
+                        </StackPanel>
                     </StackPanel>
                 </awc:RibbonTabItem>
                 
@@ -224,6 +229,7 @@
                                 </awc:DropDownButton>
                                 <!--<awc:ImageButton x:Uid="awc:ImageButton_6" Command="{x:Static aw:ToolWindowDockPanel.MaximizeAllWindowsCommand}" IsToolStyle="True" Orientation="Vertical" ImageSource="/WpfFront;component/Images/Maximized32.png">Maximize All</awc:ImageButton>
                                 <awc:ImageButton x:Uid="awc:ImageButton_7" Command="{x:Static aw:ToolWindowDockPanel.RestoreAllWindowsCommand}" IsToolStyle="True" Orientation="Vertical" ImageSource="/WpfFront;component/Images/Minimized32.png">Restore</awc:ImageButton>-->
+                                
                             </StackPanel>
                         </awc:RibbonPanel>
 
@@ -253,9 +259,10 @@
                             </ListView>
                         </awc:RibbonPanel>
 
-
+                        <StackPanel HorizontalAlignment="Right">
+                            <Image x:Uid="Image_3" Width="auto" Height="76" Margin="480,0,0,0"  Source="/WpfFront;component/Images/Icons/claro.png" HorizontalAlignment="Right"/>
+                        </StackPanel>
                     </StackPanel>
-
                 </awc:RibbonTabItem>
 
 
@@ -263,6 +270,9 @@
                 <awc:RibbonTabItem x:Uid="tbPermission" x:Name="tbMaster" Header="{StaticResource MASTERS}"  Visibility="{Binding ShowMenu4}">
 
                     <StackPanel x:Uid="StackPanel_14" Orientation="Horizontal" Height="95" >
+                        <StackPanel HorizontalAlignment="Left">
+                            <Image x:Uid="Image_3" Width="auto" Height="76"  Source="/WpfFront;component/Images/Icons/claro.png" HorizontalAlignment="Right"/>
+                        </StackPanel>
                         <awc:RibbonPanel x:Uid="awc:RibbonPanel_8" Header="Windows">
                             <StackPanel x:Uid="StackPanel_15" Orientation="Horizontal">
                                 <awc:DropDownButton x:Uid="awc:DropDownButton_4" OverridesDefaultStyle="True">
