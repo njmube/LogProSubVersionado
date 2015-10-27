@@ -265,81 +265,10 @@ namespace WpfFront
             container.RegisterType<IConfirmacionIntermediaModel, ConfirmacionIntermediaModel>();
             //MODULO INTERMEDIO CLARO - 18 DE FEBRERO DE 2015//////////////////////////////////////////////////
 
-            //MODULO INTERMEDIO DIRECTV - 23 DE FEBRERO DE 2015//////////////////////////////////////////////////
-            container.RegisterType<IConfirmacionIntermediaViewP, ConfirmacionIntermediaViewP>();
-            container.RegisterType<IConfirmacionIntermediaPresenterP, ConfirmacionIntermediaPresenterP>();
-            container.RegisterType<IConfirmacionIntermediaModelP, ConfirmacionIntermediaModelP>();
-            //MODULO INTERMEDIO DIRECTV - 23 DE FEBRERO DE 2015//////////////////////////////////////////////////
-
-
-
-            container.RegisterType<IReciboView, ReciboView>();
-            container.RegisterType<IReciboPresenter, ReciboPresenter>();
-            container.RegisterType<IReciboModel, ReciboModel>();
 
             container.RegisterType<IAdministradorView, AdministradorView>();
             container.RegisterType<IAdministradorPresenter, AdministradorPresenter>();
             container.RegisterType<IAdministradorModel, AdministradorModel>();
-
-            container.RegisterType<IAdministradorDTVView, AdministradorDTVView>();
-            container.RegisterType<IAdministradorDTVPresenter, AdministradorDTVPresenter>();
-            container.RegisterType<IAdministradorDTVModel, AdministradorDTVModel>();
-
-            container.RegisterType<IAlmacenamientoView, AlmacenamientoView>();
-            container.RegisterType<IAlmacenamientoPresenter, AlmacenamientoPresenter>();
-            container.RegisterType<IAlmacenamientoModel, AlmacenamientoModel>();
-
-            container.RegisterType<IMoverMercanciaDTVView, MoverMercanciaDTVView>();
-            container.RegisterType<IMoverMercanciaDTVPresenter, MoverMercanciaDTVPresenter>();
-            container.RegisterType<IMoverMercanciaDTVModel, MoverMercanciaDTVModel>();
-
-            ///////////////////////////////////////////////////////////////////////
-            container.RegisterType<ISmartCardDTVViewP, SmartCardDTVViewP>();
-            container.RegisterType<ISmartCardDTVPresenterP, SmartCardDTVPresenterP>();
-            container.RegisterType<ISmartCardDTVModelP, SmartCardDTVModelP>();
-            ///////////////////////////////////////////////////////////////////////
-
-            //////30 JULIO 2015 ERWIN PARDO////////////
-            container.RegisterType<ISmartCardProdDTVView, SmartCardProdDTVView>();
-            container.RegisterType<ISmartCardProdDTVPresenter, SmartCardProdDTVPresenter>();
-            container.RegisterType<ISmartCardProdDTVModel, SmartCardProdDTVModel>();
-            //////30 JULIO 2015 ERWIN PARDO////////////
-
-            //////31 AGOSTO 2015 ERWIN PARDO////////////
-            container.RegisterType<IPreDiagnosticoDTVView, PreDiagnosticoDTVView>();
-            container.RegisterType<IPreDiagnosticoDTVPresenter, PreDiagnosticoDTVPresenter>();
-            container.RegisterType<IPreDiagnosticoDTVModel, PreDiagnosticoDTVModel>();
-            //////31 AGOSTO 2015 ERWIN PARDO////////////
-
-            container.RegisterType<IDespachoDTVView, DespachoDTVView>();
-            container.RegisterType<IDespachoDTVPresenter, DespachoDTVPresenter>();
-            container.RegisterType<IDespachoDTVModel, DespachoDTVModel>();
-
-            container.RegisterType<IReparacionesDTVView, ReparacionesDTVView>();
-            container.RegisterType<IReparacionesDTVPresenter, ReparacionesDTVPresenter>();
-            container.RegisterType<IReparacionesDTVModel, ReparacionesDTVModel>();
-
-            container.RegisterType<IDiagnosticoDTVView, DiagnosticoDTVView>();
-            container.RegisterType<IDiagnosticoDTVPresenter, DiagnosticoDTVPresenter>();
-            container.RegisterType<IDiagnosticoDTVModel, DiagnosticoDTVModel>();
-
-            container.RegisterType<IEtiquetadosDTVView, EtiquetadosDTVView>();
-            container.RegisterType<IEtiquetadosDTVPresenter, EtiquetadosDTVPresenter>();
-            container.RegisterType<IEtiquetadosDTVModel, EtiquetadosDTVModel>();
-
-            container.RegisterType<IVerificacionDTVView, VerificacionDTVView>();
-            container.RegisterType<IVerificacionDTVPresenter, VerificacionDTVPresenter>();
-            container.RegisterType<IVerificacionDTVModel, VerificacionDTVModel>();
-
-            container.RegisterType<IEmpaqueDTVView, EmpaqueDTVView>();
-            container.RegisterType<IEmpaqueDTVPresenter, EmpaqueDTVPresenter>();
-            container.RegisterType<IEmpaqueDTVModel, EmpaqueDTVModel>();
-
-            //MODULO 30 DE JULIO DE 2015//////////////////////////////////////////////////
-            container.RegisterType<INovedadesDTVView, NovedadesDTVView>();
-            container.RegisterType<INovedadesDTVPresenter, NovedadesDTVPresenter>();
-            container.RegisterType<INovedadesDTVModel, NovedadesDTVModel>();
-            //MODULO 30 DE JULIO DE 2015//////////////////////////////////////////////////
 
             container.RegisterType<IGeneradorEstibasView, GeneradorEstibasView>();
             container.RegisterType<IGeneradorEstibasPresenter, GeneradorEstibasPresenter>();
@@ -778,14 +707,6 @@ namespace WpfFront
                 ////////// 18 DE FEBRERO DE 2015 /////////////
 
                 ////////// 23 DE FEBRERO DE 2015 /////////////
-                case "ConfirmacionIntermediaPresenterP":
-                    ConfirmacionIntermediaPresenterP ConfirmacionIntermediaP = container.Resolve<ConfirmacionIntermediaPresenterP>();
-                    ConfirmacionIntermediaP.Window = window;
-                    return ConfirmacionIntermediaP.View;
-                ////////// 23 DE FEBRERO DE 2015 /////////////
-
-
-                ////////// 23 DE FEBRERO DE 2015 /////////////
                 case "ActualizacionRRPresenter":
                     ActualizacionRRPresenter ActualizacionRRPresenter = container.Resolve<ActualizacionRRPresenter>();
                     ActualizacionRRPresenter.Window = window;
@@ -799,89 +720,11 @@ namespace WpfFront
                     return NovedadesPresenterP.View;
                 ////////// 23 DE MAYO DE 2015 /////////////
 
-                case "ReciboPresenter":
-                    ReciboPresenter Recibo = container.Resolve<ReciboPresenter>();
-                    Recibo.Window = window;
-                    return Recibo.View;
-
                 case "AdministradorPresenter":
                     AdministradorPresenter Administrador = container.Resolve<AdministradorPresenter>();
                     Administrador.Window = window;
                     return Administrador.View;
-
-                case "AdministradorDTVPresenter":
-                    AdministradorDTVPresenter AdministradorDTV = container.Resolve<AdministradorDTVPresenter>();
-                    AdministradorDTV.Window = window;
-                    return AdministradorDTV.View;
-
-                case "AlmacenamientoPresenter":
-                    AlmacenamientoPresenter Almacenamiento = container.Resolve<AlmacenamientoPresenter>();
-                    Almacenamiento.Window = window;
-                    return Almacenamiento.View;
-
-                case "MoverMercanciaDTVPresenter":
-                    MoverMercanciaDTVPresenter MoverMercanciaDTV = container.Resolve<MoverMercanciaDTVPresenter>();
-                    MoverMercanciaDTV.Window = window;
-                    return MoverMercanciaDTV.View;
-
-                case "DespachoDTVPresenter":
-                    DespachoDTVPresenter DespachoDTV = container.Resolve<DespachoDTVPresenter>();
-                    DespachoDTV.Window = window;
-                    return DespachoDTV.View;
-
-                case "DiagnosticoDTVPresenter":
-                    DiagnosticoDTVPresenter DiagnosticoDTV = container.Resolve<DiagnosticoDTVPresenter>();
-                    DiagnosticoDTV.Window = window;
-                    return DiagnosticoDTV.View;
-
-                case "ReparacionesDTVPresenter":
-                    ReparacionesDTVPresenter ReparacionesDTV = container.Resolve<ReparacionesDTVPresenter>();
-                    ReparacionesDTV.Window = window;
-                    return ReparacionesDTV.View;
-
-                case "EtiquetadosDTVPresenter":
-                    EtiquetadosDTVPresenter EtiquetadosDTV = container.Resolve<EtiquetadosDTVPresenter>();
-                    EtiquetadosDTV.Window = window;
-                    return EtiquetadosDTV.View;
-
-                case "VerificacionDTVPresenter":
-                    VerificacionDTVPresenter VerificacionDTV = container.Resolve<VerificacionDTVPresenter>();
-                    VerificacionDTV.Window = window;
-                    return VerificacionDTV.View;
-
-                case "EmpaqueDTVPresenter":
-                    EmpaqueDTVPresenter EmpaqueDTV = container.Resolve<EmpaqueDTVPresenter>();
-                    EmpaqueDTV.Window = window;
-                    return EmpaqueDTV.View;
-
-                /////////////////////////////////////////////////////////////////////////////////////
-                case "SmartCardDTVPresenterP":
-                    SmartCardDTVPresenterP SmartCardDTVpp = container.Resolve<SmartCardDTVPresenterP>();
-                    SmartCardDTVpp.Window = window;
-                    return SmartCardDTVpp.View;
-                //////////////////////////////////////////////////////////////////////////////////////
-
-                /////////////////////////////////////////////////////////////////////////////////////
-                case "SmartCardProdDTVPresenter":
-                    SmartCardProdDTVPresenter SmartCardProdDTVPresenterP = container.Resolve<SmartCardProdDTVPresenter>();
-                    SmartCardProdDTVPresenterP.Window = window;
-                    return SmartCardProdDTVPresenterP.View;
-                //////////////////////////////////////////////////////////////////////////////////////
-
-                ////////// 30 DE JULIO DE 2015 /////////////
-                case "NovedadesDTVPresenter":
-                    NovedadesDTVPresenter NovedadesDTVPresenterP = container.Resolve<NovedadesDTVPresenter>();
-                    NovedadesDTVPresenterP.Window = window;
-                    return NovedadesDTVPresenterP.View;
-                ////////// 30 DE JULIO DE 2015 /////////////
-
-                ////////// 31 DE AGOSTO DE 2015 /////////////
-                case "PreDiagnosticoDTVPresenter":
-                    PreDiagnosticoDTVPresenter PreDiagnosticoDTVPresenterP = container.Resolve<PreDiagnosticoDTVPresenter>();
-                    PreDiagnosticoDTVPresenterP.Window = window;
-                    return PreDiagnosticoDTVPresenterP.View;
-                ////////// 31 DE AGOSTO DE 2015 /////////////
-
+             
                 case "GeneradorEstibasPresenter":
                     GeneradorEstibasPresenter GeneradorEstibas = container.Resolve<GeneradorEstibasPresenter>();
                     GeneradorEstibas.Window = window;
@@ -896,11 +739,6 @@ namespace WpfFront
                     MoverMercanciaPresenter MoverMercancia = container.Resolve<MoverMercanciaPresenter>();
                     MoverMercancia.Window = window;
                     return MoverMercancia.View;
-
-                //case "ConfirmarReciboPresenter":
-                //    ConfirmarReciboPresenter ConfirmarRecibo = container.Resolve<ConfirmarReciboPresenter>();
-                //    ConfirmarRecibo.Window = window;
-                //    return ConfirmarRecibo.View;
 
                 case "NoProcesablesPresenter":
                     NoProcesablesPresenter NoProcesables = container.Resolve<NoProcesablesPresenter>();
