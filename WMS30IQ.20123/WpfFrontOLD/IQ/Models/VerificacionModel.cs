@@ -12,7 +12,6 @@ namespace WpfFront.Models
 {
     public interface IVerificacionModel
     {
-        public int numero { get; set; }
         DataTable ListRecords { get; set; }
         DataTable ListRecords2 { get; set; }
         DataTable ListUbicacionesDestino { get; set; }
