@@ -102,6 +102,14 @@ namespace WpfFront
         {
             get { return (modules[0].ModuleRegions[7].Options == null || modules[0].ModuleRegions[7].Options.Count == 0) ? Visibility.Collapsed : Visibility.Visible; }
         }
+        public Visibility ShowMenu8 // Administrator
+        {
+            get { return (modules[0].ModuleRegions[8].Options == null || modules[0].ModuleRegions[8].Options.Count == 0) ? Visibility.Collapsed : Visibility.Visible; }
+        }
+        //public Visibility ShowMenu9 // Consultations
+        //{
+        //    get { return (modules[0].ModuleRegions[9].Options == null || modules[0].ModuleRegions[9].Options.Count == 0) ? Visibility.Collapsed : Visibility.Visible; }
+        //}
 
         public IList<Company> Companies { get { return App.CompanyList;  } }
 

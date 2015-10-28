@@ -14,7 +14,9 @@ using WMComposite.Modularity;
 using WMComposite.Regions;
 using System.Collections.ObjectModel;
 using Assergs.Windows;
-
+using WpfFront.IQ.Models;
+using WpfFront.IQ.Presenters;
+using WpfFront.IQ.Views;
 
 namespace WpfFront
 {
@@ -268,6 +270,12 @@ namespace WpfFront
             container.RegisterType<IAdministradorView, AdministradorView>();
             container.RegisterType<IAdministradorPresenter, AdministradorPresenter>();
             container.RegisterType<IAdministradorModel, AdministradorModel>();
+
+            //MODULO ADMINISTRADOR SERIALES Y ESTIBAS CLARO - 28 DE OCTUBRE DE 2015//////////////////////////////////////////////////
+            container.RegisterType<IAdminEstibasView, AdminEstibasView>();
+            container.RegisterType<IAdminEstibasPresenter, AdminEstibasPresenter>();
+            container.RegisterType<IAdminEstibasModel, AdminEstibasModel>();
+            //MODULO ADMINISTRADOR SERIALES Y ESTIBAS CLARO - 28 DE OCTUBRE DE 2015//////////////////////////////////////////////////
 
             container.RegisterType<IGeneradorEstibasView, GeneradorEstibasView>();
             container.RegisterType<IGeneradorEstibasPresenter, GeneradorEstibasPresenter>();
@@ -670,14 +678,11 @@ namespace WpfFront
         }
 
 
-        #region IModule Members
+        #region IModule Members Presenter
 
 
         public Object Execute(Type typePresenter, ToolWindow window)
         {
-            //Excute y segun el tipo del presenter enviado muestra el view
-            //Console.WriteLine("............ "+typePresenter.Name);
-
             switch (typePresenter.Name)
             {
 
@@ -719,10 +724,17 @@ namespace WpfFront
                     return NovedadesPresenterP.View;
                 ////////// 23 DE MAYO DE 2015 /////////////
 
+                //MODULO ADMINISTRADOR SERIALES Y ESTIBAS CLARO - 28 DE OCTUBRE DE 2015//////////////////////////////////////////////////
                 case "AdministradorPresenter":
                     AdministradorPresenter Administrador = container.Resolve<AdministradorPresenter>();
                     Administrador.Window = window;
                     return Administrador.View;
+                //MODULO ADMINISTRADOR SERIALES Y ESTIBAS CLARO - 28 DE OCTUBRE DE 2015//////////////////////////////////////////////////
+
+                case "AdminEstibasPresenter":
+                    AdminEstibasPresenter AdminEstibas = container.Resolve<AdminEstibasPresenter>();
+                    AdminEstibas.Window = window;
+                    return AdminEstibas.View;
 
                 case "GeneradorEstibasPresenter":
                     GeneradorEstibasPresenter GeneradorEstibas = container.Resolve<GeneradorEstibasPresenter>();

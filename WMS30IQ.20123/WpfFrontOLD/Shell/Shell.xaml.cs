@@ -51,8 +51,6 @@ namespace WpfFront
                                                       new ExecutedRoutedEventHandler(this.RestoreAllWindow_Executed),
                                                       new CanExecuteRoutedEventHandler(this.CanExecuteRestoreCommand));
             this.CommandBindings.Add(cmdRestoreAllWindows);
-
-
         }
 
         public void ShowView()
@@ -101,14 +99,14 @@ namespace WpfFront
 
         private void DropDownMenuItem_Click(object sender, RoutedEventArgs e)
         {
-            
+
             ModuleSubmenu ms = ((HeaderedItemsControl)e.OriginalSource).Header as ModuleSubmenu; //((DropDownMenuItem)sender).Items[ ((DropDownMenuItem)sender).Items.CurrentPosition] as ModuleSubmenu;
-            SetWindow(ms);          
+            SetWindow(ms);
         }
 
         public void SetWindow(ModuleSubmenu ms)
         {
-            InternalWindow window = new InternalWindow();            
+            InternalWindow window = new InternalWindow();
             window.Parent = this.content.WindowsContainer as Panel;
             window.CanResize = true;
             window.ShowStatusBar = false;
@@ -116,7 +114,7 @@ namespace WpfFront
             window.StartPosition = ToolWindowStartPosition.CenterParent;
             window.Height = SystemParameters.FullPrimaryScreenHeight - 150;
             window.Width = SystemParameters.FullPrimaryScreenWidth - 10;
-            window.Icon =  new BitmapImage(new Uri(ms.IconPath, UriKind.Relative));
+            window.Icon = new BitmapImage(new Uri(ms.IconPath, UriKind.Relative));
             //window.Width = 800;
 
             //window.Icon = Util.GetImageSource(ms.Image);            
@@ -126,8 +124,12 @@ namespace WpfFront
 
         public void SetWindowExternal(Type curType, string presenterName)
         {
-            ModuleSubmenu ms = new ModuleSubmenu { Module = this.Model.Modules[0], 
-                PresenterType = curType, Name = presenterName }; 
+            ModuleSubmenu ms = new ModuleSubmenu
+            {
+                Module = this.Model.Modules[0],
+                PresenterType = curType,
+                Name = presenterName
+            };
             SetWindow(ms);
         }
 
@@ -218,10 +220,10 @@ namespace WpfFront
                 {
                     Name = "Process",
                     Module = this.Model.Modules[0],
-                    PresenterType = Type.GetType("WpfFront.Presenters.ProductCategoryPresenter"), 
+                    PresenterType = Type.GetType("WpfFront.Presenters.ProductCategoryPresenter"),
                     IconPath = "/WpfFront;component/Images/Icons/48x48/Unit.png"
                 });
-            }            
+            }
             ProcessWrapPanel(this._WrapPanel);
         }
 
@@ -287,7 +289,7 @@ namespace WpfFront
 
                 Border b = new Border();
                 b.Width = 100;
-                b.Height = 100;
+                b.Height = 130;
                 b.Background = Brushes.AliceBlue;
 
                 ToolTip t = new ToolTip();
@@ -435,7 +437,7 @@ namespace WpfFront
                         }
 
                     loaded = true;
-                    ((ShellPresenterModel)this.DataContext).UserInfo = "Company: " + App.curCompany.Name                        
+                    ((ShellPresenterModel)this.DataContext).UserInfo = "Company: " + App.curCompany.Name
                         + " | User: " + App.curUser.UserName
                         + " | Version: " + App.curVersion;
 
@@ -476,7 +478,7 @@ namespace WpfFront
         {
             //Cambio del Actual Location
             App.curLocation = this.cboLocation.SelectedItem as Location;
-            ((ShellPresenterModel)this.DataContext).UserInfo = "Company: " + App.curCompany.Name                        
+            ((ShellPresenterModel)this.DataContext).UserInfo = "Company: " + App.curCompany.Name
                         + " | User: " + App.curUser.UserName
                         + " | Version: " + App.curVersion;
 
@@ -549,9 +551,8 @@ namespace WpfFront
 
         private void ucProduct_OnLoadRecord(object sender, EventArgs e)
         {
-           LoadInquiry(sender, new DataEventArgs<string>(ucProduct.Product.ProductCode));
+            LoadInquiry(sender, new DataEventArgs<string>(ucProduct.Product.ProductCode));
         }
-
 
         private void ucBin_OnLoadLocation(object sender, EventArgs e)
         {
@@ -592,13 +593,8 @@ namespace WpfFront
 
                 Util.ShowMessage("Password  was changed.");
                 txtNewPassword.Password = txtNewPassword2.Password = "";
-
             }
             catch { }
-
         }
-
-
     }
-
 }

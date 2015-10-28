@@ -1,0 +1,23 @@
+﻿<WMCore:UserControlBase x:Uid="AdminEstibas" x:Class="WpfFront.IQ.Views.AdminEstibasView"
+            Height="Auto" Width="Auto" HorizontalAlignment="Stretch"
+            xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+            xmlns:xcdg="http://schemas.xceed.com/wpf/xaml/datagrid"
+            xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+            xmlns:WMCore="clr-namespace:Core.WPF;assembly=Core"   
+            xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+            xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+            xmlns:dg="http://schemas.microsoft.com/wpf/2008/toolkit"
+            xmlns:toolkit="http://schemas.microsoft.com/wpf/2008/toolkit"
+            xmlns:uc="clr-namespace:WpfFront.Common.UserControls"
+            xmlns:winformchart="clr-namespace:System.Windows.Forms.DataVisualization.Charting;assembly=System.Windows.Forms.DataVisualization"
+            x:Name="AdminEstibas">
+    
+<AdornerDecorator x:Uid="AdornerDecorator_1">
+    <DockPanel x:Uid="DockPanel_1" Background="AliceBlue" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+        <TabControl x:Uid="tabMenu" Margin="7,2,6,6" Name="tabMenu" 
+                Style="{DynamicResource TabControlStyle}"
+                VerticalAlignment="Stretch">
+        </TabControl>
+    </DockPanel>
+</AdornerDecorator>
+</WMCore:UserControlBase>

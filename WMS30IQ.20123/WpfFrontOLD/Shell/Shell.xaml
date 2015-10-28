@@ -166,8 +166,6 @@
                                         </awc:DropDownMenuItem>
                                     </awc:DropDownMenuItem>
                                 </awc:DropDownButton>
-                                <!--<awc:ImageButton x:Uid="awc:ImageButton_2" Command="{x:Static aw:ToolWindowDockPanel.MaximizeAllWindowsCommand}" IsToolStyle="True" Orientation="Vertical" ImageSource="/WpfFront;component/Images/Maximized32.png">Maximize All</awc:ImageButton>
-                                <awc:ImageButton x:Uid="awc:ImageButton_3" Command="{x:Static aw:ToolWindowDockPanel.RestoreAllWindowsCommand}" IsToolStyle="True" Orientation="Vertical" ImageSource="/WpfFront;component/Images/Minimized32.png">Restore</awc:ImageButton>-->
                             </StackPanel>
                         </awc:RibbonPanel>
 
@@ -195,7 +193,6 @@
                                 </ListView.ItemTemplate>
                             </ListView>
                         </awc:RibbonPanel>
-                        <!--<Image x:Uid="Image_3" Width="100" Height="76" Margin="50,10,0,9" Source="/WpfFront;component/Images/Icons/directv.png"/>-->
                         <StackPanel HorizontalAlignment="Right">
                             <Image x:Uid="Image_3" Width="auto" Height="76" Margin="480,0,0,0"  Source="/WpfFront;component/Images/Icons/claro.png" HorizontalAlignment="Right"/>
                         </StackPanel>
@@ -233,7 +230,6 @@
                             </StackPanel>
                         </awc:RibbonPanel>
 
-
                         <awc:RibbonPanel x:Uid="awc:RibbonPanel_7" Header="Inventory Options">
                             <ListView x:Uid="ListView_3" ItemsSource="{Binding UserMenu[3].Options}" Width="Auto" Background="{DynamicResource WBg}">
                                 <ListView.ItemTemplate>
@@ -265,8 +261,46 @@
                     </StackPanel>
                 </awc:RibbonTabItem>
 
+                <awc:RibbonTabItem x:Uid="tbAdministrator" Header="Administrador"  Visibility="{Binding ShowMenu8}">
+                    <StackPanel x:Uid="StackPanel_11" Orientation="Horizontal" Height="95" >
+                        <awc:RibbonPanel x:Uid="awc:RibbonPanel_7" Header="Inventory Options">
+                            <ListView x:Uid="ListView_3" ItemsSource="{Binding UserMenu[8].Options}" Width="Auto" Background="{DynamicResource WBg}">
+                                <ListView.ItemTemplate>
+                                    <DataTemplate x:Uid="DataTemplate_3">
+                                        <awc:ImageButton x:Uid="awc:ImageButton_8" CommandParameter="{Binding}"  Click="ImageButton_Click"  
+                                                     IsToolStyle="True" ToolTip="{Binding Path=Name}" Orientation="Vertical" 
+                                                      MinWidth="70" Content="{Binding Path=Name}" ImageSource="{Binding Image}" />
+                                    </DataTemplate>
+                                </ListView.ItemTemplate>
+                            </ListView>
+                        </awc:RibbonPanel>
 
-                
+                        <StackPanel HorizontalAlignment="Right">
+                            <Image x:Uid="Image_3" Width="auto" Height="76" Margin="480,0,0,0"  Source="/WpfFront;component/Images/Icons/claro.png" HorizontalAlignment="Right"/>
+                        </StackPanel>
+                    </StackPanel>
+                </awc:RibbonTabItem>
+
+                <!--<awc:RibbonTabItem x:Uid="tbConsultation" Header="Consultas"  Visibility="{Binding ShowMenu9}">
+                    <StackPanel x:Uid="StackPanel_11" Orientation="Horizontal" Height="95" >
+                        <awc:RibbonPanel x:Uid="awc:RibbonPanel_7" Header="Inventory Options">
+                            <ListView x:Uid="ListView_3" ItemsSource="{Binding UserMenu[9].Options}" Width="Auto" Background="{DynamicResource WBg}">
+                                <ListView.ItemTemplate>
+                                    <DataTemplate x:Uid="DataTemplate_3">
+                                        <awc:ImageButton x:Uid="awc:ImageButton_8" CommandParameter="{Binding}"  Click="ImageButton_Click"  
+                                                     IsToolStyle="True" ToolTip="{Binding Path=Name}" Orientation="Vertical" 
+                                                      MinWidth="70" Content="{Binding Path=Name}" ImageSource="{Binding Image}" />
+                                    </DataTemplate>
+                                </ListView.ItemTemplate>
+                            </ListView>
+                        </awc:RibbonPanel>
+
+                        <StackPanel HorizontalAlignment="Right">
+                            <Image x:Uid="Image_3" Width="auto" Height="76" Margin="480,0,0,0"  Source="/WpfFront;component/Images/Icons/claro.png" HorizontalAlignment="Right"/>
+                        </StackPanel>
+                    </StackPanel>
+                </awc:RibbonTabItem>-->
+
                 <awc:RibbonTabItem x:Uid="tbPermission" x:Name="tbMaster" Header="{StaticResource MASTERS}"  Visibility="{Binding ShowMenu4}">
 
                     <StackPanel x:Uid="StackPanel_14" Orientation="Horizontal" Height="95" >
@@ -316,9 +350,6 @@
                     
                 </awc:RibbonTabItem>
 
-
-                
-                
                 <awc:RibbonTabItem x:Uid="tbConfig" x:Name="tbConfig" Header="{StaticResource SYSTEM_SETUP}"  Visibility="{Binding ShowMenu5}">
 
                     <StackPanel x:Uid="StackPanel_17" Orientation="Horizontal" Height="95" >
