@@ -46,7 +46,7 @@
                 <awc:RibbonTabItem x:Uid="TabInitial" x:Name="TabInitial" Header="{StaticResource MAIN_CONSOLE}">
                     <StackPanel x:Uid="StackPanel_2" Orientation="Horizontal" Height="95" >
                        
-                        <awc:RibbonPanel x:Uid="awc:RibbonPanel_1" Header="Windows">
+                        <awc:RibbonPanel x:Uid="awc:RibbonPanel_1" Header="Windows" Visibility="Collapsed">
                             <StackPanel x:Uid="StackPanel_3" Orientation="Horizontal">
                                 <awc:DropDownButton x:Uid="awc:DropDownButton_1" OverridesDefaultStyle="True">
                                     <awc:DropDownMenuItem x:Uid="awc:DropDownMenuItem_1" TopLevelButtonOrientation="Vertical" DropDownButtonMode="ToggleButtonOnly" HeaderText="Current Windows" MaxWidth="55" SubmenuOpened="WindowsSubmenu_Opened" OverridesDefaultStyle="True">

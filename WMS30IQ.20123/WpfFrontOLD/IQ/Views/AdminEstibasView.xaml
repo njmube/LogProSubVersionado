@@ -11,13 +11,186 @@
             xmlns:uc="clr-namespace:WpfFront.Common.UserControls"
             xmlns:winformchart="clr-namespace:System.Windows.Forms.DataVisualization.Charting;assembly=System.Windows.Forms.DataVisualization"
             x:Name="AdminEstibas">
-    
-<AdornerDecorator x:Uid="AdornerDecorator_1">
-    <DockPanel x:Uid="DockPanel_1" Background="AliceBlue" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
-        <TabControl x:Uid="tabMenu" Margin="7,2,6,6" Name="tabMenu" 
-                Style="{DynamicResource TabControlStyle}"
-                VerticalAlignment="Stretch">
-        </TabControl>
-    </DockPanel>
-</AdornerDecorator>
+    <AdornerDecorator x:Uid="AdornerDecorator_1">
+        <DockPanel x:Uid="DockPanel_1" Background="AliceBlue" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+            <StackPanel x:Uid="StackPanel_1" Orientation="Vertical" >
+                <StackPanel x:Uid="Stack_Panel" Orientation="Horizontal" Margin="3" HorizontalAlignment="Center" Width="auto" Height="auto" >
+                    <Border x:Uid="Border_1" Name="Border_Detail" Style="{DynamicResource UserControlFormInnerBorder}" Margin="3" HorizontalAlignment="Center" Visibility="Visible" >
+                        <StackPanel x:Name="Stack_DetailSerial" Orientation="Vertical" Margin="3" HorizontalAlignment="Center" >
+                            <StackPanel>
+                                <TextBlock Text="MÓDULO ADMINISTRADOR DE ESTIBAS" HorizontalAlignment="Left" FontWeight="bold" />
+                            </StackPanel>
+                            <Separator Margin="5,0,0,0"/>
+                            <StackPanel Orientation="Horizontal" Margin="0,6,0,0">
+                                <StackPanel  Name="Stack_Pallet" Orientation="Vertical" Margin="4,0,4,0" >
+                                    <TextBlock Name="txt_pallet" Text="Código de estiba" />
+                                    <TextBox Name="tb_pallet" Margin="0,5,0,0" Height="25" Width="150"  />
+                                </StackPanel>
+                               
+                                <StackPanel  x:Name="StackBotonBuscar" Width="auto" Orientation="Horizontal" Margin="50,4,4,3" HorizontalAlignment="Right" VerticalAlignment="Bottom" Height="auto" >
+                                    <Button x:Name="btnBuscar" ToolTip="Buscar estiba">
+                                        <StackPanel>
+                                            <Image Source="/WpfFront;component/Images/look.png"/>
+                                        </StackPanel>
+                                    </Button>
+                                </StackPanel>
+                            </StackPanel>
+                            <Separator Margin="0,7,0,0"/>
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="Pallets cargados: " FontWeight="Bold" Margin="0,0,8,4" />
+                                <TextBlock x:Name="txt_RecuentoPallets" Text="{Binding ListadoPallets.Count}" FontWeight="Bold" Margin="0,0,8,4" />
+                            </StackPanel>
+                            <StackPanel x:Uid="Stack_Adicionales_2" x:Name="Stack_Adicionales_2" Orientation="Vertical" Margin="0,0,0,0">
+                                <ListView x:Name="lv_ListadoPallets" SelectionMode="Multiple" ItemsSource="{Binding ListadoPallets}" Margin="0,4,0,0"  MaxHeight="400"  HorizontalAlignment="Center">
+                                    <ListView.View>
+                                        <GridView x:Name="GridViewListadoPallets">
+                                            <GridViewColumn Header="Estiba" Width="100" DisplayMemberBinding="{Binding Estiba1}" />
+                                            <GridViewColumn Header="Código empaque II" Width="auto" DisplayMemberBinding="{Binding Estiba2}" />
+                                            <GridViewColumn Header="Código empaque III" Width="auto" DisplayMemberBinding="{Binding Estiba3}" />
+                                            <GridViewColumn Header="Modelo" Width="265" DisplayMemberBinding="{Binding Modelo}" />
+                                            <GridViewColumn Header="Cantidad" Width="65" DisplayMemberBinding="{Binding Cantidad}" />
+                                            <GridViewColumn Header="Fecha ingreso" Width="auto" DisplayMemberBinding="{Binding FechaIngreso}" />
+                                            <GridViewColumn Header="Estado" Width="90" DisplayMemberBinding="{Binding Estado}" />
+                                            <GridViewColumn Header="Ubicación" Width="65" DisplayMemberBinding="{Binding Ubicacion}" />
+                                            <GridViewColumn Header="Posición" Width="65" DisplayMemberBinding="{Binding Posicion}" />
+                                        </GridView>
+                                    </ListView.View>
+                                </ListView>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal" Width="200" HorizontalAlignment="Left">
+                                <TextBlock Text="Total seriales seleccionados: " FontWeight="Bold" Margin="0,0,8,4" />
+                                <TextBlock x:Name="txt_RecuentoSerialesSeleccionados" Text="0" FontWeight="Bold" Margin="0,0,8,4" />
+                            </StackPanel>
+
+                            <StackPanel Orientation="Horizontal" Width="180" HorizontalAlignment="Left">
+                                <TextBlock  Text="Total estibas seleccionados: " FontWeight="Bold" Margin="0,0,8,4" />
+                                <TextBlock  x:Name="txt_RecuentoEstibasSeleccionadas" Text="0" FontWeight="Bold" Margin="0,0,8,4" />
+                            </StackPanel>
+                            <Expander Margin="-5,10,0,0" VerticalAlignment="Bottom" Cursor="Pen" Width="auto">
+                                <Expander.Header>
+                                    <Border Background="WhiteSmoke">
+                                        <TextBlock><Run Text="Listado de equipos por estiba seleccionada"/></TextBlock>
+                                    </Border>
+                                </Expander.Header>
+
+                                <Border Margin="0,0,0,0" Background="AliceBlue">
+                                    <StackPanel x:Name="stackpanel111">
+                                        <ListView x:Name="lv_serialesXPallet" ItemsSource="{Binding ListadoSerialesXPallet}" Margin="0,0,0,0" MaxHeight="280">
+                                            <ListView.View>
+                                                <GridView x:Name="GridViewSerialesXPallet">
+                                                    <GridViewColumn Header="Pallet" Width="0" DisplayMemberBinding="{Binding PPallet}" />
+                                                    <GridViewColumn Header="Serial" Width="140" DisplayMemberBinding="{Binding PSerial}"/>
+                                                    <GridViewColumn Header="SAP" Width="0" DisplayMemberBinding="{Binding SAP}"/>
+                                                    <GridViewColumn Header="Mac"  Width="90" DisplayMemberBinding="{Binding PMac}"/>
+                                                    <GridViewColumn Header="Remisión" Width="60" DisplayMemberBinding="{Binding Remision}"/>
+                                                    <GridViewColumn Header="Fecha registro" Width="115" DisplayMemberBinding="{Binding PFRegistro}"/>
+                                                </GridView>
+                                            </ListView.View>
+                                        </ListView>
+                                        <StackPanel Orientation="Horizontal">
+                                            <TextBlock Text="Total equipos por estiba seleccionada: " FontWeight="Bold" Margin="0,6,8,4" />
+                                            <TextBlock x:Name="txt_recuentoTotalEquipos" Text="{Binding ListadoSerialesXPallet.Count}" FontWeight="Bold" Margin="0,6,8,4" />
+                                        </StackPanel>
+                                    </StackPanel>
+                                </Border>
+                            </Expander>
+                            <Border Margin="0,20,0,0" Background="AliceBlue" Height="70">
+                                <StackPanel>
+                                    <StackPanel Background="DarkBlue">
+                                        <TextBlock FontStyle="Italic" Foreground="White" FontSize="15" FontWeight="Thin" Text="ZONA DE ACTUALIZACIÓN DE ESTIBAS" HorizontalAlignment="Center"/>
+                                    </StackPanel>
+                                    <StackPanel Orientation="Horizontal">
+                                        <StackPanel Orientation="Vertical">
+                                            <TextBlock Text="Ubicación" ></TextBlock>
+                                            <ComboBox x:Name="cboUbicacion" Width="130"></ComboBox>
+                                        </StackPanel>
+                                        <StackPanel Margin="50,0,0,0" Orientation="Vertical">
+                                            <TextBlock Text="Estado" ></TextBlock>
+                                            <ComboBox x:Name="cboEstado" Width="130"></ComboBox>
+                                        </StackPanel>
+                                        <StackPanel Margin="50,0,0,0" Orientation="Vertical">
+                                            <TextBlock Text="Posición" ></TextBlock>
+                                            <ComboBox x:Name="cboPosicion" Width="130"></ComboBox>
+                                        </StackPanel>
+                                        <StackPanel Margin="50,0,0,0" Orientation="Vertical">
+                                            <Image  x:Name="img_ActualizarInformacionEstibas" Margin="3,10,0,0" Width="20" Height="20" VerticalAlignment="Center"  HorizontalAlignment="Center" Source="/WpfFront;component/Images/Icons/Confirm.png" ToolTip="Actualizar la información" RenderTransformOrigin="0.462,0.41" />
+                                            <TextBlock  FontSize="10" FontWeight="Bold"  Text="Actualizar información" />
+                                        </StackPanel>
+                                    </StackPanel>
+                                </StackPanel>
+                            </Border>
+                        </StackPanel>
+                    </Border>
+                    <!--Unión de estibas y adición de seriales OneByOne-->
+                    <StackPanel Orientation="Vertical" >
+                        <Border x:Uid="Border_Head" Name="Border_Head_2" Style="{DynamicResource UserControlFormInnerBorder}" Margin="3" HorizontalAlignment="Left" Height="auto" Width="auto" Visibility="Visible">
+                            <StackPanel x:Uid="Stack_Panel12" Margin="5" Width="auto" HorizontalAlignment="Left" Orientation="Vertical">
+                                <StackPanel x:Uid="Stack_NumeroDoc" Name="Stack_NumeroDoc_2" Margin="10,0,0,0" >
+                                    <TextBlock Text="Unión de estibas" HorizontalAlignment="Left" FontWeight="bold" />
+                                </StackPanel>
+                                <Separator Margin="5,0,0,10"/>
+                                <StackPanel x:Name="Stack_Panel13" Orientation="Vertical">
+                                    <StackPanel x:Name="Stack_Panel14" Orientation="Horizontal">
+                                        <TextBlock Text="Seleccione una ubicación" HorizontalAlignment="Left"></TextBlock>
+                                        <StackPanel Orientation="Vertical">
+                                            <ComboBox x:Name="cbo_UbicacionUnionEstibas" Height="23" Width="155" Margin="20,0,0,0" ItemsSource="{Binding ListadoPosicionesUnionEstibas}" SelectedIndex="-1" DisplayMemberPath="Name" SelectedValuePath="Code" SelectionChanged="cbo_UbicacionUnionEstibas_SelectionChanged_1"></ComboBox>
+                                            <TextBlock x:Name="txt_SeleccionarUbicacion" Text="Por favor seleccione una ubicación" FontSize="10" Margin="20,0,0,0" FontStyle="Oblique" Foreground="Maroon" FontWeight="Bold" Visibility="Hidden"></TextBlock>
+                                        </StackPanel>
+                                    </StackPanel>
+                                    <StackPanel x:Name="Stack_Panel15" Orientation="Horizontal" Margin="0,10,0,0">
+                                        <TextBlock Text="Generar pallet nuevo"></TextBlock>
+                                        <TextBox x:Name="txt_palletGeneratedUnionEstibas"  Margin="42,0,0,0" Width="135" Height="20" IsReadOnly="True"></TextBox>
+                                        <Image x:Uid="ImageRefresh" Cursor="Hand" x:Name="ImageRefreshUnionEstiba"  Margin="3,5,0,0" Width="16" VerticalAlignment="Center"  HorizontalAlignment="Center" Source="/WpfFront;component/Images/refresh.png" ToolTip="Generar estiba automáticamente" RenderTransformOrigin="0.462,0.41" Height="20" MouseDown="ImageRefreshUnionEstiba_MouseDown_1"/>
+                                    </StackPanel>
+                                    <StackPanel x:Name="Stack_Panel16" Orientation="Horizontal" Margin="0,10,0,0" HorizontalAlignment="Right">
+                                        <Button x:Name="btn_CombinarEstibas" Content="Combinar pallets seleccionados" HorizontalAlignment="Right"  FontWeight="Bold" IsEnabled="false" Margin="0,10,0,0" Click="btn_CombinarEstibas_Click_1"></Button>
+                                    </StackPanel>
+                                </StackPanel>
+                            </StackPanel>
+                        </Border>
+
+                        <Border x:Uid="Border_Head" Name="Border_Head_3" Style="{DynamicResource UserControlFormInnerBorder}" Margin="5,0,0,0" HorizontalAlignment="Left" Height="auto" Width="auto" Visibility="Visible">
+                            <StackPanel x:Uid="Stack_Panel12" Margin="5" Width="auto" HorizontalAlignment="Left" Orientation="Vertical">
+                                <StackPanel x:Uid="Stack_NumeroDoc" Name="Stack_NumeroDoc_3" Margin="10,0,0,0" >
+                                    <TextBlock Text="Adición de seriales 1 a 1" HorizontalAlignment="Left" FontWeight="bold" />
+                                </StackPanel>
+                                <Separator Margin="5,0,0,10"/>
+                                <StackPanel Orientation="Horizontal" >
+                                    <TextBlock Text="Lectura de serial" FontSize="12"></TextBlock>
+                                    <TextBox x:Name="txt_serialAdicionSeriales" Height="22" Width="150" Margin="70,0,0,20" KeyDown="txt_serialAdicionSeriales_KeyDown_1" ></TextBox>
+                                </StackPanel>
+                                <StackPanel Orientation="Vertical">
+                                    <ListView x:Name="lv_serialesOneByOne" ItemsSource="{Binding Path=ListSerialsOneByOne}">
+                                        <ListView.View>
+                                            <GridView>
+                                                <GridViewColumn Header="Serial" Width="100" DisplayMemberBinding="{Binding Path = Serial }" />
+                                                <GridViewColumn Header="Producto" Width="100" DisplayMemberBinding="{Binding Path = Producto }" />
+                                                <GridViewColumn Header="Código SAP" Width="100" DisplayMemberBinding="{Binding Path = COD_SAP }" />
+                                            </GridView>
+                                        </ListView.View>
+                                    </ListView>
+                                    <Button x:Name="btn_RemoverSerial1a1" Content="Remover serial(es) seleccionado(s) de la lista" Width="280" Margin="0,10,0,0" HorizontalAlignment="Center" IsEnabled="False" FontWeight="Bold" Click="btn_RemoverSerial1a1_Click_1"></Button>
+                                    <Button x:Name="btn_AnadirSeriales1a1" Content="Añadir # seriales al pallet" Width="280" Margin="0,10,0,0" HorizontalAlignment="Center" IsEnabled="False" FontWeight="Bold" Click="btn_AnadirSeriales1a1_Click_1"></Button>
+                                </StackPanel>
+                            </StackPanel>
+                        </Border>
+                    </StackPanel>
+                </StackPanel>
+            </StackPanel>
+            
+            <!-- Para el boton de generar pallet para copiarlo
+            <MenuItem Header="_Edit">
+                <MenuItem Header="_Cut" Command="Cut">
+                    <MenuItem.Icon>
+                        <Image Source="Images/cut.png" />
+                    </MenuItem.Icon>
+                </MenuItem>
+                <MenuItem Header="_Copy" Command="Copy">
+                    <MenuItem.Icon>
+                        <Image Source="Images/copy.png" />
+                    </MenuItem.Icon>
+                </MenuItem>
+            </MenuItem>-->
+        </DockPanel>
+    </AdornerDecorator>
 </WMCore:UserControlBase>

@@ -2,6 +2,7 @@
 using WpfFront.Models;
 using WpfFront.Services;
 using WpfFront.Views;
+using WpfFront.IQ.Views;
 using WpfFront.WMSBusinessService;
 using WpfFront.Common;
 using Microsoft.Practices.Unity;
@@ -14,9 +15,6 @@ using WMComposite.Modularity;
 using WMComposite.Regions;
 using System.Collections.ObjectModel;
 using Assergs.Windows;
-using WpfFront.IQ.Models;
-using WpfFront.IQ.Presenters;
-using WpfFront.IQ.Views;
 
 namespace WpfFront
 {

@@ -115,9 +115,6 @@ namespace WpfFront
             window.Height = SystemParameters.FullPrimaryScreenHeight - 150;
             window.Width = SystemParameters.FullPrimaryScreenWidth - 10;
             window.Icon = new BitmapImage(new Uri(ms.IconPath, UriKind.Relative));
-            //window.Width = 800;
-
-            //window.Icon = Util.GetImageSource(ms.Image);            
             window.GridContent.Children.Add((UserControlBase)ms.Module.Execute(ms.PresenterType, window));
             window.Show();
         }

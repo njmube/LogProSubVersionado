@@ -6,8 +6,6 @@ using WpfFront.Common;
 using WpfFront.WMSBusinessService;
 using System.Data;
 
-
-
 namespace WpfFront.Models
 {
     public interface IAdministradorModel
