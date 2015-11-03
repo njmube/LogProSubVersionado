@@ -313,7 +313,7 @@ namespace WpfFront.Presenters
             try
             {
                 //Validacion existe o no el equipo en DB
-                ConsultaBuscar = "SELECT * FROM dbo.EquiposCLARO WHERE Serial = '" + View.GetSerial1.Text.ToString() + "'";
+                ConsultaBuscar = "SELECT Serial FROM dbo.EquiposCLARO WHERE Serial = '" + View.GetSerial1.Text.ToString() + "'";
                 DataTable Resultado = service.DirectSQLQuery(ConsultaBuscar, "", "dbo.EquiposCLARO", Local);
                 Console.WriteLine(ConsultaBuscar);
                 if (Resultado.Rows.Count > 0)

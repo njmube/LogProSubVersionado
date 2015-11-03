@@ -12,10 +12,10 @@
             xmlns:winformchart="clr-namespace:System.Windows.Forms.DataVisualization.Charting;assembly=System.Windows.Forms.DataVisualization"
             x:Name="AdminEstibas">
     <AdornerDecorator x:Uid="AdornerDecorator_1">
-        <DockPanel x:Uid="DockPanel_1" Background="AliceBlue" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+        <DockPanel x:Uid="DockPanel_1" Background="AliceBlue" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Width="auto">
             <StackPanel x:Uid="StackPanel_1" Orientation="Vertical" >
                 <StackPanel x:Uid="Stack_Panel" Orientation="Horizontal" Margin="3" HorizontalAlignment="Center" Width="auto" Height="auto" >
-                    <Border x:Uid="Border_1" Name="Border_Detail" Style="{DynamicResource UserControlFormInnerBorder}" Margin="3" HorizontalAlignment="Center" Visibility="Visible" >
+                    <Border x:Uid="Border_1" Name="Border_Detail" Style="{DynamicResource UserControlFormInnerBorder}" Margin="3" HorizontalAlignment="Left" Visibility="Visible" Height="auto" Width="auto" >
                         <StackPanel x:Name="Stack_DetailSerial" Orientation="Vertical" Margin="3" HorizontalAlignment="Center" >
                             <StackPanel>
                                 <TextBlock Text="MÓDULO ADMINISTRADOR DE ESTIBAS" HorizontalAlignment="Left" FontWeight="bold" />
@@ -28,11 +28,21 @@
                                 </StackPanel>
                                
                                 <StackPanel  x:Name="StackBotonBuscar" Width="auto" Orientation="Horizontal" Margin="50,4,4,3" HorizontalAlignment="Right" VerticalAlignment="Bottom" Height="auto" >
-                                    <Button x:Name="btnBuscar" ToolTip="Buscar estiba">
+                                    <Button x:Name="btnBuscar" ToolTip="Buscar estiba" Click="btnBuscar_Click">
                                         <StackPanel>
                                             <Image Source="/WpfFront;component/Images/look.png"/>
                                         </StackPanel>
                                     </Button>
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal"  Width="206" Margin="150,0,0,0" HorizontalAlignment="Left" VerticalAlignment="Center" Cursor="Hand">
+                                    <StackPanel Orientation="Vertical">
+                                        <Image Name="imgExporPallets"  Cursor="Hand"   HorizontalAlignment="Center" Source="/WpfFront;component/Images/excel2.png" ToolTip="Exportar lista de pallets a archivo de excel" MouseDown="imgExporPallets_MouseDown" />
+                                        <TextBlock Text="Exportar pallets"  HorizontalAlignment="Center" FontWeight="bold" FontSize="9" Height="auto" Width="auto" />
+                                    </StackPanel>
+                                    <StackPanel Orientation="Vertical" Margin="20,0,0,0">
+                                        <Image  HorizontalAlignment="Center" Cursor="Hand" Source="/WpfFront;component/Images/excel2.png" ToolTip="Exportar lista de seriales a archivo de excel" />
+                                        <TextBlock x:Name="imgExportSeriales" Text="Exportar seriales"  HorizontalAlignment="Center" FontWeight="bold" FontSize="9" Height="auto" Width="auto" MouseDown="imgExportSeriales_MouseDown"/>
+                                    </StackPanel>
                                 </StackPanel>
                             </StackPanel>
                             <Separator Margin="0,7,0,0"/>
@@ -41,18 +51,14 @@
                                 <TextBlock x:Name="txt_RecuentoPallets" Text="{Binding ListadoPallets.Count}" FontWeight="Bold" Margin="0,0,8,4" />
                             </StackPanel>
                             <StackPanel x:Uid="Stack_Adicionales_2" x:Name="Stack_Adicionales_2" Orientation="Vertical" Margin="0,0,0,0">
-                                <ListView x:Name="lv_ListadoPallets" SelectionMode="Multiple" ItemsSource="{Binding ListadoPallets}" Margin="0,4,0,0"  MaxHeight="400"  HorizontalAlignment="Center">
+                                <ListView x:Name="lv_ListadoPallets" ItemsSource="{Binding ListadoPallets}" Margin="0,4,0,0" Width="640"  MaxHeight="400"  HorizontalAlignment="Left" SelectionChanged="lv_ListadoPallets_SelectionChanged">
                                     <ListView.View>
                                         <GridView x:Name="GridViewListadoPallets">
-                                            <GridViewColumn Header="Estiba" Width="100" DisplayMemberBinding="{Binding Estiba1}" />
-                                            <GridViewColumn Header="Código empaque II" Width="auto" DisplayMemberBinding="{Binding Estiba2}" />
-                                            <GridViewColumn Header="Código empaque III" Width="auto" DisplayMemberBinding="{Binding Estiba3}" />
-                                            <GridViewColumn Header="Modelo" Width="265" DisplayMemberBinding="{Binding Modelo}" />
+                                            <GridViewColumn Header="Estiba" Width="100" DisplayMemberBinding="{Binding Estiba}" />
+                                            <GridViewColumn Header="Modelo" Width="auto" DisplayMemberBinding="{Binding Modelo}" />
                                             <GridViewColumn Header="Cantidad" Width="65" DisplayMemberBinding="{Binding Cantidad}" />
                                             <GridViewColumn Header="Fecha ingreso" Width="auto" DisplayMemberBinding="{Binding FechaIngreso}" />
-                                            <GridViewColumn Header="Estado" Width="90" DisplayMemberBinding="{Binding Estado}" />
-                                            <GridViewColumn Header="Ubicación" Width="65" DisplayMemberBinding="{Binding Ubicacion}" />
-                                            <GridViewColumn Header="Posición" Width="65" DisplayMemberBinding="{Binding Posicion}" />
+                                            <GridViewColumn Header="Ubicación" Width="auto" DisplayMemberBinding="{Binding Ubicacion}" />
                                         </GridView>
                                     </ListView.View>
                                 </ListView>
@@ -78,12 +84,15 @@
                                         <ListView x:Name="lv_serialesXPallet" ItemsSource="{Binding ListadoSerialesXPallet}" Margin="0,0,0,0" MaxHeight="280">
                                             <ListView.View>
                                                 <GridView x:Name="GridViewSerialesXPallet">
-                                                    <GridViewColumn Header="Pallet" Width="0" DisplayMemberBinding="{Binding PPallet}" />
-                                                    <GridViewColumn Header="Serial" Width="140" DisplayMemberBinding="{Binding PSerial}"/>
+                                                    <GridViewColumn Header="Serial" Width="140" DisplayMemberBinding="{Binding Serial}"/>
                                                     <GridViewColumn Header="SAP" Width="0" DisplayMemberBinding="{Binding SAP}"/>
-                                                    <GridViewColumn Header="Mac"  Width="90" DisplayMemberBinding="{Binding PMac}"/>
+                                                    <GridViewColumn Header="Mac"  Width="90" DisplayMemberBinding="{Binding Mac}"/>
+                                                    <GridViewColumn Header="Modelo"  Width="90" DisplayMemberBinding="{Binding Modelo}"/>
+                                                    <GridViewColumn Header="Estado" Width="auto" DisplayMemberBinding="{Binding Estado}" />
+                                                    <GridViewColumn Header="Posición" Width="auto" DisplayMemberBinding="{Binding Posicion}" />
+                                                    <GridViewColumn Header="Nro. Caja"  Width="90" DisplayMemberBinding="{Binding Caja}"/>
                                                     <GridViewColumn Header="Remisión" Width="60" DisplayMemberBinding="{Binding Remision}"/>
-                                                    <GridViewColumn Header="Fecha registro" Width="115" DisplayMemberBinding="{Binding PFRegistro}"/>
+                                                    <GridViewColumn Header="Fecha ingreso" Width="60" DisplayMemberBinding="{Binding FechaIngreso}"/>
                                                 </GridView>
                                             </ListView.View>
                                         </ListView>
@@ -100,20 +109,20 @@
                                         <TextBlock FontStyle="Italic" Foreground="White" FontSize="15" FontWeight="Thin" Text="ZONA DE ACTUALIZACIÓN DE ESTIBAS" HorizontalAlignment="Center"/>
                                     </StackPanel>
                                     <StackPanel Orientation="Horizontal">
-                                        <StackPanel Orientation="Vertical">
-                                            <TextBlock Text="Ubicación" ></TextBlock>
-                                            <ComboBox x:Name="cboUbicacion" Width="130"></ComboBox>
-                                        </StackPanel>
-                                        <StackPanel Margin="50,0,0,0" Orientation="Vertical">
+                                        <StackPanel  Margin=" 30,10,0,15" Orientation="Vertical">
                                             <TextBlock Text="Estado" ></TextBlock>
-                                            <ComboBox x:Name="cboEstado" Width="130"></ComboBox>
+                                            <ComboBox x:Name="cboEstado" Width="130" ItemsSource="{Binding ListEstado}" SelectedValue="Code" DisplayMemberPath="Name" SelectionChanged="cboEstado_SelectionChanged"></ComboBox>
                                         </StackPanel>
-                                        <StackPanel Margin="50,0,0,0" Orientation="Vertical">
+                                        <StackPanel Orientation="Vertical" Margin=" 30,10,0,15">
+                                            <TextBlock Text="Ubicación" ></TextBlock>
+                                            <TextBox x:Name="txtUbicacion" Width="130" ></TextBox>
+                                        </StackPanel>
+                                        <StackPanel  Margin=" 30,10,0,15" Orientation="Vertical">
                                             <TextBlock Text="Posición" ></TextBlock>
-                                            <ComboBox x:Name="cboPosicion" Width="130"></ComboBox>
+                                            <ComboBox x:Name="cboPosicion" Width="130" ItemsSource="{Binding ListPosiciones}" SelectedValue="Code" DisplayMemberPath="Name"></ComboBox>
                                         </StackPanel>
                                         <StackPanel Margin="50,0,0,0" Orientation="Vertical">
-                                            <Image  x:Name="img_ActualizarInformacionEstibas" Margin="3,10,0,0" Width="20" Height="20" VerticalAlignment="Center"  HorizontalAlignment="Center" Source="/WpfFront;component/Images/Icons/Confirm.png" ToolTip="Actualizar la información" RenderTransformOrigin="0.462,0.41" />
+                                            <Image x:Name="img_ActualizarInformacionEstibas" Cursor="Hand" Margin="3,10,0,0" Width="20" Height="20" VerticalAlignment="Center"  HorizontalAlignment="Center" Source="/WpfFront;component/Images/Icons/Confirm.png" ToolTip="Actualizar la información" />
                                             <TextBlock  FontSize="10" FontWeight="Bold"  Text="Actualizar información" />
                                         </StackPanel>
                                     </StackPanel>
@@ -123,7 +132,7 @@
                     </Border>
                     <!--Unión de estibas y adición de seriales OneByOne-->
                     <StackPanel Orientation="Vertical" >
-                        <Border x:Uid="Border_Head" Name="Border_Head_2" Style="{DynamicResource UserControlFormInnerBorder}" Margin="3" HorizontalAlignment="Left" Height="auto" Width="auto" Visibility="Visible">
+                        <Border x:Uid="Border_Head" Name="Border_Head_2" Style="{DynamicResource UserControlFormInnerBorder}" Margin="3" HorizontalAlignment="Left" Height="auto" Width="349" Visibility="Visible">
                             <StackPanel x:Uid="Stack_Panel12" Margin="5" Width="auto" HorizontalAlignment="Left" Orientation="Vertical">
                                 <StackPanel x:Uid="Stack_NumeroDoc" Name="Stack_NumeroDoc_2" Margin="10,0,0,0" >
                                     <TextBlock Text="Unión de estibas" HorizontalAlignment="Left" FontWeight="bold" />
@@ -139,8 +148,8 @@
                                     </StackPanel>
                                     <StackPanel x:Name="Stack_Panel15" Orientation="Horizontal" Margin="0,10,0,0">
                                         <TextBlock Text="Generar pallet nuevo"></TextBlock>
-                                        <TextBox x:Name="txt_palletGeneratedUnionEstibas"  Margin="42,0,0,0" Width="135" Height="20" IsReadOnly="True"></TextBox>
-                                        <Image x:Uid="ImageRefresh" Cursor="Hand" x:Name="ImageRefreshUnionEstiba"  Margin="3,5,0,0" Width="16" VerticalAlignment="Center"  HorizontalAlignment="Center" Source="/WpfFront;component/Images/refresh.png" ToolTip="Generar estiba automáticamente" RenderTransformOrigin="0.462,0.41" Height="20" MouseDown="ImageRefreshUnionEstiba_MouseDown_1"/>
+                                        <TextBox x:Name="txt_palletGeneratedUnionEstibas"  Margin="48,0,0,0" Width="135" Height="20" IsReadOnly="True"></TextBox>
+                                        <Image Cursor="Hand"  Margin="3,2,0,0" Width="16" VerticalAlignment="Center"  HorizontalAlignment="Center" Source="/WpfFront;component/Images/refresh.png" ToolTip="Generar estiba automáticamente" RenderTransformOrigin="0.462,0.41" Height="20" MouseDown="ImageRefreshUnionEstiba_MouseDown_1"/>
                                     </StackPanel>
                                     <StackPanel x:Name="Stack_Panel16" Orientation="Horizontal" Margin="0,10,0,0" HorizontalAlignment="Right">
                                         <Button x:Name="btn_CombinarEstibas" Content="Combinar pallets seleccionados" HorizontalAlignment="Right"  FontWeight="Bold" IsEnabled="false" Margin="0,10,0,0" Click="btn_CombinarEstibas_Click_1"></Button>
@@ -149,7 +158,7 @@
                             </StackPanel>
                         </Border>
 
-                        <Border x:Uid="Border_Head" Name="Border_Head_3" Style="{DynamicResource UserControlFormInnerBorder}" Margin="5,0,0,0" HorizontalAlignment="Left" Height="auto" Width="auto" Visibility="Visible">
+                        <Border x:Uid="Border_Head" Name="Border_Head_3" Style="{DynamicResource UserControlFormInnerBorder}" Margin="5,0,0,0" HorizontalAlignment="Left" Height="auto" Width="auto" Visibility="Collapsed">
                             <StackPanel x:Uid="Stack_Panel12" Margin="5" Width="auto" HorizontalAlignment="Left" Orientation="Vertical">
                                 <StackPanel x:Uid="Stack_NumeroDoc" Name="Stack_NumeroDoc_3" Margin="10,0,0,0" >
                                     <TextBlock Text="Adición de seriales 1 a 1" HorizontalAlignment="Left" FontWeight="bold" />
@@ -177,20 +186,6 @@
                     </StackPanel>
                 </StackPanel>
             </StackPanel>
-            
-            <!-- Para el boton de generar pallet para copiarlo
-            <MenuItem Header="_Edit">
-                <MenuItem Header="_Cut" Command="Cut">
-                    <MenuItem.Icon>
-                        <Image Source="Images/cut.png" />
-                    </MenuItem.Icon>
-                </MenuItem>
-                <MenuItem Header="_Copy" Command="Copy">
-                    <MenuItem.Icon>
-                        <Image Source="Images/copy.png" />
-                    </MenuItem.Icon>
-                </MenuItem>
-            </MenuItem>-->
         </DockPanel>
     </AdornerDecorator>
 </WMCore:UserControlBase>

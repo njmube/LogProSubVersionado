@@ -27,8 +27,8 @@ namespace WpfFront.Presenters
         private readonly WMSServiceClient service;
         public ToolWindow Window { get; set; }
         public Connection Local;
-        private String userName = App.curUser.UserName;
-        private String user = App.curUser.FirstName + " " + App.curUser.LastName;
+        private string userName = App.curUser.UserName;
+        private string user = App.curUser.FirstName + " " + App.curUser.LastName;
 
         public AdminEstibasPresenter(IUnityContainer container, IAdminEstibasView view)
         {
@@ -36,6 +36,13 @@ namespace WpfFront.Presenters
             this.container = container;
             this.service = new WMSServiceClient();
             View.Model = this.container.Resolve<AdminEstibasModel>();
+
+            #region Metodos
+            View.ConsultarPallets += this.OnConsultarPallets;
+            View.ConsultarSerialesXPallet += this.OnConsultarSerialesXPallet;
+            View.ConfirmarRecibo += this.OnConfirmarRecibo;
+            View.exportPallets += this.OnExportPallets;
+            View.exportSeriales += this.OnExportSeriales;
 
             #region Combinar Estibas
 
@@ -51,16 +58,178 @@ namespace WpfFront.Presenters
             View.RemoveItemsSelected += new EventHandler<EventArgs>(this.OnRemoveItemSelected);
 
             #endregion
+            #endregion
+
+            #region Datos
             //Cargo la conexion local
             try { Local = service.GetConnection(new Connection { Name = "LOCAL" }).First(); }
             catch { }
-
+            // Posiciones E.g. A1D3
             View.Model.ListadoPosicionesUnionEstibas = service.GetMMaster(new MMaster { MetaType = new MType { Code = "CLAROPOSIC" } });
-          
+            View.Model.ListPosiciones = service.GetMMaster(new MMaster { MetaType = new MType { Code = "CLAROPOSIC" } });
+            // Actualiza las ubicaciones que esten disponibles en el sistema.
             this.UbicacionDisponibleUnionEstiba();
+            this.UbicacionDisponibleActualizacionEstibas();
+            // Cargo los estados disponibles.
+            View.Model.ListEstado = service.GetMMaster(new MMaster { MetaType = new MType { Code = "LOGPROSTAT" } });
 
             createTable();
+            #endregion
         }
+        private void UbicacionDisponibleActualizacionEstibas()
+        {
+            try
+            {
+                DataTable dt_auxiliar = service.DirectSQLQuery("SELECT POSICION FROM DBO.EQUIPOSCLARO WHERE POSICION IS NOT NULL AND (ESTADO LIKE 'ALMACENAMIENTO' OR ESTADO LIKE 'DESPACHO')  GROUP BY POSICION ", "", "DBO.EQUIPOSCLARO", Local);
+                List<String> list = dt_auxiliar.AsEnumerable()
+                           .Select(r => r.Field<String>("POSICION"))
+                           .ToList();
+
+                var query = from item in View.Model.ListPosiciones
+                            where !list.Contains(item.Name)
+                            select item;
+
+                View.Model.ListPosiciones = query.ToList();
+                View.cbo_Posicion.SelectedIndex = -1;
+            }
+            catch (Exception ex)
+            {
+                Util.ShowError("No es posible actualizar el listado de ubicaciones disponibles " + ex.Message.ToString());
+            }
+        }
+
+        private void OnConsultarPallets(object sender, EventArgs e)
+        {
+            //Variables Auxiliares
+            System.Text.StringBuilder ConsultaSQL = new System.Text.StringBuilder();
+            string CodigoPallet = "";
+
+            // Añadir el código del pallet a la variable
+            CodigoPallet = View.tbCodigoPrincipal.Text.ToString();
+
+            ConsultaSQL.AppendFormat("EXEC sp_GetProcesos 'BUSCARPALLETS_ADMIN', '{0}'", CodigoPallet);
+            View.Model.ListadoPallets = service.DirectSQLQuery(ConsultaSQL.ToString(), "", "dbo.EquiposClaro", Local);   
+        }
+        
+        private void OnConsultarSerialesXPallet(object sender, EventArgs e)
+        {
+            if (View.ListViewListadoPallets.SelectedItems.Count <= 0)
+            {
+                View.Model.ListadoSerialesXPallet.Clear();
+                return;
+            }
+            System.Text.StringBuilder ConsultaSQL = new System.Text.StringBuilder();
+            string codigoEstiba = ((DataRowView)View.ListViewListadoPallets.SelectedItem).Row["Estiba"].ToString();
+
+            ConsultaSQL.AppendFormat("EXECUTE dbo.sp_GetProcesos 'BUSCARSERIALESxPALLET_ADMIN', '{0}'", codigoEstiba);
+            View.Model.ListadoSerialesXPallet = service.DirectSQLQuery(ConsultaSQL.ToString(), "", "dbo.EquiposClaro", Local);
+        }
+
+        private void OnExportPallets(object sender, MouseButtonEventArgs e)
+        {
+            Microsoft.Office.Interop.Excel.Application excel = null;
+            Microsoft.Office.Interop.Excel.Workbook wb = null;
+
+            object missing = Type.Missing;
+            Microsoft.Office.Interop.Excel.Worksheet ws = null;
+            Microsoft.Office.Interop.Excel.Range rng = null;
+
+            try
+            {
+                int filas_seleccion = View.ListViewListadoPallets.SelectedItems.Count;
+
+                if (filas_seleccion > 0)
+                {
+                    excel = new Microsoft.Office.Interop.Excel.Application();
+
+                    wb = excel.Workbooks.Add();
+                    ws = (Microsoft.Office.Interop.Excel.Worksheet)wb.ActiveSheet;
+
+                    for (int Idx = 0; Idx < View.GV_ListadoPallets.Columns.Count; Idx++)
+                    {
+                        ws.Range["A1"].Offset[0, Idx].Value = View.GV_ListadoPallets.Columns[Idx].Header.ToString();
+                        ws.Range["A1"].Offset[0, Idx].Interior.Color = System.Drawing.ColorTranslator.ToOle(System.Drawing.Color.Orange);
+                    }
+                    int cont = 0;
+
+                    foreach (DataRowView Registros in View.ListViewListadoPallets.SelectedItems)
+                    {
+                        ws.get_Range("A1", "H" + cont + 1).EntireColumn.NumberFormat = "@";
+
+                        ws.Range["A2"].Offset[cont].Resize[1, View.GV_ListadoPallets.Columns.Count].Value =
+                                Registros.Row.ItemArray;
+                        cont++;
+                    }
+
+                    rng = ws.get_Range("A1", "H" + cont + 1);
+                    rng.Cells.HorizontalAlignment = Microsoft.Office.Interop.Excel.XlHAlign.xlHAlignCenter;
+                    rng.Columns.AutoFit();
+
+                    excel.Visible = true;
+                    wb.Activate();
+                }
+                else
+                {
+                    Util.ShowMessage("Debe seleccionar uno o varios pallets para la generación del archivo");
+                }
+            }
+            catch (Exception ex)
+            {
+                Util.ShowMessage("Error creando el archivo Excel: " + ex.ToString());
+            }
+        }
+        private void OnExportSeriales(object sender, MouseButtonEventArgs e)
+        {
+            Microsoft.Office.Interop.Excel.Application excel = null;
+            Microsoft.Office.Interop.Excel.Workbook wb = null;
+
+            object missing = Type.Missing;
+            Microsoft.Office.Interop.Excel.Worksheet ws = null;
+            Microsoft.Office.Interop.Excel.Range rng = null;
+
+            try
+            {
+
+                excel = new Microsoft.Office.Interop.Excel.Application();
+
+                wb = excel.Workbooks.Add();
+                ws = (Microsoft.Office.Interop.Excel.Worksheet)wb.ActiveSheet;
+
+                for (int Idx = 0; Idx < View.Gv_SerialesXPalletSeleccionado.Columns.Count; Idx++)
+                {
+                    ws.Range["A1"].Offset[0, Idx].Value = View.Gv_SerialesXPalletSeleccionado.Columns[Idx].Header.ToString();
+                    ws.Range["A1"].Offset[0, Idx].Interior.Color = System.Drawing.ColorTranslator.ToOle(System.Drawing.Color.Orange);
+                }
+
+
+                int cont = 0;
+                foreach (DataRowView Registros in View.lv_serialesXPalletSeleccionado.Items)
+                {
+                    ws.get_Range("A1", "H" + cont + 1).EntireColumn.NumberFormat = "@";
+
+                    ws.Range["A2"].Offset[cont].Resize[1, View.Gv_SerialesXPalletSeleccionado.Columns.Count].Value =
+                            Registros.Row.ItemArray;
+                    cont++;
+                }
+
+
+                rng = ws.get_Range("A1", "H" + cont + 1);
+                rng.Cells.HorizontalAlignment = Microsoft.Office.Interop.Excel.XlHAlign.xlHAlignCenter;
+                rng.Columns.AutoFit();
+
+                excel.Visible = true;
+                wb.Activate();
+            }
+            catch (Exception ex)
+            {
+                Util.ShowMessage("Error creando el archivo Excel: " + ex.ToString());
+            }
+        }
+        private void OnConfirmarRecibo(object sender, EventArgs e)
+        {
+            View.txt_Ubicacion.Text = View.Model.ListEstado.Where(f => f.Code == ((MMaster)View.cbo_Estado.SelectedItem).Code.ToString()).First().Description.ToString();
+        }
+
         #region Union de estibas
 
         private void UbicacionDisponibleUnionEstiba()
@@ -160,7 +329,8 @@ namespace WpfFront.Presenters
             }
 
             this.UbicacionDisponibleUnionEstiba();
-            //this.BuscarRegistrosCambioClasificacion();  llamar al metodo de buscar sin parametros para que busque todos
+            OnConsultarPallets(sender, e);
+            View.Model.ListadoSerialesXPallet.Clear();
             View.TXT_palletGeneratedUnionEstibas.Text = "";
 
         }

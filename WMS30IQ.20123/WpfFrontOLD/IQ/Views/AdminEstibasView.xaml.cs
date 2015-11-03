@@ -26,6 +26,12 @@ namespace WpfFront.IQ.Views
     public partial class AdminEstibasView : UserControlBase, IAdminEstibasView
     {
         #region Eventos
+
+        public event EventHandler<EventArgs> ConsultarPallets;
+        public event EventHandler<SelectionChangedEventArgs> ConsultarSerialesXPallet;
+        public event EventHandler<EventArgs> ConfirmarRecibo;
+        public event EventHandler<MouseButtonEventArgs> exportPallets;
+        public event EventHandler<MouseButtonEventArgs> exportSeriales;
         #region Combinar estibas
 
         public event EventHandler<EventArgs> CombinarEstibas;
@@ -40,7 +46,9 @@ namespace WpfFront.IQ.Views
         public event EventHandler<EventArgs> RemoveItemsSelected;
 
         #endregion
+
         #endregion
+
         public AdminEstibasView()
         {
             InitializeComponent();
@@ -63,6 +71,11 @@ namespace WpfFront.IQ.Views
         {
             get { return this.lv_ListadoPallets; }
             set { this.lv_ListadoPallets = value; }
+        }
+        public GridView GV_ListadoPallets
+        {
+            get { return this.GridViewListadoPallets; }
+            set { this.GridViewListadoPallets = value; }
         }
         public Button BtnBuscar
         {
@@ -95,10 +108,10 @@ namespace WpfFront.IQ.Views
             set { this.txt_recuentoTotalEquipos = value; }
         }
         /////////// ZONA DE ACTUALIZACIÓN DE ESTIBAS ////////////
-        public ComboBox cbo_Ubicacion
+        public TextBox txt_Ubicacion
         {
-            get { return this.cboUbicacion; }
-            set { this.cboUbicacion = value; }
+            get { return this.txtUbicacion; }
+            set { this.txtUbicacion = value; }
         }
         public ComboBox cbo_Estado
         {
@@ -173,8 +186,29 @@ namespace WpfFront.IQ.Views
         #endregion
 
         #region Metodos
+        private void btnBuscar_Click(object sender, RoutedEventArgs e)
+        {
+            ConsultarPallets(sender, e);
+        }
 
+        private void lv_ListadoPallets_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            ConsultarSerialesXPallet(sender, e);
+        }
 
+        private void cboEstado_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            ConfirmarRecibo(sender, e);
+        }
+        private void imgExportSeriales_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            exportPallets(sender, e);
+        }
+
+        private void imgExporPallets_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            exportSeriales(sender, e);
+        }
 
         #region Union de estibas
 
@@ -196,7 +230,6 @@ namespace WpfFront.IQ.Views
         #endregion
 
         #region Adicion de seriales 1 a 1
-
         private void txt_serialAdicionSeriales_KeyDown_1(object sender, KeyEventArgs e)
         {
             if (e.Key.Equals(Key.Enter))
@@ -205,7 +238,6 @@ namespace WpfFront.IQ.Views
             }
             contentButton();
         }
-
         public void contentButton()
         {
             int numeroSeriales = lv_serialesOneByOne.Items.Count;
@@ -231,7 +263,6 @@ namespace WpfFront.IQ.Views
             }
             this.btn_AnadirSeriales1a1.Content = content;
         }
-
         private void btn_RemoverSerial1a1_Click_1(object sender, RoutedEventArgs e)
         {
             RemoveItemsSelected(sender, e);
@@ -247,11 +278,10 @@ namespace WpfFront.IQ.Views
             else
                 Util.ShowMessage("Por favor seleccionar una estiba.");
         }
-
+       
         #endregion
 
         #endregion
-
     }
     public interface IAdminEstibasView
     {
@@ -259,7 +289,20 @@ namespace WpfFront.IQ.Views
         AdminEstibasModel Model { get; set; }
 
         #region Variables
+        TextBox tbCodigoPrincipal { get; set; }
+        Button BtnBuscar { get; set; }
         ListView ListViewListadoPallets { get; set; }
+        GridView GV_ListadoPallets { get; set; }
+        TextBlock txt_RecuentoSeriales { get; set; }
+        TextBlock txt_RecuentoEstibas { get; set; }
+        ListView lv_serialesXPalletSeleccionado { get; set; }
+        GridView Gv_SerialesXPalletSeleccionado { get; set; }
+        TextBlock Txt_recuentoTotalEquipos { get; set; }
+
+        /////////// ZONA DE ACTUALIZACIÓN DE ESTIBAS ////////////
+        TextBox txt_Ubicacion { get; set; }
+        ComboBox cbo_Estado { get; set; }
+        ComboBox cbo_Posicion { get; set; }
 
         #region Union de Estibas
 
@@ -279,9 +322,14 @@ namespace WpfFront.IQ.Views
         #endregion
 
         #endregion
-        
 
         #region Obtener Metodos
+
+        event EventHandler<EventArgs> ConsultarPallets;
+        event EventHandler<SelectionChangedEventArgs> ConsultarSerialesXPallet;
+        event EventHandler<EventArgs> ConfirmarRecibo;
+        event EventHandler<MouseButtonEventArgs> exportPallets;
+        event EventHandler<MouseButtonEventArgs> exportSeriales;
 
         #region Combinar Estibas
 
