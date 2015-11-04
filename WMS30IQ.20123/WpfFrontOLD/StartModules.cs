@@ -15,6 +15,8 @@ using WMComposite.Modularity;
 using WMComposite.Regions;
 using System.Collections.ObjectModel;
 using Assergs.Windows;
+using WpfFront.IQ.Presenters;
+using WpfFront.IQ.Models;
 
 namespace WpfFront
 {
@@ -274,6 +276,12 @@ namespace WpfFront
             container.RegisterType<IAdminEstibasPresenter, AdminEstibasPresenter>();
             container.RegisterType<IAdminEstibasModel, AdminEstibasModel>();
             //MODULO ADMINISTRADOR SERIALES Y ESTIBAS CLARO - 28 DE OCTUBRE DE 2015//////////////////////////////////////////////////
+
+            //MODULO ADMINISTRADOR SERIALES Y ESTIBAS CLARO - 4 DE NOVIEMBRE DE 2015//////////////////////////////////////////////////
+            container.RegisterType<IConsultaTrackingView, ConsultaTrackingView>();
+            container.RegisterType<IConsultaTrackingPresenter, ConsultaTrackingPresenter>();
+            container.RegisterType<IConsultaTrackingModel, ConsultaTrackingModel>();
+            //MODULO ADMINISTRADOR SERIALES Y ESTIBAS CLARO - 4 DE NOVIEMBRE DE 2015//////////////////////////////////////////////////
 
             container.RegisterType<IGeneradorEstibasView, GeneradorEstibasView>();
             container.RegisterType<IGeneradorEstibasPresenter, GeneradorEstibasPresenter>();
@@ -734,6 +742,13 @@ namespace WpfFront
                     AdminEstibas.Window = window;
                     return AdminEstibas.View;
 
+                //MODULO CONSULTA DE TRACKING CLARO - 4 DE NOVIEMBRE DE 2015//////////////////////////////////////////////////
+                case "ConsultaTrackingPresenter":
+                    ConsultaTrackingPresenter consultaTrackPres = container.Resolve<ConsultaTrackingPresenter>();
+                    consultaTrackPres.Window = window;
+                    return consultaTrackPres.View;
+                //MODULO CONSULTA DE TRACKING CLARO - 4 DE NOVIEMBRE DE 2015//////////////////////////////////////////////////
+
                 case "GeneradorEstibasPresenter":
                     GeneradorEstibasPresenter GeneradorEstibas = container.Resolve<GeneradorEstibasPresenter>();
                     GeneradorEstibas.Window = window;
@@ -748,11 +763,6 @@ namespace WpfFront
                     MoverMercanciaPresenter MoverMercancia = container.Resolve<MoverMercanciaPresenter>();
                     MoverMercancia.Window = window;
                     return MoverMercancia.View;
-
-                //case "ConfirmarReciboPresenter":
-                //    ConfirmarReciboPresenter ConfirmarRecibo = container.Resolve<ConfirmarReciboPresenter>();
-                //    ConfirmarRecibo.Window = window;
-                //    return ConfirmarRecibo.View;
 
                 case "NoProcesablesPresenter":
                     NoProcesablesPresenter NoProcesables = container.Resolve<NoProcesablesPresenter>();
@@ -1274,98 +1284,9 @@ namespace WpfFront
                 #endregion
 
 
-            #region Execute Trace
-
-
-            //if (typePresenter == typeof(DocumentPresenter))
-            //{
-            //    IDocumentPresenter presenter = container.Resolve<DocumentPresenter>();
-            //    regionManager.Shell.ShowViewInShell(RegionNames.MainInformation, presenter.View, typeof(DocumentPresenter).Name, true);
-            //    return;
-            //}
-
-            //if (typePresenter == typeof(DocumentAddressPresenter))
-            //{
-            //    IDocumentAddressPresenter presenter = container.Resolve<DocumentAddressPresenter>();
-            //    regionManager.Shell.ShowViewInShell(RegionNames.MainInformation, presenter.View, typeof(DocumentAddressPresenter).Name, true);
-            //    return;
-            //}
-
-
-
-
-            //if (typePresenter == typeof(DocumentLinePresenter))
-            //{
-            //    IDocumentLinePresenter presenter = container.Resolve<DocumentLinePresenter>();
-            //    regionManager.Shell.ShowViewInShell(RegionNames.MainInformation, presenter.View, typeof(DocumentLinePresenter).Name, true);
-            //    return;
-            //}
-
-
-
-            //if (typePresenter == typeof(LabelPresenter))
-            //{
-            //    ILabelPresenter presenter = container.Resolve<LabelPresenter>();
-            //    regionManager.Shell.ShowViewInShell(RegionNames.MainInformation, presenter.View, typeof(LabelPresenter).Name, true);
-            //    return;
-            //}
-
-
-            //if (typePresenter == typeof(NodePresenter))
-            //{
-            //    INodePresenter presenter = container.Resolve<NodePresenter>();
-            //    regionManager.Shell.ShowViewInShell(RegionNames.MainInformation, presenter.View, typeof(NodePresenter).Name, true);
-            //    return;
-            //}
-
-            //if (typePresenter == typeof(NodeDocumentTypePresenter))
-            //{
-            //    INodeDocumentTypePresenter presenter = container.Resolve<NodeDocumentTypePresenter>();
-            //    regionManager.Shell.ShowViewInShell(RegionNames.MainInformation, presenter.View, typeof(NodeDocumentTypePresenter).Name, true);
-            //    return;
-            //}
-
-            //if (typePresenter == typeof(NodeExtensionPresenter))
-            //{
-            //    INodeExtensionPresenter presenter = container.Resolve<NodeExtensionPresenter>();
-            //    regionManager.Shell.ShowViewInShell(RegionNames.MainInformation, presenter.View, typeof(NodeExtensionPresenter).Name, true);
-            //    return;
-            //}
-
-            //if (typePresenter == typeof(NodeExtensionTracePresenter))
-            //{
-            //    INodeExtensionTracePresenter presenter = container.Resolve<NodeExtensionTracePresenter>();
-            //    regionManager.Shell.ShowViewInShell(RegionNames.MainInformation, presenter.View, typeof(NodeExtensionTracePresenter).Name, true);
-            //    return;
-            //}
-
-            //if (typePresenter == typeof(NodeRoutePresenter))
-            //{
-            //    INodeRoutePresenter presenter = container.Resolve<NodeRoutePresenter>();
-            //    regionManager.Shell.ShowViewInShell(RegionNames.MainInformation, presenter.View, typeof(NodeRoutePresenter).Name, true);
-            //    return;
-            //}
-
-
-
-            //if (typePresenter == typeof(TaskDocumentRelationPresenter))
-            //{
-            //    ITaskDocumentRelationPresenter presenter = container.Resolve<TaskDocumentRelationPresenter>();
-            //    regionManager.Shell.ShowViewInShell(RegionNames.MainInformation, presenter.View, typeof(TaskDocumentRelationPresenter).Name, true);
-            //    return;
-            //}
-
-            //if (typePresenter == typeof(TaskByUserPresenter))
-            //{
-            //    ITaskByUserPresenter presenter = container.Resolve<TaskByUserPresenter>();
-            //    regionManager.Shell.ShowViewInShell(RegionNames.MainInformation, presenter.View, typeof(TaskByUserPresenter).Name, true);
-            //    return;
-            //}
-
+          
 
             return null;
-
-            #endregion
 
         }
 

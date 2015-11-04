@@ -88,11 +88,11 @@
                                         <TextBox x:Uid="txt_Mac" x:Name="txt_Mac" Width="150" Height="23" VerticalAlignment="Center" />
                                         <!---->
                                 <StackPanel x:Uid="Stack_FallaDiagnostico" Width="auto" Orientation="Horizontal" Margin="4,3,4,3">
-                                    <TextBlock x:Uid="Text_block" Width="100" Text="Nombre Material" VerticalAlignment="Center" Margin="4,0,6,0" FontWeight="Bold" />
+                                    <TextBlock x:Uid="Text_block" Width="100" Text="Nombre material" VerticalAlignment="Center" Margin="4,0,6,0" FontWeight="Bold" />
                                     <ComboBox x:Uid="cb_NombreMaterial" Name="cb_NombreMaterial" Width="150" Height="23" ItemsSource="{Binding Path=ListadoProductos}" SelectedValue="Code" DisplayMemberPath="Name" SelectionChanged="cb_NombreMaterial_SelectionChanged" />
                                     <!---->
                                         <StackPanel x:Uid="Stack_Adicionales" Orientation="Horizontal" Margin="4,3,4,3">
-                                            <TextBlock x:Uid="Text_block" Width="100" Text="Estado Serial" VerticalAlignment="Center" Margin="4,0,6,0" FontWeight="Bold" />
+                                            <TextBlock x:Uid="Text_block" Width="100" Text="Estado serial" VerticalAlignment="Center" Margin="4,0,6,0" FontWeight="Bold" />
                                             <ComboBox x:Uid="cb_EstadoSerial" Name="cb_EstadoSerial" Width="150" Height="23" ItemsSource="{Binding Path=ListadoEstatusLogPro}" SelectedValue="Code" DisplayMemberPath="Name" SelectionChanged="cb_EstadoSerial_SelectionChanged" />
                                         </StackPanel>
                                     </StackPanel>

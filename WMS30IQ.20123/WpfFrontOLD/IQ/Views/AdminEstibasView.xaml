@@ -36,12 +36,12 @@
                                 </StackPanel>
                                 <StackPanel Orientation="Horizontal"  Width="206" Margin="150,0,0,0" HorizontalAlignment="Left" VerticalAlignment="Center" Cursor="Hand">
                                     <StackPanel Orientation="Vertical">
-                                        <Image Name="imgExporPallets"  Cursor="Hand"   HorizontalAlignment="Center" Source="/WpfFront;component/Images/excel2.png" ToolTip="Exportar lista de pallets a archivo de excel" MouseDown="imgExporPallets_MouseDown" />
+                                        <Image Name="imgExporPallets"  Cursor="Hand"   HorizontalAlignment="Center" Source="/WpfFront;component/Images/excel2.png" ToolTip="Exportar lista de pallets a formato excel" MouseDown="imgExporPallets_MouseDown" />
                                         <TextBlock Text="Exportar pallets"  HorizontalAlignment="Center" FontWeight="bold" FontSize="9" Height="auto" Width="auto" />
                                     </StackPanel>
                                     <StackPanel Orientation="Vertical" Margin="20,0,0,0">
-                                        <Image  HorizontalAlignment="Center" Cursor="Hand" Source="/WpfFront;component/Images/excel2.png" ToolTip="Exportar lista de seriales a archivo de excel" />
-                                        <TextBlock x:Name="imgExportSeriales" Text="Exportar seriales"  HorizontalAlignment="Center" FontWeight="bold" FontSize="9" Height="auto" Width="auto" MouseDown="imgExportSeriales_MouseDown"/>
+                                        <Image x:Name="imgExportSeriales" HorizontalAlignment="Center" Cursor="Hand" Source="/WpfFront;component/Images/excel2.png" ToolTip="Exportar lista de serialesa formato excel" MouseDown="imgExportSeriales_MouseDown" />
+                                        <TextBlock  Text="Exportar seriales"  HorizontalAlignment="Center" FontWeight="bold" FontSize="9" Height="auto" Width="auto" />
                                     </StackPanel>
                                 </StackPanel>
                             </StackPanel>

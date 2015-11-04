@@ -198,10 +198,8 @@
                         </StackPanel>
                     </StackPanel>
                 </awc:RibbonTabItem>
-                
                 <!-- Daily Process -->
                 <awc:RibbonTabItem x:Uid="tbInventory" x:Name="tbInventory" Header="Produccion"  Visibility="{Binding ShowMenu3}">
-
                     <StackPanel x:Uid="StackPanel_11" Orientation="Horizontal" Height="95" >
                         <awc:RibbonPanel x:Uid="awc:RibbonPanel_6" Header="Windows">
                             <StackPanel x:Uid="StackPanel_12" Orientation="Horizontal">
@@ -224,12 +222,9 @@
                                         </awc:DropDownMenuItem>
                                     </awc:DropDownMenuItem>
                                 </awc:DropDownButton>
-                                <!--<awc:ImageButton x:Uid="awc:ImageButton_6" Command="{x:Static aw:ToolWindowDockPanel.MaximizeAllWindowsCommand}" IsToolStyle="True" Orientation="Vertical" ImageSource="/WpfFront;component/Images/Maximized32.png">Maximize All</awc:ImageButton>
-                                <awc:ImageButton x:Uid="awc:ImageButton_7" Command="{x:Static aw:ToolWindowDockPanel.RestoreAllWindowsCommand}" IsToolStyle="True" Orientation="Vertical" ImageSource="/WpfFront;component/Images/Minimized32.png">Restore</awc:ImageButton>-->
                                 
                             </StackPanel>
                         </awc:RibbonPanel>
-
                         <awc:RibbonPanel x:Uid="awc:RibbonPanel_7" Header="Inventory Options">
                             <ListView x:Uid="ListView_3" ItemsSource="{Binding UserMenu[3].Options}" Width="Auto" Background="{DynamicResource WBg}">
                                 <ListView.ItemTemplate>
@@ -242,7 +237,6 @@
                             </ListView>
                         </awc:RibbonPanel>
 
-
                         <awc:RibbonPanel   Header="Counting" Visibility="{Binding ShowMenu7}">
                             <ListView  ItemsSource="{Binding UserMenu[7].Options}" Width="Auto" Background="{DynamicResource WBg}">
                                 <ListView.ItemTemplate>
@@ -254,13 +248,11 @@
                                 </ListView.ItemTemplate>
                             </ListView>
                         </awc:RibbonPanel>
-
                         <StackPanel HorizontalAlignment="Right">
                             <Image x:Uid="Image_3" Width="auto" Height="76" Margin="480,0,0,0"  Source="/WpfFront;component/Images/Icons/claro.png" HorizontalAlignment="Right"/>
                         </StackPanel>
                     </StackPanel>
                 </awc:RibbonTabItem>
-
                 <awc:RibbonTabItem x:Uid="tbAdministrator" Header="Administrador"  Visibility="{Binding ShowMenu8}">
                     <StackPanel x:Uid="StackPanel_11" Orientation="Horizontal" Height="95" >
                         <awc:RibbonPanel x:Uid="awc:RibbonPanel_7" Header="Inventory Options">
@@ -274,14 +266,13 @@
                                 </ListView.ItemTemplate>
                             </ListView>
                         </awc:RibbonPanel>
-
                         <StackPanel HorizontalAlignment="Right">
                             <Image x:Uid="Image_3" Width="auto" Height="76" Margin="480,0,0,0"  Source="/WpfFront;component/Images/Icons/claro.png" HorizontalAlignment="Right"/>
                         </StackPanel>
                     </StackPanel>
                 </awc:RibbonTabItem>
 
-                <!--<awc:RibbonTabItem x:Uid="tbConsultation" Header="Consultas"  Visibility="{Binding ShowMenu9}">
+                <awc:RibbonTabItem x:Uid="tbConsultation" Header="Consultas"  Visibility="{Binding ShowMenu9}">
                     <StackPanel x:Uid="StackPanel_11" Orientation="Horizontal" Height="95" >
                         <awc:RibbonPanel x:Uid="awc:RibbonPanel_7" Header="Inventory Options">
                             <ListView x:Uid="ListView_3" ItemsSource="{Binding UserMenu[9].Options}" Width="Auto" Background="{DynamicResource WBg}">
@@ -299,7 +290,7 @@
                             <Image x:Uid="Image_3" Width="auto" Height="76" Margin="480,0,0,0"  Source="/WpfFront;component/Images/Icons/claro.png" HorizontalAlignment="Right"/>
                         </StackPanel>
                     </StackPanel>
-                </awc:RibbonTabItem>-->
+                </awc:RibbonTabItem>
 
                 <awc:RibbonTabItem x:Uid="tbPermission" x:Name="tbMaster" Header="{StaticResource MASTERS}"  Visibility="{Binding ShowMenu4}">
 
@@ -396,7 +387,7 @@
                     
                 </awc:RibbonTabItem>
 
-                <awc:RibbonTabItem x:Uid="tbExit" x:Name="tbReportes" Header="Reports" MouseDoubleClick="goNavigateButton_Click" Height="24" VerticalAlignment="Top" >
+                <awc:RibbonTabItem x:Uid="tbExit" x:Name="tbReportes" Header="Reportes" MouseDoubleClick="goNavigateButton_Click" Height="24" VerticalAlignment="Top" >
                     <StackPanel>
                         <WebBrowser x:Name="myWebBrowser" Height="900"/>
                     </StackPanel>
@@ -436,23 +427,10 @@
                     </StackPanel>
                 </awc:RibbonTabItem>
 
-
                 <awc:RibbonTabItem x:Uid="tbExit" x:Name="tbExit" Header="{StaticResource EXIT}">
                 </awc:RibbonTabItem>
-
-
-
-
-
-
             </awc:Ribbon>
-
-
-
-            <!-- Content -->
-
             <Grid x:Uid="containerGrid" x:Name="containerGrid" Background="{DynamicResource DefaultWorkspaceBackgroundBrush}">
-
                 <Path
 					x:Uid="Path_1" Fill="{DynamicResource DefaultWorkspaceAdorner1BackgroundBrush}"
 					Stretch="Fill"
@@ -462,7 +440,6 @@
 					HorizontalAlignment="Left"
 					VerticalAlignment="Top"
 					Height="159"/>
-
                 <Path
 					x:Uid="Path_2" Fill="{DynamicResource DefaultWorkspaceAdorner2BackgroundBrush}"
 					Stretch="Fill"
@@ -471,23 +448,9 @@
 					Data="M0.5,0.5 L480.5,0.5 C362.06667,12.09897 210.5,53.233083 0.5,169.5 z"
 					VerticalAlignment="Top"
 					Height="134"/>
-
                 <aw:ToolWindowDockPanel x:Uid="content" Name="content" />
-
             </Grid>
-
-
-
         </DockPanel>
-
-
         <Canvas x:Uid="_ModalContainer" Name="_ModalContainer" Grid.ColumnSpan="2" />
-
-        <!--<Popup Placement="Center"  Name="popup1" IsOpen="True"  AllowsTransparency="True" Margin="0,25,-420,25" 
-               PlacementTarget="{Binding ElementName=mRibbon}" HorizontalAlignment="Right" Width="400">
-            <uc:PopUpHelp />
-        </Popup>-->
-
     </Grid>
-
 </Window>

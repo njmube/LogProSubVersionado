@@ -202,12 +202,12 @@ namespace WpfFront.IQ.Views
         }
         private void imgExportSeriales_MouseDown(object sender, MouseButtonEventArgs e)
         {
-            exportPallets(sender, e);
+            exportSeriales(sender, e);   
         }
 
         private void imgExporPallets_MouseDown(object sender, MouseButtonEventArgs e)
         {
-            exportSeriales(sender, e);
+            exportPallets(sender, e);
         }
 
         #region Union de estibas
