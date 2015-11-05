@@ -1,8 +1,271 @@
-﻿<Window x:Class="WpfFront.IQ.Views.ConsultaSerialesView"
-        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="ConsultaSerialesView" Height="300" Width="300">
-    <Grid>
-        
-    </Grid>
-</Window>
+﻿<WMCore:UserControlBase x:Uid="ConsultaSeriales" x:Class="WpfFront.Views.ConsultaSerialesView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:xcdg="http://schemas.xceed.com/wpf/xaml/datagrid"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    Height="Auto" Width="Auto" HorizontalAlignment="Stretch"
+    xmlns:WMCore="clr-namespace:Core.WPF;assembly=Core"   
+    xmlns:dg="http://schemas.microsoft.com/wpf/2008/toolkit"
+    xmlns:toolkit="http://schemas.microsoft.com/wpf/2008/toolkit"
+    xmlns:uc="clr-namespace:WpfFront.Common.UserControls"
+    x:Name="ConsultaSeriales">
+    <AdornerDecorator>
+        <DockPanel x:Uid="DockPanel_1" Background="AliceBlue" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+            <StackPanel x:Uid="StackPanel_1" Orientation="Horizontal" >
+                <StackPanel x:Uid="Stack_Panel" Orientation="Vertical" Margin="3" HorizontalAlignment="Center" Width="auto" Height="auto" >
+                    <Border x:Uid="Border_1" Name="Border_Detail" Style="{DynamicResource UserControlFormInnerBorder}" Margin="3" HorizontalAlignment="Center" Visibility="Visible" >
+                        <StackPanel x:Name="Stack_DetailSerial" Orientation="Vertical" Margin="3" HorizontalAlignment="Center" >
+                            <StackPanel>
+                                <TextBlock Text="MODULO ADMINISTRADOR DE SERIALES" HorizontalAlignment="Left" FontWeight="bold" />
+                            </StackPanel>
+                            <Separator Margin="5,0,0,0"/>
+                            <StackPanel x:Uid="Stack_SerialGroup" Name="Stack_SerialGroup" Orientation="Horizontal" Margin="0,6,0,0">
+
+                                <StackPanel x:Uid="Stack_Serial1" Name="Stack_Serial1" Orientation="Vertical" Margin="4,0,4,0" >
+                                    <TextBlock x:Uid="txt_Serial1" Name="txt_Serial1" Text="Digite el serial del cual desea obtener información detallada..." />
+                                    <TextBox x:Uid="tb_Serial1" Name="tb_Serial1" Width="150" KeyDown="tb_Serial1_KeyDown_1" HorizontalAlignment="Left" Height="20"/>
+                                    <TextBox x:Uid="tb_Query" Name="tb_Query" Width="500" Visibility="Collapsed"/>
+                                </StackPanel>
+                            </StackPanel>
+
+                            <Separator Margin="0,7,0,0"/>
+                            <StackPanel>
+                                <TextBlock Text="CAMPOS LOGÍSTICA" HorizontalAlignment="Left" FontWeight="bold" Foreground="Brown" />
+                            </StackPanel>
+                            <StackPanel x:Uid="Stack_Adicionales" Name="Stack_Info1" Orientation="Horizontal" Margin="0,6,0,0">
+                                <TextBlock x:Uid="Text_block" Width="100" Text="Mac" VerticalAlignment="Center" Margin="4,0,6,0" FontWeight="Bold" />
+                                <TextBox x:Uid="txt_Mac" x:Name="txt_Mac" Width="150" Height="23" VerticalAlignment="Center" IsReadOnly="True"/>
+                                <!---->
+                                <StackPanel x:Uid="Stack_FallaDiagnostico" Width="auto" Orientation="Horizontal" Margin="4,3,4,3">
+                                    <TextBlock x:Uid="Text_block" Width="100" Text="Nombre material" VerticalAlignment="Center" Margin="4,0,6,0" FontWeight="Bold" />
+                                    <ComboBox x:Uid="cb_NombreMaterial" Name="cb_NombreMaterial" Width="150" Height="23" ItemsSource="{Binding Path=ListadoProductos}" SelectedValue="Code" DisplayMemberPath="Name" SelectionChanged="cb_NombreMaterial_SelectionChanged" IsEnabled="False"/>
+                                    <!---->
+                                        <StackPanel x:Uid="Stack_Adicionales" Orientation="Horizontal" Margin="4,3,4,3">
+                                            <TextBlock x:Uid="Text_block" Width="100" Text="Estado serial" VerticalAlignment="Center" Margin="4,0,6,0" FontWeight="Bold" />
+                                    <ComboBox x:Uid="cb_EstadoSerial" Name="cb_EstadoSerial" Width="150" Height="23" ItemsSource="{Binding Path=ListadoEstatusLogPro}" SelectedValue="Code" DisplayMemberPath="Name" SelectionChanged="cb_EstadoSerial_SelectionChanged"  IsEnabled="False"/>
+                                        </StackPanel>
+                                    </StackPanel>
+                                </StackPanel>
+
+                        <StackPanel x:Uid="Stack_Adicionales" Name="Stack_Info2" Orientation="Horizontal" Margin="0,6,0,0">
+                            <TextBlock x:Uid="Text_block" Width="100" Text="Id. Pallet" VerticalAlignment="Center" Margin="4,0,6,0" FontWeight="Bold" />
+                            <TextBox x:Uid="txt_IdPallet" x:Name="txt_IdPallet" Width="150" Height="23" VerticalAlignment="Center"  IsReadOnly="True"/>
+                            <!---->
+                        <StackPanel x:Uid="Stack_FallaDiagnostico" Width="auto" Orientation="Horizontal" Margin="4,3,4,3">
+                            <TextBlock x:Uid="Text_block" Width="100" Text="Ubicación" VerticalAlignment="Center" Margin="4,0,6,0" FontWeight="Bold" />
+                            <TextBox x:Uid="txt_Ubicacion" x:Name="txt_Ubicacion" Width="150" Height="23" VerticalAlignment="Center"  IsReadOnly="True"/>
+                                     <!---->
+                            <StackPanel x:Uid="Stack_FallaDiagnostico" Width="auto" Orientation="Horizontal" Margin="4,3,4,3">
+                                <TextBlock x:Uid="Text_block" Width="100" Text="Código empaque" VerticalAlignment="Center" Margin="4,0,6,0" FontWeight="Bold" />
+                                <TextBox x:Uid="txt_CodigoEmpaque" x:Name="txt_CodigoEmpaque" Width="150" Height="23" VerticalAlignment="Center"  IsReadOnly="True"/>
+                            </StackPanel>
+                        </StackPanel>
+                </StackPanel>
+
+                <StackPanel x:Uid="Stack_Adicionales" Name="Stack_Info3" Orientation="Horizontal" Margin="0,6,0,0">
+                    <TextBlock x:Uid="Text_block" Width="100" Text="Cod. empaque 2" VerticalAlignment="Center" Margin="4,0,6,0" FontWeight="Bold" />
+                    <TextBox x:Uid="txt_MacAsoc" x:Name="txt_CodigoEmpaque2" Width="150" Height="23" VerticalAlignment="Center"  IsReadOnly="True" />
+                    <!---->
+                                <StackPanel x:Uid="Stack_FallaDiagnostico" Width="auto" Orientation="Horizontal" Margin="4,3,4,3">
+                                    <TextBlock x:Uid="Text_block" Width="100" Text="Posición" VerticalAlignment="Center" Margin="4,0,6,0" FontWeight="Bold" />                                    
+                                    <ComboBox x:Uid="cb_Posicion" Name="cb_Posicion" Width="150" Height="23" ItemsSource="{Binding Path=ListadoPosiciones}" SelectedValue="Code" DisplayMemberPath="Name"  IsEnabled="False"/>
+                                    <!---->
+                    <StackPanel x:Uid="Stack_Adicionales" Orientation="Horizontal" Margin="4,3,4,3">
+                        <TextBlock x:Uid="Text_block" Width="100" Text="Fecha ingreso" VerticalAlignment="Center" Margin="4,0,6,0" FontWeight="Bold" />
+                        <DatePicker Margin="0,4,-20,0" Padding="0,0,0,0" Width="154" BorderBrush="AliceBlue" BorderThickness="0" Name="txt_FechaIng" IsEnabled="False">
+                            <DatePicker.Resources>
+                                <Style TargetType="{x:Type DatePickerTextBox}">
+                                    <Setter Property="Background" Value="{DynamicResource CtrlTextBackground}"/>
+                                    <Setter Property="BorderThickness" Value="0"/>
+                                    <Setter Property="Template">
+                                        <Setter.Value>
+                                            <ControlTemplate>
+                                                <TextBox x:Name="PART_TextBox" 
+                                        									Text="{Binding SelectedDate, RelativeSource={RelativeSource AncestorType={x:Type DatePicker}}, StringFormat=dd-MM-yyyy}"  Width="90" Margin="0,0,-20,0" IsReadOnly="True"/>
+                                            </ControlTemplate>
+                                        </Setter.Value>
+                                    </Setter>
+                                    <Setter Property="Text" Value="My Custom Text" />
+                                    <Setter Property="Background" Value="AliceBlue" />
+                                </Style>
+                            </DatePicker.Resources>
+                        </DatePicker>
+                    </StackPanel>
+                </StackPanel>
+            </StackPanel>
+
+            <StackPanel x:Uid="Stack_Adicionales" Name="Stack_Info4" Orientation="Horizontal" Margin="0,6,0,0">
+                <TextBlock x:Uid="Text_block" Width="100" Text="Familia" VerticalAlignment="Center" Margin="4,0,6,0" FontWeight="Bold" />
+                <TextBox x:Uid="txt_Familia" x:Name="txt_Familia" Width="150" Height="23" VerticalAlignment="Center" IsReadOnly="True" />
+                <!---->                            
+                                <StackPanel x:Uid="ListadoTipoOrigen" Width="auto" Orientation="Horizontal" Margin="4,3,4,3">
+                                    <TextBlock x:Uid="Text_block" Width="100" Text="Origen" VerticalAlignment="Center" Margin="4,0,6,0" FontWeight="Bold" />                                    
+                                    <ComboBox x:Uid="cb_Origen" Name="cb_Origen" Width="150" Height="23" ItemsSource="{Binding Path=ListadoOrigen}" SelectedValue="Code" DisplayMemberPath="Name" SelectionChanged="cb_Origen_SelectionChanged"  IsEnabled="False"/>
+                                    <!---->
+                <StackPanel x:Uid="Stack_Adicionales" Orientation="Horizontal" Margin="4,3,4,3">
+                    <TextBlock x:Uid="Text_block" Width="100" Text="Ciudad" VerticalAlignment="Center" Margin="4,0,6,0" FontWeight="Bold" />
+                    <TextBox x:Uid="txt_CodigoSAP" x:Name="txt_Ciudad" Width="150" Height="23" VerticalAlignment="Center" IsEnabled="False"/>
+                </StackPanel>
+            </StackPanel>
+            </StackPanel>
+
+            <StackPanel x:Uid="Stack_Adicionales" Name="Stack_Info5" Orientation="Horizontal" Margin="0,6,0,0">
+                <TextBlock x:Uid="Text_block" Width="100" Text="Tipo origen" VerticalAlignment="Center" Margin="4,0,6,0" FontWeight="Bold"/>
+                <ComboBox x:Uid="cb_TipoOrigen" Name="cb_TipoOrigen" Width="150" Height="23" ItemsSource="{Binding Path=ListadoTipoOrigen}" SelectedValue="Code" DisplayMemberPath="Name"  IsEnabled="False"/>
+                <!---->
+                                <StackPanel x:Uid="Stack_FallaDiagnostico" Width="auto" Orientation="Horizontal" Margin="4,3,4,3">
+                                    <TextBlock x:Uid="Text_block" Width="100" Text="Código SAP" VerticalAlignment="Center" Margin="4,0,6,0" FontWeight="Bold" />
+                                    <TextBox x:Uid="txt_CodigoSAP" x:Name="txt_CodigoSAP" Width="150" Height="23" VerticalAlignment="Center" IsEnabled="False"/>
+                                    <!---->
+                <StackPanel x:Uid="Stack_Adicionales" Orientation="Horizontal" Margin="4,3,4,3">
+                    <TextBlock x:Uid="Text_block" Width="100" Text="Doc. Ingreso" VerticalAlignment="Center" Margin="4,0,6,0" FontWeight="Bold" />
+                    <TextBox x:Uid="txt_DocIngreso" x:Name="txt_DocIngreso" Width="150" Height="23" VerticalAlignment="Center" IsReadOnly="True" />
+                </StackPanel>
+            </StackPanel>
+            </StackPanel>
+
+            <StackPanel x:Uid="Stack_FallaDiagnostico" Name="Stack_Info6" Width="auto" Orientation="Horizontal" Margin="0,6,0,0">
+                <TextBlock x:Uid="Text_block" Width="100" Text="Fecha Doc." VerticalAlignment="Center" Margin="4,0,6,0" FontWeight="Bold"/>
+                <!--<TextBox x:Uid="txt_FechaDoc" x:Name="txt_FechaDoc" Width="150" Height="23" VerticalAlignment="Center" IsEnabled="False" />-->
+                <DatePicker Margin="0,4,-20,0" Padding="0,0,0,0" Width="154" BorderBrush="AliceBlue" BorderThickness="0" Name="txt_FechaDoc" IsEnabled="False">
+                    <DatePicker.Resources>
+                        <Style TargetType="{x:Type DatePickerTextBox}">
+                            <Setter Property="Background" Value="{DynamicResource CtrlTextBackground}"/>
+                            <Setter Property="BorderThickness" Value="0"/>
+                            <Setter Property="Template">
+                                <Setter.Value>
+                                    <ControlTemplate>
+                                        <TextBox x:Name="PART_TextBox" 
+                                        									Text="{Binding SelectedDate, RelativeSource={RelativeSource AncestorType={x:Type DatePicker}}, StringFormat=dd-MM-yyyy}"  Width="90" Margin="0,0,-20,0" IsReadOnly="True"/>
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
+                            <Setter Property="Text" Value="My Custom Text" />
+                            <Setter Property="Background" Value="AliceBlue" />
+                        </Style>
+                    </DatePicker.Resources>
+                </DatePicker>
+                <!---->
+                                <StackPanel x:Uid="Stack_FallaDiagnostico" Width="auto" Orientation="Horizontal" Margin="19,3,4,3">
+                                     <TextBlock x:Uid="Text_block" Width="100" Text="Tipo Recibo" VerticalAlignment="Center" Margin="4,0,6,0" FontWeight="Bold"/>
+                                        <ComboBox x:Uid="cb_TipoRecibo" Name="cb_TipoRecibo" Width="150" Height="23" ItemsSource="{Binding Path=ListadoTipoREC}" SelectedValue="Code" DisplayMemberPath="Name" IsEnabled="False"/>
+                                    <!---->
+                <StackPanel x:Uid="Stack_Adicionales" Orientation="Horizontal" Margin="4,3,4,3">
+                    <TextBlock x:Uid="Text_block" Width="100" Text="Consecutivo" VerticalAlignment="Center" Margin="4,0,6,0" FontWeight="Bold" />
+                    <TextBox x:Uid="txt_Consecutivo" x:Name="txt_Consecutivo" Width="150" Height="23" VerticalAlignment="Center" IsReadOnly="True" />
+                    <!---->
+                                    </StackPanel>
+                                </StackPanel>
+                            </StackPanel>
+
+            <StackPanel x:Uid="Stack_Adicionales" Name="Stack_Info7" Orientation="Horizontal" Margin="0,6,0,0">                                
+                                    <TextBlock x:Uid="Text_block" Width="100" Text="Estado RR" VerticalAlignment="Center" Margin="4,0,6,0" FontWeight="Bold" />                                    
+                                    <ComboBox x:Uid="cb_EstadoRR" Name="cb_EstadoRR" Width="150" Height="23" ItemsSource="{Binding Path=ListadoEstadoRR}" SelectedValue="Code" DisplayMemberPath="Name" IsEnabled="False" />
+                                    <!---->
+                    <StackPanel x:Uid="Stack_Adicionales" Orientation="Horizontal" Margin="4,3,4,3">
+                        <TextBlock x:Uid="Text_block" Width="100" Text="Centro" VerticalAlignment="Center" Margin="4,0,6,0" FontWeight="Bold" />
+                        <TextBox x:Uid="txt_Centro" x:Name="txt_Centro" Width="150" Height="23" VerticalAlignment="Center" IsReadOnly="True"/>
+                    </StackPanel>
+
+                </StackPanel>
+
+                <Separator Margin="0,7,0,0"/>
+
+                <StackPanel>
+                    <TextBlock Text="CAMPOS PRODUCCIÓN" HorizontalAlignment="Left" FontWeight="bold" Foreground="Brown" />
+                </StackPanel>
+
+                <StackPanel x:Uid="Stack_Adicionales" Name="Stack_Info8" Orientation="Horizontal" Margin="0,6,0,0">
+                    <TextBlock x:Uid="Text_block" Width="100" Text="Tec. Asig. Diag." VerticalAlignment="Center" Margin="4,0,6,0" FontWeight="Bold" />
+                    <TextBox x:Uid="txt_TecAsigDiag" x:Name="txt_TecAsigDiag" Width="150" Height="23" VerticalAlignment="Center" IsReadOnly="True" />
+                    <!---->
+                         <StackPanel x:Uid="Stack_FallaDiagnostico" Width="auto" Orientation="Horizontal" Margin="4,3,4,3">
+                             <TextBlock x:Uid="Text_block" Width="100" Text="Falla diag." VerticalAlignment="Center" Margin="4,0,6,0" FontWeight="Bold"/>
+                             <ComboBox x:Uid="cb_FallaDiag" Name="cb_FallaDiag" Width="150" Height="23" ItemsSource="{Binding Path=ListadoFallas}" SelectedValue="Code" DisplayMemberPath="Code" SelectionChanged="cb_FallaDiag_SelectionChanged" IsEnabled="False"/>
+                             <!---->
+                    <StackPanel x:Uid="Stack_Adicionales" Orientation="Horizontal" Margin="4,3,4,3">
+                        <TextBlock x:Uid="Text_block" Width="107" Text="Estado diagnostico" VerticalAlignment="Center" Margin="4,0,6,0" FontWeight="Bold"/>
+                        <TextBox x:Uid="txt_StatusDiag" x:Name="txt_StatusDiag" Width="150" Height="23" VerticalAlignment="Center" IsReadOnly="True"/>
+                    </StackPanel>
+                </StackPanel>
+            </StackPanel>
+
+            <StackPanel x:Uid="Stack_Adicionales" Name="Stack_Info9" Orientation="Horizontal" Margin="0,6,0,0">
+                <TextBlock x:Uid="Text_block" Width="100" Text="Tec. Asig. Rep" VerticalAlignment="Center" Margin="4,0,6,0" FontWeight="Bold"/>
+                <TextBox x:Uid="txt_TencnicoAsig" x:Name="txt_TencnicoAsig" Width="150" Height="23" VerticalAlignment="Center" IsReadOnly="True" />
+                <!---->
+                        <StackPanel x:Uid="Stack_FallaDiagnostico" Width="auto" Orientation="Horizontal" Margin="4,3,4,3">
+                            <TextBlock x:Uid="Text_block" Width="100" Text="Estado Rep" VerticalAlignment="Center" Margin="4,0,6,0" FontWeight="Bold"/>
+                            <ComboBox x:Uid="cb_EstadoRep" Name="cb_EstadoRep" Width="150" Height="23" SelectionChanged="cb_estadoRep_SelectionChanged" IsEnabled="False">
+                                <ComboBoxItem Content="REPARADO"/>
+                                <ComboBoxItem Content="SCRAP"/>
+                            </ComboBox>
+                <!---->
+                            <StackPanel x:Uid="Stack_Adicionales" Orientation="Horizontal" Margin="4,3,4,3">
+                                <TextBlock x:Uid="Text_block" Width="100" Text="Falla reparación" VerticalAlignment="Center" Margin="4,0,6,0" FontWeight="Bold"/>
+                                <ComboBox x:Uid="cb_FallaRep" Name="cb_FallaRep" Width="150" Height="23" ItemsSource="{Binding Path=ListadoFallas}" SelectedValue="Code" DisplayMemberPath="Code" IsEnabled="False" />
+                            </StackPanel>
+                        </StackPanel>
+                    </StackPanel>
+
+                    <StackPanel x:Uid="Stack_Adicionales" Name="Stack_Info10" Orientation="Horizontal" Margin="0,6,0,0">
+                        <TextBlock x:Uid="Text_block" Width="100" Text="Falla rep. 1" VerticalAlignment="Center" Margin="4,0,6,0" FontWeight="Bold" />
+                        <ComboBox x:Uid="cb_FallaRep1" Name="cb_FallaRep1" Width="150" Height="23" ItemsSource="{Binding Path=ListadoFallas}" SelectedValue="Code" DisplayMemberPath="Code" IsEnabled="False"/>
+                        <!---->
+                <StackPanel x:Uid="Stack_FallaDiagnostico" Width="auto" Orientation="Horizontal" Margin="4,3,4,3">
+                    <TextBlock x:Uid="Text_block" Width="100" Text="Falla rep. 2" VerticalAlignment="Center" Margin="4,0,6,0" FontWeight="Bold"/>
+                    <ComboBox x:Uid="cb_FallaRep2" Name="cb_FallaRep2" Width="150" Height="23" ItemsSource="{Binding Path=ListadoFallas}" SelectedValue="Code" DisplayMemberPath="Code" IsEnabled="False"/>
+                    <!---->
+                            <StackPanel x:Uid="Stack_Adicionales" Orientation="Horizontal" Margin="4,3,4,3">
+                                <TextBlock x:Uid="Text_block" Width="100" Text="Falla rep. 3" VerticalAlignment="Center" Margin="4,0,6,0" FontWeight="Bold"/>
+                                <ComboBox x:Uid="cb_FallaRep3" Name="cb_FallaRep3" Width="150" Height="23" ItemsSource="{Binding Path=ListadoFallas}" SelectedValue="Code" DisplayMemberPath="Code" IsEnabled="False" />
+                            </StackPanel>
+                        </StackPanel>
+                   </StackPanel>
+
+                    <StackPanel x:Uid="Stack_Adicionales" Name="Stack_Info11" Orientation="Horizontal" Margin="0,6,0,0">
+                        <TextBlock x:Uid="Text_block" Width="100" Text="Falla rep. 4" VerticalAlignment="Center" Margin="4,0,6,0" FontWeight="Bold"/>
+                        <ComboBox x:Uid="cb_FallaRep4" Name="cb_FallaRep4" Width="150" Height="23" ItemsSource="{Binding Path=ListadoFallas}" SelectedValue="Code" DisplayMemberPath="Code" IsEnabled="False" />
+                        <!---->
+                    <StackPanel x:Uid="Stack_FallaDiagnostico" Width="auto" Orientation="Horizontal" Margin="4,3,4,3">
+                        <TextBlock x:Uid="Text_block" Width="100" Text="Motivo SCRAP" VerticalAlignment="Center" Margin="4,0,6,0" FontWeight="Bold" />
+                        <ComboBox x:Uid="cb_MotivoScrap" Name="cb_MotivoScrap" Width="150" Height="23" ItemsSource="{Binding Path=ListadoMotScrap}" SelectedValue="Code" DisplayMemberPath="Name" IsEnabled="False" />
+                        <!---->
+                            <StackPanel x:Uid="Stack_Adicionales" Orientation="Horizontal" Margin="4,3,4,3">
+                                <TextBlock x:Uid="Text_block" Width="100" Text="Falla verificación" VerticalAlignment="Center" Margin="4,0,6,0" FontWeight="Bold" />
+                                <ComboBox x:Uid="cb_FallaVerif" Name="cb_FallaVerif" Width="150" Height="23" ItemsSource="{Binding Path=ListadoFallas}" SelectedValue="Code" DisplayMemberPath="Code" SelectionChanged="cb_FallaVerif_SelectionChanged" IsEnabled="False" />
+                                <!---->
+                    </StackPanel>
+                </StackPanel>
+            </StackPanel>
+
+                <StackPanel x:Uid="Stack_Adicionales" Name="Stack_Info12" Orientation="Horizontal" Margin="0,6,0,0">
+                    <TextBlock x:Uid="Text_block" Width="100" Text="Estado verificación" VerticalAlignment="Center" Margin="4,0,6,0" FontWeight="Bold" FontSize="11" />
+                    <TextBox x:Uid="txt_StatusVerif" x:Name="txt_StatusVerif" Width="150" Height="23" VerticalAlignment="Center" IsReadOnly="True"/>
+                    <StackPanel x:Uid="Stack_Adicionales" Orientation="Horizontal" Margin="4,3,4,3">
+                        <TextBlock x:Uid="Text_block" Width="100" Text="Fecha despacho" VerticalAlignment="Center" Margin="4,0,6,0" FontWeight="Bold" />
+                        <DatePicker Margin="0,4,-20,0" Padding="0,0,0,0" Width="154" BorderBrush="AliceBlue" BorderThickness="0" Name="txt_FechaDespacho" IsEnabled="False">
+                                    <DatePicker.Resources>
+                                            <Style TargetType="{x:Type DatePickerTextBox}">
+                                                <Setter Property="Background" Value="{DynamicResource CtrlTextBackground}"/>
+                                                <Setter Property="BorderThickness" Value="0"/>
+                                                <Setter Property="Template">
+                                                    <Setter.Value>
+                                                        <ControlTemplate>
+                                                        <TextBox x:Name="PART_TextBox"  Text="{Binding SelectedDate, RelativeSource={RelativeSource AncestorType={x:Type DatePicker}}, StringFormat=dd-MM-yyyy}"  Width="90" Margin="0,0,-20,0" IsReadOnly="True"/>
+                                                        </ControlTemplate>
+                                                    </Setter.Value>
+                                                </Setter>
+                                                <Setter Property="Text" Value="My Custom Text" />
+                                                <Setter Property="Background" Value="AliceBlue" />
+                                            </Style>
+                                        </DatePicker.Resources>
+                                    </DatePicker>
+                                </StackPanel>
+                            </StackPanel>
+                        </StackPanel>
+                    </Border>
+                </StackPanel>
+            </StackPanel>
+        </DockPanel>
+    </AdornerDecorator>
+</WMCore:UserControlBase>

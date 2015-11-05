@@ -89,8 +89,6 @@ namespace WpfFront
             }
         }
 
-
-
         private void ImageButton_Click(object sender, RoutedEventArgs e)
         {
             ModuleSubmenu ms = ((ImageButton)sender).CommandParameter as ModuleSubmenu;
@@ -99,7 +97,6 @@ namespace WpfFront
 
         private void DropDownMenuItem_Click(object sender, RoutedEventArgs e)
         {
-
             ModuleSubmenu ms = ((HeaderedItemsControl)e.OriginalSource).Header as ModuleSubmenu; //((DropDownMenuItem)sender).Items[ ((DropDownMenuItem)sender).Items.CurrentPosition] as ModuleSubmenu;
             SetWindow(ms);
         }

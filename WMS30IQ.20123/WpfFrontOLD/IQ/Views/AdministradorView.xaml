@@ -19,8 +19,6 @@
                         Style="{DynamicResource TabControlStyle}"
                         VerticalAlignment="Stretch">
 
-                <!--#LG:MAKE_ADJUSTMENT:Make Adjustment:Relizar Ajuste-->
-
                 <TabItem x:Uid="TabItem_1" Header="Administrador">
                     <StackPanel x:Uid="StackPanel_1" Orientation="Horizontal" >
                         <StackPanel x:Uid="Stack_Panel1" Orientation="Vertical" Margin="3" HorizontalAlignment="Center" Width="auto" Height="auto" Visibility="Collapsed">

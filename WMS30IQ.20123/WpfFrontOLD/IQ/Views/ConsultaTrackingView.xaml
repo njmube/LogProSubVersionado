@@ -12,24 +12,6 @@
     <AdornerDecorator>
         <DockPanel x:Uid="DockPanel_1" Background="AliceBlue" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
             <StackPanel x:Uid="Stack_Panel" Orientation="Vertical" Margin="0,3,0,0" HorizontalAlignment="Center" Width="1157" Height="auto" >
-                <Border x:Uid="Border_1" Name="Border_Detasil3" Visibility="Collapsed" Style="{DynamicResource UserControlFormInnerBorder}" Margin="3" HorizontalAlignment="Left" Width="998" Height="198" >
-                    <StackPanel x:Name="Stack_DetailSerial113" Orientation="Horizontal" Margin="3" HorizontalAlignment="Left" >
-                        <StackPanel x:Name="stackValidation5">
-                            <StackPanel>
-                                <TextBlock Text="FILTRAR EQUIPOS" HorizontalAlignment="Left" FontWeight="bold" />
-                            </StackPanel>
-
-                            <StackPanel x:Uid="Stack_Adicionales_2" x:Name="Stack_Adicionales_4" Orientation="Vertical" Margin="0,0,0,0">
-                                <Separator Margin="5,10,0,10"/>
-                                <StackPanel Orientation="Horizontal">
-                                    <TextBlock x:Uid="textblock_recuento" Text="Pallets Cargados: " FontWeight="Bold" Margin="0,0,8,4" />
-                                    <TextBlock x:Uid="textblock_recuento4" x:Name="textblock_recuento4" Text="{Binding ListadoCambioUbicacion.Count}" FontWeight="Bold" Margin="0,0,8,4" />
-                                </StackPanel>
-                            </StackPanel>
-                        </StackPanel>
-                    </StackPanel>
-                </Border>
-
                 <StackPanel x:Uid="Stack_Panel" Orientation="Horizontal" Margin="4,3,0,4" HorizontalAlignment="Center" Width="auto" Height="auto" >
                     <Border x:Uid="Border_1" x:Name="Border_Detail1" Style="{DynamicResource UserControlFormInnerBorder}" Margin="0,3,0,0" HorizontalAlignment="Right" Width="1150" Height="515" >
                         <StackPanel x:Name="Stack_DetailSerial18" Orientation="Vertical" Margin="0,3,3,3" HorizontalAlignment="Right" Width="1130" >

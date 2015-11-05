@@ -283,6 +283,12 @@ namespace WpfFront
             container.RegisterType<IConsultaTrackingModel, ConsultaTrackingModel>();
             //MODULO ADMINISTRADOR SERIALES Y ESTIBAS CLARO - 4 DE NOVIEMBRE DE 2015//////////////////////////////////////////////////
 
+            //MODULO ADMINISTRADOR SERIALES Y ESTIBAS CLARO - 4 DE NOVIEMBRE DE 2015//////////////////////////////////////////////////
+            container.RegisterType<IConsultaSerialesView, ConsultaSerialesView>();
+            container.RegisterType<IConsultaSerialesPresenter, ConsultaSerialesPresenter>();
+            container.RegisterType<IConsultaSerialesModel, ConsultaSerialesModel>();
+            //MODULO ADMINISTRADOR SERIALES Y ESTIBAS CLARO - 4 DE NOVIEMBRE DE 2015//////////////////////////////////////////////////
+
             container.RegisterType<IGeneradorEstibasView, GeneradorEstibasView>();
             container.RegisterType<IGeneradorEstibasPresenter, GeneradorEstibasPresenter>();
             container.RegisterType<IGeneradorEstibasModel, GeneradorEstibasModel>();
@@ -747,6 +753,11 @@ namespace WpfFront
                     ConsultaTrackingPresenter consultaTrackPres = container.Resolve<ConsultaTrackingPresenter>();
                     consultaTrackPres.Window = window;
                     return consultaTrackPres.View;
+
+                case "ConsultaSerialesPresenter":
+                    ConsultaSerialesPresenter consultaSerialesPres = container.Resolve<ConsultaSerialesPresenter>();
+                    consultaSerialesPres.Window = window;
+                    return consultaSerialesPres.View;
                 //MODULO CONSULTA DE TRACKING CLARO - 4 DE NOVIEMBRE DE 2015//////////////////////////////////////////////////
 
                 case "GeneradorEstibasPresenter":
